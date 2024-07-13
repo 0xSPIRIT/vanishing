@@ -1,0 +1,204 @@
+[Showing the struggle of getting out of bed]
+Text Appears: "Dysania"
+
+(Atari Graphics)
+- You're walking through the desert, thirsty and about to die.
+- You try to reach out to someone.
+- You scream out for help to God.
+- You teleport to your house, you're exiting your bedroom.
+- Show you taking deep breaths.
+
+[Showing not taking agency in life]
+Text Appears: "Dinner Party"
+
+(Atari Graphics)
+- You enter the room, it seems like some sort of event.
+- You talk to the person at the front before you enter, and they're really judgy
+  for some reason, and you don't push back on anything they say.
+  This person's design has a huge triangle head and a single huge eye.
+- You sit at a dinner table with your friends.
+- You're joking with your friends, but it's just a mask, a show. You don't really
+  care about what's going on.
+- You notice a girl (pink) sit at another table.
+- You're in shock, you didn't think you'd see her there.
+- Your eyes catch for a second.
+- Your friends say you should talk to her, but when you start walking to her...
+- Teleport to the bathroom.
+- Text Appears in pure Black: "COWARD."
+- Text Appears: "I pray for courage but find only echoes."
+-               "I pray for purpose but find only echoes."
+-               "When will you reveal yourself to me?"
+
+[Showing meaninglessness in life]
+Text Appears: "Repetitions"
+
+- Working in a cubicle, an office job.
+- Minigame of doing some random stuff- it doesn't satisfy him.
+- His coworkers talk about random stuff that doesn't matter.
+- You mention to them that you have a recurring dream of being
+  trapped in a prison with no way out, and they seem weirdly dismissive
+  of what you said, and they just sort of ignore you.
+- You pretend to care about what's happening.
+- The people from his job start disappearing, the others forgetting they even existed.
+  [These people are meaningless to Chase.]
+- Chase is frightened.
+- Cut to driving home. (Mareux - Underground)
+  First-person perspective but still Atari
+- You enter your home, and scroll on your phone, trying to numb your mind.
+
+[Yearning for purpose]
+Text Appears: "Meeting"
+
+- You ensure the windows are closed and you fall asleep.
+
+- At night, sleeping, his eyebrows wince, then hears something whispering to
+  him. His eyes open with dread and looks to his left.
+- (3D Graphics) There's the window that is open that wasn't when he went to bed.
+- The camera zooms into it.
+- Chase asks, "Is that you?", "Have you come for me?"
+
+- Black text appears: "I HEAR THEE, MY SON."
+- Chase goes from intensely scared to a huge smile.
+- Black text appears: "WHAT DO YOU DESIRE?"
+- Chase: "Purpose."
+- Black text appears: "GOOD."
+- Black text appears: "TO GRANT YOUR PRAYER, YOU MUST COMPLETE A TASK FOR ME."
+- Black text appears: "SHOW THAT YOUR FAITH IS PURE."
+- Chase: "I will do anything."
+- Black text appears:
+     acedd2eaac3582ad42435742073bf948
+     286f4f1392ac1b722ea896c3d0e3e3ab
+     9e5eea55961c85624d3c62706cf85097
+     9e686b9e0a47b7e103c10928fa8a8143
+     d63a8310eb8bcbdadfc6d36a1155c2ff
+            DO YOU UNDERSTAND?
+- Chase: "I- well.... I..."
+            DO YOU UNDERSTAND?
+- Chase: "Yeah."
+
+[Showing how perception changes when you're depressed]
+Text Appears: "Perception"
+
+- He leaves his house, and ends up at a train station, in the black of night.
+- You buy a ticket from a person that has a pyramid head who's especially judgy
+  for no reason. Their head has one huge eye on it.
+- You question why they're acting so odd. They say they're not.
+- They immediately transform into a (more) regular model, and their dialogue is
+  normal now.
+
+- You enter the train, and exit immediately on another exit.
+
+- You're at the dinner party again, with only the two dinner tables; your table
+  and the table with the girl. They all have triangle heads. You talk to her.
+
+  Her: "Have you found what you're looking for?"
+  Her: "Purpose?"
+  Chase: "I'm not sure, I don't think I've found it yet."
+  Her: "Me too. What, do you think you're the only one who hasn't?"
+  Chase: "Nothing I accomplish is fulfilling for me. Are you telling me
+          that happens to everyone?"
+  Her: "No, of course not. Some people have it easier than others, but that
+        is how it is."
+  Chase: "Seriously? "It is what it is?" You have to be kidding."
+  Her: "You're trying too hard to find a solution, Chase.
+        Have you always been like this?"
+  Chase: "Pretty much most of my life."
+  Her: "But not always?"
+  Chase: "Ah, great. We're "focusing on the positives."
+          I understand now that you don't understand.
+          Goodbye."
+
+You walk through another door, and you're back in your room again...
+
+(Atari Graphics)
+- You have a phone call.
+- F: "I'm you from the future!"
+- C: "Did you escape the prison?"
+- F: "Yes! I did, would you like to know how I did it?"
+- C: "Yes."
+- F: "Oh, so all you have to do is have patience, and th---
+      ..."
+- C: "Are you still there..?"
+- F: "I'm sorry, I just realized I didn't escape after all.
+      It turns out I'm still in the prison, there was just
+      a bigger one around the previous one.
+      I'll call you back if I do escape, promise."
+- C: "Wait wh-"
+- *click*
+
+Text Appears: "Patience and Blasphemy"
+
+(Atari Graphics)
+- You're walking through the desert again, thirsty and about to die.
+- You try to reach out to someone.
+- "Wait, we've been here before haven't we?"
+   Hahahahahah, you can't fool me!"
+
+- Fade slowly into the bedroom.
+- Black Text: "YOU DIDN'T COMPLETE THE TASK THAT I ASKED."
+- You:        "I changed my mind."
+- Black Text: "No, no, no. You must complete this, otherwise you
+               won't get what you want. What you NEED.
+               MEANING. PURPOSE. CONTENTMENT. I AM THE ALL-POWERFUL,
+               I CAN GRANT YOU WHATEVER AND WHOMEVER YOU PLEASE.
+- You:        "I just said I changed my mind."
+- Black-Red Text: "THE INFINITE POSSESSES A POWER YOU CANNOT BEGIN
+               TO GRASP. WHAT WILL YOU DO IN TWENTY YEARS WITH
+               A JOB WHICH HOLDS AS MUCH MEANING AS COUNTING
+               GRAINS OF SAND AT THE SHORE AND A HOME
+               AS LONELY AS THE SILENCE BEFORE CREATION
+               ITSELF? I CAN MAKE THAT HAPPEN, CHASE."
+- You:        "I will be patient."
+- Red Text:   "Fool. I am the ALMIGHTY. YOU SHOULD BE BOWING
+               TO MY PRESENCE. YOU ARE A PUNY VESSEL OF FLESH
+               WHICH HAS NOT THE SMALLEST INCLINATION OF TRUE
+               POWER. I will be here FOREVER."
+- You:        "You will be here forever, yes. And you may return
+               stronger than ever before.
+               But I will cherish every last nanosecond that I am
+               able to overpower you, as I have done now."
+
+- RED Text: 
+
+               MORTAL, HEED THESE WORDS.
+               I AM THE ALMIGHTY.
+               I AM THE EXALTER AND THE PUNISHER.
+               I AM THE EVERLASTING!
+
+               I HAVE BIRTHED THE UNIVERSE FROM
+               THE INFINITE PLANE OF NOTHINGNES6,
+               FABRICATED LIFE FROM 6CRAP6 OF DUST,
+               CONJURED TH3 KN0WN FROM TH3 V01D
+               AND YOU THINK YOU CAN 0VERPOWER M3?
+
+                           666
+
+               0f961574366631de13e5343b05bcf0a5
+               5107cca865d6662eee032b4848277692
+               66666666666666666666666666666666
+               f8e75ff9835716664db31032088f0d3e
+               c34aafc3d123f91666dc05c7bc220c76
+               1b8d971549ba141eb666c75d192dd9c0
+
+                           ______              
+                      .d$$$******$$$$c.        
+                   .d$P"            "$$c      
+                  $$$$$.           .$$$*$.    
+                .$$ 4$L*$$.     .$$Pd$  '$b   
+                $F   *$. "$$e.e$$" 4$F   ^$b  
+               d$     $$   z$$$e   $$     '$. 
+               $P     `$L$$P` `"$$d$"      $$ 
+               $$     e$$F       4$$b.     $$ 
+               $b  .$$" $$      .$$ "4$b.  $$ 
+               $$e$P"    $b     d$`    "$$c$F 
+               '$P$$$$$$$$$$$$$$$$$$$$$$$$$$  
+                "$c.      4$.  $$       .$$   
+                 ^$$.      $$ d$"      d$P    
+                   "$$c.   `$b$F    .d$P"     
+                     `4$$$c.$$$..e$$P"        
+                         `^^^^^^^`
+
+   
+              Chase: "You have no power over me."
+
+              Fade out.
