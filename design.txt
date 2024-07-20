@@ -1,6 +1,6 @@
 Chapters
   1. Dysania                    5 mins (x)
-  2. Dinner Party               3 mins
+  2. Dinner Party               4 mins
   3. Repetitions                6 mins
   4. Theophany                  3 mins
   5. Perception                 4 mins
@@ -37,6 +37,7 @@ Text Appears: "Dinner Party"
 - You notice a girl (pink) sit at another table- Penelope (Penny)
 - You're in shock, you didn't think you'd see her there.
 - Both your eyes catch for a second.
+(3D Graphics)
 - Your friends say you should talk to her, but when you start walking
   to her...
 - Teleport to the bathroom.
@@ -84,7 +85,7 @@ Text Appears: "Theophany"
 - Black text appears: "WHAT DO YOU DESIRE?"
 - Chase: "Meaning and fulfillment."
 - Black text appears: "GOOD.
--                      TO GRANT YOUR PRAYER, YOU MUST COMPLETE A TASK
+                       TO GRANT YOUR PRAYER, YOU MUST COMPLETE A TASK
                        FOR ME.
 -                      SHOW THAT YOUR FAITH IS PURE."
 - Chase: "I will do anything you ask, Lord."

@@ -1,9 +1,5 @@
 TODO
 
-x Fix the bug of textbox not having the background when playing through
-  from chapter 1 to 2.
-- Fix textboxes not retaining their scale or something? talking to
-  Eleanor doesn't retain the same stuff.
 - Chapter 2: Dinner Party
   x Camera with level with multiple screens
   x Bouncer
@@ -11,13 +7,23 @@ x Fix the bug of textbox not having the background when playing through
   x Mike and Jessica
   x People at the start chilling, they have dates.
   x Dinner party tables
-  - Dialogue with Amy -> Penny
-  - Penelope comes (shift the camera to the side like undertale)
-  - Fullscreen image of you, then her looking at you (your eyes catch)
-  - You go up to her then teleport to...
-  - bathroom
+  x Dialogue with Eleanor -> Penny
+  x Penelope comes (shift the camera to the side like undertale)
+  x Fullscreen image of you, then her looking at you (your eyes catch)
+  x You go up to her,
+  - then teleport to...
+  - Bathroom
   - Closeup of a window with wind blowing, with the
-  - Ending text over it.
+  - hex
+  - then, Ending text over it.
+
+A phone call with a future version of yourself:
+  The universe does not stop behaving chaotically just because you
+  don't want it to. We must all come to terms with our situations.
+  It sounds like a fancier way of saying, "shit happens", but it
+  IS the situation, and we must find meaning in our predicaments.
+  When bad things happen to you, that is not God disgracing you,
+  or punishing you-- that is being human.
 
 - We need to have a really short 30 second intro
   (3d) which shows the overarching God themes as well

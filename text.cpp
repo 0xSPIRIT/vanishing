@@ -246,6 +246,12 @@ bool text_update_and_draw(Text *text, Vector2 offset) {
         pos.y += line_height;
     }
 
+    if (IsKeyDown(KEY_M)) {
+        text_set_to_end(text);
+        text->finished = true;
+        return true;
+    }
+
     if (text->not_first_frame && !text->finished && is_action_pressed()) {
         if (text_at_end(text)) {
             text->finished = true;

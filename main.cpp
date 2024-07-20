@@ -40,9 +40,9 @@ enum Game_Mode {
 };
 Game_Mode game_mode = GAME_MODE_INVALID;
 
-int chapter = 1;
+int chapter = 2;
 
-Font global_font;
+Font global_font, comic_sans;
 
 enum Keyboard_Focus {
     NO_KEYBOARD_FOCUS, // we're free to move around
@@ -120,6 +120,7 @@ MainFunction() {
     SetTargetFPS(60);
 
     global_font = LoadFontEx("frabk.ttf", 32, 0, 0);
+    comic_sans = LoadFontEx("comic.ttf", 16, 0, 0);
     assert(IsFontReady(global_font));
 
     //DisableCursor();

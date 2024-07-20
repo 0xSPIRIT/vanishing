@@ -43,12 +43,13 @@ enum Entity_Type {
     ENTITY_CHAP_2_OLIVIA,
     ENTITY_CHAP_2_AVA,
 
-    ENTITY_CHAP_2_PAULIE,
     ENTITY_CHAP_2_RANDOM_GUY,
     ENTITY_CHAP_2_RANDOM_GIRL,
 
     ENTITY_CHAP_2_BOUNCER,
     ENTITY_CHAP_2_BARTENDER,
+
+    ENTITY_CHAP_2_PENNY,
 };
 
 // All Atari chapters use the same Entity struct, because
@@ -68,12 +69,14 @@ struct Entity {
 
     union {
         // Chapter 1 entities
-        Chapter_1_Player_Variables chap_1_player;
-        Chapter_1_Node             chap_1_node;
-        Chapter_1_Phone            chap_1_phone;
+        Chapter_1_Player  chap_1_player;
+        Chapter_1_Node    chap_1_node;
+        Chapter_1_Phone   chap_1_phone;
 
         // Chapter 2 entities
-        Chapter_2_Door             chap_2_door;
+        Chapter_2_Door    chap_2_door;
+        Chapter_2_Player  chap_2_player;
+        Chapter_2_Penny   chap_2_penny;
     };
 };
 

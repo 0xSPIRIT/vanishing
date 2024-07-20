@@ -14,7 +14,7 @@ enum Player_Walking_State {
 
 // These are included in the Entity struct in atari.cpp as a part of
 // the union.
-struct Chapter_1_Player_Variables {
+struct Chapter_1_Player {
     Vector2 stored_pos;
     Player_Walking_State walking_state;
     bool  is_hurt;
