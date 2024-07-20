@@ -15,11 +15,19 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <time.h>
 
 #define GLSL_VERSION 330
 
-const int default_width = 1280;
-const int default_height = 720;
+#ifdef RELEASE
+  #define MainFunction int WinMain
+  #define NDEBUG
+#else
+  #define MainFunction int main
+#endif
+
+const int default_width  = 192*5;
+const int default_height = 144*5;
 
 int render_width = default_width;
 int render_height = default_height;
@@ -32,13 +40,47 @@ enum Game_Mode {
 };
 Game_Mode game_mode = GAME_MODE_INVALID;
 
+int chapter = 1;
+
 Font global_font;
+
+enum Keyboard_Focus {
+    NO_KEYBOARD_FOCUS, // we're free to move around
+    KEYBOARD_FOCUS_TEXTBOX, // a textbox is currently opened.
+};
 
 void set_game_mode(Game_Mode mode);
 
+Rectangle get_screen_rectangle() {
+    Rectangle result;
+
+    float desired_aspect_ratio = 4.f/3.f;
+
+    int screen_width = GetRenderWidth();
+    int screen_height = (int) ((float)screen_width / desired_aspect_ratio);
+    if (screen_height > GetRenderHeight()) {
+        screen_height = GetRenderHeight();
+        screen_width = (int)(screen_height * desired_aspect_ratio);
+    }
+
+    result.x = GetRenderWidth()  / 2 - screen_width  / 2;
+    result.y = GetRenderHeight() / 2 - screen_height / 2;
+    result.width  = screen_width;
+    result.height = screen_height;
+
+    return result;
+}
+
+#include "util.cpp"
+
+#include "keys.cpp"
 #include "text.cpp"
 
 #include "3d.cpp"
+
+#include "chapter_1.h"
+#include "chapter_2.h"
+
 #include "atari.cpp"
 #include "intro.cpp"
 
@@ -67,23 +109,28 @@ void set_game_mode(Game_Mode mode) {
     }
 }
 
-int main() {
-    SetTraceLogLevel(LOG_ERROR);
+MainFunction() {
+    srand(time(0));
+
+    SetTraceLogLevel(LOG_WARNING);
+    SetExitKey(0);
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT);
 
     InitWindow(default_width, default_height, "Vanishing");
     SetTargetFPS(60);
 
-    global_font = LoadFontEx("FRABK.TTF", 48, 0, 0);
+    global_font = LoadFontEx("frabk.ttf", 32, 0, 0);
     assert(IsFontReady(global_font));
 
-    DisableCursor();
+    //DisableCursor();
 
     set_game_mode(GAME_MODE_INTRO);
 
     while (!WindowShouldClose()) {
         if (IsKeyPressed(KEY_F11))
             toggle_fullscreen();
+        if (IsKeyPressed(KEY_ESCAPE))
+            exit(0);
 
         switch (game_mode) {
             case GAME_MODE_INTRO: game_intro_run(&game_intro); break;

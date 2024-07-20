@@ -1,3 +1,14 @@
+Chapters
+  1. Dysania                    5 mins (x)
+  2. Dinner Party               3 mins
+  3. Repetitions                6 mins
+  4. Theophany                  3 mins
+  5. Perception                 4 mins
+  6. Patience and Blasphemy     4 mins
+  7. Epilogue                   6 mins
+
+  = 28 mins
+
 [Showing the struggle of getting out of bed]
 Text Appears: "Dysania"
 
@@ -6,28 +17,34 @@ Text Appears: "Dysania"
 - You try to reach out to someone.
 - You scream out for help to God.
 - You teleport to your house, you're exiting your bedroom.
-- Show you taking deep breaths.
+- Show you taking deep breaths. (Possible showing rotoscope animation
+  of me walking out door looking sad and apathetic)
+(Ensure you retain the sense of direness here.)
 
 [Showing not taking agency in life]
 Text Appears: "Dinner Party"
 
 (Atari Graphics)
 - You enter the room, it seems like some sort of event.
-- You talk to the person at the front before you enter, and they're really judgy
-  for some reason, and you don't push back on anything they say.
-  This person's design has a huge triangle head and a single huge eye.
+- You talk to the person at the front before you enter, and they're
+  really judgy for some reason, and you don't push back on anything
+  they say. This person's design has a huge triangle head and a single
+  huge eye.
 - You sit at a dinner table with your friends.
-- You're joking with your friends, but it's just a mask, a show. You don't really
-  care about what's going on.
-- You notice a girl (pink) sit at another table.
+- You're joking with your friends, but it's just a mask, a show. You
+  don't really care about what's going on, and you aren't adding much
+  to the conversation.
+- You notice a girl (pink) sit at another table- Penelope (Penny)
 - You're in shock, you didn't think you'd see her there.
-- Your eyes catch for a second.
-- Your friends say you should talk to her, but when you start walking to her...
+- Both your eyes catch for a second.
+- Your friends say you should talk to her, but when you start walking
+  to her...
 - Teleport to the bathroom.
-- Text Appears in pure Black: "COWARD."
+- Closeup of an open window.
 - Text Appears: "I pray for courage but find only echoes."
--               "I pray for purpose but find only echoes."
--               "When will you reveal yourself to me?"
+                "I pray for purpose but find only echoes."
+                "I must be cured. I must be saved."
+                "When will you reveal yourself to me?"
 
 [Showing meaninglessness in life]
 Text Appears: "Repetitions"
@@ -39,102 +56,120 @@ Text Appears: "Repetitions"
   trapped in a prison with no way out, and they seem weirdly dismissive
   of what you said, and they just sort of ignore you.
 - You pretend to care about what's happening.
-- The people from his job start disappearing, the others forgetting they even existed.
+- The people from his job start disappearing, the others forgetting
+  they even existed.
   [These people are meaningless to Chase.]
 - Chase is frightened.
-- Cut to driving home. (Mareux - Underground)
+- He stares at an open window.
+- Cut to driving home. (Mareux - Underground or SPIT IN MY FACE
+                        throughout the rest of the scene)
   First-person perspective but still Atari
-- You enter your home, and scroll on your phone, trying to numb your mind.
+- You enter your home, and scroll on your phone, trying to numb your
+  mind.
 
 [Yearning for purpose]
-Text Appears: "Meeting"
+Text Appears: "Theophany"
 
 - You ensure the windows are closed and you fall asleep.
 
-- At night, sleeping, his eyebrows wince, then hears something whispering to
-  him. His eyes open with dread and looks to his left.
-- (3D Graphics) There's the window that is open that wasn't when he went to bed.
+- At night, sleeping, his eyebrows wince, then hears something
+  whispering to him. His eyes open with dread and looks to his left.
+- (3D Graphics) There's the window that is open that wasn't when he
+  went to bed.
 - The camera zooms into it.
 - Chase asks, "Is that you?", "Have you come for me?"
 
 - Black text appears: "I HEAR THEE, MY SON."
 - Chase goes from intensely scared to a huge smile.
 - Black text appears: "WHAT DO YOU DESIRE?"
-- Chase: "Purpose."
-- Black text appears: "GOOD."
-- Black text appears: "TO GRANT YOUR PRAYER, YOU MUST COMPLETE A TASK FOR ME."
-- Black text appears: "SHOW THAT YOUR FAITH IS PURE."
-- Chase: "I will do anything."
+- Chase: "Meaning and fulfillment."
+- Black text appears: "GOOD.
+-                      TO GRANT YOUR PRAYER, YOU MUST COMPLETE A TASK
+                       FOR ME.
+-                      SHOW THAT YOUR FAITH IS PURE."
+- Chase: "I will do anything you ask, Lord."
 - Black text appears:
      acedd2eaac3582ad42435742073bf948
      286f4f1392ac1b722ea896c3d0e3e3ab
      9e5eea55961c85624d3c62706cf85097
      9e686b9e0a47b7e103c10928fa8a8143
      d63a8310eb8bcbdadfc6d36a1155c2ff
+
             DO YOU UNDERSTAND?
-- Chase: "I- well.... I..."
+
+- Chase: "I- well... I don't know how that will..."
+
             DO YOU UNDERSTAND?
-- Chase: "Yeah."
+
+- Chase: "... Yes."
 
 [Showing how perception changes when you're depressed]
 Text Appears: "Perception"
 
-- He leaves his house, and ends up at a train station, in the black of night.
-- You buy a ticket from a person that has a pyramid head who's especially judgy
-  for no reason. Their head has one huge eye on it.
+Text Appears:
+  I don't have the courage to do what the Lord has asked.
+  It's been weeks.
+  I think I know who I should visit.
+
+(3D graphics)
+- He leaves his house, and ends up at a train station, in the black of
+  night. There's an open window somewhere which represents God is watching.
+- You buy a ticket from a person that has a pyramid head who's especially
+  judgy for no reason. Their head has one huge eye on it.
 - You question why they're acting so odd. They say they're not.
-- They immediately transform into a (more) regular model, and their dialogue is
-  normal now.
+- Their head rotates now and their face is now more normal.
+  Their dialogue is normal now, not displaying any exaggerated negative
+  speech.
 
 - You enter the train, and exit immediately on another exit.
 
-- You're at the dinner party again, with only the two dinner tables; your table
-  and the table with the girl. They all have triangle heads. You talk to her.
+- You're in a modern-style minimalist house similar to houses in
+  The Beginner's Guide.
 
-  Her: "Have you found what you're looking for?"
-  Her: "Purpose?"
-  Chase: "I'm not sure, I don't think I've found it yet."
-  Her: "Me too. What, do you think you're the only one who hasn't?"
-  Chase: "Nothing I accomplish is fulfilling for me. Are you telling me
-          that happens to everyone?"
-  Her: "No, of course not. Some people have it easier than others, but that
-        is how it is."
-  Chase: "Seriously? "It is what it is?" You have to be kidding."
-  Her: "You're trying too hard to find a solution, Chase.
-        Have you always been like this?"
-  Chase: "Pretty much most of my life."
-  Her: "But not always?"
-  Chase: "Ah, great. We're "focusing on the positives."
-          I understand now that you don't understand.
-          Goodbye."
+  J is a triangle-headed person.
+
+  J: "Have you found what you're looking for?"
+     "Purpose?"
+  C: "I'm not sure, I don't think I've found it yet."
+  J: "Me too. What, do you think you're the only one who hasn't?"
+  C: "Nothing I accomplish is fulfilling for me. Are you telling me
+      that happens to everyone?"
+  J: "No, of course not. Some people have it easier than others, but
+      that is how it is."
+  C: "Seriously? "It is what it is?" You have to be kidding."
+  J: "You're trying too hard to find a solution, Chase.
+      Have you always been like this?"
+  C: "Pretty much most of my life."
+  J: "But not always?"
+  C: "Ah, great. So we're "focusing on the positives."
+      I understand now that you don't understand.
+      Goodbye."
 
 You walk through another door, and you're back in your room again...
 
 (Atari Graphics)
-- You have a phone call.
-- F: "I'm you from the future!"
-- C: "Did you escape the prison?"
-- F: "Yes! I did, would you like to know how I did it?"
-- C: "Yes."
-- F: "Oh, so all you have to do is have patience, and th---
-      ..."
-- C: "Are you still there..?"
-- F: "I'm sorry, I just realized I didn't escape after all.
+You have a phone call.
+
+  F: "I'm you from the future!"
+  C: "Did you escape the prison?"
+  F: "Yes! I did, would you like to know how I did it?"
+  C: "Yes."
+  F: "Oh, so all you have to do is have patience, and-"
+  C: "Are you still there..?"
+  F: "I'm sorry, I just realized I didn't escape after all.
       It turns out I'm still in the prison, there was just
       a bigger one around the previous one.
       I'll call you back if I do escape, promise."
-- C: "Wait wh-"
-- *click*
+  C: "Wait wh-"
+  *click*
 
 Text Appears: "Patience and Blasphemy"
 
 (Atari Graphics)
 - You're walking through the desert again, thirsty and about to die.
-- You try to reach out to someone.
-- "Wait, we've been here before haven't we?"
-   Hahahahahah, you can't fool me!"
+- You try to reach out to a node...
 
-- Fade slowly into the bedroom.
+- Cross Fade into the bedroom.
 - Black Text: "YOU DIDN'T COMPLETE THE TASK THAT I ASKED."
 - You:        "I changed my mind."
 - Black Text: "No, no, no. You must complete this, otherwise you
@@ -142,43 +177,43 @@ Text Appears: "Patience and Blasphemy"
                MEANING. PURPOSE. CONTENTMENT. I AM THE ALL-POWERFUL,
                I CAN GRANT YOU WHATEVER AND WHOMEVER YOU PLEASE.
 - You:        "I just said I changed my mind."
-- Black-Red Text: "THE INFINITE POSSESSES A POWER YOU CANNOT BEGIN
-               TO GRASP. WHAT WILL YOU DO IN TWENTY YEARS WITH
-               A JOB WHICH HOLDS AS MUCH MEANING AS COUNTING
-               GRAINS OF SAND AT THE SHORE AND A HOME
-               AS LONELY AS THE SILENCE BEFORE CREATION
-               ITSELF? I CAN MAKE THAT HAPPEN, CHASE."
-- You:        "I will be patient."
+- Black-Red Text:
+              "THE INFINITE POSSESSES A POWER YOU CANNOT BEGIN
+               TO GRASP. WHAT DO YOU HAVE? A JOB WHICH
+               HOLDS AS MUCH MEANING AS COUNTING GRAINS OF SAND
+               AT THE SHORE? A HOME AS LONELY AS THE SILENCE BEFORE
+               CREATION ITSELF? WHAT WILL YOU DO WITHOUT MY
+               BENEVOLENT GUIDANCE?"
+- You:        "I-I..."
+              "I'll be... patient."
 - Red Text:   "Fool. I am the ALMIGHTY. YOU SHOULD BE BOWING
                TO MY PRESENCE. YOU ARE A PUNY VESSEL OF FLESH
                WHICH HAS NOT THE SMALLEST INCLINATION OF TRUE
-               POWER. I will be here FOREVER."
+               POWER. I have existed for eternity and I will be
+               here for eternity."
 - You:        "You will be here forever, yes. And you may return
-               stronger than ever before.
-               But I will cherish every last nanosecond that I am
-               able to overpower you, as I have done now."
+               stronger than ever before. But I will cherish every
+               second that I am able to overpower you."
 
 - RED Text: 
 
-               MORTAL, HEED THESE WORDS.
-               I AM THE ALMIGHTY.
-               I AM THE EXALTER AND THE PUNISHER.
-               I AM THE EVERLASTING!
+                 MORTAL, HEED THESE WORDS.
+                     I AM THE ALMIGHTY.
+             I AM THE EXALTER AND THE PUNISHER;
+                   I AM THE EVERLASTING!
 
-               I HAVE BIRTHED THE UNIVERSE FROM
-               THE INFINITE PLANE OF NOTHINGNES6,
-               FABRICATED LIFE FROM 6CRAP6 OF DUST,
-               CONJURED TH3 KN0WN FROM TH3 V01D
-               AND YOU THINK YOU CAN 0VERPOWER M3?
+              I HAVE BIRTHED THE UNIVERSE FROM
+                THE INFINITUDE OF PURE V0ID,
+            FABRICATED LIFE FROM 6CRAP6 OF DUST,
+            CONJURED TH3 KN0WN FROM TH3 UNKNOWN!
+             YOU BELIEVE YOU CAN 0VERPOWER ME?
 
-                           666
-
-               0f961574366631de13e5343b05bcf0a5
-               5107cca865d6662eee032b4848277692
-               66666666666666666666666666666666
-               f8e75ff9835716664db31032088f0d3e
-               c34aafc3d123f91666dc05c7bc220c76
-               1b8d971549ba141eb666c75d192dd9c0
+              0f961574366631de13e5343b05bcf0a5
+              5107cca865d6662eee032b4848277692
+              ccef10e666e666r66266666636261666
+              f8e75ff9835716664db31032088f0d3e
+              c34aafc3d123f91666dc05c7bc220c76
+              1b8d971549ba141eb666c75d192dd9c0
 
                            ______              
                       .d$$$******$$$$c.        
@@ -188,8 +223,8 @@ Text Appears: "Patience and Blasphemy"
                 $F   *$. "$$e.e$$" 4$F   ^$b  
                d$     $$   z$$$e   $$     '$. 
                $P     `$L$$P` `"$$d$"      $$ 
-               $$     e$$F       4$$b.     $$ 
-               $b  .$$" $$      .$$ "4$b.  $$ 
+               $$     e$$F  666  4$$b.     $$ 
+               $b  .$$" $$  666  $$ "4$b.  $$ 
                $$e$P"    $b     d$`    "$$c$F 
                '$P$$$$$$$$$$$$$$$$$$$$$$$$$$  
                 "$c.      4$.  $$       .$$   
@@ -198,7 +233,118 @@ Text Appears: "Patience and Blasphemy"
                      `4$$$c.$$$..e$$P"        
                          `^^^^^^^`
 
-   
-              Chase: "You have no power over me."
 
-              Fade out.
+The screen goes RED, with a deafening noise amping up the tension.
+Then BLACKNESS.
+
+Text Appears: "Epilogue"
+
+(3D Graphics)
+You're in a white void.
+You are enclosed in bars that surround you.
+There are orbs on the ground which look like the same nodes with
+liquid in it from the first chapter. When you go up to touch
+them, a message appears:
+
+    "This one is named hanging out with friends"
+    "This one is named eating good food."
+    "This one is named learning guitar."
+    "This one is named taking an afternoon drive."
+    "This one is named sports."
+
+  At each point, you decide not to pick them up because
+  you are trying to find a way out of the jail bars. You
+  can't focus, and feel sad. You need to get a little break,
+  don't you?
+
+  You go to the door and be patient until it opens, on a timer.
+  It opens slowly over time.
+
+  You get to the other side.
+
+  You make a phone call.
+
+  Wow, I got out! I need to make a phone call.
+
+  F: "I'm you from the future!"
+  C: "Did you escape the prison?"
+  F: "Yes! I did, would you like to know how I did it?"
+  C: "Yes."
+  F: "Oh, so all you have to do is have patience, and-"
+  C: "Are you still there..?"
+  F: "I'm sorry, I just realized I didn't escape after all.
+      It turns out I'm still in the prison, there was just
+      a bigger one around the previous one.
+      I'll call you back if I do escape, promise."
+  C: "Wait wh-"
+  *click*
+
+  When you get to the other side, the same thing happens, but
+  with different opportunities.
+    "This one is named learning a new skill"
+    "This one is named taking an internship."
+    "This one is named talking to someone important."
+    "This one is named finding love."
+
+  Even though you get the option yes or no, you continue to ignore them.
+  You find that these things are meaningless, even though you'd like
+  to have them in theory. You move on through this jail, and onto the
+  next segment.
+
+  There aren't any orbs. You just wait for the jail to open.
+
+  In the next segment, there's one orb. "Pick it up?"
+  If you answer yes, he says: "Why not?"
+
+(Atari graphics)
+Having a smoke with the girl from the start.
+You talk to her about something that interests you both.
+
+                -- the end --
+            created by spiritwolf
+
+---
+
+Analysis
+
+Putting this stuff here so I can remember... I forget these
+things easily.
+
+- The Devil/God is represented by an open window because suicide is
+  the best thing he can get Chase to do.
+- The whole thing is about meaninglessness and a search for
+  fulfillment.
+- The devil disguised as God (or is God himself) represents Chase's
+  inner desire to stop, hold back, and continue living a nothing
+  life, eventually killing him via suicide.
+- Chase feels a sense of malaise in everything he does because he
+  keeps focusing on "escaping for good". There is no such thing.
+- The bad times must exist, and he must ride them out, and he must
+  cherish the good times. It's not a reason not to take opportunities;
+  otherwise you'll be 50 without kids and an unfulfilling job and you
+  will have realized you wasted your life.
+- When you're in this state your brain makes wrong perceptive
+  judgements on others, skewing them negative.
+- The game also talks about pepole trying to give advice to Chase,
+  "It is what it is", "You're not the only one", "Focus on the
+  positives" -- this can be good advice but in certain contexts.
+- The infinite subset of prisons references the cyclical nature of
+  the human condition, and it tells you that you should enjoy the
+  times you have. You're still trapped, sure, but enjoy what you
+  have.
+- Chase is too obsessed with getting out of the jail ("fixing" his
+  problem) that he has no time to actually live. Everything loses
+  meaning. He may still do some activities like going out with
+  friends but he doesn't cherish it and experience it in the moment.
+- The advice from Chase that came from himself "Be patient" is what
+  actually ended up helping him. It came from himself, not anyone
+  else.
+
+- Chase is thirsty for meaning and purpose
+- The guy on the phone says that there's "water" everywhere!
+  People don't really get stuck in the desert for very long,
+  if at all.
+- Chase sees the "water", sure, but it's not water to him.
+  It's painful.
+- It's shown as something easy to get to, but the instructions
+  seem arbitrary. "Go up, down, up, left!"
