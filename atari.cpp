@@ -502,7 +502,7 @@ void atari_mid_text_list_init(Text_List *list, char *line,
     list->color        = RED;
     list->center_text  = true;
     list->scroll_type  = EntireLine;
-    list->render_type  = ShadowBackdrop;
+    list->render_type  = Bare;
     list->location     = Middle;
     list->take_keyboard_focus = false;
 

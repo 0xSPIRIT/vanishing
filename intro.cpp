@@ -33,7 +33,7 @@ void game_intro_init(Game_Intro *game) {
             intro_init_text_list(&game->text[3], "A sinking feeling engulfed his entire body.", &game->text[4]);
             intro_init_text_list(&game->text[4], "He tried looking outside;\rtrying to feel something-- anything!", &game->text[5]);
             intro_init_text_list(&game->text[5], "But couldn't.", &game->text[6]);
-            intro_init_text_list(&game->text[6], "He clenched the cross that hung around his neck.\rHe went to sleep that night\nparticularly perturbed.", &game->text[7]);
+            intro_init_text_list(&game->text[6], "He went to sleep that night\nparticularly perturbed.", &game->text[7]);
             intro_init_text_list(&game->text[7], "He twisted and turned in his bed\nas he slowly dozed off...", nullptr);
         } break;
         case 2: {

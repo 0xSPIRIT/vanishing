@@ -539,7 +539,7 @@ void chapter_2_level_init(Game_Atari *game) {
                          speed,
                          &game->text[52]);
     {
-        String choices[] = { const_string("Sure"), const_string("No, look around more") };
+        String choices[] = { const_string("Sure"), const_string("Look around more first") };
         Text_List *next[] = { nullptr, nullptr };
         void (*hooks[2])(void*) = {
             chapter_2_sit_down,
@@ -823,7 +823,7 @@ void chapter_2_level_init(Game_Atari *game) {
                           &game->text[103]);
     chapter_2_window_text(true,
                           &game->text[103],
-                          "But the Universe whispered\nto him:\r"
+                          "But the Lord whispered\nto him:\r"
                           "78c4f1a6506db3ff\n"
                           "ab7d9d2ccbd8866d\n"
                           "34f2616ed69da985\n"

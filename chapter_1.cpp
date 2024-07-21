@@ -756,7 +756,10 @@ void chapter_1_update(Game_Atari *game, float dt) {
 void chapter_1_draw(Game_Atari *game) {
     Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
 
-    game->textbox_alpha = 200;
+    if (level->final_text)
+        game->textbox_alpha = 255;
+    else 
+        game->textbox_alpha = 200;
 
     ClearBackground(level->background_color);
 
