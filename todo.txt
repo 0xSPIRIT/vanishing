@@ -1,6 +1,6 @@
 TODO
 
-- Chapter 2: Dinner Party
+x Chapter 2: Dinner Party
   x Camera with level with multiple screens
   x Bouncer
   x Jake and Erica
@@ -11,11 +11,13 @@ TODO
   x Penelope comes (shift the camera to the side like undertale)
   x Fullscreen image of you, then her looking at you (your eyes catch)
   x You go up to her,
-  - then teleport to...
-  - Bathroom
-  - Closeup of a window with wind blowing, with the
-  - hex
-  - then, Ending text over it.
+  x then teleport to...
+  x Bathroom
+  x Closeup of a window with wind blowing, with the
+  x hex
+  x then, Ending text over it.
+
+- Somehow include a window in the first chapter somewhere?
 
 A phone call with a future version of yourself:
   The universe does not stop behaving chaotically just because you

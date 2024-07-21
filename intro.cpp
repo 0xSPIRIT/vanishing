@@ -39,6 +39,9 @@ void game_intro_init(Game_Intro *game) {
         case 2: {
             intro_init_text_list(&game->text[0], "2. Dinner Party", 0);
         } break;
+        case 3: {
+            intro_init_text_list(&game->text[0], "3. Repetitions", 0);
+        } break;
     }
 
     game->current_text_list = &game->text[0];

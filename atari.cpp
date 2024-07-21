@@ -89,6 +89,8 @@ struct Game_Atari {
     Text_List text[128];
     Text_List *current;
 
+    uint8_t textbox_alpha;
+
     bool queue_deinit_and_goto_intro;
     void *level; // Points to the specific chapter level struct.
 };
@@ -439,7 +441,7 @@ void atari_update_and_draw_textbox(Game_Atari *game) {
                    {0, 0, (float)render_width, (float)render_height},
                    {0, 0},
                    0,
-                   {255, 255, 255, 200});
+                   {255, 255, 255, game->textbox_alpha});
 }
 
 void atari_text_list_init(Text_List *list, char *speaker,
@@ -450,8 +452,16 @@ void atari_text_list_init(Text_List *list, char *speaker,
     list->font_spacing = 1;
     list->scale        = 0.125;
     list->scroll_speed = scroll_speed;
-    list->color        = BLACK;
-    list->bg_color     = {186, 158, 78, 255};
+    switch (chapter) {
+        case 1: {
+            list->color    = BLACK;
+            list->bg_color = {186, 158, 78, 255};
+        } break;
+        case 2: {
+            list->color    = WHITE;
+            list->bg_color = {27, 36, 41, 255};
+        } break;
+    }
     list->center_text  = false;
 
     text_list_init(list, speaker, line, next);
