@@ -1,6 +1,6 @@
 Chapters
   1. Dysania                    5 mins (x)
-  2. Dinner Party               4 mins (x)
+  2. Dinner Party               5 mins (x)
   3. Repetitions                6 mins
   4. Theophany                  3 mins
   5. Perception                 4 mins
@@ -37,7 +37,6 @@ Text Appears: "Dinner Party"
 - You notice a girl (pink) sit at another table- Penelope (Penny)
 - You're in shock, you didn't think you'd see her there.
 - Both your eyes catch for a second.
-(3D Graphics)
 - Your friends say you should talk to her, but when you start walking
   to her...
 - Teleport to the bathroom.
@@ -60,7 +59,8 @@ Text Appears: "Repetitions"
 - The people from his job start disappearing, the others forgetting
   they even existed.
   [These people are meaningless to Chase.]
-- Chase is frightened.
+- Chase is frightened, but also that he may disappear too. (Because
+  his life is meaningless as well.)
 - He stares at an open window.
 - Cut to driving home. (Mareux - Underground or SPIT IN MY FACE
                         throughout the rest of the scene)
@@ -118,12 +118,13 @@ Text Appears:
 - You buy a ticket from a person that has a pyramid head who's especially
   judgy for no reason. Their head has one huge eye on it.
 - You question why they're acting so odd. They say they're not.
-- Their head rotates now and their face is now more normal.
-  Their dialogue is normal now, not displaying any exaggerated negative
+- Screen goes black for a second and the level is reloaded. Now when you
+  talk to the person, they don't havea huge eye on their face.
+- Their dialogue is normal now, not displaying any exaggerated negative
   speech.
 
-- You enter the train, and exit immediately on another exit.
-
+- You enter the train, and it sets off.
+- You exit.
 - You're in a modern-style minimalist house similar to houses in
   The Beginner's Guide.
 
@@ -181,12 +182,11 @@ Text Appears: "Patience and Blasphemy"
 - Black-Red Text:
               "THE INFINITE POSSESSES A POWER YOU CANNOT BEGIN
                TO GRASP. WHAT DO YOU HAVE? A JOB WHICH
-               HOLDS AS MUCH MEANING AS COUNTING GRAINS OF SAND
-               AT THE SHORE? A HOME AS LONELY AS THE SILENCE BEFORE
-               CREATION ITSELF? WHAT WILL YOU DO WITHOUT MY
+               HOLDS AS MUCH MEANING AS COUNTING GRAINS OF SAND?
+               A HOME AS LONELY AS THE SILENCE BEFORE
+               CREATION? WHAT WILL YOU DO WITHOUT MY
                BENEVOLENT GUIDANCE?"
-- You:        "I-I..."
-              "I'll be... patient."
+- You:        "I'll be... patient."
 - Red Text:   "Fool. I am the ALMIGHTY. YOU SHOULD BE BOWING
                TO MY PRESENCE. YOU ARE A PUNY VESSEL OF FLESH
                WHICH HAS NOT THE SMALLEST INCLINATION OF TRUE
@@ -247,11 +247,11 @@ There are orbs on the ground which look like the same nodes with
 liquid in it from the first chapter. When you go up to touch
 them, a message appears:
 
-    "This one is named hanging out with friends"
-    "This one is named eating good food."
-    "This one is named learning guitar."
-    "This one is named taking an afternoon drive."
-    "This one is named sports."
+    "This one is named hanging out with friends. (READ SUCCESS)"
+    "This one is named eating good food. (READ SUCCESS)"
+    "This one is named learning guitar. (READ SUCCESS)"
+    "This one is named taking an afternoon drive. (READ SUCCESS)"
+    "This one is named sports. (READ SUCCESS)"
 
   At each point, you decide not to pick them up because
   you are trying to find a way out of the jail bars. You
@@ -266,12 +266,14 @@ them, a message appears:
   You make a phone call.
 
   Wow, I got out! I need to make a phone call.
+  The future you is written as "You" as the speaker text,
+  and the previous you is written as "Chase".
 
   F: "I'm you from the future!"
   C: "Did you escape the prison?"
   F: "Yes! I did, would you like to know how I did it?"
   C: "Yes."
-  F: "Oh, so all you have to do is have patience, and-"
+  F: "Oh, so all you have to do is have patience, and-" (fog clears a little allowing you to see bars)
   C: "Are you still there..?"
   F: "I'm sorry, I just realized I didn't escape after all.
       It turns out I'm still in the prison, there was just
@@ -282,10 +284,10 @@ them, a message appears:
 
   When you get to the other side, the same thing happens, but
   with different opportunities.
-    "This one is named learning a new skill"
-    "This one is named taking an internship."
-    "This one is named talking to someone important."
-    "This one is named finding love."
+    "This one is named learning a new skill. (READ SUCCESS)"
+    "This one is named taking an internship. (READ SUCCESS)"
+    "This one is named talking to someone important. (READ SUCCESS)"
+    "This one is named finding love. (READ SUCCESS)"
 
   Even though you get the option yes or no, you continue to ignore them.
   You find that these things are meaningless, even though you'd like
@@ -294,11 +296,13 @@ them, a message appears:
 
   There aren't any orbs. You just wait for the jail to open.
 
+  "Congratulations, you have wasted your time."
+
   In the next segment, there's one orb. "Pick it up?"
   If you answer yes, he says: "Why not?"
 
 (Atari graphics)
-Having a smoke with the girl from the start.
+Having a smoke with Penny.
 You talk to her about something that interests you both.
 
                 -- the end --
@@ -342,11 +346,30 @@ things easily.
   else.
 
 - Chase is thirsty for meaning and purpose
-- The guy on the phone says that there's "water" everywhere!
-  People don't really get stuck in "the desert" of meaninglessness
-  for very long, if at all.
+- The guy on the phone says that there's "water" (meaningful activities)
+  everywhere! People don't really get stuck in "the desert" of
+  meaninglessness for very long, if at all.
 - Chase sees the "water", sure, but it's not water to him.
   It's painful. He tries to drink them, but it doesn't work
   like it does for others.
 - It's shown as something easy to get to, but the instructions
   seem arbitrary. "Go up, down, up, left!"
+
+- The "this one is named <random hex>" is to denote how alien
+  things that should have meaning, like going out with friends,
+  doing things that you like, etc. feel when you're in a
+  depressive state.
+
+- The triangle headed people represent people who you are
+  perceiving in a different way than objective reality.
+  Their huge eyes watching you make you feel disturbed,
+  that's how Chase feels when he's talking to them.
+- The 3D graphics is used to heighten tension and give a
+  pacing difference. It's also when Chase is confused.
+
+- I like the idea that Chase's revelations came only from
+  himself. He's always talking to a "future version of
+  himself", but these revelations were his, not anyone
+  else's. It was not, and cannot be bestowed upon him
+  by anyone else by its own nature. Revelations can only
+  be internal experiences.

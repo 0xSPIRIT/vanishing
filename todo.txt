@@ -1,22 +1,5 @@
 TODO
 
-x Chapter 2: Dinner Party
-  x Camera with level with multiple screens
-  x Bouncer
-  x Jake and Erica
-  x Mike and Jessica
-  x People at the start chilling, they have dates.
-  x Dinner party tables
-  x Dialogue with Eleanor -> Penny
-  x Penelope comes (shift the camera to the side like undertale)
-  x Fullscreen image of you, then her looking at you (your eyes catch)
-  x You go up to her,
-  x then teleport to...
-  x Bathroom
-  x Closeup of a window with wind blowing, with the
-  x hex
-  x then, Ending text over it.
-
 - Somehow include a window in the first chapter somewhere?
 
 A phone call with a future version of yourself:
@@ -32,9 +15,16 @@ A phone call with a future version of yourself:
   as the theme of meaninglessness.
 
 Later
+- Replace the font renderer with your own for the document
+  review section so we can use monospaced fonts properly.
+
+- Make sure all the God text is Black at first, not red.
 - Intro: Make it the same setting as the epilogue-- the jail.
          Introduce the feeling of meaninglessness and depression
          that Chase has.
+         Introduce the mysterious monster which hooks people
+         and also introduces the themes that will be covered.
+
 - At the end of chapter 1, make it so that the player is kept
   at the middle of the screen so it looks like he's getting out
   of bed when the switch occurs.
@@ -51,6 +41,7 @@ grease is a VHS shader, but that's something that we know can
 be made, and should be one of the last things that I even do
 on the game.
 
+https://www.reddit.com/r/opengl/comments/cfx7e4/what_is_the_best_way_to_achive_crt_looks_using/
 https://www.youtube.com/watch?v=Z30cKoFvha4
 
 Add some sort of intensity uniform that can affect how bad the

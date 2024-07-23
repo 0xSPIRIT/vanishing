@@ -236,7 +236,7 @@ void chapter_2_end_fade(void *game_ptr) {
     atari_queue_deinit_and_goto_intro(game);
 }
 
-void chapter_2_level_init(Game_Atari *game) {
+void chapter_2_init(Game_Atari *game) {
     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
 
     Texture2D *textures = atari_assets.textures;
@@ -610,7 +610,7 @@ void chapter_2_level_init(Game_Atari *game) {
                          &game->text[62]);
     atari_text_list_init(&game->text[62],
                          "Eleanor",
-                         "Y'know, last month,\rI got commissioned for this\nbig restaurant chain.",
+                         "Y'know, last month,\rI got commissioned by this\nbig restaurant chain.",
                          speed,
                          &game->text[63]);
     atari_text_list_init(&game->text[63],
@@ -645,17 +645,17 @@ void chapter_2_level_init(Game_Atari *game) {
                          &game->text[69]);
     atari_text_list_init(&game->text[69],
                          "Chase",
-                         "!!!\rHow dare they!",
+                         "....!\rHow dare they!",
                          speed,
                          &game->text[70]);
     atari_text_list_init(&game->text[70],
                          "Eleanor",
-                         "... Except for one...\rI put this in as a joke,\rcuz I'm so quirky.",
+                         "... Except for one...\rI put this one in as a joke,\r'cause I'm so quirky.",
                          speed,
                          &game->text[71]);
     atari_text_list_init(&game->text[71],
                          "Eleanor",
-                         "They actually loved it.",
+                         "But it turns out,\nthey actually loved it.",
                          speed,
                          &game->text[72]);
     atari_text_list_init(&game->text[72],
@@ -665,18 +665,18 @@ void chapter_2_level_init(Game_Atari *game) {
                          &game->text[73]);
     atari_text_list_init(&game->text[73],
                          "Eleanor",
-                         "It was one that I used\nComic Sans for the\nmain font.",
+                         "... It was one that I used\nComic Sans for the main font.",
                          speed,
                          &game->text[74]);
     game->text[73].text[0].font = &comic_sans;
     atari_text_list_init(&game->text[74],
                          "Chase",
-                         "No wayy...",
+                         "No. Way.",
                          speed,
                          &game->text[75]);
     atari_text_list_init(&game->text[75],
                          "Eleanor",
-                         "They liked it so much,\rthat they just used that.\rCheck their website.",
+                         "They liked it so much,\rthat they just used it.\rCheck their website.",
                          speed,
                          &game->text[76]);
     atari_text_list_init(&game->text[76],
@@ -686,7 +686,7 @@ void chapter_2_level_init(Game_Atari *game) {
                          &game->text[77]);
     atari_text_list_init(&game->text[77],
                          "Eleanor",
-                         "Not really,\rI got paid the beaucoup\nbucks.",
+                         "Not really.\rI got paid beaucoup\nbucks, so I'm chilling.",
                          speed,
                          &game->text[78]);
     atari_text_list_init(&game->text[78],
@@ -718,12 +718,12 @@ void chapter_2_level_init(Game_Atari *game) {
                          &game->text[82]);
     atari_text_list_init(&game->text[82],
                          "Eleanor",
-                         "Isn't that...?",
+                         "Isn't that...?\r...",
                          speed,
                          &game->text[83]);
     atari_text_list_init(&game->text[83],
                          "Chase",
-                         "Use your words, Eleanor.\rTalking and so forth.",
+                         "Use your words, Eleanor.\rUtilise the old vocal cords.",
                          speed,
                          &game->text[84]);
     atari_text_list_init(&game->text[84],
@@ -819,7 +819,7 @@ void chapter_2_level_init(Game_Atari *game) {
                           &game->text[102]);
     chapter_2_window_text(false,
                           &game->text[102],
-                          "He thought,\r\"I must be CURED!\",\rHe asked,\r\"When will you reveal\nyourself to me?\"",
+                          "He thought,\r\"I must be cured from this!\",\rHe asked,\r\"When will you reveal\nyourself to me?\"",
                           &game->text[103]);
     chapter_2_window_text(true,
                           &game->text[103],
@@ -899,6 +899,10 @@ void chapter_2_level_init(Game_Atari *game) {
     add_wall(&game->entities, { 576, 160-3, 192*3, 8});
 
     add_door(&game->entities, { 569, 78, 7, 25 });
+}
+
+void chapter_2_deinit(Game_Atari *game) {
+    (void)game;
 }
 
 void chapter_2_entity_update(Entity *e, Game_Atari *game, float dt) {

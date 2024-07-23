@@ -9,6 +9,14 @@
 //
 // Via switch statements, we dispatch to the specific
 // chapter's code for updating and rendering the game.
+//
+// Functions you must implement if you're making
+// a new chapter:
+//
+//   chapter_n_init(game)
+//   chapter_n_update(game, dt)
+//   chapter_n_draw(game)
+//
 
 // Loaded and unloaded for each chapter,
 // so you can use different texture ID's.
@@ -354,32 +362,6 @@ bool can_open_dialogue(Game_Atari *game, Entity *e, Entity *player) {
     return result;
 }
 
-void atari_deinit(Game_Atari *game) {
-    for (int i = 0; i < StaticArraySize(atari_assets.textures); i++) {
-        if (atari_assets.textures[i].width) {
-            UnloadTexture(atari_assets.textures[i]);
-            memset(&atari_assets.textures[i], 0, sizeof(Texture2D));
-        }
-    }
-
-    //memset(game->text, 0, sizeof(game->text));
-    // Reset text
-    for (int i = 0; i < StaticArraySize(game->text); i++) {
-        game->text[i] = {};
-    }
-    game->current = 0;
-
-    for (size_t i = 0; i < game->entities.length; i++) {
-        Entity *e = game->entities.data[i];
-        free(e);
-    }
-
-    game->entities.length = 0;
-
-    free(game->level);
-    game->level = 0;
-}
-
 void atari_queue_deinit_and_goto_intro(Game_Atari *game) {
     game->queue_deinit_and_goto_intro = true;
 }
@@ -511,6 +493,7 @@ void atari_mid_text_list_init(Text_List *list, char *line,
 
 #include "chapter_1.cpp"
 #include "chapter_2.cpp"
+#include "chapter_3.cpp"
 
 void game_atari_init(Game_Atari *game) {
     assert(game->level == nullptr); // So we can make sure we had called deinit before
@@ -530,13 +513,47 @@ void game_atari_init(Game_Atari *game) {
     switch (chapter) {
         case 1: {
             game->level = calloc(1, sizeof(Level_Chapter_1));
-            chapter_1_level_init(game);
+            chapter_1_init(game);
         } break;
         case 2: {
             game->level = calloc(1, sizeof(Level_Chapter_2));
-            chapter_2_level_init(game);
+            chapter_2_init(game);
+        } break;
+        case 3: {
+            game->level = calloc(1, sizeof(Level_Chapter_3));
+            chapter_3_init(game);
         } break;
     }
+}
+
+void atari_deinit(Game_Atari *game) {
+    switch (chapter) {
+        case 1: chapter_1_deinit(game);
+        case 2: chapter_2_deinit(game);
+        case 3: chapter_3_deinit(game);
+    }
+
+    for (int i = 0; i < StaticArraySize(atari_assets.textures); i++) {
+        if (atari_assets.textures[i].width) {
+            UnloadTexture(atari_assets.textures[i]);
+            memset(&atari_assets.textures[i], 0, sizeof(Texture2D));
+        }
+    }
+
+    // Reset text
+    for (int i = 0; i < StaticArraySize(game->text); i++) {
+        game->text[i] = {};
+    }
+    game->current = 0;
+
+    for (size_t i = 0; i < game->entities.length; i++) {
+        Entity *e = game->entities.data[i];
+        free(e);
+    }
+    array_free(&game->entities);
+
+    free(game->level);
+    game->level = 0;
 }
 
 void game_atari_run(Game_Atari *game) {
@@ -545,6 +562,7 @@ void game_atari_run(Game_Atari *game) {
     switch (chapter) {
         case 1: chapter_1_update(game, dt); break;
         case 2: chapter_2_update(game, dt); break;
+        case 3: chapter_3_update(game, dt); break;
     }
 
     BeginDrawing();
@@ -555,6 +573,7 @@ void game_atari_run(Game_Atari *game) {
         switch (chapter) {
             case 1: chapter_1_draw(game); break;
             case 2: chapter_2_draw(game); break;
+            case 3: chapter_3_draw(game); break;
         }
 
         atari_update_and_draw_textbox(game);

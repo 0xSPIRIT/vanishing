@@ -1,6 +1,53 @@
 #define StaticArraySize(array) (sizeof(array)/sizeof(array[0]))
 #define Radians(degrees) (PI * degrees / 180.0)
 
+// Arena Alloactor
+
+struct Arena {
+    uint8_t *buffer;
+    size_t   used;
+    size_t   capacity;
+};
+
+Arena make_arena(size_t initial_size) {
+    Arena arena;
+
+    arena.used     = 0;
+    arena.capacity = initial_size;
+    arena.buffer   = (uint8_t *)calloc(initial_size, sizeof(arena.buffer[0]));
+
+    return arena;
+}
+
+void arena_free(Arena *arena) {
+    if (arena->buffer)
+        free(arena->buffer);
+    memset(arena, 0, sizeof(Arena));
+}
+
+void *arena_push(Arena *arena, size_t size) {
+    void *result = 0;
+
+    if (arena->used + size >= arena->capacity) {
+        assert(false);
+    } else {
+        result = (arena->buffer + arena->used);
+        arena->used += size;
+    }
+
+    return result;
+}
+
+void arena_pop(Arena *arena, size_t size) {
+    if (arena->used >= size) {
+        arena->used -= size;
+    } else {
+        assert(false);
+    }
+}
+
+// Dynamic Array
+
 template <typename T>
 struct Array {
     T *data;
@@ -26,7 +73,7 @@ void array_free(Array<T> *array) {
 
     memset(array->data, 0, sizeof(T)*array->length);
 
-    free(data);
+    free(array->data);
 
     array->data     = 0;
     array->length   = 0;
@@ -81,13 +128,11 @@ void array_print(Array<T> array, const char *t_format_specifier) {
     }
 }
 
-///
+// Misc
 
 void print_rectangle(Rectangle rect) {
     printf("{%f, %f, %f, %f}", rect.x, rect.y, rect.width, rect.height);
 }
-
-///
 
 Texture2D load_texture(const char *filename) {
     Texture2D result;

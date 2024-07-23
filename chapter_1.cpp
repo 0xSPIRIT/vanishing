@@ -119,7 +119,7 @@ void set_player_alarm(void *game_ptr) {
     level->about_to_exit = true;
 }
 
-void chapter_1_level_init(Game_Atari *game) {
+void chapter_1_init(Game_Atari *game) {
     Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
 
     Texture2D *textures = atari_assets.textures;
@@ -182,17 +182,17 @@ void chapter_1_level_init(Game_Atari *game) {
 
     atari_text_list_init(&game->text[7],
                          0,
-                         "This one calls itself F900BC\n2ED1154368AE.",
+                         "This one calls itself\n83D3960AA4B1 (READ ERROR).",
                          speed,
                          &game->text[10]);
     atari_text_list_init(&game->text[8],
                          "Chase",
-                         "This one calls itself C0291B\nA163240674CED.",
+                         "This one calls itself\nC0291BA16324 (READ ERROR).",
                          speed,
                          &game->text[10]);
     atari_text_list_init(&game->text[9],
                          0,
-                         "This one calls itself DC6F82\n033518962C.",
+                         "This one calls itself\nDC6F8203351 (READ ERROR).",
                          speed,
                          &game->text[10]);
 
@@ -319,6 +319,10 @@ void chapter_1_level_init(Game_Atari *game) {
     game->text[31].callbacks[0] = set_player_alarm;
 
     game->current = &game->text[0];
+}
+
+void chapter_1_deinit(Game_Atari *game) {
+    (void)game;
 }
 
 void add_cactuses_randomly(Array<Entity*> *entities, size_t cactus_count) {

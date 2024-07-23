@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <math.h>
 #include <time.h>
 
@@ -40,9 +41,9 @@ enum Game_Mode {
 };
 Game_Mode game_mode = GAME_MODE_INVALID;
 
-int chapter = 2;
+int chapter = 3;
 
-Font global_font, comic_sans;
+Font global_font, comic_sans, bitmap_font;
 
 enum Keyboard_Focus {
     NO_KEYBOARD_FOCUS, // we're free to move around
@@ -54,7 +55,7 @@ void set_game_mode(Game_Mode mode);
 Rectangle get_screen_rectangle() {
     Rectangle result;
 
-    float desired_aspect_ratio = 4.f/3.f;
+    float desired_aspect_ratio = (float)render_width/(float)render_height;//4.f/3.f;
 
     int screen_width = GetRenderWidth();
     int screen_height = (int) ((float)screen_width / desired_aspect_ratio);
@@ -67,6 +68,21 @@ Rectangle get_screen_rectangle() {
     result.y = GetRenderHeight() / 2 - screen_height / 2;
     result.width  = screen_width;
     result.height = screen_height;
+
+    return result;
+}
+
+Vector2 get_mouse() {
+    Vector2 result   = GetMousePosition();
+    Rectangle screen = get_screen_rectangle();
+
+    float scale_x = screen.width / (float)render_width;
+    float scale_y = screen.height / (float)render_height;
+
+    result.x -= screen.x;
+    result.y -= screen.y;
+    result.x /= scale_x;
+    result.y /= scale_y;
 
     return result;
 }
@@ -120,7 +136,14 @@ MainFunction() {
     SetTargetFPS(60);
 
     global_font = LoadFontEx("frabk.ttf", 32, 0, 0);
-    comic_sans = LoadFontEx("comic.ttf", 16, 0, 0);
+    comic_sans  = LoadFontEx("comic.ttf", 16, 0, 0);
+
+    /*
+    Image bitmap = LoadImage("mbf_small_00_black_bg.png");
+    bitmap_font = LoadFontFromImage(bitmap, BLACK, 0);
+    */
+
+    //bitmap_font = LoadFont("mbf_small_00_black_bg.png");
     assert(IsFontReady(global_font));
 
     //DisableCursor();
