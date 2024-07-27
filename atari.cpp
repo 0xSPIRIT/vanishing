@@ -565,16 +565,14 @@ void game_atari_init(Game_Atari *game) {
     game->render_target  = LoadRenderTexture(render_width, render_height);
     game->textbox_target = LoadRenderTexture(render_width, render_height);
 
-    if (game->level_arena.buffer)
-        arena_free(&game->level_arena);
-
     union Max_Size {
         Level_Chapter_1 a;
         Level_Chapter_2 b;
         Level_Chapter_3 c;
     };
 
-    game->level_arena = make_arena(Megabytes(128));
+    if (!game->level_arena.buffer)
+        game->level_arena = make_arena(Megabytes(128));
 
     entity_allocator.first_free  = 0;
     entity_allocator.level_arena = &game->level_arena;
@@ -602,8 +600,8 @@ void atari_deinit(Game_Atari *game) {
         case 3: chapter_3_deinit(game);
     }
 
-    arena_free(&game->level_arena);
-    entity_allocator.first_free = 0;
+    arena_reset(&game->level_arena);
+    entity_allocator.first_free  = 0;
     entity_allocator.level_arena = 0;
 
     for (int i = 0; i < StaticArraySize(atari_assets.textures); i++) {
@@ -620,8 +618,6 @@ void atari_deinit(Game_Atari *game) {
     game->current = 0;
 
     array_free(&game->entities);
-
-    free(game->level);
     game->level = nullptr;
 }
 

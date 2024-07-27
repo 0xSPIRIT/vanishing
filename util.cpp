@@ -31,6 +31,11 @@ Arena make_arena(size_t size) {
     return arena;
 }
 
+void arena_reset(Arena *arena) {
+    memset(arena->buffer, 0, arena->capacity);
+    arena->used = 0;
+}
+
 void arena_free(Arena *arena) {
     if (arena->buffer)
         free(arena->buffer);

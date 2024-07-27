@@ -469,16 +469,16 @@ void chapter_3_init(Game_Atari *game) {
     level->state = CHAPTER_3_STATE_OFFICE;
 
     Texture2D *textures = atari_assets.textures;
-    textures[0] = load_texture("art/desktop_wallpaper.png");
-    textures[1] = load_texture("art/window_controls.png");
-    textures[2] = load_texture("art/window_title.png");
-    textures[3] = load_texture("art/player.png");
-    textures[4] = load_texture("art/cubicle_vertical_part.png");
-    textures[5] = load_texture("art/cubicle_top_part.png");
-    textures[6] = load_texture("art/office_chair.png");
-    textures[7] = load_texture("art/office_outside.png");
-    textures[8] = load_texture("art/office_guy.png");
-    textures[9] = load_texture("art/office_girl.png");
+    textures[0]  = load_texture("art/desktop_wallpaper.png");
+    textures[1]  = load_texture("art/window_controls.png");
+    textures[2]  = load_texture("art/window_title.png");
+    textures[3]  = load_texture("art/player.png");
+    textures[4]  = load_texture("art/cubicle_vertical_part.png");
+    textures[5]  = load_texture("art/cubicle_top_part.png");
+    textures[6]  = load_texture("art/office_chair.png");
+    textures[7]  = load_texture("art/office_outside.png");
+    textures[8]  = load_texture("art/office_guy.png");
+    textures[9]  = load_texture("art/office_girl.png");
     textures[10] = load_texture("art/kitchen_table.png");
     textures[11] = load_texture("art/lunch_room.png");
     textures[12] = load_texture("art/devil_table.png");
@@ -488,7 +488,7 @@ void chapter_3_init(Game_Atari *game) {
 
     level->camera.zoom = 1;
 
-    game->entities = make_array<Entity*>(20);
+    game->entities = make_array<Entity*>(512);
 
     float speed = 30;
 
