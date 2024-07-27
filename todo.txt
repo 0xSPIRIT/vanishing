@@ -1,12 +1,19 @@
 TODO
 
-- Somehow include a window in the first chapter somewhere?
+x Lunch dialogue 1
+- documents 2
+- Lunch dialogue 2
+- documents 3
+- Lunch dialogue 3 - Dream & devil thing; they must be dealing with the
+  devil to have such happiness and fulfillment in their lives doing such
+  mundane things. It's basically just showing Chase's subconscious.
+- look out window
 
 A phone call with a future version of yourself:
   The universe does not stop behaving chaotically just because you
   don't want it to. We must all come to terms with our situations.
   It sounds like a fancier way of saying, "shit happens", but it
-  IS the situation, and we must find meaning in our predicaments.
+  IS our situation, and we MUST find meaning in our predicaments.
   When bad things happen to you, that is not God disgracing you,
   or punishing you-- that is being human.
 
@@ -14,11 +21,22 @@ A phone call with a future version of yourself:
   (3d) which shows the overarching God themes as well
   as the theme of meaninglessness.
 
+- Chapter 1: follow the footsteps in the ending rather than
+             following the water so that it lines you up
+             better to be looking like you're getting
+             otu of bed. Also change the text at the end
+
 Later
+- Somehow include a window in the first chapter somewhere?
+- chapter 2: add white thing right before teleporting to bathroom with penny
 - Replace the font renderer with your own for the document
   review section so we can use monospaced fonts properly.
-
+- Make sure that nothing overlaps in the first chapter
+  when you move screens. Especially make sure that it
+  can't spawn inside the player.
 - Make sure all the God text is Black at first, not red.
+- For the devil text in one of the final chapters you can
+  use the Document Review instead of regular textboxes.
 - Intro: Make it the same setting as the epilogue-- the jail.
          Introduce the feeling of meaninglessness and depression
          that Chase has.

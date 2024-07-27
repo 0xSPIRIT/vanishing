@@ -1,7 +1,18 @@
 #define StaticArraySize(array) (sizeof(array)/sizeof(array[0]))
 #define Radians(degrees) (PI * degrees / 180.0)
 
+#define Kilobytes(kb) ((size_t)kb * 1024)
+#define Megabytes(mb) ((size_t)mb * 1024 * 1024)
+#define Gigabytes(gb) ((size_t)gb * 1024 * 1024 * 1024)
+
 // Arena Alloactor
+
+extern "C" {
+    void *VirtualAlloc(void *, size_t, uint32_t, uint32_t);
+}
+#define MEM_COMMIT     0x00001000
+#define MEM_RESERVE    0x00002000
+#define PAGE_READWRITE 0x04
 
 struct Arena {
     uint8_t *buffer;
@@ -9,12 +20,13 @@ struct Arena {
     size_t   capacity;
 };
 
-Arena make_arena(size_t initial_size) {
+Arena make_arena(size_t size) {
     Arena arena;
 
     arena.used     = 0;
-    arena.capacity = initial_size;
-    arena.buffer   = (uint8_t *)calloc(initial_size, sizeof(arena.buffer[0]));
+    arena.capacity = size;
+    arena.buffer   = (uint8_t *)VirtualAlloc(0, size, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+    assert(arena.buffer);
 
     return arena;
 }
@@ -68,16 +80,8 @@ Array<T> make_array(size_t initial_capacity) {
 
 template <typename T>
 void array_free(Array<T> *array) {
-    assert(array->data);
-    if (array->data == nullptr) return;
-
-    memset(array->data, 0, sizeof(T)*array->length);
-
     free(array->data);
-
-    array->data     = 0;
-    array->length   = 0;
-    array->capacity = 0;
+    memset(array, 0, sizeof(Array<T>));
 }
 
 template <typename T>
@@ -149,3 +153,65 @@ int sign(float a) {
     if (a > 0) return +1;
     return 0;
 }
+
+Color lerp_color(Color a, Color b, double t) {
+    Color result = a;
+
+    result.r += (b.r - a.r) * t;
+    result.g += (b.g - a.g) * t;
+    result.b += (b.b - a.b) * t;
+    result.a += (b.a - a.a) * t;
+
+    return result;
+}
+
+bool rand_bool(double prob_true) {
+    double random = rand() / (double)RAND_MAX;
+    return random <= prob_true;
+}
+
+float rand_float(void) {
+    return (float)rand() / (float)RAND_MAX;
+}
+
+float rand_range(float start, float end) {
+    float result = start;
+    result += rand_float() * (end - start);
+
+    return result;
+}
+
+// System Time
+
+#if defined(_WIN32)
+extern "C" {
+    typedef union _LARGE_INTEGER {
+        struct {
+            uint32_t LowPart;
+            uint32_t HighPart;
+        } DUMMYSTRUCTNAME;
+        struct {
+            uint32_t LowPart;
+            uint32_t HighPart;
+        } u;
+        uint64_t QuadPart;
+    } LARGE_INTEGER;
+
+    int QueryPerformanceCounter  (LARGE_INTEGER *);
+    int QueryPerformanceFrequency(LARGE_INTEGER *);
+}
+
+double global_system_timer_frequency = 0;
+
+inline void set_global_system_frequency() {
+    LARGE_INTEGER a;
+    QueryPerformanceFrequency(&a);
+    global_system_timer_frequency = (double)a.QuadPart;
+}
+
+inline uint64_t get_system_time() {
+    LARGE_INTEGER a;
+    QueryPerformanceCounter(&a);
+    return a.QuadPart;
+}
+#endif // defined(_WIN32)

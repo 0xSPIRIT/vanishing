@@ -1,13 +1,13 @@
 Chapters
-  1. Dysania                    5 mins (x)
+  1. Dysania                    7 mins (x)
   2. Dinner Party               5 mins (x)
-  3. Repetitions                6 mins
+  3. Repetitions                9 mins
   4. Theophany                  3 mins
-  5. Perception                 4 mins
-  6. Patience and Blasphemy     4 mins
-  7. Epilogue                   6 mins
+  5. Perception                 7 mins
+  6. Patience and Blasphemy     3 mins
+  7. Epilogue                  10 mins
 
-  = 28 mins
+  = 44 minutes
 
 [Showing the struggle of getting out of bed]
 Text Appears: "Dysania"
@@ -125,6 +125,10 @@ Text Appears:
 
 - You enter the train, and it sets off.
 - You exit.
+- You're at the dinner party again and you talk to one of the people;
+  they say things way differently now that they don't have triangle
+  heads.
+- You enter another exit door.
 - You're in a modern-style minimalist house similar to houses in
   The Beginner's Guide.
 
@@ -190,8 +194,8 @@ Text Appears: "Patience and Blasphemy"
 - Red Text:   "Fool. I am the ALMIGHTY. YOU SHOULD BE BOWING
                TO MY PRESENCE. YOU ARE A PUNY VESSEL OF FLESH
                WHICH HAS NOT THE SMALLEST INCLINATION OF TRUE
-               POWER. I have existed for eternity and I will be
-               here for eternity."
+               POWER. I HAVE EXISTED FOR ETERNITY AND I WILL BE
+               HERE FOR ETERNITY."
 - You:        "You will be here forever, yes. And you may return
                stronger than ever before. But I will cherish every
                second that I am able to overpower you."
@@ -287,7 +291,7 @@ them, a message appears:
     "This one is named learning a new skill. (READ SUCCESS)"
     "This one is named taking an internship. (READ SUCCESS)"
     "This one is named talking to someone important. (READ SUCCESS)"
-    "This one is named finding love. (READ SUCCESS)"
+    "This one is named falling in love. (READ SUCCESS)"
 
   Even though you get the option yes or no, you continue to ignore them.
   You find that these things are meaningless, even though you'd like
@@ -295,15 +299,21 @@ them, a message appears:
   next segment.
 
   There aren't any orbs. You just wait for the jail to open.
+  "This is the final door to the Other Side."
 
   "Congratulations, you have wasted your time."
 
+  BLACKNESS... Then, WHITENESS again.
+
   In the next segment, there's one orb. "Pick it up?"
-  If you answer yes, he says: "Why not?"
+  If you answer no, he says: "Why not?" over and over
+  until you choose yes- there's no other option here!
+  Yes:
 
 (Atari graphics)
 Having a smoke with Penny.
 You talk to her about something that interests you both.
+She says "haha you're really funny"
 
                 -- the end --
             created by spiritwolf

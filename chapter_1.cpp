@@ -40,7 +40,7 @@ struct Level_Chapter_1 {
 };
 
 Entity *chapter_1_make_entity(Entity_Type type, float x, float y) {
-    Entity *result = (Entity*)calloc(1, sizeof(Entity));
+    Entity *result = allocate_entity();
 
     result->type = type;
     result->pos = {x, y};
@@ -95,7 +95,7 @@ void chapter_1_activate_node(void *ptr_game) {
             Entity *footstep = chapter_1_make_entity(ENTITY_BLOOD,
                                            player->pos.x,
                                            player->pos.y + entity_texture_height(player) - 3);
-            array_add<Entity*>(&game->entities, footstep);
+            array_add(&game->entities, footstep);
 
             int state = player->chap_1_player.walking_state;
             state++;
@@ -150,7 +150,7 @@ void chapter_1_init(Game_Atari *game) {
 
     Entity *player = chapter_1_make_entity(ENTITY_PLAYER, render_width/2 - 4, render_height/2 - 8);
 
-    array_add<Entity*>(&game->entities, player);
+    array_add(&game->entities, player);
 
 
     float speed = 15;
@@ -333,7 +333,7 @@ void add_cactuses_randomly(Array<Entity*> *entities, size_t cactus_count) {
         Entity_Type type = (rand()%2 == 0) ? ENTITY_CACTUS : ENTITY_ROCK;
 
         Entity *cactus_a = chapter_1_make_entity(type, x, y);
-        array_add<Entity*>(entities, cactus_a);
+        array_add(entities, cactus_a);
         int cactus_a_index = (int)entities->length-1;
 
         // Check if it's colliding with any other entities. If so, remove it
@@ -345,7 +345,8 @@ void add_cactuses_randomly(Array<Entity*> *entities, size_t cactus_count) {
             if (e == cactus_a) continue;
 
             if (are_entities_visibly_colliding(cactus_a, e)) {
-                array_remove<Entity*>(entities, cactus_a_index);
+                free_entity(cactus_a);
+                array_remove(entities, cactus_a_index);
                 i--;
                 break;
             }
@@ -456,16 +457,6 @@ void chapter_1_entity_update(Entity *e, Game_Atari *game, float dt) {
 
             apply_velocity(e, velocity, &game->entities);
 
-            /*
-            if (!is_colliding_at_start) {
-                bool colliding = (bool)is_entity_colliding_with_any_collidable_entity(e, &game->entities);
-                if (colliding) {
-                    e->pos = stored_pos;
-                    dir_x = dir_y = 0;
-                }
-            }
-            */
-
             if (level->state == LEVEL_CHAPTER_1_STATE_FOREST) {
                 if (e->pos.y < render_height/2) {
                     level->state = LEVEL_CHAPTER_1_STATE_APARTMENT;
@@ -476,8 +467,8 @@ void chapter_1_entity_update(Entity *e, Game_Atari *game, float dt) {
                     for (int i = 0; i < game->entities.length; i++) {
                         Entity *entity = game->entities.data[i];
                         if (entity->type != ENTITY_PLAYER) {
-                            free(entity);
-                            array_remove<Entity*>(&game->entities, i--);
+                            free_entity(entity);
+                            array_remove(&game->entities, i--);
                         }
                     }
                 }
@@ -511,7 +502,7 @@ void chapter_1_entity_update(Entity *e, Game_Atari *game, float dt) {
                     Entity *footstep = chapter_1_make_entity(type,
                                                    e->pos.x,
                                                    e->pos.y + entity_texture_height(e) - 3);
-                    array_add<Entity*>(&game->entities, footstep);
+                    array_add(&game->entities, footstep);
                 }
             }
 
@@ -613,7 +604,7 @@ void chapter_1_entity_update(Entity *e, Game_Atari *game, float dt) {
                             type == ENTITY_FOOTSTEPS || type == ENTITY_BLOOD ||
                             type == ENTITY_NODE || type == ENTITY_PHONE)
                         {
-                            free(entity);
+                            free_entity(entity);
                             array_remove(&game->entities, i--);
                         }
                     }
@@ -648,13 +639,13 @@ void chapter_1_entity_update(Entity *e, Game_Atari *game, float dt) {
                         Entity *phone = chapter_1_make_entity(ENTITY_PHONE,
                                                     render_width/2 - 4,
                                                     render_height/4);
-                        array_add<Entity*>(&game->entities, phone);
+                        array_add(&game->entities, phone);
                     }
 
                     if (node_type != NODE_INVALID) {
                         Entity *node = chapter_1_make_entity(ENTITY_NODE, render_width/2 - 16, render_height/2 - 16);
                         node->chap_1_node.type = node_type;
-                        array_add<Entity*>(&game->entities, node);
+                        array_add(&game->entities, node);
                     }
 
                     // And then re-add new ones.

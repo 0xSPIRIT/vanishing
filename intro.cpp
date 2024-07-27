@@ -54,7 +54,7 @@ void game_intro_run(Game_Intro *game) {
 
     BeginTextureMode(game->render_target);
 
-    ClearBackground({82, 75, 66, 255});
+    ClearBackground(BLACK);
     if (game->current_text_list)
         game->current_text_list = text_list_update_and_draw(game->current_text_list);
 

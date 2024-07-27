@@ -161,11 +161,13 @@ Overall Design:
 
 Specific Design:
 
-  - Infinite cubicles: sense of meaninglessness.
-  - You have to find which one is your number (1138)
-  - You sit down at the cubicle (popup text)
-  - Job minigame:
-    - You work as a document reviewer.
+  x Infinite cubicles: sense of meaninglessness.
+  x You have to find which one is your number (1138)
+  x You sit down at the cubicle (popup text)
+  x Repeating intermediary rooms with diminishing colors
+    until you have to walk through a room in darkness.
+  x Job minigame:
+    x You work as a document reviewer.
       You go through documents that need to be sent
       out. You find inconsistencies and spelling
       errors in them and you correct them by clicking
@@ -192,4 +194,32 @@ Specific Design:
   - Cut to driving home (Mareux - Underground esque music)
     (first person but atari, 2 frame loop)
   - Cut to home. Collapse on bed.
-  - Scroll on your phone for like 30 seconds.
+  - Scroll on your phone for like 30 seconds until
+    you pass out.
+
+
+Document Review
+---------------
+
+These are excerpts from documents
+to our clients. Read the document
+thoroughly and click on any errors
+to correct them- we must look
+professional!
+
+5 levels per.
+
+1.
+We're thrilled to announce oru new product: the thing-o-meter! It measures thigns nda whatnot.
+
+2.
+Here's our messagr fro the day: Appreciatw the beauty of the wrold! Be it a sunset, a walk in the park, or a conevrsation with friends. We must thakn the Lord thta ew're aliev!
+
+3.
+It wsa a bright cold day in April, and the clocks were strkiing thirteen. Winston Smith, his chin nussled into his brest in an efort to escape the vile wind, slipped quick through the glass doors of Victory Mansions, though not quickly enouhg to prevent a swril of gritty dust from entering long with him.
+
+4.
+The cretures outside loked from pig to man, and form man to pig, and from pig to man again; but aready it was imposibble to say wich was wich.
+
+5.
+This work was stirctly volontery, but any animal who absinted himself from it wood have his rashons reduced by haf.

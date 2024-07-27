@@ -401,6 +401,12 @@ void reset_text_list(Text_List *list) {
     }
 }
 
+bool is_text_list_at_end(Text_List *list) {
+    bool result = list->text_index == list->text_count-1;
+    result &= text_at_end(&list->text[list->text_index]);
+    return result;
+}
+
 Text_List *text_list_update_and_draw(Text_List *list, void *user_data) {
     Text_List *result = list;
 
@@ -457,7 +463,7 @@ Text_List *text_list_update_and_draw(Text_List *list, void *user_data) {
             speaker_box_height = rectangle.height;
 
             if (list->location == Location::Top) {
-                rectangle.y = offset.y + list->textbox_height;
+                rectangle.y = offset.y + list->textbox_height + 1;
             }
 
             if (thickness == 1) {

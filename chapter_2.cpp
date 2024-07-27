@@ -80,7 +80,7 @@ void chapter_2_window_text(bool scroll, Text_List *list, char *line,
 }
 
 Entity *chapter_2_make_entity(Entity_Type type, float x, float y) {
-    Entity *result = (Entity *)calloc(1, sizeof(Entity));
+    Entity *result = allocate_entity();
 
     result->type = type;
     result->pos = {x, y};
@@ -148,21 +148,13 @@ Entity *chapter_2_make_entity(Entity_Type type, float x, float y) {
     return result;
 }
 
-void add_wall(Array<Entity*> *entities, Rectangle r) {
-    Entity *wall = chapter_2_make_entity(ENTITY_WALL, r.x, r.y);
-    wall->base_collider.width  = r.width;
-    wall->base_collider.height = r.height;
-
-    array_add<Entity*>(entities, wall);
-}
-
 void add_door(Array<Entity*> *entities, Rectangle r) {
     Entity *door = chapter_2_make_entity(ENTITY_CHAP_2_DOOR, r.x, r.y);
     door->base_collider.width  = r.width;
     door->base_collider.height = r.height;
     door->chap_2_door.active = true;
 
-    array_add<Entity*>(entities, door);
+    array_add(entities, door);
 }
 
 void chapter_2_end_bouncer_text(void *game_ptr) {
@@ -219,7 +211,7 @@ void chapter_2_end_eleanor_second_text(void *game_ptr) {
     level->penny_state = CHAPTER_2_PENNY_STATE_WALKING;
     level->penny = chapter_2_make_entity(ENTITY_CHAP_2_PENNY, 620, 70);
     level->penny->alarm[0] = 1;
-    array_add<Entity*>(&game->entities, level->penny);
+    array_add(&game->entities, level->penny);
 }
 
 void chapter_2_end_eleanor_third_text(void *game_ptr) {
@@ -268,7 +260,7 @@ void chapter_2_init(Game_Atari *game) {
     float speed = 30;
 
     atari_text_list_init(&game->text[0],
-                         "Bouncer",
+                         "Guard",
                          "What's your problem?",
                          speed,
                          &game->text[1]);
@@ -278,7 +270,7 @@ void chapter_2_init(Game_Atari *game) {
                          speed,
                          &game->text[2]);
     atari_text_list_init(&game->text[2],
-                         "Bouncer",
+                         "Guard",
                          "... You sure you aren't\nlost, kid?\rIt's late.",
                          speed,
                          &game->text[3]);
@@ -288,7 +280,7 @@ void chapter_2_init(Game_Atari *game) {
                          speed,
                          &game->text[4]);
     atari_text_list_init(&game->text[4],
-                         "Bouncer",
+                         "Guard",
                          "Come on, you came to a\ndinner party wearing\nTHAT?",
                          speed,
                          &game->text[5]);
@@ -303,7 +295,7 @@ void chapter_2_init(Game_Atari *game) {
                          speed,
                          &game->text[7]);
     atari_text_list_init(&game->text[7],
-                         "Bouncer",
+                         "Guard",
                          "Whatever, get in.",
                          speed,
                          &game->text[8]);
@@ -686,7 +678,7 @@ void chapter_2_init(Game_Atari *game) {
                          &game->text[77]);
     atari_text_list_init(&game->text[77],
                          "Eleanor",
-                         "Not really.\rI got paid beaucoup\nbucks, so I'm chilling.",
+                         "Not really.\rI got paid the beaucoup\nbucks, so...",
                          speed,
                          &game->text[78]);
     atari_text_list_init(&game->text[78],
@@ -859,31 +851,31 @@ void chapter_2_init(Game_Atari *game) {
     level->player   = chapter_2_make_entity(ENTITY_PLAYER, 118, 287);
     //level->player   = chapter_2_make_entity(ENTITY_PLAYER, 600, 80); // skip to table section
 
-    array_add<Entity*>(&game->entities, level->player);
-    array_add<Entity*>(&game->entities, jake);
-    array_add<Entity*>(&game->entities, erica);
-    array_add<Entity*>(&game->entities, bartender);
-    array_add<Entity*>(&game->entities, bouncer);
-    array_add<Entity*>(&game->entities, mike);
-    array_add<Entity*>(&game->entities, jessica);
-    array_add<Entity*>(&game->entities, amelia);
-    array_add<Entity*>(&game->entities, guy);
-    array_add<Entity*>(&game->entities, amelia_1);
-    array_add<Entity*>(&game->entities, amelia_2);
-    array_add<Entity*>(&game->entities, amelia_3);
-    array_add<Entity*>(&game->entities, amelia_4);
-    array_add<Entity*>(&game->entities, amelia_5);
-    array_add<Entity*>(&game->entities, eleanor);
-    //array_add<Entity*>(&game->entities, paulie);
+    array_add(&game->entities, level->player);
+    array_add(&game->entities, jake);
+    array_add(&game->entities, erica);
+    array_add(&game->entities, bartender);
+    array_add(&game->entities, bouncer);
+    array_add(&game->entities, mike);
+    array_add(&game->entities, jessica);
+    array_add(&game->entities, amelia);
+    array_add(&game->entities, guy);
+    array_add(&game->entities, amelia_1);
+    array_add(&game->entities, amelia_2);
+    array_add(&game->entities, amelia_3);
+    array_add(&game->entities, amelia_4);
+    array_add(&game->entities, amelia_5);
+    array_add(&game->entities, eleanor);
+    //array_add(&game->entities, paulie);
 
-    array_add<Entity*>(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 3.75*192-24-10, 3*160/4-9));
-    array_add<Entity*>(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 3.25*192-24+10, 160/4-9));
+    array_add(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 3.75*192-24-10, 3*160/4-9));
+    array_add(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 3.25*192-24+10, 160/4-9));
 
-    array_add<Entity*>(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 4.75*192-24-15, 3*160/4-4));
-    array_add<Entity*>(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 4.25*192-24+13, 160/4+2));
+    array_add(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 4.75*192-24-15, 3*160/4-4));
+    array_add(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 4.25*192-24+13, 160/4+2));
 
-    array_add<Entity*>(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 5.75*192-24-15, 3*160/4-4));
-    array_add<Entity*>(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 5.25*192-24+13+50, 160/4+2));
+    array_add(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 5.75*192-24-15, 3*160/4-4));
+    array_add(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 5.25*192-24+13+50, 160/4+2));
 
     add_wall(&game->entities, { 0, 188, 76, 27 }); // bar
     add_wall(&game->entities, { 64, 133, 19, 123 });
@@ -1219,8 +1211,8 @@ void chapter_2_update(Game_Atari *game, float dt) {
                     Entity *e = game->entities.data[i];
 
                     if (e->type != ENTITY_PLAYER) {
-                        free(e);
-                        array_remove<Entity*>(&game->entities, i--);
+                        free_entity(e);
+                        array_remove(&game->entities, i--);
                     }
                 }
                 level->penny = 0;

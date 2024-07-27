@@ -53,11 +53,18 @@ enum Entity_Type {
 
     ENTITY_CHAP_2_RANDOM_GUY,
     ENTITY_CHAP_2_RANDOM_GIRL,
-
     ENTITY_CHAP_2_BOUNCER,
     ENTITY_CHAP_2_BARTENDER,
-
     ENTITY_CHAP_2_PENNY,
+
+    ENTITY_CHAP_3_CUBICLE_TOP,
+    ENTITY_CHAP_3_CUBICLE_VERTICAL,
+    ENTITY_CHAP_3_CUBICLE_CHAIR,
+
+    ENTITY_CHAP_3_GUY,
+    ENTITY_CHAP_3_GIRL,
+
+    ENTITY_CHAP_3_LUNCH_TABLE,
 };
 
 // All Atari chapters use the same Entity struct, because
@@ -67,6 +74,7 @@ enum Entity_Type {
 // struct to the union.
 
 struct Entity {
+    Entity     *next_free;
     Entity_Type type;
     int         texture_id;      // Index into atari_assets.textures[]
     Vector2     pos;
@@ -82,16 +90,26 @@ struct Entity {
         Chapter_1_Phone   chap_1_phone;
 
         // Chapter 2 entities
-        Chapter_2_Door    chap_2_door;
         Chapter_2_Player  chap_2_player;
+        Chapter_2_Door    chap_2_door;
         Chapter_2_Penny   chap_2_penny;
+
+        // Chapter 3 entities
+        Chapter_3_Cubicle chap_3_cubicle;
+        Chapter_3_Circler chap_3_circler;
     };
+};
+
+struct Entity_Allocator {
+    Entity *first_free;
+    Arena  *level_arena;
 };
 
 struct Game_Atari {
     RenderTexture2D render_target;
     RenderTexture2D textbox_target;
 
+    Arena level_arena;
     Array<Entity*> entities;
 
     Text_List text[128];
@@ -104,6 +122,7 @@ struct Game_Atari {
 };
 
 Font atari_font;
+Entity_Allocator entity_allocator;
 
 Keyboard_Focus keyboard_focus(Game_Atari *game) {
     if (game->current != nullptr && game->current->take_keyboard_focus) {
@@ -111,6 +130,25 @@ Keyboard_Focus keyboard_focus(Game_Atari *game) {
     } else {
         return NO_KEYBOARD_FOCUS;
     }
+}
+
+Entity *allocate_entity(void) {
+    Entity *result = entity_allocator.first_free;
+
+    if (result) {
+        entity_allocator.first_free = entity_allocator.first_free->next_free;
+    } else {
+        result = (Entity *)arena_push(entity_allocator.level_arena, sizeof(Entity));
+    }
+
+    memset(result, 0, sizeof(Entity));
+
+    return result;
+}
+
+void free_entity(Entity *entity) {
+    entity->next_free = entity_allocator.first_free;
+    entity_allocator.first_free = entity;
 }
 
 Entity *entities_get_player(Array<Entity*> *entities) {
@@ -149,6 +187,20 @@ void entity_update_alarms(Entity *e, float dt) {
                 e->alarm[i] = 0;
         }
     }
+}
+
+void add_wall(Array<Entity*> *entities, Rectangle r) {
+    Entity *wall = allocate_entity();
+    
+    wall->pos = { r.x, r.y };
+    wall->type = ENTITY_WALL;
+
+    wall->texture_id = -1;
+
+    wall->base_collider.width  = r.width;
+    wall->base_collider.height = r.height;
+
+    array_add(entities, wall);
 }
 
 Texture2D *entity_get_texture(Entity *entity) {
@@ -407,6 +459,13 @@ void sort_entities(Array<Entity*> *entities) {
     }
 }
 
+void default_entity_draw(Entity *e) {
+    Texture2D *texture = entity_get_texture(e);
+    if (texture) {
+        DrawTexture(*texture, e->pos.x, e->pos.y, WHITE);
+    }
+}
+
 void atari_update_and_draw_textbox(Game_Atari *game) {
     BeginTextureMode(game->textbox_target);
 
@@ -498,10 +557,6 @@ void atari_mid_text_list_init(Text_List *list, char *line,
 void game_atari_init(Game_Atari *game) {
     assert(game->level == nullptr); // So we can make sure we had called deinit before
 
-    printf("sizeof(Text_List) = %.2fMB, sizeof(game->text[]) = %.2fMB\n",
-           sizeof(Text_List)  / 1024.0 / 1024.0,
-           sizeof(game->text) / 1024.0 / 1024.0);
-
     render_width = 192;
     render_height = 160;
 
@@ -510,17 +565,31 @@ void game_atari_init(Game_Atari *game) {
     game->render_target  = LoadRenderTexture(render_width, render_height);
     game->textbox_target = LoadRenderTexture(render_width, render_height);
 
+    if (game->level_arena.buffer)
+        arena_free(&game->level_arena);
+
+    union Max_Size {
+        Level_Chapter_1 a;
+        Level_Chapter_2 b;
+        Level_Chapter_3 c;
+    };
+
+    game->level_arena = make_arena(Megabytes(128));
+
+    entity_allocator.first_free  = 0;
+    entity_allocator.level_arena = &game->level_arena;
+
     switch (chapter) {
         case 1: {
-            game->level = calloc(1, sizeof(Level_Chapter_1));
+            game->level = arena_push(&game->level_arena, sizeof(Level_Chapter_1));
             chapter_1_init(game);
         } break;
         case 2: {
-            game->level = calloc(1, sizeof(Level_Chapter_2));
+            game->level = arena_push(&game->level_arena, sizeof(Level_Chapter_2));
             chapter_2_init(game);
         } break;
         case 3: {
-            game->level = calloc(1, sizeof(Level_Chapter_3));
+            game->level = arena_push(&game->level_arena, sizeof(Level_Chapter_3));
             chapter_3_init(game);
         } break;
     }
@@ -532,6 +601,10 @@ void atari_deinit(Game_Atari *game) {
         case 2: chapter_2_deinit(game);
         case 3: chapter_3_deinit(game);
     }
+
+    arena_free(&game->level_arena);
+    entity_allocator.first_free = 0;
+    entity_allocator.level_arena = 0;
 
     for (int i = 0; i < StaticArraySize(atari_assets.textures); i++) {
         if (atari_assets.textures[i].width) {
@@ -546,14 +619,10 @@ void atari_deinit(Game_Atari *game) {
     }
     game->current = 0;
 
-    for (size_t i = 0; i < game->entities.length; i++) {
-        Entity *e = game->entities.data[i];
-        free(e);
-    }
     array_free(&game->entities);
 
     free(game->level);
-    game->level = 0;
+    game->level = nullptr;
 }
 
 void game_atari_run(Game_Atari *game) {
@@ -573,7 +642,7 @@ void game_atari_run(Game_Atari *game) {
         switch (chapter) {
             case 1: chapter_1_draw(game); break;
             case 2: chapter_2_draw(game); break;
-            case 3: chapter_3_draw(game); break;
+            case 3: chapter_3_draw(game, dt); break;
         }
 
         atari_update_and_draw_textbox(game);
@@ -593,9 +662,9 @@ void game_atari_run(Game_Atari *game) {
     EndDrawing();
 
     if (game->queue_deinit_and_goto_intro) {
+        game->queue_deinit_and_goto_intro = false;
         atari_deinit(game);
         chapter++;
         set_game_mode(GAME_MODE_INTRO);
-        game->queue_deinit_and_goto_intro = false;
     }
 }

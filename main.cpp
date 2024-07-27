@@ -55,7 +55,7 @@ void set_game_mode(Game_Mode mode);
 Rectangle get_screen_rectangle() {
     Rectangle result;
 
-    float desired_aspect_ratio = (float)render_width/(float)render_height;//4.f/3.f;
+    float desired_aspect_ratio = 4.f/3.f;
 
     int screen_width = GetRenderWidth();
     int screen_height = (int) ((float)screen_width / desired_aspect_ratio);
@@ -94,8 +94,10 @@ Vector2 get_mouse() {
 
 #include "3d.cpp"
 
+// The chapter_n.cpp files are included in atari.cpp.
 #include "chapter_1.h"
 #include "chapter_2.h"
+#include "chapter_3.h"
 
 #include "atari.cpp"
 #include "intro.cpp"
@@ -127,23 +129,19 @@ void set_game_mode(Game_Mode mode) {
 
 MainFunction() {
     srand(time(0));
+    set_global_system_frequency();
 
     SetTraceLogLevel(LOG_WARNING);
-    SetExitKey(0);
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT);
 
-    InitWindow(default_width, default_height, "Vanishing");
+    InitWindow(default_width, default_height, "Video Game");
     SetTargetFPS(60);
+
+    SetExitKey(0);
 
     global_font = LoadFontEx("frabk.ttf", 32, 0, 0);
     comic_sans  = LoadFontEx("comic.ttf", 16, 0, 0);
 
-    /*
-    Image bitmap = LoadImage("mbf_small_00_black_bg.png");
-    bitmap_font = LoadFontFromImage(bitmap, BLACK, 0);
-    */
-
-    //bitmap_font = LoadFont("mbf_small_00_black_bg.png");
     assert(IsFontReady(global_font));
 
     //DisableCursor();
@@ -153,8 +151,10 @@ MainFunction() {
     while (!WindowShouldClose()) {
         if (IsKeyPressed(KEY_F11))
             toggle_fullscreen();
-        if (IsKeyPressed(KEY_ESCAPE))
+
+        if ((IsKeyPressed(KEY_F4) && IsKeyDown(KEY_LEFT_ALT)) || IsKeyPressed(KEY_ESCAPE)) {
             exit(0);
+        }
 
         switch (game_mode) {
             case GAME_MODE_INTRO: game_intro_run(&game_intro); break;
