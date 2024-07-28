@@ -102,7 +102,7 @@ Vector2 get_mouse() {
 #include "atari.cpp"
 #include "intro.cpp"
 
-Game_3D game_3d;
+Game_3D    game_3d;
 Game_Intro game_intro;
 Game_Atari game_atari;
 
@@ -129,7 +129,7 @@ void set_game_mode(Game_Mode mode) {
 
 MainFunction() {
     srand(time(0));
-    set_global_system_frequency();
+    set_global_system_timer_frequency();
 
     SetTraceLogLevel(LOG_WARNING);
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT);
@@ -146,7 +146,7 @@ MainFunction() {
 
     //DisableCursor();
 
-    set_game_mode(GAME_MODE_INTRO);
+    set_game_mode(GAME_MODE_ATARI);
 
     while (!WindowShouldClose()) {
         if (IsKeyPressed(KEY_F11))
@@ -157,9 +157,9 @@ MainFunction() {
         }
 
         switch (game_mode) {
-            case GAME_MODE_INTRO: game_intro_run(&game_intro); break;
-            case GAME_MODE_3D:    game_3d_run(&game_3d);       break;
-            case GAME_MODE_ATARI: game_atari_run(&game_atari); break;
+            case GAME_MODE_INTRO:   game_intro_run(&game_intro); break;
+            case GAME_MODE_3D:      game_3d_run(&game_3d);       break;
+            case GAME_MODE_ATARI:   game_atari_run(&game_atari); break;
             case GAME_MODE_INVALID: assert(false);
         }
     }

@@ -1,12 +1,13 @@
 TODO
 
-x Lunch dialogue 1
-- documents 2
-- Lunch dialogue 2
-- documents 3
-- Lunch dialogue 3 - Dream & devil thing; they must be dealing with the
-  devil to have such happiness and fulfillment in their lives doing such
-  mundane things. It's basically just showing Chase's subconscious.
+x First ones are totally normal, boring, and add the animal farm one about voluntary work
+x First lunch text is boring.
+Second ones start adding entire word changes, meaning changes, and you intercept letters between a couple finding love(no errors). there's still normal ones in between, memos, etc with no meaning 
+x Second lunch text is more gossip, almost the exact same text from lunch 1, but you start asking meekly about how you guys are happy. They seem confused
+Third ones you change one of the emails endings to "I love you" to help them out. 
+Third lunch text, they say the same thing as lunch 2, but you press them harder. How are you people so happy? What kind of deal did they make with the devil to allow them that? Then you show the pentagram thing.
+During lunch text 3, You somehow find out that the two lovers never existed. They vanished from existence, the gossip text changed-- they were talking about them before but now they left them out. When chase goes to question them about it (they went off script!) they're confused.
+
 - look out window
 
 A phone call with a future version of yourself:
@@ -65,12 +66,6 @@ https://www.youtube.com/watch?v=Z30cKoFvha4
 Add some sort of intensity uniform that can affect how bad the
 VHS quality drops. Also, I like when it has the artifact of
 the image stretching really bad at the bottom and top.
-
-------
-
-I'll finish up the general design today.
-When doing each individual chapter, I will design the dialogue
-within that time, I won't do everything in advance.
 
 ------
 

@@ -100,11 +100,6 @@ struct Entity {
     };
 };
 
-struct Entity_Allocator {
-    Entity *first_free;
-    Arena  *level_arena;
-};
-
 struct Game_Atari {
     RenderTexture2D render_target;
     RenderTexture2D textbox_target;
@@ -121,16 +116,13 @@ struct Game_Atari {
     void *level; // Points to the specific chapter level struct.
 };
 
+struct Entity_Allocator {
+    Entity *first_free;
+    Arena  *level_arena;
+};
+
 Font atari_font;
 Entity_Allocator entity_allocator;
-
-Keyboard_Focus keyboard_focus(Game_Atari *game) {
-    if (game->current != nullptr && game->current->take_keyboard_focus) {
-        return KEYBOARD_FOCUS_TEXTBOX;
-    } else {
-        return NO_KEYBOARD_FOCUS;
-    }
-}
 
 Entity *allocate_entity(void) {
     Entity *result = entity_allocator.first_free;
@@ -149,6 +141,14 @@ Entity *allocate_entity(void) {
 void free_entity(Entity *entity) {
     entity->next_free = entity_allocator.first_free;
     entity_allocator.first_free = entity;
+}
+
+Keyboard_Focus keyboard_focus(Game_Atari *game) {
+    if (game->current != nullptr && game->current->take_keyboard_focus) {
+        return KEYBOARD_FOCUS_TEXTBOX;
+    } else {
+        return NO_KEYBOARD_FOCUS;
+    }
 }
 
 Entity *entities_get_player(Array<Entity*> *entities) {
@@ -179,6 +179,12 @@ Entity *entities_find_from_type(Array<Entity*> *entities, Entity_Type search) {
     return result;
 }
 
+// TODO: You can make this better by setting the alarm to 0
+// when completed, but on the next frame set it to -1.
+// So any code that has a check like `if (e->alarm[0] == 0)`
+// will only go through once, because it's -1 on the next
+// frame and it doesn't need to store an additional bool
+// or whatever.
 void entity_update_alarms(Entity *e, float dt) {
     for (size_t i = 0; i < StaticArraySize(e->alarm); i++) {
         if (e->alarm[i] > 0) {
@@ -572,7 +578,7 @@ void game_atari_init(Game_Atari *game) {
     };
 
     if (!game->level_arena.buffer)
-        game->level_arena = make_arena(Megabytes(128));
+        game->level_arena = make_arena(Megabytes(16));
 
     entity_allocator.first_free  = 0;
     entity_allocator.level_arena = &game->level_arena;

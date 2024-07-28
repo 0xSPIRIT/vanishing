@@ -1,0 +1,657 @@
+3d.cpp(14,5):     game->render_target = LoadRenderTexture(render_width, render_height);
+3d.cpp(16,5):     game->scene = LoadModel("models/scene.glb");
+3d.cpp(18,5):     game->rotation = 0;
+3d.cpp(20,5):     game->camera.position = {0, 2, 0};
+3d.cpp(21,5):     game->camera.target   = {1, 2, 0};
+3d.cpp(22,5):     game->camera.up       = {0, 1, 0};
+3d.cpp(23,5):     game->camera.fovy     = 62;
+3d.cpp(24,5):     game->camera.projection = CAMERA_PERSPECTIVE;
+3d.cpp(26,5):     game->shader = LoadShader("shaders/basic.vs", "shaders/basic.fs");
+3d.cpp(28,5):     game->shader.locs[SHADER_LOC_MATRIX_MODEL] = GetShaderLocation(game->shader, "matModel");
+3d.cpp(28,68):     game->shader.locs[SHADER_LOC_MATRIX_MODEL] = GetShaderLocation(game->shader, "matModel");
+3d.cpp(29,5):     game->shader.locs[SHADER_LOC_VECTOR_VIEW]  = GetShaderLocation(game->shader, "viewPos");
+3d.cpp(29,68):     game->shader.locs[SHADER_LOC_VECTOR_VIEW]  = GetShaderLocation(game->shader, "viewPos");
+3d.cpp(31,25):     for (int i = 0; i < game->scene.materialCount; i++) {
+3d.cpp(32,9):         game->scene.materials[i].shader = game->shader;
+3d.cpp(32,43):         game->scene.materials[i].shader = game->shader;
+3d.cpp(35,40):     int ambientLoc = GetShaderLocation(game->shader, "ambient");
+3d.cpp(37,20):     SetShaderValue(game->shader, ambientLoc, data, SHADER_UNIFORM_VEC4);
+3d.cpp(40,43):     int fogDensityLoc = GetShaderLocation(game->shader, "fogDensity");
+3d.cpp(41,20):     SetShaderValue(game->shader, fogDensityLoc, &fogDensity, SHADER_UNIFORM_FLOAT);
+3d.cpp(43,66):     CreateLight(LIGHT_POINT, { 0, 6, 6 }, Vector3Zero(), ORANGE, game->shader);
+3d.cpp(70,33):     Vector3 stored_camera_pos = game->camera.position;
+3d.cpp(71,36):     Vector3 stored_camera_target = game->camera.target;
+3d.cpp(74,92):     Vector3 model_down = Vector3RotateByAxisAngle({0, -1, 0}, scene_rotation_axis, Radians(game->rotation));
+3d.cpp(75,92):     Vector3 model_up   = Vector3RotateByAxisAngle({0, +1, 0}, scene_rotation_axis, Radians(game->rotation));
+3d.cpp(77,20):     update_camera(&game->camera, scene_rotation_axis, game->rotation);
+3d.cpp(77,55):     update_camera(&game->camera, scene_rotation_axis, game->rotation);
+3d.cpp(81,20):     ray.position = game->camera.position;
+3d.cpp(86,25):     for (int i = 0; i < game->scene.meshCount; i++) {
+3d.cpp(87,21):         Mesh mesh = game->scene.meshes[i];
+3d.cpp(88,70):         Matrix transform = MatrixRotate(scene_rotation_axis, Radians(game->rotation));
+3d.cpp(94,70):             Vector3 delta = Vector3Subtract(desired_camera_position, game->camera.position);
+3d.cpp(96,13):             game->camera.position = desired_camera_position;
+3d.cpp(97,13):             game->camera.target = Vector3Add(game->camera.target, delta);
+3d.cpp(97,46):             game->camera.target = Vector3Add(game->camera.target, delta);
+3d.cpp(105,9):         game->camera.position = stored_camera_pos;
+3d.cpp(106,9):         game->camera.target = stored_camera_target;
+3d.cpp(109,20):     SetShaderValue(game->shader, game->shader.locs[SHADER_LOC_VECTOR_VIEW], &game->camera.position.x, SHADER_UNIFORM_VEC3);
+3d.cpp(109,34):     SetShaderValue(game->shader, game->shader.locs[SHADER_LOC_VECTOR_VIEW], &game->camera.position.x, SHADER_UNIFORM_VEC3);
+3d.cpp(109,78):     SetShaderValue(game->shader, game->shader.locs[SHADER_LOC_VECTOR_VIEW], &game->camera.position.x, SHADER_UNIFORM_VEC3);
+3d.cpp(115,22):     BeginTextureMode(game->render_target);
+3d.cpp(119,21):         BeginMode3D(game->camera);
+3d.cpp(120,25):         BeginShaderMode(game->shader);
+3d.cpp(122,21):         DrawModelEx(game->scene, {}, scene_rotation_axis, game->rotation, {1, 1, 1}, WHITE);
+3d.cpp(122,59):         DrawModelEx(game->scene, {}, scene_rotation_axis, game->rotation, {1, 1, 1}, WHITE);
+3d.cpp(133,20):     DrawTexturePro(game->render_target.texture,
+atari.cpp(128,9):     if (game->current != nullptr && game->current->take_keyboard_focus) {
+atari.cpp(128,37):     if (game->current != nullptr && game->current->take_keyboard_focus) {
+atari.cpp(390,9):     if (game->current != nullptr) return false;
+atari.cpp(397,28):     for (size_t i = 0; i < game->entities.length; i++) {
+atari.cpp(398,27):         Entity *current = game->entities.data[i];
+atari.cpp(418,5):     game->queue_deinit_and_goto_intro = true;
+atari.cpp(470,22):     BeginTextureMode(game->textbox_target);
+atari.cpp(474,9):     if (game->current)
+atari.cpp(475,9):         game->current = text_list_update_and_draw(game->current, game);
+atari.cpp(475,51):         game->current = text_list_update_and_draw(game->current, game);
+atari.cpp(478,22):     BeginTextureMode(game->render_target);
+atari.cpp(480,20):     DrawTexturePro(game->textbox_target.texture,
+atari.cpp(485,36):                    {255, 255, 255, game->textbox_alpha});
+atari.cpp(558,12):     assert(game->level == nullptr); // So we can make sure we had called deinit before
+atari.cpp(565,5):     game->render_target  = LoadRenderTexture(render_width, render_height);
+atari.cpp(566,5):     game->textbox_target = LoadRenderTexture(render_width, render_height);
+atari.cpp(574,10):     if (!game->level_arena.buffer)
+atari.cpp(575,9):         game->level_arena = make_arena(Megabytes(128));
+atari.cpp(578,37):     entity_allocator.level_arena = &game->level_arena;
+atari.cpp(582,13):             game->level = arena_push(&game->level_arena, sizeof(Level_Chapter_1));
+atari.cpp(582,39):             game->level = arena_push(&game->level_arena, sizeof(Level_Chapter_1));
+atari.cpp(586,13):             game->level = arena_push(&game->level_arena, sizeof(Level_Chapter_2));
+atari.cpp(586,39):             game->level = arena_push(&game->level_arena, sizeof(Level_Chapter_2));
+atari.cpp(590,13):             game->level = arena_push(&game->level_arena, sizeof(Level_Chapter_3));
+atari.cpp(590,39):             game->level = arena_push(&game->level_arena, sizeof(Level_Chapter_3));
+atari.cpp(595,22):     arena_print_used(game->level_arena);
+atari.cpp(605,18):     arena_reset(&game->level_arena);
+atari.cpp(617,41):     for (int i = 0; i < StaticArraySize(game->text); i++) {
+atari.cpp(618,9):         game->text[i] = {};
+atari.cpp(620,5):     game->current = 0;
+atari.cpp(622,17):     array_free(&game->entities);
+atari.cpp(623,5):     game->level = nullptr;
+atari.cpp(638,26):         BeginTextureMode(game->render_target);
+atari.cpp(653,20):     DrawTexturePro(game->render_target.texture,
+atari.cpp(662,9):     if (game->queue_deinit_and_goto_intro) {
+atari.cpp(663,9):         game->queue_deinit_and_goto_intro = false;
+chapter_1.cpp(84,43):     Entity *player = entities_get_player(&game->entities);
+chapter_1.cpp(86,28):     for (size_t i = 0; i < game->entities.length; i++) {
+chapter_1.cpp(87,21):         Entity *e = game->entities.data[i];
+chapter_1.cpp(98,24):             array_add(&game->entities, footstep);
+chapter_1.cpp(114,48):     Level_Chapter_1 *level = (Level_Chapter_1*)game->level;
+chapter_1.cpp(116,43):     Entity *player = entities_get_player(&game->entities);
+chapter_1.cpp(123,49):     Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
+chapter_1.cpp(149,5):     game->entities = make_array<Entity*>(2);
+chapter_1.cpp(153,16):     array_add(&game->entities, player);
+chapter_1.cpp(158,27):     atari_text_list_init(&game->text[0],
+chapter_1.cpp(162,27):                          &game->text[1]);
+chapter_1.cpp(163,27):     atari_text_list_init(&game->text[1],
+chapter_1.cpp(169,27):     atari_text_list_init(&game->text[2],
+chapter_1.cpp(174,27):     atari_text_list_init(&game->text[3],
+chapter_1.cpp(183,27):     atari_text_list_init(&game->text[7],
+chapter_1.cpp(187,27):                          &game->text[10]);
+chapter_1.cpp(188,27):     atari_text_list_init(&game->text[8],
+chapter_1.cpp(192,27):                          &game->text[10]);
+chapter_1.cpp(193,27):     atari_text_list_init(&game->text[9],
+chapter_1.cpp(197,27):                          &game->text[10]);
+chapter_1.cpp(203,34):     atari_choice_text_list_init(&game->text[10],
+chapter_1.cpp(211,27):     atari_text_list_init(&game->text[11],
+chapter_1.cpp(215,27):                          &game->text[12]);
+chapter_1.cpp(216,27):     atari_text_list_init(&game->text[12],
+chapter_1.cpp(220,27):                          &game->text[13]);
+chapter_1.cpp(221,27):     atari_text_list_init(&game->text[13],
+chapter_1.cpp(225,27):                          &game->text[14]);
+chapter_1.cpp(226,27):     atari_text_list_init(&game->text[14],
+chapter_1.cpp(230,27):                          &game->text[15]);
+chapter_1.cpp(231,27):     atari_text_list_init(&game->text[15],
+chapter_1.cpp(235,27):                          &game->text[16]);
+chapter_1.cpp(236,27):     atari_text_list_init(&game->text[16],
+chapter_1.cpp(240,27):                          &game->text[17]);
+chapter_1.cpp(241,27):     atari_text_list_init(&game->text[17],
+chapter_1.cpp(245,27):                          &game->text[18]);
+chapter_1.cpp(246,27):     atari_text_list_init(&game->text[18],
+chapter_1.cpp(250,27):                          &game->text[19]);
+chapter_1.cpp(251,27):     atari_text_list_init(&game->text[19],
+chapter_1.cpp(255,27):                          &game->text[20]);
+chapter_1.cpp(256,27):     atari_text_list_init(&game->text[20],
+chapter_1.cpp(260,27):                          &game->text[21]);
+chapter_1.cpp(261,27):     atari_text_list_init(&game->text[21],
+chapter_1.cpp(265,27):                          &game->text[22]);
+chapter_1.cpp(266,27):     atari_text_list_init(&game->text[22],
+chapter_1.cpp(270,27):                          &game->text[23]);
+chapter_1.cpp(271,27):     atari_text_list_init(&game->text[23],
+chapter_1.cpp(279,30):        atari_text_list_init(&game->text[23],
+chapter_1.cpp(286,31):     atari_mid_text_list_init(&game->text[24],
+chapter_1.cpp(288,31):                              &game->text[25]);
+chapter_1.cpp(290,31):     atari_mid_text_list_init(&game->text[25],
+chapter_1.cpp(292,31):                              &game->text[26]);
+chapter_1.cpp(294,31):     atari_mid_text_list_init(&game->text[26],
+chapter_1.cpp(296,31):                              &game->text[27]);
+chapter_1.cpp(298,31):     atari_mid_text_list_init(&game->text[27],
+chapter_1.cpp(300,31):                              &game->text[28]);
+chapter_1.cpp(302,31):     atari_mid_text_list_init(&game->text[28],
+chapter_1.cpp(304,31):                              &game->text[29]);
+chapter_1.cpp(306,31):     atari_mid_text_list_init(&game->text[29],
+chapter_1.cpp(308,31):                              &game->text[30]);
+chapter_1.cpp(310,31):     atari_mid_text_list_init(&game->text[30],
+chapter_1.cpp(315,31):     atari_mid_text_list_init(&game->text[31],
+chapter_1.cpp(318,5):     game->text[31].scroll_type = LetterByLetter;
+chapter_1.cpp(319,5):     game->text[31].callbacks[0] = set_player_alarm;
+chapter_1.cpp(321,5):     game->current = &game->text[0];
+chapter_1.cpp(321,22):     game->current = &game->text[0];
+chapter_1.cpp(358,49):     Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
+chapter_1.cpp(359,43):     Entity *player = entities_get_player(&game->entities);
+chapter_1.cpp(368,25):                         game->current = &game->text[17];
+chapter_1.cpp(368,42):                         game->current = &game->text[17];
+chapter_1.cpp(370,25):                         game->current = &game->text[11];
+chapter_1.cpp(370,42):                         game->current = &game->text[11];
+chapter_1.cpp(384,29):                             game->current = &game->text[7];
+chapter_1.cpp(384,46):                             game->current = &game->text[7];
+chapter_1.cpp(387,29):                             game->current = &game->text[8];
+chapter_1.cpp(387,46):                             game->current = &game->text[8];
+chapter_1.cpp(390,29):                             game->current = &game->text[9];
+chapter_1.cpp(390,46):                             game->current = &game->text[9];
+chapter_1.cpp(402,17):                 game->current = &game->text[31];
+chapter_1.cpp(402,34):                 game->current = &game->text[31];
+chapter_1.cpp(458,42):             apply_velocity(e, velocity, &game->entities);
+chapter_1.cpp(467,41):                     for (int i = 0; i < game->entities.length; i++) {
+chapter_1.cpp(468,42):                         Entity *entity = game->entities.data[i];
+chapter_1.cpp(471,43):                             array_remove(&game->entities, i--);
+chapter_1.cpp(496,29):                             game->current = &game->text[2];
+chapter_1.cpp(496,46):                             game->current = &game->text[2];
+chapter_1.cpp(498,29):                             game->current = &game->text[3];
+chapter_1.cpp(498,46):                             game->current = &game->text[3];
+chapter_1.cpp(505,32):                     array_add(&game->entities, footstep);
+chapter_1.cpp(522,58):             Entity *node_find = entities_find_from_type(&game->entities,
+chapter_1.cpp(599,41):                     for (int i = 0; i < game->entities.length; i++) {
+chapter_1.cpp(600,42):                         Entity *entity = game->entities.data[i];
+chapter_1.cpp(608,43):                             array_remove(&game->entities, i--);
+chapter_1.cpp(642,36):                         array_add(&game->entities, phone);
+chapter_1.cpp(648,36):                         array_add(&game->entities, node);
+chapter_1.cpp(654,48):                         add_cactuses_randomly(&game->entities, CACTUS_COUNT);
+chapter_1.cpp(669,49):     Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
+chapter_1.cpp(711,49):     Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
+chapter_1.cpp(713,25):     for (int i = 0; i < game->entities.length; i++) {
+chapter_1.cpp(714,21):         Entity *e = game->entities.data[i];
+chapter_1.cpp(719,9):         game->current == nullptr)
+chapter_1.cpp(733,21):                     game->current = &game->text[24];
+chapter_1.cpp(733,38):                     game->current = &game->text[24];
+chapter_1.cpp(752,49):     Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
+chapter_1.cpp(755,9):         game->textbox_alpha = 255;
+chapter_1.cpp(757,9):         game->textbox_alpha = 200;
+chapter_1.cpp(770,20):     sort_entities(&game->entities);
+chapter_1.cpp(772,27):     size_t entity_count = game->entities.length;
+chapter_1.cpp(776,21):         Entity *e = game->entities.data[i];
+chapter_2.cpp(163,48):     Entity *bouncer = entities_find_from_type(&game->entities, ENTITY_CHAP_2_BOUNCER);
+chapter_2.cpp(170,45):     Entity *door = entities_find_from_type(&game->entities,
+chapter_2.cpp(181,49):     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
+chapter_2.cpp(184,48):     Entity *eleanor = entities_find_from_type(&game->entities,
+chapter_2.cpp(199,49):     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
+chapter_2.cpp(209,49):     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
+chapter_2.cpp(214,16):     array_add(&game->entities, level->penny);
+chapter_2.cpp(219,49):     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
+chapter_2.cpp(232,49):     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
+chapter_2.cpp(248,5):     game->entities = make_array<Entity*>(20);
+chapter_2.cpp(262,27):     atari_text_list_init(&game->text[0],
+chapter_2.cpp(266,27):                          &game->text[1]);
+chapter_2.cpp(267,27):     atari_text_list_init(&game->text[1],
+chapter_2.cpp(271,27):                          &game->text[2]);
+chapter_2.cpp(272,27):     atari_text_list_init(&game->text[2],
+chapter_2.cpp(276,27):                          &game->text[3]);
+chapter_2.cpp(277,27):     atari_text_list_init(&game->text[3],
+chapter_2.cpp(281,27):                          &game->text[4]);
+chapter_2.cpp(282,27):     atari_text_list_init(&game->text[4],
+chapter_2.cpp(286,27):                          &game->text[5]);
+chapter_2.cpp(287,27):     atari_text_list_init(&game->text[5],
+chapter_2.cpp(291,27):                          &game->text[6]);
+chapter_2.cpp(292,27):     atari_text_list_init(&game->text[6],
+chapter_2.cpp(296,27):                          &game->text[7]);
+chapter_2.cpp(297,27):     atari_text_list_init(&game->text[7],
+chapter_2.cpp(301,27):                          &game->text[8]);
+chapter_2.cpp(302,27):     atari_text_list_init(&game->text[8],
+chapter_2.cpp(308,5):     game->text[8].callbacks[0] = chapter_2_end_bouncer_text;
+chapter_2.cpp(311,27):     atari_text_list_init(&game->text[9],
+chapter_2.cpp(315,27):                          &game->text[10]);
+chapter_2.cpp(316,27):     atari_text_list_init(&game->text[10],
+chapter_2.cpp(320,27):                          &game->text[11]);
+chapter_2.cpp(321,27):     atari_text_list_init(&game->text[11],
+chapter_2.cpp(325,27):                          &game->text[12]);
+chapter_2.cpp(326,27):     atari_text_list_init(&game->text[12],
+chapter_2.cpp(333,27):     atari_text_list_init(&game->text[13],
+chapter_2.cpp(340,27):     atari_text_list_init(&game->text[14],
+chapter_2.cpp(344,27):                          &game->text[15]);
+chapter_2.cpp(345,27):     atari_text_list_init(&game->text[15],
+chapter_2.cpp(349,27):                          &game->text[16]);
+chapter_2.cpp(350,27):     atari_text_list_init(&game->text[16],
+chapter_2.cpp(354,27):                          &game->text[17]);
+chapter_2.cpp(355,27):     atari_text_list_init(&game->text[17],
+chapter_2.cpp(359,27):                          &game->text[18]);
+chapter_2.cpp(360,27):     atari_text_list_init(&game->text[18],
+chapter_2.cpp(364,27):                          &game->text[19]);
+chapter_2.cpp(365,27):     atari_text_list_init(&game->text[19],
+chapter_2.cpp(369,27):                          &game->text[20]);
+chapter_2.cpp(370,27):     atari_text_list_init(&game->text[20],
+chapter_2.cpp(374,27):                          &game->text[21]);
+chapter_2.cpp(375,27):     atari_text_list_init(&game->text[21],
+chapter_2.cpp(379,27):                          &game->text[22]);
+chapter_2.cpp(380,27):     atari_text_list_init(&game->text[22],
+chapter_2.cpp(384,27):                          &game->text[23]);
+chapter_2.cpp(385,27):     atari_text_list_init(&game->text[23],
+chapter_2.cpp(389,27):                          &game->text[24]);
+chapter_2.cpp(390,27):     atari_text_list_init(&game->text[24],
+chapter_2.cpp(394,27):                          &game->text[25]);
+chapter_2.cpp(395,27):     atari_text_list_init(&game->text[25],
+chapter_2.cpp(402,27):     atari_text_list_init(&game->text[26],
+chapter_2.cpp(406,27):                          &game->text[27]);
+chapter_2.cpp(407,27):     atari_text_list_init(&game->text[27],
+chapter_2.cpp(414,27):     atari_text_list_init(&game->text[29],
+chapter_2.cpp(418,27):                          &game->text[30]);
+chapter_2.cpp(419,27):     atari_text_list_init(&game->text[30],
+chapter_2.cpp(423,27):                          &game->text[31]);
+chapter_2.cpp(424,27):     atari_text_list_init(&game->text[31],
+chapter_2.cpp(428,27):                          &game->text[32]);
+chapter_2.cpp(429,27):     atari_text_list_init(&game->text[32],
+chapter_2.cpp(433,27):                          &game->text[33]);
+chapter_2.cpp(434,27):     atari_text_list_init(&game->text[33],
+chapter_2.cpp(438,27):                          &game->text[34]);
+chapter_2.cpp(439,27):     atari_text_list_init(&game->text[34],
+chapter_2.cpp(443,27):                          &game->text[35]);
+chapter_2.cpp(444,27):     atari_text_list_init(&game->text[35],
+chapter_2.cpp(448,27):                          &game->text[36]);
+chapter_2.cpp(449,27):     atari_text_list_init(&game->text[36],
+chapter_2.cpp(453,27):                          &game->text[37]);
+chapter_2.cpp(454,27):     atari_text_list_init(&game->text[37],
+chapter_2.cpp(458,27):                          &game->text[38]);
+chapter_2.cpp(459,27):     atari_text_list_init(&game->text[38],
+chapter_2.cpp(463,27):                          &game->text[39]);
+chapter_2.cpp(464,27):     atari_text_list_init(&game->text[39],
+chapter_2.cpp(471,27):     atari_text_list_init(&game->text[40],
+chapter_2.cpp(475,27):                          &game->text[41]);
+chapter_2.cpp(476,27):     atari_text_list_init(&game->text[41],
+chapter_2.cpp(480,27):                          &game->text[42]);
+chapter_2.cpp(481,27):     atari_text_list_init(&game->text[42],
+chapter_2.cpp(485,27):                          &game->text[43]);
+chapter_2.cpp(486,27):     atari_text_list_init(&game->text[43],
+chapter_2.cpp(490,27):                          &game->text[44]);
+chapter_2.cpp(491,27):     atari_text_list_init(&game->text[44],
+chapter_2.cpp(498,27):     atari_text_list_init(&game->text[45],
+chapter_2.cpp(502,27):                          &game->text[46]);
+chapter_2.cpp(503,27):     atari_text_list_init(&game->text[46],
+chapter_2.cpp(507,27):                          &game->text[47]);
+chapter_2.cpp(508,27):     atari_text_list_init(&game->text[47],
+chapter_2.cpp(512,27):                          &game->text[48]);
+chapter_2.cpp(513,27):     atari_text_list_init(&game->text[48],
+chapter_2.cpp(517,27):                          &game->text[49]);
+chapter_2.cpp(518,27):     atari_text_list_init(&game->text[49],
+chapter_2.cpp(522,27):                          &game->text[50]);
+chapter_2.cpp(523,27):     atari_text_list_init(&game->text[50],
+chapter_2.cpp(527,27):                          &game->text[51]);
+chapter_2.cpp(528,27):     atari_text_list_init(&game->text[51],
+chapter_2.cpp(532,27):                          &game->text[52]);
+chapter_2.cpp(541,38):         atari_choice_text_list_init(&game->text[52],
+chapter_2.cpp(552,27):     atari_text_list_init(&game->text[53],
+chapter_2.cpp(556,27):                          &game->text[54]);
+chapter_2.cpp(557,27):     atari_text_list_init(&game->text[54],
+chapter_2.cpp(561,27):                          &game->text[55]);
+chapter_2.cpp(562,27):     atari_text_list_init(&game->text[55],
+chapter_2.cpp(568,27):                          &game->text[56]);
+chapter_2.cpp(569,27):     atari_text_list_init(&game->text[56],
+chapter_2.cpp(575,27):                          &game->text[57]);
+chapter_2.cpp(576,27):     atari_text_list_init(&game->text[57],
+chapter_2.cpp(580,27):                          &game->text[58]);
+chapter_2.cpp(581,27):     atari_text_list_init(&game->text[58],
+chapter_2.cpp(588,27):     atari_text_list_init(&game->text[59],
+chapter_2.cpp(592,27):                          &game->text[60]);
+chapter_2.cpp(593,27):     atari_text_list_init(&game->text[60],
+chapter_2.cpp(597,27):                          &game->text[61]);
+chapter_2.cpp(598,27):     atari_text_list_init(&game->text[61],
+chapter_2.cpp(602,27):                          &game->text[62]);
+chapter_2.cpp(603,27):     atari_text_list_init(&game->text[62],
+chapter_2.cpp(607,27):                          &game->text[63]);
+chapter_2.cpp(608,27):     atari_text_list_init(&game->text[63],
+chapter_2.cpp(612,27):                          &game->text[64]);
+chapter_2.cpp(613,27):     atari_text_list_init(&game->text[64],
+chapter_2.cpp(617,27):                          &game->text[65]);
+chapter_2.cpp(618,27):     atari_text_list_init(&game->text[65],
+chapter_2.cpp(622,27):                          &game->text[66]);
+chapter_2.cpp(623,27):     atari_text_list_init(&game->text[66],
+chapter_2.cpp(627,27):                          &game->text[67]);
+chapter_2.cpp(628,27):     atari_text_list_init(&game->text[67],
+chapter_2.cpp(632,27):                          &game->text[68]);
+chapter_2.cpp(633,27):     atari_text_list_init(&game->text[68],
+chapter_2.cpp(637,27):                          &game->text[69]);
+chapter_2.cpp(638,27):     atari_text_list_init(&game->text[69],
+chapter_2.cpp(642,27):                          &game->text[70]);
+chapter_2.cpp(643,27):     atari_text_list_init(&game->text[70],
+chapter_2.cpp(647,27):                          &game->text[71]);
+chapter_2.cpp(648,27):     atari_text_list_init(&game->text[71],
+chapter_2.cpp(652,27):                          &game->text[72]);
+chapter_2.cpp(653,27):     atari_text_list_init(&game->text[72],
+chapter_2.cpp(657,27):                          &game->text[73]);
+chapter_2.cpp(658,27):     atari_text_list_init(&game->text[73],
+chapter_2.cpp(662,27):                          &game->text[74]);
+chapter_2.cpp(663,5):     game->text[73].text[0].font = &comic_sans;
+chapter_2.cpp(664,27):     atari_text_list_init(&game->text[74],
+chapter_2.cpp(668,27):                          &game->text[75]);
+chapter_2.cpp(669,27):     atari_text_list_init(&game->text[75],
+chapter_2.cpp(673,27):                          &game->text[76]);
+chapter_2.cpp(674,27):     atari_text_list_init(&game->text[76],
+chapter_2.cpp(678,27):                          &game->text[77]);
+chapter_2.cpp(679,27):     atari_text_list_init(&game->text[77],
+chapter_2.cpp(683,27):                          &game->text[78]);
+chapter_2.cpp(684,27):     atari_text_list_init(&game->text[78],
+chapter_2.cpp(688,27):                          &game->text[79]);
+chapter_2.cpp(689,27):     atari_text_list_init(&game->text[79],
+chapter_2.cpp(693,27):                          &game->text[120]);
+chapter_2.cpp(695,27):     atari_text_list_init(&game->text[120],
+chapter_2.cpp(701,27):     atari_text_list_init(&game->text[80],
+chapter_2.cpp(705,27):                          &game->text[81]);
+chapter_2.cpp(706,27):     atari_text_list_init(&game->text[81],
+chapter_2.cpp(710,27):                          &game->text[82]);
+chapter_2.cpp(711,27):     atari_text_list_init(&game->text[82],
+chapter_2.cpp(715,27):                          &game->text[83]);
+chapter_2.cpp(716,27):     atari_text_list_init(&game->text[83],
+chapter_2.cpp(720,27):                          &game->text[84]);
+chapter_2.cpp(721,27):     atari_text_list_init(&game->text[84],
+chapter_2.cpp(725,27):                          &game->text[85]);
+chapter_2.cpp(726,27):     atari_text_list_init(&game->text[85],
+chapter_2.cpp(732,5):     game->text[79].callbacks[0] = chapter_2_end_eleanor_first_text;
+chapter_2.cpp(733,5):     game->text[85].callbacks[0] = chapter_2_end_eleanor_second_text;
+chapter_2.cpp(735,27):     atari_text_list_init(&game->text[86],
+chapter_2.cpp(739,27):                          &game->text[87]);
+chapter_2.cpp(740,27):     atari_text_list_init(&game->text[87],
+chapter_2.cpp(744,27):                          &game->text[88]);
+chapter_2.cpp(745,27):     atari_text_list_init(&game->text[88],
+chapter_2.cpp(749,27):                          &game->text[89]);
+chapter_2.cpp(750,27):     atari_text_list_init(&game->text[89],
+chapter_2.cpp(756,5):     game->text[89].callbacks[0] = chapter_2_end_eleanor_third_text;
+chapter_2.cpp(758,27):     atari_text_list_init(&game->text[90],
+chapter_2.cpp(762,27):                          &game->text[91]);
+chapter_2.cpp(763,27):     atari_text_list_init(&game->text[91],
+chapter_2.cpp(767,27):                          &game->text[92]);
+chapter_2.cpp(768,27):     atari_text_list_init(&game->text[92],
+chapter_2.cpp(772,27):                          &game->text[93]);
+chapter_2.cpp(773,27):     atari_text_list_init(&game->text[93],
+chapter_2.cpp(777,27):                          &game->text[94]);
+chapter_2.cpp(778,27):     atari_text_list_init(&game->text[94],
+chapter_2.cpp(782,27):                          &game->text[95]);
+chapter_2.cpp(783,27):     atari_text_list_init(&game->text[95],
+chapter_2.cpp(787,27):                          &game->text[96]);
+chapter_2.cpp(788,27):     atari_text_list_init(&game->text[96],
+chapter_2.cpp(792,27):                          &game->text[97]);
+chapter_2.cpp(793,27):     atari_text_list_init(&game->text[97],
+chapter_2.cpp(797,27):                          &game->text[98]);
+chapter_2.cpp(798,27):     atari_text_list_init(&game->text[98],
+chapter_2.cpp(805,28):                           &game->text[100],
+chapter_2.cpp(807,28):                           &game->text[101]);
+chapter_2.cpp(809,28):                           &game->text[101],
+chapter_2.cpp(811,28):                           &game->text[102]);
+chapter_2.cpp(813,28):                           &game->text[102],
+chapter_2.cpp(815,28):                           &game->text[103]);
+chapter_2.cpp(817,28):                           &game->text[103],
+chapter_2.cpp(826,28):                           &game->text[104]);
+chapter_2.cpp(828,28):                           &game->text[104],
+chapter_2.cpp(831,5):     game->text[104].callbacks[0] = chapter_2_end_fade;
+chapter_2.cpp(854,16):     array_add(&game->entities, level->player);
+chapter_2.cpp(855,16):     array_add(&game->entities, jake);
+chapter_2.cpp(856,16):     array_add(&game->entities, erica);
+chapter_2.cpp(857,16):     array_add(&game->entities, bartender);
+chapter_2.cpp(858,16):     array_add(&game->entities, bouncer);
+chapter_2.cpp(859,16):     array_add(&game->entities, mike);
+chapter_2.cpp(860,16):     array_add(&game->entities, jessica);
+chapter_2.cpp(861,16):     array_add(&game->entities, amelia);
+chapter_2.cpp(862,16):     array_add(&game->entities, guy);
+chapter_2.cpp(863,16):     array_add(&game->entities, amelia_1);
+chapter_2.cpp(864,16):     array_add(&game->entities, amelia_2);
+chapter_2.cpp(865,16):     array_add(&game->entities, amelia_3);
+chapter_2.cpp(866,16):     array_add(&game->entities, amelia_4);
+chapter_2.cpp(867,16):     array_add(&game->entities, amelia_5);
+chapter_2.cpp(868,16):     array_add(&game->entities, eleanor);
+chapter_2.cpp(869,18):     //array_add(&game->entities, paulie);
+chapter_2.cpp(871,16):     array_add(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 3.75*192-24-10, 3*160/4-9));
+chapter_2.cpp(872,16):     array_add(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 3.25*192-24+10, 160/4-9));
+chapter_2.cpp(874,16):     array_add(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 4.75*192-24-15, 3*160/4-4));
+chapter_2.cpp(875,16):     array_add(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 4.25*192-24+13, 160/4+2));
+chapter_2.cpp(877,16):     array_add(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 5.75*192-24-15, 3*160/4-4));
+chapter_2.cpp(878,16):     array_add(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 5.25*192-24+13+50, 160/4+2));
+chapter_2.cpp(880,15):     add_wall(&game->entities, { 0, 188, 76, 27 }); // bar
+chapter_2.cpp(881,15):     add_wall(&game->entities, { 64, 133, 19, 123 });
+chapter_2.cpp(882,15):     add_wall(&game->entities, { 173, 133, 19, 123 });
+chapter_2.cpp(883,15):     add_wall(&game->entities, { 189, 160, 3, 160 });
+chapter_2.cpp(884,15):     add_wall(&game->entities, { 0, 133, 78, 10 });
+chapter_2.cpp(885,15):     add_wall(&game->entities, { 192, 0, 192*2 + 7, 47 });
+chapter_2.cpp(886,15):     add_wall(&game->entities, { 0, 0, 105, 22 });
+chapter_2.cpp(887,15):     add_wall(&game->entities, { 192, 133, 192*2 + 7, 27 });
+chapter_2.cpp(888,15):     add_wall(&game->entities, { 0, 22, 6, 132 });
+chapter_2.cpp(889,15):     add_wall(&game->entities, { 569, 47, 14, 31});
+chapter_2.cpp(890,15):     add_wall(&game->entities, { 569, 103, 14, 30});
+chapter_2.cpp(891,15):     add_wall(&game->entities, { 576, 160-3, 192*3, 8});
+chapter_2.cpp(893,15):     add_door(&game->entities, { 569, 78, 7, 25 });
+chapter_2.cpp(901,49):     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
+chapter_2.cpp(921,22):                 if (!game->current && player->alarm[0] == 0) {
+chapter_2.cpp(924,29):                             game->current = &game->text[59];
+chapter_2.cpp(924,46):                             game->current = &game->text[59];
+chapter_2.cpp(928,29):                             game->current = &game->text[80];
+chapter_2.cpp(928,46):                             game->current = &game->text[80];
+chapter_2.cpp(955,42):             apply_velocity(e, velocity, &game->entities);
+chapter_2.cpp(966,31):                     case 0: { game->current = &game->text[14]; } break;
+chapter_2.cpp(966,48):                     case 0: { game->current = &game->text[14]; } break;
+chapter_2.cpp(974,31):                     case 0: { game->current = &game->text[26]; } break;
+chapter_2.cpp(974,48):                     case 0: { game->current = &game->text[26]; } break;
+chapter_2.cpp(982,31):                     case 0: { game->current = &game->text[29]; } break;
+chapter_2.cpp(982,48):                     case 0: { game->current = &game->text[29]; } break;
+chapter_2.cpp(991,25):                         game->current = &game->text[45];
+chapter_2.cpp(991,42):                         game->current = &game->text[45];
+chapter_2.cpp(999,25):                         game->current = &game->text[52];
+chapter_2.cpp(999,42):                         game->current = &game->text[52];
+chapter_2.cpp(1007,21):                     game->current = &game->text[40];
+chapter_2.cpp(1007,38):                     game->current = &game->text[40];
+chapter_2.cpp(1015,31):                     case 0: { game->current = &game->text[53]; } break;
+chapter_2.cpp(1015,48):                     case 0: { game->current = &game->text[53]; } break;
+chapter_2.cpp(1023,17):                 game->current = &game->text[0];
+chapter_2.cpp(1023,34):                 game->current = &game->text[0];
+chapter_2.cpp(1034,31):                     case 0: { game->current = &game->text[9];  } break;
+chapter_2.cpp(1034,48):                     case 0: { game->current = &game->text[9];  } break;
+chapter_2.cpp(1035,31):                     case 1: { game->current = &game->text[13]; } break;
+chapter_2.cpp(1035,48):                     case 1: { game->current = &game->text[13]; } break;
+chapter_2.cpp(1066,54):                         apply_velocity(e, velocity, &game->entities);
+chapter_2.cpp(1072,29):                             game->current = 0;
+chapter_2.cpp(1110,25):                         game->current = &game->text[86];
+chapter_2.cpp(1110,42):                         game->current = &game->text[86];
+chapter_2.cpp(1141,27):     size_t entity_count = game->entities.length;
+chapter_2.cpp(1143,49):     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
+chapter_2.cpp(1146,21):         Entity *e = game->entities.data[i];
+chapter_2.cpp(1158,21):                     game->current = &game->text[100];
+chapter_2.cpp(1158,38):                     game->current = &game->text[100];
+chapter_2.cpp(1199,40):             if (level->mirror_popup && game->current == 0 && is_action_pressed()) {
+chapter_2.cpp(1200,17):                 game->current = &game->text[90];
+chapter_2.cpp(1200,34):                 game->current = &game->text[90];
+chapter_2.cpp(1204,54):             Entity *penny = entities_find_from_type(&game->entities, ENTITY_CHAP_2_PENNY);
+chapter_2.cpp(1210,37):                 for (int i = 0; i < game->entities.length; i++) {
+chapter_2.cpp(1211,33):                     Entity *e = game->entities.data[i];
+chapter_2.cpp(1215,39):                         array_remove(&game->entities, i--);
+chapter_2.cpp(1220,27):                 add_wall(&game->entities, {0, 0, 39, 160});
+chapter_2.cpp(1221,27):                 add_wall(&game->entities, {0, 0, 192, 37});
+chapter_2.cpp(1254,49):     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
+chapter_2.cpp(1258,5):     game->textbox_alpha = 200;
+chapter_2.cpp(1268,62):             texture = &atari_assets.textures[11], scale = 1, game->textbox_alpha = 255;
+chapter_2.cpp(1286,24):         sort_entities(&game->entities);
+chapter_2.cpp(1288,31):         size_t entity_count = game->entities.length;
+chapter_2.cpp(1291,25):             Entity *e = game->entities.data[i];
+chapter_2.cpp(1297,13):         if (game->current == 0) {
+chapter_3.cpp(73,13):     if (minigame->current_document+1 < minigame->document_count) {
+chapter_3.cpp(73,44):     if (minigame->current_document+1 < minigame->document_count) {
+chapter_3.cpp(74,13):         minigame->current_document++;
+chapter_3.cpp(75,13):         minigame->scroll_y = 0;
+chapter_3.cpp(268,49):     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
+chapter_3.cpp(305,49):     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
+chapter_3.cpp(312,25):     for (int i = 0; i < game->entities.length; i++) {
+chapter_3.cpp(313,21):         Entity *e = game->entities.data[i];
+chapter_3.cpp(316,27):             array_remove(&game->entities, i--);
+chapter_3.cpp(320,33):     Array<Entity*> *entities = &game->entities;
+chapter_3.cpp(330,5):     game->current = &game->text[4];
+chapter_3.cpp(330,22):     game->current = &game->text[4];
+chapter_3.cpp(334,49):     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
+chapter_3.cpp(336,15):     add_wall(&game->entities, {0, 0, 6, 94});
+chapter_3.cpp(337,15):     add_wall(&game->entities, {95, 0, 3, 92});
+chapter_3.cpp(338,15):     add_wall(&game->entities, {185, 0, 3, 95});
+chapter_3.cpp(346,24):             array_add(&game->entities, guy);
+chapter_3.cpp(349,24):             array_add(&game->entities, girl);
+chapter_3.cpp(355,49):     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
+chapter_3.cpp(381,60):             level->minigame = chapter_3_make_job_minigame(&game->level_arena, documents, count);
+chapter_3.cpp(467,49):     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
+chapter_3.cpp(491,5):     game->entities = make_array<Entity*>(512);
+chapter_3.cpp(495,27):     atari_text_list_init(&game->text[0],
+chapter_3.cpp(506,34):     atari_choice_text_list_init(&game->text[1],
+chapter_3.cpp(514,27):     atari_text_list_init(&game->text[2],
+chapter_3.cpp(520,27):     atari_text_list_init(&game->text[3],
+chapter_3.cpp(528,27):     atari_text_list_init(&game->text[4],
+chapter_3.cpp(532,27):                          &game->text[5]);
+chapter_3.cpp(533,27):     atari_text_list_init(&game->text[5],
+chapter_3.cpp(537,27):                          &game->text[6]);
+chapter_3.cpp(538,27):     atari_text_list_init(&game->text[6],
+chapter_3.cpp(542,27):                          &game->text[7]);
+chapter_3.cpp(543,27):     atari_text_list_init(&game->text[7],
+chapter_3.cpp(547,27):                          &game->text[8]);
+chapter_3.cpp(548,27):     atari_text_list_init(&game->text[8],
+chapter_3.cpp(552,27):                          &game->text[9]);
+chapter_3.cpp(553,27):     atari_text_list_init(&game->text[9],
+chapter_3.cpp(557,27):                          &game->text[10]);
+chapter_3.cpp(558,27):     atari_text_list_init(&game->text[10],
+chapter_3.cpp(562,27):                          &game->text[11]);
+chapter_3.cpp(563,27):     atari_text_list_init(&game->text[11],
+chapter_3.cpp(567,27):                          &game->text[12]);
+chapter_3.cpp(568,27):     atari_text_list_init(&game->text[12],
+chapter_3.cpp(572,27):                          &game->text[13]);
+chapter_3.cpp(573,27):     atari_text_list_init(&game->text[13],
+chapter_3.cpp(580,9):         game->text[i].location = Top;
+chapter_3.cpp(585,16):     array_add(&game->entities, level->player);
+chapter_3.cpp(598,16):     assert(minigame->active);
+chapter_3.cpp(601,25):     if (key_down()) minigame->scroll_y -= 120 * dt;
+chapter_3.cpp(602,25):     if (key_up())   minigame->scroll_y += 120 * dt;
+chapter_3.cpp(606,9):     minigame->scroll_y += scroll_speed_px * wheel.y;
+chapter_3.cpp(608,9):     minigame->scroll_y = min(minigame->scroll_y, 0);
+chapter_3.cpp(608,34):     minigame->scroll_y = min(minigame->scroll_y, 0);
+chapter_3.cpp(614,22):     Font *font = minigame->font;
+chapter_3.cpp(616,26):     DrawRectangleRec(minigame->window_outer, WHITE);
+chapter_3.cpp(617,30):     DrawRectangleLinesEx(minigame->window_outer, minigame->window_border_thickness, BLACK);
+chapter_3.cpp(617,54):     DrawRectangleLinesEx(minigame->window_outer, minigame->window_border_thickness, BLACK);
+chapter_3.cpp(618,30):     DrawRectangleLinesEx(minigame->title_bar, 1, BLACK);
+chapter_3.cpp(621,32):     DrawTexture(*controls, minigame->title_bar.x + minigame->title_bar.width - controls->width, minigame->title_bar.y, WHITE);
+chapter_3.cpp(621,56):     DrawTexture(*controls, minigame->title_bar.x + minigame->title_bar.width - controls->width, minigame->title_bar.y, WHITE);
+chapter_3.cpp(621,101):     DrawTexture(*controls, minigame->title_bar.x + minigame->title_bar.width - controls->width, minigame->title_bar.y, WHITE);
+chapter_3.cpp(623,36):     DrawTexture(*window_title, minigame->title_bar.x, minigame->title_bar.y, WHITE);
+chapter_3.cpp(623,59):     DrawTexture(*window_title, minigame->title_bar.x, minigame->title_bar.y, WHITE);
+chapter_3.cpp(626,26):     BeginTextureMode(minigame->render_target);
+chapter_3.cpp(631,74):     Vector2 default_size = MeasureTextEx(*font, "T", font->baseSize, minigame->font_spacing);
+chapter_3.cpp(639,19):         pad + minigame->scroll_y
+chapter_3.cpp(646,80):             size = MeasureTextEx(*font, current_line.text, font->baseSize, minigame->font_spacing);
+chapter_3.cpp(647,75):             DrawTextEx(*font, current_line.text, pos, font->baseSize, minigame->font_spacing, BLACK);
+chapter_3.cpp(655,31):     Document *document = &minigame->document_list[minigame->current_document];
+chapter_3.cpp(655,55):     Document *document = &minigame->document_list[minigame->current_document];
+chapter_3.cpp(690,57):                                                     minigame->font_spacing);
+chapter_3.cpp(694,57):                                                     minigame->font_spacing);
+chapter_3.cpp(706,88):             Vector2 size = MeasureTextEx(*font, current_line.text, font->baseSize, minigame->font_spacing);
+chapter_3.cpp(710,30):             if (size.x > minigame->window_inner.width) {
+chapter_3.cpp(740,23):         rect.x += minigame->window_inner.x;
+chapter_3.cpp(741,23):         rect.y += minigame->window_inner.y;
+chapter_3.cpp(793,9):     minigame->finish_button.x = 
+chapter_3.cpp(794,13):         minigame->window_inner.width - minigame->finish_button.width - 5;
+chapter_3.cpp(794,44):         minigame->window_inner.width - minigame->finish_button.width - 5;
+chapter_3.cpp(795,9):     minigame->finish_button.y = 
+chapter_3.cpp(809,13):         minigame->finish_button.x,
+chapter_3.cpp(810,13):         minigame->finish_button.y,
+chapter_3.cpp(811,13):         minigame->finish_button.width * percentage,
+chapter_3.cpp(812,13):         minigame->finish_button.height
+chapter_3.cpp(815,30):     bool complete_lot = (minigame->current_document == minigame->document_count - 1);
+chapter_3.cpp(815,60):     bool complete_lot = (minigame->current_document == minigame->document_count - 1);
+chapter_3.cpp(818,13):         minigame->window_inner.x + minigame->finish_button.x,
+chapter_3.cpp(818,40):         minigame->window_inner.x + minigame->finish_button.x,
+chapter_3.cpp(819,13):         minigame->window_inner.y + minigame->finish_button.y,
+chapter_3.cpp(819,40):         minigame->window_inner.y + minigame->finish_button.y,
+chapter_3.cpp(820,13):         minigame->finish_button.width,
+chapter_3.cpp(821,13):         minigame->finish_button.height
+chapter_3.cpp(828,21):                 minigame->active = false;
+chapter_3.cpp(830,61):                 Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
+chapter_3.cpp(840,26):     DrawRectangleRec(minigame->finish_button, color);
+chapter_3.cpp(846,21):     DrawTextEx(*minigame->font, text, {minigame->finish_button.x + minigame->finish_button.width/2 - size.x/2, minigame->finish_button.y + minigame->finish_button.height/2 - size.y/2}, font->baseSize, 0, WHITE);
+chapter_3.cpp(846,44):     DrawTextEx(*minigame->font, text, {minigame->finish_button.x + minigame->finish_button.width/2 - size.x/2, minigame->finish_button.y + minigame->finish_button.height/2 - size.y/2}, font->baseSize, 0, WHITE);
+chapter_3.cpp(846,72):     DrawTextEx(*minigame->font, text, {minigame->finish_button.x + minigame->finish_button.width/2 - size.x/2, minigame->finish_button.y + minigame->finish_button.height/2 - size.y/2}, font->baseSize, 0, WHITE);
+chapter_3.cpp(846,116):     DrawTextEx(*minigame->font, text, {minigame->finish_button.x + minigame->finish_button.width/2 - size.x/2, minigame->finish_button.y + minigame->finish_button.height/2 - size.y/2}, font->baseSize, 0, WHITE);
+chapter_3.cpp(846,144):     DrawTextEx(*minigame->font, text, {minigame->finish_button.x + minigame->finish_button.width/2 - size.x/2, minigame->finish_button.y + minigame->finish_button.height/2 - size.y/2}, font->baseSize, 0, WHITE);
+chapter_3.cpp(851,21):     int width = minigame->render_target.texture.width;
+chapter_3.cpp(852,22):     int height = minigame->render_target.texture.height;
+chapter_3.cpp(854,24):     DrawTexturePro(minigame->render_target.texture,
+chapter_3.cpp(856,24):                    minigame->window_inner,
+chapter_3.cpp(864,49):     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
+chapter_3.cpp(875,17):             if (game->current != nullptr)
+chapter_3.cpp(884,47):             apply_velocity(entity, velocity, &game->entities);
+chapter_3.cpp(916,37):                 for (int i = 0; i < game->entities.length; i++) {
+chapter_3.cpp(917,33):                     Entity *e = game->entities.data[i];
+chapter_3.cpp(928,39):                         array_remove(&game->entities, i--);
+chapter_3.cpp(937,34):                     add_cubicle(&game->entities, rand_bool(0.9),  10+rand_range(-3,3), 10+rand_range(-3,3));
+chapter_3.cpp(938,34):                     add_cubicle(&game->entities, rand_bool(0.9),  10+rand_range(-3,3), 90+rand_range(-3,3));
+chapter_3.cpp(940,34):                     add_cubicle(&game->entities, rand_bool(0.1), 140+rand_range(-3,3), 10+rand_range(-3,3));
+chapter_3.cpp(941,34):                     add_cubicle(&game->entities, rand_bool(0.1), 140+rand_range(-3,3), 90+rand_range(-3,3));
+chapter_3.cpp(949,44):                     for (size_t i = 0; i < game->entities.length; i++) {
+chapter_3.cpp(950,37):                         Entity *e = game->entities.data[i];
+chapter_3.cpp(976,21):                     game->current = &game->text[3];
+chapter_3.cpp(976,38):                     game->current = &game->text[3];
+chapter_3.cpp(978,21):                     game->current = &game->text[1];
+chapter_3.cpp(978,38):                     game->current = &game->text[1];
+chapter_3.cpp(980,21):                     game->current = &game->text[0];
+chapter_3.cpp(980,38):                     game->current = &game->text[0];
+chapter_3.cpp(994,21):                     game->current = &game->text[2];
+chapter_3.cpp(994,38):                     game->current = &game->text[2];
+chapter_3.cpp(999,37):                     char *speaker = game->current->speaker.text;
+chapter_3.cpp(1009,21):                     game->current->speaker.length = strlen(speaker);
+chapter_3.cpp(1017,49):     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
+chapter_3.cpp(1102,49):     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
+chapter_3.cpp(1105,13):         if (game->current) {
+chapter_3.cpp(1106,18):             if (!game->current->next[0]) {
+chapter_3.cpp(1107,41):                 if (is_text_list_at_end(game->current)) {
+chapter_3.cpp(1110,21):                     game->current = 0;
+chapter_3.cpp(1122,31):         size_t entity_count = game->entities.length;
+chapter_3.cpp(1125,25):             Entity *e = game->entities.data[i];
+chapter_3.cpp(1132,5):     game->textbox_alpha = 200;
+chapter_3.cpp(1134,49):     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
+chapter_3.cpp(1139,21):             if (minigame->active) {
+chapter_3.cpp(1140,55):                 job_minigame_run(game, minigame, dt, &game->render_target);
+chapter_3.cpp(1163,32):                 sort_entities(&game->entities);
+chapter_3.cpp(1165,37):                 for (int i = 0; i < game->entities.length; i++) {
+chapter_3.cpp(1166,43):                     chapter_3_entity_draw(game->entities.data[i], game);
+chapter_3.cpp(1182,28):             sort_entities(&game->entities);
+chapter_3.cpp(1184,33):             for (int i = 0; i < game->entities.length; i++) {
+chapter_3.cpp(1185,39):                 chapter_3_entity_draw(game->entities.data[i], game);
+intro.cpp(26,5):     game->render_target = LoadRenderTexture(render_width, render_height);
+intro.cpp(30,35):             intro_init_text_list(&game->text[0], "1. Dysania", &game->text[1]);
+intro.cpp(30,65):             intro_init_text_list(&game->text[0], "1. Dysania", &game->text[1]);
+intro.cpp(31,35):             intro_init_text_list(&game->text[1], "Chase sat despondently at a cafe on a bright\nSaturday morning.\rHe listened to the hustle and bustle of the commuters,\rsaw their happy faces eating breakfast.", &game->text[2]);
+intro.cpp(31,215):             intro_init_text_list(&game->text[1], "Chase sat despondently at a cafe on a bright\nSaturday morning.\rHe listened to the hustle and bustle of the commuters,\rsaw their happy faces eating breakfast.", &game->text[2]);
+intro.cpp(32,35):             intro_init_text_list(&game->text[2], "Laughter erupted at a nearby table--\ra group of friends.", &game->text[3]);
+intro.cpp(32,112):             intro_init_text_list(&game->text[2], "Laughter erupted at a nearby table--\ra group of friends.", &game->text[3]);
+intro.cpp(33,35):             intro_init_text_list(&game->text[3], "A sinking feeling engulfed his entire body.", &game->text[4]);
+intro.cpp(33,98):             intro_init_text_list(&game->text[3], "A sinking feeling engulfed his entire body.", &game->text[4]);
+intro.cpp(34,35):             intro_init_text_list(&game->text[4], "He tried looking outside;\rtrying to feel something-- anything!", &game->text[5]);
+intro.cpp(34,118):             intro_init_text_list(&game->text[4], "He tried looking outside;\rtrying to feel something-- anything!", &game->text[5]);
+intro.cpp(35,35):             intro_init_text_list(&game->text[5], "But couldn't.", &game->text[6]);
+intro.cpp(35,68):             intro_init_text_list(&game->text[5], "But couldn't.", &game->text[6]);
+intro.cpp(36,35):             intro_init_text_list(&game->text[6], "He went to sleep that night\nparticularly perturbed.", &game->text[7]);
+intro.cpp(36,107):             intro_init_text_list(&game->text[6], "He went to sleep that night\nparticularly perturbed.", &game->text[7]);
+intro.cpp(37,35):             intro_init_text_list(&game->text[7], "He twisted and turned in his bed\nas he slowly dozed off...", nullptr);
+intro.cpp(40,35):             intro_init_text_list(&game->text[0], "2. Dinner Party", 0);
+intro.cpp(43,35):             intro_init_text_list(&game->text[0], "3. Repetitions", 0);
+intro.cpp(47,5):     game->current_text_list = &game->text[0];
+intro.cpp(47,32):     game->current_text_list = &game->text[0];
+intro.cpp(55,22):     BeginTextureMode(game->render_target);
+intro.cpp(58,9):     if (game->current_text_list)
+intro.cpp(59,9):         game->current_text_list = text_list_update_and_draw(game->current_text_list);
+intro.cpp(59,61):         game->current_text_list = text_list_update_and_draw(game->current_text_list);
+intro.cpp(61,9):     if (game->current_text_list == nullptr) {
+intro.cpp(69,20):     DrawTexturePro(game->render_target.texture,

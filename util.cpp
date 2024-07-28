@@ -42,6 +42,13 @@ void arena_free(Arena *arena) {
     memset(arena, 0, sizeof(Arena));
 }
 
+void arena_print_used(Arena arena) {
+    printf("Arena: Used %zu/%zu (%f%%)\n",
+           arena.used,
+           arena.capacity,
+           (double)arena.used / (double)arena.capacity);
+}
+
 void *arena_push(Arena *arena, size_t size) {
     void *result = 0;
 
@@ -143,6 +150,17 @@ void print_rectangle(Rectangle rect) {
     printf("{%f, %f, %f, %f}", rect.x, rect.y, rect.width, rect.height);
 }
 
+Rectangle integer_rectangle(Rectangle rect) {
+    Rectangle result;
+
+    result.x      = (int)rect.x;
+    result.y      = (int)rect.y;
+    result.width  = (int)rect.width;
+    result.height = (int)rect.height;
+
+    return result;
+}
+
 Texture2D load_texture(const char *filename) {
     Texture2D result;
 
@@ -208,7 +226,7 @@ extern "C" {
 
 double global_system_timer_frequency = 0;
 
-inline void set_global_system_frequency() {
+inline void set_global_system_timer_frequency() {
     LARGE_INTEGER a;
     QueryPerformanceFrequency(&a);
     global_system_timer_frequency = (double)a.QuadPart;

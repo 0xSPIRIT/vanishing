@@ -1,13 +1,19 @@
 Chapters
+  0. Prologue / Epilogue        1 min
   1. Dysania                    7 mins (x)
   2. Dinner Party               5 mins (x)
   3. Repetitions                9 mins
   4. Theophany                  3 mins
   5. Perception                 7 mins
   6. Patience and Blasphemy     3 mins
-  7. Epilogue                  10 mins
+  7. Epilogue / Prologue       10 mins
 
-  = 44 minutes
+  = 45 minutes
+
+If you play the game forwards, you get the "good" narrative
+whereas if you play it backwards, you get the "bad" story,
+where you start off in a good place and end in a bad one.
+This is to portray the often cyclical nature of depression.
 
 [Showing the struggle of getting out of bed]
 Text Appears: "Dysania"
