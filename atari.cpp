@@ -4,7 +4,7 @@
 // There are a few general functions that everyone
 // will need when handling entities.
 //
-// The specific chapters are #included after these
+// The specific chapters are included after these
 // utility entity functions.
 //
 // Via switch statements, we dispatch to the specific
@@ -570,6 +570,7 @@ void atari_mid_text_list_init(Text_List *list, char *line,
 #include "chapter_1.cpp"
 #include "chapter_2.cpp"
 #include "chapter_3.cpp"
+#include "chapter_4.cpp"
 
 void game_atari_init(Game_Atari *game) {
     assert(game->level == nullptr); // So we can make sure we had called deinit before
@@ -581,12 +582,6 @@ void game_atari_init(Game_Atari *game) {
 
     game->render_target  = LoadRenderTexture(render_width, render_height);
     game->textbox_target = LoadRenderTexture(render_width, render_height);
-
-    union Max_Size {
-        Level_Chapter_1 a;
-        Level_Chapter_2 b;
-        Level_Chapter_3 c;
-    };
 
     if (!game->level_arena.buffer)
         game->level_arena = make_arena(Megabytes(16));
@@ -606,6 +601,10 @@ void game_atari_init(Game_Atari *game) {
         case 3: {
             game->level = arena_push(&game->level_arena, sizeof(Level_Chapter_3));
             chapter_3_init(game);
+        } break;
+        case 4: {
+            game->level = arena_push(&game->level_arena, sizeof(Level_Chapter_4));
+            chapter_4_init(game);
         } break;
     }
 }
@@ -645,6 +644,7 @@ void game_atari_run(Game_Atari *game) {
         case 1: chapter_1_update(game, dt); break;
         case 2: chapter_2_update(game, dt); break;
         case 3: chapter_3_update(game, dt); break;
+        case 4: chapter_4_update(game, dt); break;
     }
 
     BeginDrawing();
@@ -656,6 +656,7 @@ void game_atari_run(Game_Atari *game) {
             case 1: chapter_1_draw(game); break;
             case 2: chapter_2_draw(game); break;
             case 3: chapter_3_draw(game, dt); break;
+            case 4: chapter_4_draw(game); break;
         }
 
         atari_update_and_draw_textbox(game);

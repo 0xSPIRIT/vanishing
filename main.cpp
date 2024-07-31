@@ -41,7 +41,7 @@ enum Game_Mode {
 };
 Game_Mode game_mode = GAME_MODE_INVALID;
 
-int chapter = 1;
+int chapter = 3;
 
 Font global_font, comic_sans, bitmap_font;
 
@@ -146,7 +146,7 @@ MainFunction() {
 
     //DisableCursor();
 
-    set_game_mode(GAME_MODE_ATARI);
+    set_game_mode(GAME_MODE_INTRO);
 
     while (!WindowShouldClose()) {
         if (IsKeyPressed(KEY_F11))

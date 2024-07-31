@@ -746,34 +746,126 @@ void chapter_3_init(Game_Atari *game) {
                          speed,
                          &game->text[35]);
     atari_text_list_init(&game->text[35],
-                         "Person",
-                         "I prefer brioche bread.",
-                         speed,
-                         &game->text[36]);
-    atari_text_list_init(&game->text[36],
                          "Person #2",
                          "So who are you guys\nlistening to right now?",
                          speed,
-                         &game->text[37]);
-    atari_text_list_init(&game->text[37],
+                         &game->text[36]);
+    atari_text_list_init(&game->text[36],
                          "Person #9",
                          "So this one time we're going out with",
                          speed,
+                         &game->text[37]);
+    atari_text_list_init(&game->text[37],
+                         "Girl",
+                         "My commute to work is\nso longgggg!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+                         speed,
                          &game->text[38]);
     atari_text_list_init(&game->text[38],
-                         "Girl",
-                         "My commute to work is so long!",
+                         "Chase",
+                         "...",
                          speed,
                          &game->text[39]);
     atari_text_list_init(&game->text[39],
                          "Chase",
-                         "...\rI need to get out\nof here.",
+                         "Y'know...\rEvery other night I have\nthis recurring dream.",
+                         speed,
+                         &game->text[40]);
+    atari_text_list_init(&game->text[40],
+                         "Chase",
+                         "I'm stuck in this prison\nwith no way out-",
+                         speed,
+                         &game->text[41]);
+    atari_text_list_init(&game->text[41],
+                         "Chase",
+                         "It's a completely white\nvoid, surrounded by these\nlong, solid diamond bars.",
+                         speed,
+                         &game->text[42]);
+    atari_text_list_init(&game->text[42],
+                         "Chase",
+                         "And I'm completely alone.",
+                         speed,
+                         &game->text[43]);
+    atari_text_list_init(&game->text[43],
+                         "Chase",
+                         "There were these things\non the ground, like little\ncapsules with liquid inside.",
+                         speed,
+                         &game->text[44]);
+    atari_text_list_init(&game->text[44],
+                         "Chase",
+                         "I remember picking one,\nand there was writing\netched onto it;",
+                         speed,
+                         &game->text[45]);
+    atari_text_list_init(&game->text[45],
+                         "Chase",
+                         "But I didn't read it-\rI was too busy trying\nto find a way out.",
+                         speed,
+                         &game->text[46]);
+    atari_text_list_init(&game->text[46],
+                         "Chase",
+                         "So, I went up to the bars\nsurrounding the entire\nplace,",
+                         speed,
+                         &game->text[47]);
+    atari_text_list_init(&game->text[47],
+                         "Chase",
+                         "and I started striking it\nwith my bare hands.",
+                         speed,
+                         &game->text[48]);
+    atari_text_list_init(&game->text[48],
+                         "Chase",
+                         "The pain was\nunimaginable.",
+                         speed,
+                         &game->text[49]);
+    atari_text_list_init(&game->text[49],
+                         "Chase",
+                         "After one thousand years,\rI finally made enough of\na dent so I could pass.",
+                         speed,
+                         &game->text[50]);
+    atari_text_list_init(&game->text[50],
+                         "Chase",
+                         "But, as the tip of my feet\nbarely brushed against the\nfloor of the oustide,",
+                         speed,
+                         &game->text[51]);
+    atari_text_list_init(&game->text[51],
+                         "Chase",
+                         "I dropped dead,\rcollpasing onto the\nground.",
+                         speed,
+                         &game->text[52]);
+    atari_text_list_init(&game->text[52],
+                         "Chase",
+                         "And then I wake up.",
+                         speed,
+                         &game->text[53]);
+    atari_text_list_init(&game->text[53],
+                         "Amy",
+                         "... Sorry, what were you\nsaying, Chase?\rYou were mumbling.",
+                         speed,
+                         &game->text[54]);
+    atari_text_list_init(&game->text[54],
+                         "Chase",
+                         "...",
+                         speed,
+                         &game->text[55]);
+    atari_text_list_init(&game->text[55],
+                         "Amy",
+                         "Anyways, like I was\nsaying, I wonder if the\nmeeting is still on?",
+                         speed,
+                         &game->text[56]);
+    atari_text_list_init(&game->text[56],
+                         "Chase",
+                         "...\r...\r...",
+                         speed,
+                         &game->text[57]);
+    atari_text_list_init(&game->text[57],
+                         "Chase",
+                         "I need to get out\nof here.\rNow.",
                          speed,
                          nullptr);
 
-    for (int i = 4; i <= 39; i++) {
+    for (int i = 4; i <= 38; i++) {
         game->text[i].location = Top;
     }
+    game->text[53].location = Top;
+    game->text[55].location = Top;
 
     level->player = chapter_3_make_entity(ENTITY_PLAYER, 66, 96);
 
@@ -782,13 +874,10 @@ void chapter_3_init(Game_Atari *game) {
     chapter_3_init_outside(game);
 
     chapter_3_job_init(game, 0);
-    //level->minigame.active = true;
 
     /*
     chapter_3_goto_lunch_room(game, CHAPTER_3_LUNCH_TEXT_3);
     chapter_3_job_init(game, 3);
-    level->minigame.active = true;
-    level->state = CHAPTER_3_STATE_TIKTOK;
     */
 
     //level->state = CHAPTER_3_STATE_ROAD;
@@ -1569,7 +1658,7 @@ void chapter_3_draw(Game_Atari *game, float dt) {
             Rectangle bed_interact = { 70, 0, 48, 60 };
 
             level->bed_popup = CheckCollisionRecs(player, bed_interact);
-5            if (is_action_pressed() && level->bed_popup) {
+            if (is_action_pressed() && level->bed_popup) {
                 level->state = CHAPTER_3_STATE_TIKTOK;
             }
 

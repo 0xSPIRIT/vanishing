@@ -263,10 +263,9 @@ Amy:     ...
 - Go to bed.
 - (play sound of someone rotating a window handle)
   Chase's eyebrows wince. (atari closeup)
-  (play soudn of window opening)
+  (play sound of window opening)
   His eyes open with dread.
   (play sounds of whispering)
   His pupils move to the right,
-  eyes widen a little more.
 - 3D first person perspective: looking from bed onto window.
 - Text from design.txt

@@ -1,0 +1,171 @@
+FileVersion = 1
+LastConfig = "Debug"
+LastPlatform = "Win64"
+RecentFilesList = ["c:\\dev\\vanishing\\chapter_3.cpp", "c:\\dev\\vanishing\\main.cpp"]
+
+[MainWindow]
+X = 382
+Y = 76
+Width = 1156
+Height = 867
+ShowKind = "ShowMaximized"
+
+[MainDockingFrame]
+Type = "DockingFrame"
+SplitType = 1
+
+[[MainDockingFrame.DockedWidgets]]
+IsFillWidget = true
+Permanent = true
+RequestedWidth = 150.0
+RequestedHeight = 150.0
+SizePriority = 150.0
+DefaultDocumentsTabbedView = true
+Type = "TabbedView"
+
+[[MainDockingFrame.DockedWidgets.Tabs]]
+Active = true
+TabLabel = "chapter_3.cpp"
+TabWidth = 118.0
+TabIsPinned = false
+Type = "SourceViewPanel"
+FilePath = "c:\\dev\\vanishing\\chapter_3.cpp"
+CursorPos = 56742
+VertPos = 33599.0
+
+[[MainDockingFrame.DockedWidgets.Tabs]]
+TabLabel = "main.cpp"
+TabWidth = 91.33334
+TabIsPinned = false
+Type = "SourceViewPanel"
+FilePath = "c:\\dev\\vanishing\\main.cpp"
+CursorPos = 843
+VertPos = 2691.0
+
+[[MainDockingFrame.DockedWidgets]]
+RequestedWidth = 856.0
+RequestedHeight = 250.0
+Type = "DockingFrame"
+SplitType = 2
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets]]
+RequestedWidth = 958.0
+RequestedHeight = 250.0
+SizePriority = 0.74197
+Type = "TabbedView"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "Memory"
+TabWidth = 97.33334
+TabIsPinned = false
+Type = "MemoryPanel"
+AutoResize = "Auto_Mul8"
+RequestedWidth = 300.0
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "Watch"
+TabWidth = 85.33334
+TabIsPinned = false
+Type = "WatchPanel"
+Columns = [{Width = 250.0}, {Width = 250.0}, {Width = 250.0}]
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+Active = true
+TabLabel = "Auto"
+TabWidth = 76.66666
+TabIsPinned = false
+Type = "AutoWatchPanel"
+Columns = [{Width = 250.0}, {Width = 250.0}, {Width = 250.0}]
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets]]
+RequestedWidth = 957.0
+RequestedHeight = 250.0
+SizePriority = 0.25803
+Type = "TabbedView"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "Threads"
+TabWidth = 94.66666
+TabIsPinned = false
+Type = "ThreadPanel"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "Call Stack"
+TabWidth = 104.0
+TabIsPinned = false
+Type = "CallStackPanel"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "Immediate"
+TabWidth = 109.3333
+TabIsPinned = false
+Type = "ImmediatePanel"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+Active = true
+TabLabel = "Output"
+TabWidth = 89.33334
+TabIsPinned = false
+Type = "OutputPanel"
+
+[[BookmarkFolders]]
+Title = ""
+
+[OutputFilters]
+ModuleLoadMessages = false
+ModuleUnloadMessages = false
+ProcessExitMessages = false
+ThreadCreateMessages = false
+ThreadExitMessages = false
+SymbolLoadMessages = false
+ProgramOutput = false
+
+[DebugSession]
+FileVersion = 1
+Dependencies = {}
+
+[DebugSession.Project]
+Name = "Debug Session"
+TargetType = "CustomBuild"
+StartupObject = "Program"
+DefaultNamespace = ""
+
+[DebugSession.Configs.Debug.Win32]
+TargetName = ""
+BuildCommandsOnRun = "Never"
+DebugWorkingDirectory = ""
+
+[DebugSession.Configs.Debug.Win64]
+TargetName = "C:\\dev\\vanishing\\main.exe"
+BuildCommandsOnRun = "Never"
+DebugWorkingDirectory = ""
+
+[DebugSession.Configs.Release.Win32]
+TargetName = ""
+BuildCommandsOnRun = "Never"
+DebugWorkingDirectory = ""
+
+[DebugSession.Configs.Release.Win64]
+TargetName = ""
+BuildCommandsOnRun = "Never"
+DebugWorkingDirectory = ""
+
+[DebugSession.Configs.Paranoid.Win32]
+TargetName = ""
+BuildCommandsOnRun = "Never"
+DebugWorkingDirectory = ""
+
+[DebugSession.Configs.Paranoid.Win64]
+TargetName = ""
+BuildCommandsOnRun = "Never"
+DebugWorkingDirectory = ""
+
+[DebugSession.Configs.Test.Win32]
+TargetName = ""
+BuildCommandsOnRun = "Never"
+DebugWorkingDirectory = ""
+
+[DebugSession.Configs.Test.Win64]
+TargetName = ""
+BuildCommandsOnRun = "Never"
+DebugWorkingDirectory = ""

@@ -116,7 +116,7 @@ Text Appears: "Perception"
 Text Appears:
   I don't have the courage to do what the Lord has asked.
   It's been weeks.
-  I think I know who I should visit.
+  I need to clear my head.
 
 (3D graphics)
 - He leaves his house, and ends up at a train station, in the black of
@@ -125,7 +125,7 @@ Text Appears:
   judgy for no reason. Their head has one huge eye on it.
 - You question why they're acting so odd. They say they're not.
 - Screen goes black for a second and the level is reloaded. Now when you
-  talk to the person, they don't havea huge eye on their face.
+  talk to the person, they don't have a huge eye on their face.
 - Their dialogue is normal now, not displaying any exaggerated negative
   speech.
 
@@ -296,8 +296,7 @@ them, a message appears:
   with different opportunities.
     "This one is named learning a new skill. (READ SUCCESS)"
     "This one is named taking an internship. (READ SUCCESS)"
-    "This one is named talking to someone important. (READ SUCCESS)"
-    "This one is named falling in love. (READ SUCCESS)"
+    "This one is named meeting new people. (READ SUCCESS)"
 
   Even though you get the option yes or no, you continue to ignore them.
   You find that these things are meaningless, even though you'd like
@@ -389,3 +388,29 @@ things easily.
   else's. It was not, and cannot be bestowed upon him
   by anyone else by its own nature. Revelations can only
   be internal experiences.
+
+Chapter 3:
+- Repetitive nature of life, he hates it.
+- Does something which is completely meaningless. This is
+  talked about with the Camus quotes.
+- The idea of continuing on in the face of the absurd
+  is not something that he quite understands, at least not
+  yet.
+- Forced to do it otherwise he won't make money of course.
+  (animal farm quote)
+- The people there talk about nothing
+- He's confused as to how they're so happy- they must've
+  made a deal with the devil himself.
+- There are moments of reprieve such as the Peggy and
+  Hunter scenario which you see, and is allegorical to
+  Penny and Chase (that's where he wants to be).
+- He talks about a recurring dream he had about being in
+  a white void with no way out, surrounded by bars. This is
+  the state of his life. He wants to talk about things that
+  he's actually thinking about. He says that he doesn't
+  pick up the nodes on the ground because he's too focused
+  on trying to escape. One hundred years passes, and he
+  finally sees the jail bars being raised, but when he
+  gets to the end, he drops dead.
+- He wants to drown out everything so he goes on his phone
+  and scrolls himself to sleep.

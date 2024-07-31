@@ -1,5 +1,20 @@
 TODO : Today
 
+- Chapter 3 - add the story about the prison
+  in lunch text 3.
+
+- Chapter 4:
+    - You ensure that the windows are closed (textbox popup)
+    - Go to bed.
+    - (play sound of someone rotating a window handle)
+      Chase's eyebrows wince. (atari closeup)
+      (play sound of window opening)
+      His eyes open with dread.
+      (play sounds of whispering)
+      His pupils move to the right,
+    - 3D first person perspective: looking from bed onto window.
+    - Text from design.txt
+
 A phone call with a future version of yourself:
   The universe does not stop behaving chaotically just because you
   don't want it to. We must all come to terms with our situations.
