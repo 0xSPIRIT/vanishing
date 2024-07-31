@@ -254,3 +254,19 @@ Chase:   Mike, right?
          Usually he's here with us.
 Amy:     ...
          Who's Mike?
+
+------
+
+4. Theophany
+
+- You ensure that the windows are closed (textbox popup)
+- Go to bed.
+- (play sound of someone rotating a window handle)
+  Chase's eyebrows wince. (atari closeup)
+  (play soudn of window opening)
+  His eyes open with dread.
+  (play sounds of whispering)
+  His pupils move to the right,
+  eyes widen a little more.
+- 3D first person perspective: looking from bed onto window.
+- Text from design.txt

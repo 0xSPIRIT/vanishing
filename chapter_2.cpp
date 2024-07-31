@@ -9,8 +9,6 @@ enum Chapter_2_Penny_State {
     CHAPTER_2_PENNY_STATE_INVALID,
     CHAPTER_2_PENNY_STATE_WALKING, // camera follows penny
     CHAPTER_2_PENNY_STATE_STOP_FIRST,
-    CHAPTER_2_PENNY_STATE_FULLSCREEN_1,
-    CHAPTER_2_PENNY_STATE_FULLSCREEN_2,
     CHAPTER_2_PENNY_STATE_STOP_SECOND,
     CHAPTER_2_PENNY_STATE_THE_REST, // camera follows penny
     CHAPTER_2_PENNY_STATE_STOP,    // stops at the group of girls
@@ -490,7 +488,7 @@ void chapter_2_init(Game_Atari *game) {
                          &game->text[44]);
     atari_text_list_init(&game->text[44],
                          "Chase",
-                         "Thanks, it means a lot.\rAnyways, I'll get out of\nyour hair.",
+                         "Thanks.\rAnyways, I'll get out of\nyour hair.",
                          speed,
                          nullptr);
 
@@ -642,7 +640,7 @@ void chapter_2_init(Game_Atari *game) {
                          &game->text[70]);
     atari_text_list_init(&game->text[70],
                          "Eleanor",
-                         "... Except for one...\rI put this one in as a joke,\r'cause I'm so quirky.",
+                         "... Except for one...\rI put this one in as a joke,\r'cause why not?",
                          speed,
                          &game->text[71]);
     atari_text_list_init(&game->text[71],
@@ -657,7 +655,7 @@ void chapter_2_init(Game_Atari *game) {
                          &game->text[73]);
     atari_text_list_init(&game->text[73],
                          "Eleanor",
-                         "... It was one that I used\nComic Sans for the main font.",
+                         "... It was one where I used\nComic Sans for the main font.",
                          speed,
                          &game->text[74]);
     game->text[73].text[0].font = &comic_sans;
@@ -715,7 +713,7 @@ void chapter_2_init(Game_Atari *game) {
                          &game->text[83]);
     atari_text_list_init(&game->text[83],
                          "Chase",
-                         "Use your words, Eleanor.\rUtilise the old vocal cords.",
+                         "Use your words, Eleanor.",
                          speed,
                          &game->text[84]);
     atari_text_list_init(&game->text[84],
@@ -787,7 +785,7 @@ void chapter_2_init(Game_Atari *game) {
                          &game->text[96]);
     atari_text_list_init(&game->text[96],
                          0,
-                         "He said something, though.\rHe knew he definitely said\nsomething.",
+                         "He said something, though.\rHe definitely said\nsomething.",
                          speed,
                          &game->text[97]);
     atari_text_list_init(&game->text[97],
@@ -828,7 +826,19 @@ void chapter_2_init(Game_Atari *game) {
                           &game->text[104],
                           "But he couldn't understand.\rBecause it was not meant\nto be understood.",
                           nullptr);
+
     game->text[104].callbacks[0] = chapter_2_end_fade;
+
+    atari_text_list_init(&game->text[105],
+                         0,
+                         "Their eyes catch.",
+                         speed,
+                         &game->text[106]);
+    atari_text_list_init(&game->text[106],
+                         0,
+                         "She smiles and waves at\nChase, and he smiles and\nwaves back.",
+                         speed,
+                         nullptr);
 
     Entity *jake    = chapter_2_make_entity(ENTITY_CHAP_2_JAKE,    638,  30);
     Entity *erica   = chapter_2_make_entity(ENTITY_CHAP_2_ERICA,   618,  14);
@@ -1055,7 +1065,8 @@ void chapter_2_entity_update(Entity *e, Game_Atari *game, float dt) {
                             fabs(e->pos.x - player->pos.x) < 1)
                         {
                             level->penny_state = CHAPTER_2_PENNY_STATE_STOP_FIRST;
-                            e->alarm[0] = 2;
+                            e->alarm[0] = 0.5;
+                            game->current = &game->text[105];
                         }
 
                         if (e->pos.x >= player->pos.x + 50) {
@@ -1076,9 +1087,9 @@ void chapter_2_entity_update(Entity *e, Game_Atari *game, float dt) {
                     }
                 } break;
                 case CHAPTER_2_PENNY_STATE_STOP_FIRST: {
-                    if (e->alarm[0] == 0) {
-                        level->penny_state = CHAPTER_2_PENNY_STATE_FULLSCREEN_1;
-                        e->alarm[0] = 2;
+                    if (game->current == 0 && e->alarm[0] == 0) {
+                        level->penny_state = CHAPTER_2_PENNY_STATE_THE_REST;
+                        e->alarm[0] = 0.5;
                     }
                 } break;
                 case CHAPTER_2_PENNY_STATE_STOP_SECOND: {
@@ -1090,18 +1101,6 @@ void chapter_2_entity_update(Entity *e, Game_Atari *game, float dt) {
                 case CHAPTER_2_PENNY_STATE_STOP: {
                     if (e->alarm[0] == 0) {
                         level->penny_state = CHAPTER_2_PENNY_STATE_DONE;
-                        e->alarm[0] = 2;
-                    }
-                } break;
-                case CHAPTER_2_PENNY_STATE_FULLSCREEN_1: {
-                    if (e->alarm[0] == 0) {
-                        level->penny_state = CHAPTER_2_PENNY_STATE_FULLSCREEN_2;
-                        e->alarm[0] = 2;
-                    }
-                } break;
-                case CHAPTER_2_PENNY_STATE_FULLSCREEN_2: {
-                    if (e->alarm[0] == 0) {
-                        level->penny_state = CHAPTER_2_PENNY_STATE_STOP_SECOND;
                         e->alarm[0] = 2;
                     }
                 } break;
@@ -1239,17 +1238,6 @@ void chapter_2_update(Game_Atari *game, float dt) {
     }
 }
 
-void chapter_2_draw_popup(const char *text) {
-    int pad = 6;
-
-    Vector2 size = MeasureTextEx(atari_font, text, atari_font.baseSize, 1);
-    Vector2 pos = {
-        render_width/2 - size.x/2,
-        render_height - size.y - pad
-    };
-    DrawTextEx(atari_font, text, pos, atari_font.baseSize, 1, GOLD);
-}
-
 void chapter_2_draw(Game_Atari *game) {
     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
 
@@ -1257,19 +1245,12 @@ void chapter_2_draw(Game_Atari *game) {
 
     game->textbox_alpha = 200;
 
-    if (level->penny_state == CHAPTER_2_PENNY_STATE_FULLSCREEN_1 ||
-        level->penny_state == CHAPTER_2_PENNY_STATE_FULLSCREEN_2 ||
-        level->show_window)
-    {
+    if (level->show_window) {
         Texture2D *texture = 0;
-        float scale = 2;
+        float scale = 1;
 
-        if (level->show_window)
-            texture = &atari_assets.textures[11], scale = 1, game->textbox_alpha = 255;
-        else if (level->penny_state == CHAPTER_2_PENNY_STATE_FULLSCREEN_1)
-            texture = &atari_assets.textures[8];
-        else
-            texture = &atari_assets.textures[9];
+        texture = &atari_assets.textures[11];
+        game->textbox_alpha = 255;
 
         assert(texture);
 
@@ -1296,9 +1277,9 @@ void chapter_2_draw(Game_Atari *game) {
 
         if (game->current == 0) {
             if (level->window_popup) {
-                chapter_2_draw_popup("Look out the window");
+                draw_popup("Look out the window");
             } else if (level->mirror_popup) {
-                chapter_2_draw_popup("Stare at the mirror");
+                draw_popup("Stare at the mirror");
             }
         }
     }

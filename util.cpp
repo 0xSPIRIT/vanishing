@@ -204,6 +204,47 @@ float rand_range(float start, float end) {
     return result;
 }
 
+bool string_compare(const char *major, const char *minor) {
+    int major_length = (int)strlen(major);
+    int minor_length = (int)strlen(minor);
+
+    if (major_length < minor_length)
+        return false;
+
+    for (int i = 0; i < minor_length; i++) {
+        if (major[i] != minor[i])
+            return false;
+    }
+
+    return true;
+}
+
+struct Find_Word_Result {
+    int start_index;
+    int end_index;
+};
+
+Find_Word_Result find_word(const char *string, const char *word) {
+    Find_Word_Result result = {};
+
+    result.start_index = -1;
+    result.end_index = -1;
+
+    int string_length = (int)strlen(string);
+    for (int i = 0; i < string_length; i++) {
+        if (string_compare(string + i, word)) {
+            result.start_index = i;
+            result.end_index = i + (int)strlen(word) - 1;
+
+            return result;
+        }
+    }
+
+    assert(false);
+
+    return result;
+}
+
 // System Time
 
 #if defined(_WIN32)

@@ -472,6 +472,17 @@ void default_entity_draw(Entity *e) {
     }
 }
 
+void draw_popup(const char *text) {
+    int pad = 6;
+
+    Vector2 size = MeasureTextEx(atari_font, text, atari_font.baseSize, 1);
+    Vector2 pos = {
+        render_width/2 - size.x/2,
+        render_height - size.y - pad
+    };
+    DrawTextEx(atari_font, text, pos, atari_font.baseSize, 1, GOLD);
+}
+
 void atari_update_and_draw_textbox(Game_Atari *game) {
     BeginTextureMode(game->textbox_target);
 

@@ -41,7 +41,7 @@ enum Game_Mode {
 };
 Game_Mode game_mode = GAME_MODE_INVALID;
 
-int chapter = 3;
+int chapter = 1;
 
 Font global_font, comic_sans, bitmap_font;
 

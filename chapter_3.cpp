@@ -4,8 +4,11 @@
 enum Chapter_3_State {
     CHAPTER_3_STATE_OFFICE,
     CHAPTER_3_STATE_LUNCH,
+    CHAPTER_3_STATE_WINDOW,
     CHAPTER_3_STATE_ROAD,
-    CHAPTER_3_STATE_HOME
+    CHAPTER_3_STATE_HOME,
+    CHAPTER_3_STATE_HOME_INSIDE,
+    CHAPTER_3_STATE_TIKTOK,
 };
 
 enum Chapter_3_Lunch_Text {
@@ -36,6 +39,12 @@ struct Document {
 struct Chapter_3_Job_Minigame {
     bool active;
 
+    bool draw_background;
+    uint8_t window_alpha;
+
+    Color font_color;
+    Color window_bg_color;
+
     int current_document;
 
     Document document_list[MAX_DOCUMENTS];
@@ -55,14 +64,30 @@ struct Chapter_3_Job_Minigame {
     RenderTexture render_target;
 };
 
+struct Chapter_3_Phone {
+    float scroll_y, scroll_y_to;
+    Color c1, c2;
+    int fade_alpha;
+
+    float black_timer;
+};
+
 struct Level_Chapter_3 {
     Chapter_3_State state;
     Chapter_3_Job_Minigame minigame;
+    Chapter_3_Phone phone;
     Camera2D camera;
 
     Chapter_3_Lunch_Text current_lunch_text;
 
+    float text_start_timer;
+    float road_time;
+
     bool lunch_devil_effect;
+
+    bool window_popup;
+    bool open_door_popup;
+    bool bed_popup;
 
     Entity *player;
 
@@ -90,6 +115,14 @@ void document_register_error(Document *doc, int start_index,
     doc->error_count++;
 }
 
+void document_register_error_first_occurence(Document *doc, char *word, char *correction) {
+    Find_Word_Result result = find_word(doc->string, word);
+
+    if (result.start_index != -1 && result.end_index != -1) {
+        document_register_error(doc, result.start_index, result.end_index, correction);
+    }
+}
+
 Chapter_3_Job_Minigame chapter_3_make_job_minigame(Arena *level_arena,
                                                    const char **document_list,
                                                    size_t document_count)
@@ -97,6 +130,11 @@ Chapter_3_Job_Minigame chapter_3_make_job_minigame(Arena *level_arena,
     Chapter_3_Job_Minigame result = {};
 
     result.active = false;
+
+    result.font_color = BLACK;
+    result.window_bg_color = WHITE;
+    result.window_alpha = 255;
+    result.draw_background = true;
 
     result.document_count = document_count;
     result.current_document = 0;//(int)document_count - 1;
@@ -327,26 +365,24 @@ void chapter_3_goto_lunch_room(Game_Atari *game, Chapter_3_Lunch_Text lunch_text
     int table_2_count = 4;
 
     if (lunch_text == CHAPTER_3_LUNCH_TEXT_2) {
-        table_1_count /= 2;
-        table_2_count--;
+        table_1_count = 4;
+        table_2_count = 3;
+    }
+    if (lunch_text == CHAPTER_3_LUNCH_TEXT_3) {
+        table_1_count = 3;
+        table_2_count = 2;
     }
 
-    add_lunch_table(entities,   35, 35, table_1_count);
+    add_lunch_table(entities,  35,  35, table_1_count);
     add_lunch_table(entities, 100, 100, table_2_count);
 
     add_wall(entities, {0, 0, 192, 11});
+    add_wall(entities, {0, 160, 200, 4});
 
     level->player->pos.x = 129;
     level->player->pos.y = 88;
 
-    switch (lunch_text) {
-        case CHAPTER_3_LUNCH_TEXT_1: {
-            game->current = &game->text[4];
-        } break;
-        case CHAPTER_3_LUNCH_TEXT_2: {
-            game->current = &game->text[15];
-        } break;
-    }
+    level->text_start_timer = 2;
 }
 
 void chapter_3_init_outside(Game_Atari *game) {
@@ -377,126 +413,115 @@ void chapter_3_job_init(Game_Atari *game, int which_document_list) {
 
     int count = 0;
 
-    // case 0:
-    //   1. Introduction
-    //   2. Internal memo
-    //   3. E-mail about restocking supplies to company
-    //   4. E-mail from the boss to the rest of the team
-    //   5. Animal farm quote:
-    //      "This work was stirctly volontery, but any animal who absinted himself from it wood have his rashons reduced by haf.";
-    //
-    // case 1:
-    //   1. Same e-mail with restocking but you have to change the actual meaning of the text.
-    //   2. 
-
     switch (which_document_list) {
         case 0: {
             documents[count++] =
-                "Introduction\n----------------\n\nUse UP and DOWN to scroll.\n\nThese are excerpts from documents throughout our company. Read the document thoroughly and click on any errors to correct them- we mustn't look unprofessional!";
+                "Introduction\n----------------\n\nUse UP and DOWN to scroll.\n\nThese are excerpts from documents throughout our company. Your job is to read the document thoroughly and click on any errors to correct them before they are sent-- we mustn't look unprefesional!";
             documents[count++] =
-                "Memo\n-------\n\nDear Team,\n  This is a friendly reminder about our upcoming employee dinner party scheduled for July 22nd.\n  Due to the influx of new employees, it'll be a great place to get settled into the company culture!\n  Please ensure you RSVP by July 10th to help with planning the catering arrangements.\n\nBest Regards,\nJane Smith\n(HR Manager)";
+                "Memo\n-------\n\nDear Team,\n  This is a frendly reminder about our upcoming employee dinner party scheduled for June 20th.\n  Due to the influx of new employees, it'll be a great place to get setled into the company culture!\n  Please ensure you RSVP by June 10th to help with planing the catering arrangements.\n\nBest Regards,\nJane Smith\n(HR Manager)";
             documents[count++] =
-                "Dear Tech Solutions Team,\n  We're experiencing a persistent issue with our data management system that has rendered our recent efforts somewhat futile. Despite numerous internal attempts to rectify the problem, our actions have yet to yield any meaningful improvement, and is causing noticeable reductions in employees' efficiency and quality of life.\n  Given the circumstances, we are reaching out to you in hopes of finding a solution that can restore functionality and purpose to our operations. Your expertise and guidance in this matter would be invaluable to us.\n\nRegards,\nJane Smith (HR Manager)";
+                "Email\n-------\n\nDear Tech Solutions Team,\n  We're experiencing a persistant issue with our data management system and is causing noticable reductions in employees' eficiences and qualities of life.\n  We are reaching out to you in hopes of finding a solution that can retsore functionality to our operation. Your expertise and guidance in this matter would be invaluable to us.\n\nRegards,\nMichael (Project Manager)";
             documents[count++] =
-"Dear Peggy,\n We've observed that certain potential collaboration opportunities between our companies have not yet been fully explored. We understand that diving into new ventures can be daunting, and we are keen to support and facilitate a smoother engagement process.\n If there are any concerns or barriers that have prevented you from moving forward with these opportunities, please let us know. We are committed to addressing any challenges and finding ways to make these initiatives more accessible and appealing.\n Looking forward to your thoughts and hoping to advance our mutual interests.\n\nWarm regards,\nHunter\n(Business Development Manager)";
-            documents[count++] = 
-                "\"This work was stirctly volontery, but any animal who absinted himself from it wood have his rashons reduced by haf.\" [1]";
+                "Memo\n-------\n\nNotice for all employees:\n  Please be adviesd that the copier machien is not wokring. We brought a replacemnet and it is arriving next Monday.";
+            documents[count++] =
+                "Email\n-------\n\nDear Peggy,\n  Hopefully this isn't picked up by the system. We met a few weeks ago at the business meeting in Sydney; we had dinner together. I'm following up on potential collaboration opportunities between our branches that may be beneficial to us both.\n  If there are any barriers or concerns, please let me know.\n\nWarm regards,\nHunter (Business Development Manager, Toronto)";
 
             level->minigame = chapter_3_make_job_minigame(&game->level_arena, documents, count);
 
-            Document *d5 = &level->minigame.document_list[4];
-
-            document_register_error(d5, 15, 22, "strictly");
-            document_register_error(d5, 24, 32, "voluntary");
-            document_register_error(d5, 54, 61, "absented");
-            document_register_error(d5, 79, 82, "would");
-            document_register_error(d5, 93, 99, "rations");
-            document_register_error(d5, 112, 114, "half");
-        } break;
-        case 1: {
-            documents[count++] =
-                "Memo\n-------\n\nDear Team,\n  Please be noted that the coffee machine is no longer working. Joanne brought some instant coffee and left it in the cupboard for anyone who'd like.\n\nRegards,\nMichael\n(Project Manager)";
-            level->minigame = chapter_3_make_job_minigame(&game->level_arena, documents, count);
-        } break;
-        case 2: {
-        } break;
-    }
-
-    /*
-    switch (which_document_list) {
-        case 0: {
-            documents[count++] =
-                "Introduction\n----------------\n\nUse UP and DOWN to scroll.\n\nThese are excerpts from documents throughout our company. Read the document thoroughly and click on any errors to correct them- we mustn't look unprofessional!";
-            documents[count++] =
-                "We're thrilled to announce oru new product: the thing-o-meter! It measures thigns nda whatnot.";
-            documents[count++] = 
-                "Here's our messagr fro the day: Appreciatw the beauty of the wrold! Be it a sunset, a walk in the park, or a conevrsation with friends. We muts thakn the Lord thta ew're aliev!";
-            documents[count++] =
-                "It wsa a bright cold day in April, and the clocks were strkiing thirteen. Winston Smith, his chin nussled into his brest in an efort to escape the vile wind, slipped quick through the glass doors of Victory Mansions, though not quickly enouhg to prevent a swril of gritty dust from entering long with him.";
-            documents[count++] =
-                "The cretures outside loked from pig to man, and form man to pig, and from pig to man again; but aready it was imposibble to say wich was wich.";
-            documents[count++] = 
-                "This work was stirctly volontery, but any animal who absinted himself from it wood have his rashons reduced by haf.";
-
-            level->minigame = chapter_3_make_job_minigame(&level->arena, documents, count);
+            Document *d0 = &level->minigame.document_list[0];
+            document_register_error_first_occurence(d0, "unprefesional", "unprofessional");
 
             Document *d1 = &level->minigame.document_list[1];
-
-            document_register_error(d1, 27, 29, "our");
-            document_register_error(d1, 75, 80, "things");
-            document_register_error(d1, 82, 84, "and");
+            document_register_error_first_occurence(d1, "frendly", "friendly");
+            document_register_error_first_occurence(d1, "setled",  "settled");
+            document_register_error_first_occurence(d1, "planing", "planning");
 
             Document *d2 = &level->minigame.document_list[2];
-
-            document_register_error(d2, 11, 17, "message");
-            document_register_error(d2, 19, 21, "for");
-            document_register_error(d2, 32, 41, "Appreciate");
-            document_register_error(d2, 61, 66, "world!");
-            document_register_error(d2, 109, 120, "conversation");
-            document_register_error(d2, 139, 142, "must");
-            document_register_error(d2, 144, 148, "thank");
-            document_register_error(d2, 159, 162, "that");
-            document_register_error(d2, 164, 168, "we're");
-            document_register_error(d2, 170, 174, "alive");
+            document_register_error_first_occurence(d2, "persistant", "persistent");
+            document_register_error_first_occurence(d2, "noticable",  "noticeable");
+            document_register_error_first_occurence(d2, "eficiences", "efficiencies");
+            document_register_error_first_occurence(d2, "retsore",    "restore");
 
             Document *d3 = &level->minigame.document_list[3];
+            document_register_error_first_occurence(d3, "adviesd", "advised");
+            document_register_error_first_occurence(d3, "machien", "machine");
+            document_register_error_first_occurence(d3, "wokring", "working");
+            document_register_error_first_occurence(d3, "replacemnet", "replacement");
 
-            document_register_error(d3, 3, 5, "was");
-            document_register_error(d3, 55, 62, "striking");
-            document_register_error(d3, 98, 104, "nuzzled");
-            document_register_error(d3, 115, 119, "breast");
-            document_register_error(d3, 127, 131, "effort");
-            document_register_error(d3, 166, 170, "quickly");
-            document_register_error(d3, 236, 241, "enough");
-            document_register_error(d3, 256, 260, "swirl");
-            document_register_error(d3, 291, 294, "along");
-
-            Document *d4 = &level->minigame.document_list[4];
-
-            document_register_error(d4, 4, 11, "creatures");
-            document_register_error(d4, 21, 25, "looked");
-            document_register_error(d4, 48, 51, "from");
-            document_register_error(d4, 96, 101, "already");
-            document_register_error(d4, 110, 119, "impossible");
-            document_register_error(d4, 128, 131, "which");
-            document_register_error(d4, 137, 140, "which");
-
-            Document *d5 = &level->minigame.document_list[5];
-
-            document_register_error(d5, 14, 21, "strictly");
-            document_register_error(d5, 23, 31, "voluntary");
-            document_register_error(d5, 53, 60, "absented");
-            document_register_error(d5, 78, 81, "would");
-            document_register_error(d5, 92, 98, "rations");
-            document_register_error(d5, 111, 113, "half");
         } break;
         case 1: {
-            documents[count++] = "";
+            documents[count++] =
+                "Memo\n-------\n\nDear Team,\n  Please be noted that the cofee machine is no longer wokring. Joanne brought some instant coffee and left it in the cuboard for anyone whod like.\n\nRegards,\nMichael\n(Project Manager)";
+            documents[count++] =
+                "Email\n-------\n\nDear Tech Solutions Team,\n  Unfortunately, despite your team's efforts, our data management system still has many of the same issues, rendering our employees extremely inefficient.\n  I request that you return and complete the job that you were paid for.\n\nRegards,\nMichael (Project Manager)";
+            documents[count++] =
+                "Memo\n-------\n\nDear Team,\n  Over the past three and a half years, we have made great progress as a company under my leadership.\n  Today, we have thestrongest foothold on our market in Earth.\n  I know none of this could have been done without you, my trusted employees. It has been an honour to serve as your CEO, but I believe it is in the best interest of thecompany for me to stand down, and focus on the remainder of my position, until August 22nd.\n  Just remember, there's nothing this company can't do!\n\nLove,\nJohn Briden (CEO)";
+            documents[count++] =
+                "Email\n-------\n\nDear Peggy,\n  I received your email, and I'm delighted to hear that you're excited about a collaboration between our two branches. I'm free for lunch on Saturday June 8th, so we can discuss a proposal. Is that fine with your schedule?\n\nRegards,\nHunter (Business Development Manager, ABC City)";
+            documents[count++] = 
+                "\"This work was strictly voluntary, but any animal who absented himself from it would have his rations reduced by half.\" [1]";
 
-            level->minigame = chapter_3_make_job_minigame(&level->arena, documents, count);
+            level->minigame = chapter_3_make_job_minigame(&game->level_arena, documents, count);
+
+            Document *d0 = &level->minigame.document_list[0];
+            document_register_error_first_occurence(d0, "cofee", "coffee");
+            document_register_error_first_occurence(d0, "wokring", "working");
+            document_register_error_first_occurence(d0, "cuboard", "cupboard");
+            document_register_error_first_occurence(d0, "whod", "who'd");
+
+            Document *d1 = &level->minigame.document_list[1];
+            document_register_error_first_occurence(d1, "request", "demand");
+
+            Document *d2 = &level->minigame.document_list[2];
+            document_register_error_first_occurence(d2, "great", "some");
+            document_register_error_first_occurence(d2, "thestrongest", "a");
+            document_register_error_first_occurence(d2, "Earth", "Toronto");
+            document_register_error_first_occurence(d2, "trusted", "underpaid");
+            document_register_error_first_occurence(d2, "honour", "experience");
+            document_register_error_first_occurence(d2, "thecompany", "myself");
+            document_register_error_first_occurence(d2, "nothing", "much");
+        } break;
+        case 2: {
+            documents[count++] =
+                "Email\n-------\n\nDear Team,\n  I hope everyone enojyed the dinner party on Thursday! It seemed to have a great atmosphere, and good for the new employes to familiarize themselfs with the company culture.\n\nBest Regards,\nJane Smith\n(HR Manager)";
+            documents[count++] =
+                "Email\n-------\n\nPeggy,\n  The dinner was great. I suppose we don't need a reason to email on this thing anymore since we have each other's numbers, but something compelled me to.\n  Anyways, have a nice night, and I hope we see each other again :)\n\nRegards,\nHunter";
+            documents[count++] =
+                "  \"It is during that return, that pause, that Sisyphus interests me. A face that toils so close to stones is already stone itself! I see that man going back down with a heavy yet measured step toward the torment of which he will never know the end. That hour like a breathing-space which returns as surely as his suffering, that is the hour of consciousness. At each of those moments when he leaves the heights and gradually sinks toward the lairs of the gods, he is superior to his fate. He is stronger than his rock.\"\n\n----\n\n  \"One does not discover the absurd without being tempted to write a manual of happiness.\" [2]";
+
+            level->minigame = chapter_3_make_job_minigame(&game->level_arena, documents, count);
+
+            Document *d0 = &level->minigame.document_list[0];
+            document_register_error_first_occurence(d0, "enojyed", "enjoyed");
+            document_register_error_first_occurence(d0, "employes", "employees");
+            document_register_error_first_occurence(d0, "themselfs", "themselves");
+
+            Document *d1 = &level->minigame.document_list[1];
+            document_register_error_first_occurence(d1, "great.", "amazing.");
+            document_register_error_first_occurence(d1, "Regards,", "Love,");
+        } break;
+        case 3: {
+            documents[count++] =
+                "Chase stared out the window.";
+            documents[count++] =
+                "Although his eyes were fixated on an insignificant patch of grass outside, his mind wandered someplace else.";
+            documents[count++] =
+                "\"How is it that these people are so happy?\", he thought.";
+            documents[count++] =
+                "\"How can they find meaning in something so meaningless?\"";
+            documents[count++] =
+                "At times he thought of them as inferior to himself, placing himself on a throne of intellect above all.\n\nBut truthfully, he envied them!";
+            documents[count++] =
+                "\"It doesn't make sense; they had to have made a deal with the devil himself!\"";
+            documents[count++] =
+                "Chase drove home that afternoon, shook.\n\nThe mere weeks of working at that place was enough to sicken him.";
+
+            level->minigame = chapter_3_make_job_minigame(&game->level_arena, documents, count);
+            level->minigame.draw_background = false;
+            level->minigame.window_alpha = 64;
+            level->minigame.font_color = WHITE;
         } break;
     }
-*/
 }
 
 void chapter_3_init(Game_Atari *game) {
@@ -521,6 +546,13 @@ void chapter_3_init(Game_Atari *game) {
     textures[13] = load_texture("art/guy_blue.png");
     textures[14] = load_texture("art/girl.png");
     textures[15] = load_texture("art/player_white.png");
+    textures[16] = load_texture("art/open_window.png");
+    textures[17] = load_texture("art/road.png");
+    textures[18] = load_texture("art/home_outside.png");
+    textures[19] = load_texture("art/apartment2.png");
+    textures[20] = load_texture("art/smartphone.png");
+    textures[21] = load_texture("art/arrow_white.png");
+    //textures[22] = load_texture("art/arrow_black.png");
 
     level->camera.zoom = 1;
 
@@ -618,7 +650,7 @@ void chapter_3_init(Game_Atari *game) {
 
     atari_text_list_init(&game->text[15],
                          "Amy",
-                         "-decided to switch to\nwhole wheat.",
+                         "So then I decided to switch\nto whole wheat.",
                          speed,
                          &game->text[16]);
     atari_text_list_init(&game->text[16],
@@ -663,76 +695,83 @@ void chapter_3_init(Game_Atari *game) {
                          &game->text[24]);
     atari_text_list_init(&game->text[24],
                          "Chase",
-                         "Can I ask you a question?",
+                         "Wait a minute.",
                          speed,
                          &game->text[25]);
     atari_text_list_init(&game->text[25],
-                         "Clarice",
-                         "Which one of us?",
+                         "Chase",
+                         "...\rWasn't there another\nperson here yesterday?",
                          speed,
                          &game->text[26]);
     atari_text_list_init(&game->text[26],
-                         "Chase",
-                         "All of you.",
-                         speed,
-                         &game->text[27]);
-    atari_text_list_init(&game->text[27],
-                         "Clarice",
-                         "...",
-                         speed,
-                         &game->text[28]);
-    atari_text_list_init(&game->text[28],
-                         "Chase",
-                         "... Are you people happy?",
-                         speed,
-                         &game->text[29]);
-    atari_text_list_init(&game->text[29],
-                         "Clarice",
-                         "... Um, yes?",
-                         speed,
-                         &game->text[30]);
-    atari_text_list_init(&game->text[30],
-                         "Jake",
-                         "Yeah..?\rWhy wouldn't I be?",
-                         speed,
-                         &game->text[31]);
-    atari_text_list_init(&game->text[31],
-                         "Amy",
-                         "What do you mean?\rOf course.",
-                         speed,
-                         &game->text[32]);
-    atari_text_list_init(&game->text[32],
-                         "Chase",
-                         "...\rHmm...\rBut how is tha-",
-                         speed,
-                         &game->text[33]);
-    atari_text_list_init(&game->text[33],
-                         "Chase",
-                         "W-wait.",
-                         speed,
-                         &game->text[34]);
-    atari_text_list_init(&game->text[34],
-                         "Chase",
-                         "Wasn't there another\nperson here yesterday?",
-                         speed,
-                         &game->text[35]);
-    atari_text_list_init(&game->text[35],
                          "Amy",
                          "What are you talking\nabout, Chase?",
                          speed,
-                         &game->text[36]);
-    atari_text_list_init(&game->text[36],
+                         &game->text[27]);
+    atari_text_list_init(&game->text[27],
                          "Chase",
                          "Mike, right?\rIs he sick or something?\rUsually he's here.",
                          speed,
-                         &game->text[37]);
-    atari_text_list_init(&game->text[37],
+                         &game->text[28]);
+    atari_text_list_init(&game->text[28],
                          "Amy",
                          "...\rWho's Mike?",
                          speed,
                          nullptr);
 
-    for (int i = 4; i <= 37; i++) {
+    // Lunch text 3
+    atari_text_list_init(&game->text[30],
+                         "Person",
+                         "So then I decided to switch\nto whole wheat.",
+                         speed,
+                         &game->text[31]);
+    atari_text_list_init(&game->text[31],
+                         "Other Person",
+                         "I got stuck in traffic.",
+                         speed,
+                         &game->text[32]);
+    atari_text_list_init(&game->text[32],
+                         "Guy",
+                         "Ohhhh myyy godd\nDan and Melissa are\ntogether now!",
+                         speed,
+                         &game->text[33]);
+    atari_text_list_init(&game->text[33],
+                         "Girl",
+                         "John is such an ass,\nisn't he?",
+                         speed,
+                         &game->text[34]);
+    atari_text_list_init(&game->text[34],
+                         "Some Guy",
+                         "Let's go out for drinks later.",
+                         speed,
+                         &game->text[35]);
+    atari_text_list_init(&game->text[35],
+                         "Person",
+                         "I prefer brioche bread.",
+                         speed,
+                         &game->text[36]);
+    atari_text_list_init(&game->text[36],
+                         "Person #2",
+                         "So who are you guys\nlistening to right now?",
+                         speed,
+                         &game->text[37]);
+    atari_text_list_init(&game->text[37],
+                         "Person #9",
+                         "So this one time we're going out with",
+                         speed,
+                         &game->text[38]);
+    atari_text_list_init(&game->text[38],
+                         "Girl",
+                         "My commute to work is so long!",
+                         speed,
+                         &game->text[39]);
+    atari_text_list_init(&game->text[39],
+                         "Chase",
+                         "...\rI need to get out\nof here.",
+                         speed,
+                         nullptr);
+
+    for (int i = 4; i <= 39; i++) {
         game->text[i].location = Top;
     }
 
@@ -743,9 +782,16 @@ void chapter_3_init(Game_Atari *game) {
     chapter_3_init_outside(game);
 
     chapter_3_job_init(game, 0);
-
-    chapter_3_goto_lunch_room(game, CHAPTER_3_LUNCH_TEXT_2);
     //level->minigame.active = true;
+
+    /*
+    chapter_3_goto_lunch_room(game, CHAPTER_3_LUNCH_TEXT_3);
+    chapter_3_job_init(game, 3);
+    level->minigame.active = true;
+    level->state = CHAPTER_3_STATE_TIKTOK;
+    */
+
+    //level->state = CHAPTER_3_STATE_ROAD;
 }
 
 void job_minigame_run(Game_Atari *game, Chapter_3_Job_Minigame *minigame,
@@ -764,19 +810,31 @@ void job_minigame_run(Game_Atari *game, Chapter_3_Job_Minigame *minigame,
     minigame->scroll_y = min(minigame->scroll_y, 0);
     
     // Draw
-    ClearBackground(BEIGE);
-    DrawTexture(atari_assets.textures[0], 0, 0, WHITE);
-
     Font *font = minigame->font;
 
-    DrawRectangleRec(minigame->window_outer, WHITE);
-    DrawRectangleLinesEx(minigame->window_outer, minigame->window_border_thickness, BLACK);
-    DrawRectangleLinesEx(minigame->title_bar, 1, BLACK);
+    if (minigame->draw_background) {
+        ClearBackground(BEIGE);
+        DrawTexture(atari_assets.textures[0], 0, 0, WHITE);
+    }
+
+    uint8_t window_alpha = minigame->window_alpha;
+
+    Color window_bg_color = minigame->window_bg_color;
+    window_bg_color.a = window_alpha;
+
+    Color border_color = minigame->font_color;
+    border_color.a = window_alpha;
+
+    DrawRectangleRec(minigame->window_outer, window_bg_color);
+    DrawRectangleLinesEx(minigame->window_outer, minigame->window_border_thickness, border_color);
+    DrawRectangleLinesEx(minigame->title_bar, 1, border_color);
 
     Texture *controls = &atari_assets.textures[1];
-    DrawTexture(*controls, minigame->title_bar.x + minigame->title_bar.width - controls->width, minigame->title_bar.y, WHITE);
-    Texture *window_title = &atari_assets.textures[2];
-    DrawTexture(*window_title, minigame->title_bar.x, minigame->title_bar.y, WHITE);
+    DrawTexture(*controls, minigame->title_bar.x + minigame->title_bar.width - controls->width, minigame->title_bar.y, window_bg_color);
+    if (minigame->draw_background) {
+        Texture *window_title = &atari_assets.textures[2];
+        DrawTexture(*window_title, minigame->title_bar.x, minigame->title_bar.y, window_bg_color);
+    }
 
     // Draw document
     BeginTextureMode(minigame->render_target);
@@ -800,7 +858,7 @@ void job_minigame_run(Game_Atari *game, Chapter_3_Job_Minigame *minigame,
 
         if (current_line.text[0]) {
             size = MeasureTextEx(*font, current_line.text, font->baseSize, minigame->font_spacing);
-            DrawTextEx(*font, current_line.text, pos, font->baseSize, minigame->font_spacing, BLACK);
+            DrawTextEx(*font, current_line.text, pos, font->baseSize, minigame->font_spacing, minigame->font_color);
         }
 
         current_line = {};
@@ -863,7 +921,7 @@ set_word_up:
 
             previous_height = size.y;
 
-            if (size.x > minigame->window_inner.width) {
+            if (size.x > minigame->window_inner.width - 2) {
                 if (line_start_index >= previous_word_index) break;
 
                 // Go back to the previous word and chop it off there.
@@ -908,7 +966,7 @@ set_word_up:
             Word *word = &document->words[i];
 
             if (word->correction) {
-                color = { 255, 0, 0, (uint8_t)(100 + 4 * sinf(8*GetTime())) };
+                color = { 255, 0, 0, (uint8_t)(150 + 8 * sinf(8*GetTime())) };
             } else {
                 color = { 255, 0, 0, 64  };
             }
@@ -976,20 +1034,31 @@ set_word_up:
 
     bool complete_lot = (minigame->current_document == minigame->document_count - 1);
 
+    auto click_next = [&]() -> void {
+        if (complete_lot) {
+            minigame->active = false;
+
+            Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
+            int new_text = level->current_lunch_text + 1;
+            if (new_text <= CHAPTER_3_LUNCH_TEXT_3) {
+                chapter_3_goto_lunch_room(game, (Chapter_3_Lunch_Text) new_text);
+            } else {
+                level->state = CHAPTER_3_STATE_ROAD;
+            }
+        } else {
+            chapter_3_next_document(minigame);
+        }
+    };
+
     if (can_finish && CheckCollisionPointRec(mouse, visible_finish_button_rect)) {
         color = BLACK;
         if (is_action_pressed()) {
-            if (complete_lot) {
-                minigame->active = false;
-
-                Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
-                int new_text = level->current_lunch_text + 1;
-                if (new_text <= CHAPTER_3_LUNCH_TEXT_3)
-                    chapter_3_goto_lunch_room(game, (Chapter_3_Lunch_Text) new_text);
-            } else {
-                chapter_3_next_document(minigame);
-            }
+            click_next();
         }
+    }
+
+    if (IsKeyPressed(KEY_PAGE_DOWN)) {
+        click_next();
     }
 
     DrawRectangleRec(minigame->finish_button, color);
@@ -1031,16 +1100,45 @@ void chapter_3_entity_update(Entity *entity, Game_Atari *game, float dt) {
             int dir_x = key_right() - key_left();
             int dir_y = key_down()  - key_up();
 
-            if (game->current != nullptr)
-                dir_x = dir_y = 0;
-
             float player_speed = 60;
 
             if (IsKeyDown(KEY_P))
                 player_speed *= 5;
 
+            if (level->state == CHAPTER_3_STATE_HOME ||
+                level->state == CHAPTER_3_STATE_HOME_INSIDE)
+            {
+                Vector2 velocity = { dir_x * player_speed * dt, dir_y * player_speed * dt };
+                apply_velocity(entity, velocity, &game->entities);
+                
+                entity->pos.x = Clamp(entity->pos.x, 0, render_width - entity_texture_width(entity));
+                entity->pos.y = Clamp(entity->pos.y, 0, render_height - entity_texture_height(entity));
+                break;
+            }
+
+            if (game->current != nullptr || level->text_start_timer > 0)
+                dir_x = dir_y = 0;
+
             Vector2 velocity = { dir_x * player_speed * dt, dir_y * player_speed * dt };
             apply_velocity(entity, velocity, &game->entities);
+
+            if (level->state == CHAPTER_3_STATE_LUNCH && level->current_lunch_text == CHAPTER_3_LUNCH_TEXT_3) {
+                level->lunch_devil_effect = dir_x || dir_y;
+
+                Rectangle player_rectangle = {
+                    entity->pos.x + entity->base_collider.x,
+                    entity->pos.y + entity->base_collider.y,
+                    entity->base_collider.width,
+                    entity->base_collider.height
+                };
+
+                level->window_popup = !level->lunch_devil_effect && CheckCollisionRecs(player_rectangle, {0, 0, 192, 20});
+                if (level->window_popup && is_action_pressed()) {
+                    level->state = CHAPTER_3_STATE_WINDOW;
+                    chapter_3_job_init(game, 3);
+                    level->minigame.active = true;
+                }
+            }
 
             int width = entity_texture_width(entity);
             int height = entity_texture_height(entity);
@@ -1065,10 +1163,34 @@ void chapter_3_entity_update(Entity *entity, Game_Atari *game, float dt) {
             }
 
             bool can_scroll = true;
-            if (level->screens_scrolled <= 8 && scrolled_dir != DIRECTION_UP)
-                can_scroll = false;
+            if (level->state == CHAPTER_3_STATE_LUNCH && level->current_lunch_text == CHAPTER_3_LUNCH_TEXT_2 && scrolled_dir != DIRECTION_INVALID) {
+                chapter_3_job_init(game, 2);
+                level->minigame.active = true;
+                level->state = CHAPTER_3_STATE_OFFICE;
+            } else if (level->state == CHAPTER_3_STATE_LUNCH && level->current_lunch_text == CHAPTER_3_LUNCH_TEXT_3 && scrolled_dir != DIRECTION_INVALID) {
+                // Remove the tables and re-add them with slight random variation,
+                Array<Entity*> *entities = &game->entities;
 
-            if (level->state == CHAPTER_3_STATE_OFFICE && scrolled_dir != DIRECTION_INVALID && can_scroll) {
+                for (int i = 0; i < entities->length; i++) {
+                    Entity *e = entities->data[i];
+
+                    if (e->type == ENTITY_CHAP_3_LUNCH_TABLE ||
+                        e->type == ENTITY_CHAP_3_GUY ||
+                        e->type == ENTITY_CHAP_3_GIRL)
+                    {
+                        free_entity(e);
+                        array_remove(entities, i--);
+                    }
+                }
+
+                int table_1_count = 3 + rand_range(-2, 3);
+                int table_2_count = 3 + rand_range(-2, 3);
+
+                add_lunch_table(entities,  35 + rand_range(-5, 5),  35 + rand_range(-5, 5), table_1_count);
+                add_lunch_table(entities, 100 + rand_range(-5, 5), 100 + rand_range(-5, 5), table_2_count);
+            } else if (level->screens_scrolled <= 8 && scrolled_dir != DIRECTION_UP) {
+                can_scroll = false;
+            } else if (level->state == CHAPTER_3_STATE_OFFICE && scrolled_dir != DIRECTION_INVALID && can_scroll) {
                 level->screens_scrolled++;
 
                 // Remove the cubicles and re-add them.
@@ -1269,25 +1391,47 @@ void chapter_3_update(Game_Atari *game, float dt) {
         if (level->current_lunch_text == CHAPTER_3_LUNCH_TEXT_1 && game->current) {
             if (!game->current->next[0]) {
                 if (is_text_list_at_end(game->current)) {
-                    level->minigame.active = true;
                     level->state = CHAPTER_3_STATE_OFFICE;
                     game->current = 0;
 
-                    chapter_3_job_init(game, 1);
+                    chapter_3_job_init(game, (int)level->current_lunch_text);
+                    level->minigame.active = true;
                 }
             }
         }
 
-        level->lunch_devil_effect = IsKeyDown(KEY_O);
+        if (level->text_start_timer > 0) {
+            level->text_start_timer -= dt;
+            if (level->text_start_timer < 0) {
+                level->text_start_timer = 0;
+            }
+        }
+
+        if (level->text_start_timer == 0) {
+            switch (level->current_lunch_text) {
+                case CHAPTER_3_LUNCH_TEXT_1: {
+                    game->current = &game->text[4];
+                } break;
+                case CHAPTER_3_LUNCH_TEXT_2: {
+                    game->current = &game->text[15];
+                } break;
+                case CHAPTER_3_LUNCH_TEXT_3: {
+                    game->current = &game->text[30];
+                } break;
+            }
+
+            level->text_start_timer = -1;
+        }
     }
 
-    if (level->minigame.active) {
-    } else {
-        size_t entity_count = game->entities.length;
+    if (level->state != CHAPTER_3_STATE_WINDOW) {
+        if (!level->minigame.active) {
+            size_t entity_count = game->entities.length;
 
-        for (size_t i = 0; i < entity_count; i++) {
-            Entity *e = game->entities.data[i];
-            chapter_3_entity_update(e, game, dt);
+            for (size_t i = 0; i < entity_count; i++) {
+                Entity *e = game->entities.data[i];
+                chapter_3_entity_update(e, game, dt);
+            }
         }
     }
 }
@@ -1349,11 +1493,146 @@ void chapter_3_draw(Game_Atari *game, float dt) {
                 chapter_3_entity_draw(game->entities.data[i], game);
             }
 
+            if (level->window_popup) {
+                draw_popup("Stare outside.");
+            }
+
             EndMode2D();
         } break;
+        case CHAPTER_3_STATE_WINDOW: {
+            ClearBackground(BLACK);
+
+            game->textbox_alpha = 255;
+
+            DrawTexture(atari_assets.textures[16], 0, 0, WHITE);
+            job_minigame_run(game, minigame, dt, &game->render_target);
+        } break;
         case CHAPTER_3_STATE_ROAD: {
+            ClearBackground(BLACK);
+            game->textbox_alpha = 255;
+
+            level->road_time += dt;
+            if (level->road_time >= 3) {
+                level->state = CHAPTER_3_STATE_HOME;
+                for (int i = 0; i < game->entities.length; i++) {
+                    free_entity(game->entities.data[i]);
+                    array_remove(&game->entities, i--);
+                }
+
+                level->player = chapter_3_make_entity(ENTITY_PLAYER, 78, 137);
+                array_add(&game->entities, level->player);
+                add_wall(&game->entities, {0, 0, 192, 99});
+            }
+
+            DrawTexture(atari_assets.textures[17], 0, 0, WHITE);
         } break;
         case CHAPTER_3_STATE_HOME: {
+            Rectangle player = level->player->base_collider;
+            player.x += level->player->pos.x;
+            player.y += level->player->pos.y;
+
+            level->open_door_popup = CheckCollisionRecs(player, {72,79,24,28});
+
+            if (level->open_door_popup && is_action_pressed()) {
+                level->state = CHAPTER_3_STATE_HOME_INSIDE;
+                level->player->pos = { 90, 100 };
+                for (int i = 0; i < game->entities.length; i++) {
+                    if (game->entities.data[i]->type == ENTITY_WALL) {
+                        free_entity(game->entities.data[i]);
+                        array_remove(&game->entities, i--);
+                    }
+                }
+                Rectangle bed = { 80, 8, 29, 44 };
+                add_wall(&game->entities, bed);
+            }
+
+            ClearBackground(BLACK);
+            DrawTexture(atari_assets.textures[18], 0, 0, WHITE);
+
+            for (int i = 0; i < game->entities.length; i++) {
+                chapter_3_entity_draw(game->entities.data[i], game);
+            }
+
+            if (level->open_door_popup) {
+                draw_popup("Open door.");
+            }
+            game->textbox_alpha = 255;
+        } break;
+        case CHAPTER_3_STATE_HOME_INSIDE: {
+            ClearBackground(BLACK);
+            DrawTexture(atari_assets.textures[19], 0, 0, WHITE);
+
+            Rectangle player = level->player->base_collider;
+            player.x += level->player->pos.x;
+            player.y += level->player->pos.y;
+
+            Rectangle bed_interact = { 70, 0, 48, 60 };
+
+            level->bed_popup = CheckCollisionRecs(player, bed_interact);
+5            if (is_action_pressed() && level->bed_popup) {
+                level->state = CHAPTER_3_STATE_TIKTOK;
+            }
+
+            for (int i = 0; i < game->entities.length; i++) {
+                chapter_3_entity_draw(game->entities.data[i], game);
+            }
+
+            if (level->bed_popup) {
+                draw_popup("Go to bed.");
+            }
+        } break;
+        case CHAPTER_3_STATE_TIKTOK: {
+            ClearBackground(BLACK);
+
+            Chapter_3_Phone *phone = &level->phone;
+
+            if (phone->black_timer > 0) {
+                phone->black_timer -= dt;
+                if (phone->black_timer <= 0) {
+                    atari_queue_deinit_and_goto_intro(game);
+                }
+            } else {
+                if (phone->c1.a == 0) {
+                    phone->c1 = {(uint8_t)rand(), (uint8_t)rand(), (uint8_t)rand(), 255};
+                    phone->c2 = {(uint8_t)rand(), (uint8_t)rand(), (uint8_t)rand(), 255};
+                }
+
+                Rectangle phone_screen = {65, 30 - phone->scroll_y, 59, 99};
+                Rectangle phone_screen_down = phone_screen;
+                phone_screen_down.y += phone_screen.height;
+
+                DrawRectangleRec(phone_screen, phone->c1);
+                DrawRectangleRec(phone_screen_down, phone->c2);
+
+                if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S)) {
+                    phone->scroll_y_to = phone_screen.height;
+                }
+
+                // TODO: Change this to framerate indepdendent lerp
+                phone->scroll_y = Lerp(phone->scroll_y, phone->scroll_y_to, 0.2f);
+
+                float epsilon = 1;
+                if (phone->scroll_y != phone->scroll_y_to && fabs(phone->scroll_y - phone->scroll_y_to) < epsilon) {
+                    phone->scroll_y_to = 0;
+                    phone->scroll_y    = 0;
+
+                    phone->c1 = phone->c2;
+                    phone->c2 = {(uint8_t)rand(), (uint8_t)rand(), (uint8_t)rand(), 255};
+                    phone->fade_alpha += 10;
+
+                    if (phone->fade_alpha >= 240) {
+                        phone->black_timer = 4;
+                        phone->fade_alpha = 255;
+                    }
+                }
+
+                DrawTexture(atari_assets.textures[20], 0, 0, WHITE);
+
+                bool white = sin(GetTime()*10) > 0;
+                DrawTexture(atari_assets.textures[21], 85, 101, white ? WHITE : BLACK);
+
+                DrawRectangleRec({0,0,(float)render_width,(float)render_height}, {0,0,0,(uint8_t)phone->fade_alpha});
+            }
         } break;
     }
 }
