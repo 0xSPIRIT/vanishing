@@ -3,7 +3,7 @@ Chapters
   1. Dysania                    7 mins (x)
   2. Dinner Party               5 mins (x)
   3. Repetitions                9 mins (x)
-  4. Theophany                  2 mins
+  4. Theophany                  2 mins (x)
   5. Perception                 7 mins
   6. Patience and Blasphemy     3 mins
   7. Epilogue / Prologue       10 mins
@@ -93,7 +93,7 @@ Text Appears: "Theophany"
 - Black text appears: "GOOD.
                        TO GRANT YOUR PRAYER, YOU MUST COMPLETE A TASK
                        FOR ME.
--                      SHOW THAT YOUR FAITH IS PURE."
+-                      SHOW ME THAT YOUR FAITH IS PURE."
 - Chase: "I will do anything you ask, Lord."
 - Black text appears:
      acedd2eaac3582ad42435742073bf948

@@ -1,9 +1,9 @@
 #define min(a, b) (((a) < (b)) ? (a) : (b))
 #define max(a, b) (((a) > (b)) ? (a) : (b))
 
-#define STRING_SIZE    128
+#define STRING_SIZE    1024
 #define TEXT_LIST_SIZE 32
-#define TEXT_LINE_MAX  8
+#define TEXT_LINE_MAX  32
 #define CHOICE_MAX     4
 #define SCROLL_SPEED   30
 
@@ -178,7 +178,7 @@ void text_init(Text *text, Scroll_Type scroll_type, Vector2 pos, const char *lin
     }
 }
 
-bool text_at_end(Text *text) {
+bool is_text_at_end(Text *text) {
     if (text->alpha == 1 && text->current_line == text->line_count-1 &&
         text->scroll_index == text->lines[text->current_line].length-1)
     {
@@ -210,7 +210,7 @@ bool text_update_and_draw(Text *text, Vector2 offset) {
                     text->current_line++;
                 }
 
-                if (text_at_end(text)) {
+                if (is_text_at_end(text)) {
                     break;
                 }
             } while (is_newline(text->lines[text->current_line].text[(int)text->scroll_index]));
@@ -253,7 +253,7 @@ bool text_update_and_draw(Text *text, Vector2 offset) {
     }
 
     if (text->not_first_frame && !text->finished && is_action_pressed()) {
-        if (text_at_end(text)) {
+        if (is_text_at_end(text)) {
             text->finished = true;
             return true;
         }
@@ -403,7 +403,7 @@ void reset_text_list(Text_List *list) {
 
 bool is_text_list_at_end(Text_List *list) {
     bool result = list->text_index == list->text_count-1;
-    result &= text_at_end(&list->text[list->text_index]);
+    result &= is_text_at_end(&list->text[list->text_index]);
     return result;
 }
 
@@ -509,7 +509,7 @@ Text_List *text_list_update_and_draw(Text_List *list, void *user_data) {
     if (list->choice && list->text_index == list->text_count-1) {
         Text *current_text = &list->text[list->text_index];
 
-        if (text_at_end(current_text)) {
+        if (is_text_at_end(current_text)) {
             if (key_down_pressed()) {
                 list->choice_index++;
                 if (list->choice_index >= list->choice_count)
@@ -573,7 +573,7 @@ Text_List *text_list_update_and_draw(Text_List *list, void *user_data) {
 
     Text *current_text = &list->text[list->text_index];
 
-    if (text_at_end(current_text)) {
+    if (is_text_at_end(current_text)) {
         float size = max(5, 15 * list->scale);
         float pad = size*2;
 

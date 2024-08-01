@@ -156,7 +156,7 @@ void add_door(Array<Entity*> *entities, Rectangle r) {
 }
 
 void chapter_2_end_bouncer_text(void *game_ptr) {
-    Game_Atari *game = (Game_Atari *)game_ptr;
+    Game *game = (Game *)game_ptr;
 
     Entity *bouncer = entities_find_from_type(&game->entities, ENTITY_CHAP_2_BOUNCER);
     if (bouncer) {
@@ -175,7 +175,7 @@ void chapter_2_end_bouncer_text(void *game_ptr) {
 }
 
 void chapter_2_sit_down(void *game_ptr) {
-    Game_Atari *game = (Game_Atari *)game_ptr;
+    Game *game = (Game *)game_ptr;
     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
 
     Entity *player = level->player;
@@ -193,7 +193,7 @@ void chapter_2_sit_down(void *game_ptr) {
 }
 
 void chapter_2_end_eleanor_first_text(void *game_ptr) {
-    Game_Atari *game = (Game_Atari *)game_ptr;
+    Game *game = (Game *)game_ptr;
     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
 
     Entity *player = level->player;
@@ -203,7 +203,7 @@ void chapter_2_end_eleanor_first_text(void *game_ptr) {
 }
 
 void chapter_2_end_eleanor_second_text(void *game_ptr) {
-    Game_Atari *game = (Game_Atari *)game_ptr;
+    Game *game = (Game *)game_ptr;
     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
 
     level->penny_state = CHAPTER_2_PENNY_STATE_WALKING;
@@ -213,7 +213,7 @@ void chapter_2_end_eleanor_second_text(void *game_ptr) {
 }
 
 void chapter_2_end_eleanor_third_text(void *game_ptr) {
-    Game_Atari *game = (Game_Atari *)game_ptr;
+    Game *game = (Game *)game_ptr;
     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
 
     Entity *player = level->player;
@@ -222,11 +222,11 @@ void chapter_2_end_eleanor_third_text(void *game_ptr) {
 }
 
 void chapter_2_end_fade(void *game_ptr) {
-    Game_Atari *game = (Game_Atari *)game_ptr;
+    Game *game = (Game *)game_ptr;
     atari_queue_deinit_and_goto_intro(game);
 }
 
-void chapter_2_init(Game_Atari *game) {
+void chapter_2_init(Game *game) {
     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
 
     Texture2D *textures = atari_assets.textures;
@@ -903,11 +903,11 @@ void chapter_2_init(Game_Atari *game) {
     add_door(&game->entities, { 569, 78, 7, 25 });
 }
 
-void chapter_2_deinit(Game_Atari *game) {
+void chapter_2_deinit(Game *game) {
     (void)game;
 }
 
-void chapter_2_entity_update(Entity *e, Game_Atari *game, float dt) {
+void chapter_2_entity_update(Entity *e, Game *game, float dt) {
     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
 
     Entity *player = level->player;
@@ -1117,7 +1117,7 @@ void chapter_2_entity_update(Entity *e, Game_Atari *game, float dt) {
     entity_update_alarms(e, dt);
 }
 
-void chapter_2_entity_draw(Entity *e, Game_Atari *game) {
+void chapter_2_entity_draw(Entity *e, Game *game) {
     (void)game;
 
     Texture *texture = entity_get_texture(e);
@@ -1136,7 +1136,7 @@ void chapter_2_entity_draw(Entity *e, Game_Atari *game) {
     }
 }
 
-void chapter_2_update(Game_Atari *game, float dt) {
+void chapter_2_update(Game *game, float dt) {
     size_t entity_count = game->entities.length;
 
     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
@@ -1238,7 +1238,7 @@ void chapter_2_update(Game_Atari *game, float dt) {
     }
 }
 
-void chapter_2_draw(Game_Atari *game) {
+void chapter_2_draw(Game *game) {
     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
 
     ClearBackground(BLACK);

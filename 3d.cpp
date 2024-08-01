@@ -9,8 +9,8 @@ struct Game_3D {
 };
 
 void game_3d_init(Game_3D *game) {
-    render_width = 640;
-    render_height = 480;
+    render_width = 320;
+    render_height = 240;
     game->render_target = LoadRenderTexture(render_width, render_height);
 
     game->scene = LoadModel("models/scene.glb");

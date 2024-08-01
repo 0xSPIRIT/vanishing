@@ -41,7 +41,7 @@ enum Game_Mode {
 };
 Game_Mode game_mode = GAME_MODE_INVALID;
 
-int chapter = 3;
+int chapter = 4;
 
 Font global_font, comic_sans, bitmap_font;
 
@@ -98,13 +98,14 @@ Vector2 get_mouse() {
 #include "chapter_1.h"
 #include "chapter_2.h"
 #include "chapter_3.h"
+#include "chapter_4.h"
 
 #include "atari.cpp"
 #include "intro.cpp"
 
 Game_3D    game_3d;
 Game_Intro game_intro;
-Game_Atari game_atari;
+Game game_atari;
 
 void toggle_fullscreen() {
     if (!IsWindowFullscreen()) {

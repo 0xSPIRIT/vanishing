@@ -306,7 +306,7 @@ void add_cubicle(Array<Entity*> *entities, bool right, int x, int y) {
 }
 
 void chapter_3_goto_job_minigame(void *game_ptr) {
-    Game_Atari *game = (Game_Atari *)game_ptr;
+    Game *game = (Game *)game_ptr;
     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
     level->minigame.active = true;
 }
@@ -343,7 +343,7 @@ Entity *add_lunch_table(Array<Entity*> *entities, int x, int y, int num_people) 
     return table;
 }
 
-void chapter_3_goto_lunch_room(Game_Atari *game, Chapter_3_Lunch_Text lunch_text) {
+void chapter_3_goto_lunch_room(Game *game, Chapter_3_Lunch_Text lunch_text) {
     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
 
     level->current_lunch_text = lunch_text;
@@ -385,7 +385,7 @@ void chapter_3_goto_lunch_room(Game_Atari *game, Chapter_3_Lunch_Text lunch_text
     level->text_start_timer = 2;
 }
 
-void chapter_3_init_outside(Game_Atari *game) {
+void chapter_3_init_outside(Game *game) {
     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
 
     add_wall(&game->entities, {0, 0, 6, 94});
@@ -406,7 +406,7 @@ void chapter_3_init_outside(Game_Atari *game) {
     }
 }
 
-void chapter_3_job_init(Game_Atari *game, int which_document_list) {
+void chapter_3_job_init(Game *game, int which_document_list) {
     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
 
     const char *documents[MAX_DOCUMENTS] = {};
@@ -524,7 +524,7 @@ void chapter_3_job_init(Game_Atari *game, int which_document_list) {
     }
 }
 
-void chapter_3_init(Game_Atari *game) {
+void chapter_3_init(Game *game) {
     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
 
     level->state = CHAPTER_3_STATE_OFFICE;
@@ -883,7 +883,7 @@ void chapter_3_init(Game_Atari *game) {
     //level->state = CHAPTER_3_STATE_ROAD;
 }
 
-void job_minigame_run(Game_Atari *game, Chapter_3_Job_Minigame *minigame,
+void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,
                       float dt, RenderTexture *current_render_target)
 {
     assert(minigame->active);
@@ -1177,7 +1177,7 @@ set_word_up:
 }
 
 // tick
-void chapter_3_entity_update(Entity *entity, Game_Atari *game, float dt) {
+void chapter_3_entity_update(Entity *entity, Game *game, float dt) {
     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
 
     bool open_dialogue = can_open_dialogue(game, entity, level->player);
@@ -1388,7 +1388,7 @@ void chapter_3_entity_update(Entity *entity, Game_Atari *game, float dt) {
     }
 }
 
-void chapter_3_entity_draw(Entity *entity, Game_Atari *game) {
+void chapter_3_entity_draw(Entity *entity, Game *game) {
     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
 
     switch (entity->type) {
@@ -1469,11 +1469,11 @@ void chapter_3_entity_draw(Entity *entity, Game_Atari *game) {
     }
 }
 
-void chapter_3_deinit(Game_Atari *game) {
+void chapter_3_deinit(Game *game) {
     (void)game;
 }
 
-void chapter_3_update(Game_Atari *game, float dt) {
+void chapter_3_update(Game *game, float dt) {
     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
 
     if (level->state == CHAPTER_3_STATE_LUNCH) {
@@ -1525,7 +1525,7 @@ void chapter_3_update(Game_Atari *game, float dt) {
     }
 }
 
-void chapter_3_draw(Game_Atari *game, float dt) {
+void chapter_3_draw(Game *game, float dt) {
     game->textbox_alpha = 200;
 
     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
@@ -1534,7 +1534,7 @@ void chapter_3_draw(Game_Atari *game, float dt) {
     switch (level->state) {
         case CHAPTER_3_STATE_OFFICE: {
             if (minigame->active) {
-                job_minigame_run(game, minigame, dt, &game->render_target);
+                job_minigame_run(game, minigame, dt, &game->atari_render_target);
             } else {
                 if (level->screens_scrolled <= 8) {
                     Color c = {0, 0, 0, 255};
@@ -1594,7 +1594,7 @@ void chapter_3_draw(Game_Atari *game, float dt) {
             game->textbox_alpha = 255;
 
             DrawTexture(atari_assets.textures[16], 0, 0, WHITE);
-            job_minigame_run(game, minigame, dt, &game->render_target);
+            job_minigame_run(game, minigame, dt, &game->atari_render_target);
         } break;
         case CHAPTER_3_STATE_ROAD: {
             ClearBackground(BLACK);

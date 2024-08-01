@@ -65,10 +65,12 @@ enum Entity_Type {
     ENTITY_CHAP_3_GIRL,
 
     ENTITY_CHAP_3_LUNCH_TABLE,
+
+    ENTITY_CHAP_4_WINDOW,
 };
 
 // All Atari chapters use the same Entity struct, because
-// there's an Array<Entity*> in the main Game_Atari struct.
+// there's an Array<Entity*> in the main Game struct.
 //
 // You can include specialized variables by adding a new
 // struct to the union.
@@ -97,12 +99,23 @@ struct Entity {
         // Chapter 3 entities
         Chapter_3_Cubicle chap_3_cubicle;
         Chapter_3_Circler chap_3_circler;
+
+        // Chapter 4 entities
+        Chapter_4_Window  chap_4_window;
     };
 };
 
-struct Game_Atari {
-    RenderTexture2D render_target;
+enum Render_State {
+    RENDER_STATE_ATARI,
+    RENDER_STATE_3D
+};
+
+struct Game {
+    RenderTexture2D atari_render_target;
+    RenderTexture2D render_target_3d;
     RenderTexture2D textbox_target;
+
+    Render_State render_state;
 
     Arena level_arena;
     Array<Entity*> entities;
@@ -143,7 +156,7 @@ void free_entity(Entity *entity) {
     entity_allocator.first_free = entity;
 }
 
-Keyboard_Focus keyboard_focus(Game_Atari *game) {
+Keyboard_Focus keyboard_focus(Game *game) {
     if (game->current != nullptr && game->current->take_keyboard_focus) {
         return KEYBOARD_FOCUS_TEXTBOX;
     } else {
@@ -286,7 +299,7 @@ bool is_entity_collidable(Entity *e) {
         return e->chap_2_door.active;
     }
 
-    if (e->type == ENTITY_FOOTSTEPS || e->type == ENTITY_BLOOD)
+    if (e->type == ENTITY_FOOTSTEPS || e->type == ENTITY_BLOOD || e->type == ENTITY_CHAP_4_WINDOW)
         return false;
 
     return true;
@@ -385,7 +398,7 @@ bool is_player_close_to_entity(Entity *player, Entity *e, int closeness) {
     return within_region;
 }
 
-bool can_open_dialogue(Game_Atari *game, Entity *e, Entity *player) {
+bool can_open_dialogue(Game *game, Entity *e, Entity *player) {
     // Check if the player is close to multiple entities,
     // and if the closest entity == e, return true.
 
@@ -420,7 +433,7 @@ bool can_open_dialogue(Game_Atari *game, Entity *e, Entity *player) {
     return result;
 }
 
-void atari_queue_deinit_and_goto_intro(Game_Atari *game) {
+void atari_queue_deinit_and_goto_intro(Game *game) {
     game->queue_deinit_and_goto_intro = true;
 }
 
@@ -483,7 +496,7 @@ void draw_popup(const char *text) {
     DrawTextEx(atari_font, text, pos, atari_font.baseSize, 1, GOLD);
 }
 
-void atari_update_and_draw_textbox(Game_Atari *game) {
+void atari_update_and_draw_textbox(Game *game) {
     BeginTextureMode(game->textbox_target);
 
     ClearBackground({0, 0, 0, 0});
@@ -492,7 +505,15 @@ void atari_update_and_draw_textbox(Game_Atari *game) {
         game->current = text_list_update_and_draw(game->current, game);
 
     EndTextureMode();
-    BeginTextureMode(game->render_target);
+
+    switch (game->render_state) {
+        case RENDER_STATE_ATARI: {
+            BeginTextureMode(game->atari_render_target);
+        } break;
+        case RENDER_STATE_3D: {
+            BeginTextureMode(game->render_target_3d);
+        } break;
+    }
 
     DrawTexturePro(game->textbox_target.texture,
                    {0, 0, (float)render_width, -(float)render_height},
@@ -572,7 +593,7 @@ void atari_mid_text_list_init(Text_List *list, char *line,
 #include "chapter_3.cpp"
 #include "chapter_4.cpp"
 
-void game_atari_init(Game_Atari *game) {
+void game_atari_init(Game *game) {
     assert(game->level == nullptr); // So we can make sure we had called deinit before
 
     render_width = 192;
@@ -580,11 +601,15 @@ void game_atari_init(Game_Atari *game) {
 
     atari_font = LoadFont("romulus.png");
 
-    game->render_target  = LoadRenderTexture(render_width, render_height);
+    game->atari_render_target = LoadRenderTexture(render_width, render_height);
+    game->render_target_3d = LoadRenderTexture(320, 240);
     game->textbox_target = LoadRenderTexture(render_width, render_height);
 
-    if (!game->level_arena.buffer)
+    if (!game->level_arena.buffer) {
         game->level_arena = make_arena(Megabytes(16));
+    } else {
+        arena_reset(&game->level_arena);
+    }
 
     entity_allocator.first_free  = 0;
     entity_allocator.level_arena = &game->level_arena;
@@ -609,14 +634,13 @@ void game_atari_init(Game_Atari *game) {
     }
 }
 
-void atari_deinit(Game_Atari *game) {
+void atari_deinit(Game *game) {
     switch (chapter) {
         case 1: chapter_1_deinit(game);
         case 2: chapter_2_deinit(game);
         case 3: chapter_3_deinit(game);
     }
 
-    arena_reset(&game->level_arena);
     entity_allocator.first_free  = 0;
     entity_allocator.level_arena = 0;
 
@@ -637,7 +661,7 @@ void atari_deinit(Game_Atari *game) {
     game->level = nullptr;
 }
 
-void game_atari_run(Game_Atari *game) {
+void game_atari_run(Game *game) {
     float dt = GetFrameTime();
 
     switch (chapter) {
@@ -650,13 +674,20 @@ void game_atari_run(Game_Atari *game) {
     BeginDrawing();
     ClearBackground(BLACK);
     {
-        BeginTextureMode(game->render_target);
+        switch (game->render_state) {
+            case RENDER_STATE_ATARI: {
+                BeginTextureMode(game->atari_render_target);
+            } break;
+            case RENDER_STATE_3D: {
+                BeginTextureMode(game->render_target_3d);
+            } break;
+        }
 
         switch (chapter) {
             case 1: chapter_1_draw(game); break;
             case 2: chapter_2_draw(game); break;
             case 3: chapter_3_draw(game, dt); break;
-            case 4: chapter_4_draw(game); break;
+            case 4: chapter_4_draw(game, dt); break;
         }
 
         atari_update_and_draw_textbox(game);
@@ -666,7 +697,20 @@ void game_atari_run(Game_Atari *game) {
 
     Rectangle destination = get_screen_rectangle();
 
-    DrawTexturePro(game->render_target.texture,
+    Texture2D *texture = 0;
+    switch (game->render_state) {
+        case RENDER_STATE_ATARI: {
+            texture = &game->atari_render_target.texture;
+        } break;
+        case RENDER_STATE_3D: {
+            texture = &game->render_target_3d.texture;
+        } break;
+        default: {
+            assert(false);
+        } break;
+    }
+
+    DrawTexturePro(texture[0],
                    {0, 0, (float)render_width, -(float)render_height},
                    destination,
                    {0, 0},

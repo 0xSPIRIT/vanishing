@@ -204,6 +204,10 @@ float rand_range(float start, float end) {
     return result;
 }
 
+bool colors_equal(Color a, Color b) {
+    return (a.r == b.r && a.g == b.g && a.b == b.b && a.a == b.a);
+}
+
 bool string_compare(const char *major, const char *minor) {
     int major_length = (int)strlen(major);
     int minor_length = (int)strlen(minor);

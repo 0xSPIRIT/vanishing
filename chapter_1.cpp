@@ -79,7 +79,7 @@ Entity *chapter_1_make_entity(Entity_Type type, float x, float y) {
 }
 
 void chapter_1_activate_node(void *ptr_game) {
-    Game_Atari *game = (Game_Atari *)ptr_game;
+    Game *game = (Game *)ptr_game;
 
     Entity *player = entities_get_player(&game->entities);
 
@@ -110,7 +110,7 @@ void chapter_1_activate_node(void *ptr_game) {
 }
 
 void set_player_alarm(void *game_ptr) {
-    Game_Atari *game = (Game_Atari *)game_ptr;
+    Game *game = (Game *)game_ptr;
     Level_Chapter_1 *level = (Level_Chapter_1*)game->level;
 
     Entity *player = entities_get_player(&game->entities);
@@ -119,7 +119,7 @@ void set_player_alarm(void *game_ptr) {
     level->about_to_exit = true;
 }
 
-void chapter_1_init(Game_Atari *game) {
+void chapter_1_init(Game *game) {
     Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
 
     Texture2D *textures = atari_assets.textures;
@@ -321,7 +321,7 @@ void chapter_1_init(Game_Atari *game) {
     game->current = &game->text[0];
 }
 
-void chapter_1_deinit(Game_Atari *game) {
+void chapter_1_deinit(Game *game) {
     (void)game;
 }
 
@@ -354,7 +354,7 @@ void add_cactuses_randomly(Array<Entity*> *entities, size_t cactus_count) {
     }
 }
 
-void chapter_1_entity_update(Entity *e, Game_Atari *game, float dt) {
+void chapter_1_entity_update(Entity *e, Game *game, float dt) {
     Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
     Entity *player = entities_get_player(&game->entities);
 
@@ -665,7 +665,7 @@ void chapter_1_entity_update(Entity *e, Game_Atari *game, float dt) {
     entity_update_alarms(e, dt);
 }
 
-void chapter_1_entity_draw(Entity *e, Game_Atari *game) {
+void chapter_1_entity_draw(Entity *e, Game *game) {
     Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
 
     Texture2D *texture = entity_get_texture(e);
@@ -707,7 +707,7 @@ void chapter_1_entity_draw(Entity *e, Game_Atari *game) {
     }
 }
 
-void chapter_1_update(Game_Atari *game, float dt) {
+void chapter_1_update(Game *game, float dt) {
     Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
 
     for (int i = 0; i < game->entities.length; i++) {
@@ -748,7 +748,7 @@ void chapter_1_update(Game_Atari *game, float dt) {
     }
 }
 
-void chapter_1_draw(Game_Atari *game) {
+void chapter_1_draw(Game *game) {
     Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
 
     if (level->final_text)
