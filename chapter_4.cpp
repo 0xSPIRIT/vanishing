@@ -446,7 +446,7 @@ void chapter_4_update(Game *game, float dt) {
             */
  
             if (game->current && !is_text_list_at_end(game->current) && colors_equal(game->current->color, RED)) {
-                level->camera.fovy -= dt;
+                level->camera.fovy -= 1.25 * dt;
             }
 
             /*

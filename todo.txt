@@ -1,20 +1,5 @@
 TODO : Today
 
-x Chapter 4:
-    x You ensure that the windows are closed (textbox popup)
-    x Go to bed.
-    x (play sound of someone rotating a window handle)
-      Chase's eyebrows wince. (atari closeup)
-      (play sound of window opening)
-      His eyes open with dread.
-      (play sounds of whispering)
-      His head moves to the right
-    x 3D first person perspective: looking from bed onto window.
-    x Text from design.txt
-    x Clamp camera movement
-    - Really distorted, pitched-down text to speech voice for chase
-      rather than text scroll sound.
-
 A phone call with a future version of yourself:
   The universe does not stop behaving chaotically just because you
   don't want it to. We must all come to terms with our situations.
@@ -35,6 +20,9 @@ A phone call with a future version of yourself:
 - Add an interactible object in chapter 1 to "pray to god".
 
 Later
+- Chapter 4:
+  Really distorted, pitched-down text to speech voice for chase
+  rather than text scroll sound.
 - Somehow include a window in the first chapter somewhere?
 - chapter 2: add white thing right before teleporting to bathroom with penny
 - Replace the font renderer with your own for the document

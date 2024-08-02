@@ -42,6 +42,8 @@ struct Chapter_3_Job_Minigame {
     bool draw_background;
     uint8_t window_alpha;
 
+    float line_height;
+
     Color font_color;
     Color window_bg_color;
 
@@ -888,12 +890,15 @@ void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,
 {
     assert(minigame->active);
 
+    (void)dt;
+
     // Tick
-    if (key_down()) minigame->scroll_y -= 120 * dt;
-    if (key_up())   minigame->scroll_y += 120 * dt;
+    if (key_down_pressed()) minigame->scroll_y -= minigame->line_height;
+    if (key_up_pressed())   minigame->scroll_y += minigame->line_height;
 
     Vector2 wheel = GetMouseWheelMoveV();
-    int scroll_speed_px = 10;
+    int scroll_speed_px = minigame->line_height;
+    wheel.y = Clamp(wheel.y, -1, 1);
     minigame->scroll_y += scroll_speed_px * wheel.y;
 
     minigame->scroll_y = min(minigame->scroll_y, 0);
@@ -935,6 +940,8 @@ void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,
     size_t previous_word_index = 0;
     size_t line_start_index = 0;
     float previous_height = 0;
+
+    minigame->line_height = default_size.y;
 
     int pad = 3;
     Vector2 pos = {

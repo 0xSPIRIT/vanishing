@@ -27,6 +27,12 @@
   #define MainFunction int main
 #endif
 
+#define DIM_ATARI_WIDTH  192
+#define DIM_ATARI_HEIGHT 160
+
+#define DIM_3D_WIDTH  320
+#define DIM_3D_HEIGHT 240
+
 const int default_width  = 192*5;
 const int default_height = 144*5;
 
@@ -37,11 +43,10 @@ enum Game_Mode {
     GAME_MODE_INVALID,
     GAME_MODE_INTRO,
     GAME_MODE_ATARI,
-    GAME_MODE_3D
 };
 Game_Mode game_mode = GAME_MODE_INVALID;
 
-int chapter = 4;
+int chapter = 5;
 
 Font global_font, comic_sans, bitmap_font;
 
@@ -92,20 +97,17 @@ Vector2 get_mouse() {
 #include "keys.cpp"
 #include "text.cpp"
 
-#include "3d.cpp"
-
-// The chapter_n.cpp files are included in atari.cpp.
+// The chapter_n.cpp files are included in game.cpp.
 #include "chapter_1.h"
 #include "chapter_2.h"
 #include "chapter_3.h"
 #include "chapter_4.h"
 
-#include "atari.cpp"
+#include "game.cpp"
 #include "intro.cpp"
 
-Game_3D    game_3d;
 Game_Intro game_intro;
-Game game_atari;
+Game       game_atari;
 
 void toggle_fullscreen() {
     if (!IsWindowFullscreen()) {
@@ -123,7 +125,6 @@ void set_game_mode(Game_Mode mode) {
 
     switch (mode) {
         case GAME_MODE_INTRO: game_intro_init(&game_intro); break;
-        case GAME_MODE_3D:    game_3d_init(&game_3d);       break;
         case GAME_MODE_ATARI: game_atari_init(&game_atari); break;
     }
 }
@@ -159,7 +160,6 @@ MainFunction() {
 
         switch (game_mode) {
             case GAME_MODE_INTRO:   game_intro_run(&game_intro); break;
-            case GAME_MODE_3D:      game_3d_run(&game_3d);       break;
             case GAME_MODE_ATARI:   game_atari_run(&game_atari); break;
             case GAME_MODE_INVALID: assert(false);
         }
