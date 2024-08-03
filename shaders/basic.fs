@@ -38,8 +38,8 @@ void main()
     vec4 texelColor = texture(texture0, fragTexCoord);
     vec3 lightDot = vec3(0.0);
     vec3 normal = normalize(fragNormal);
-    vec3 viewD = normalize(viewPos - fragPosition);
-    vec3 specular = vec3(0.0);
+
+    vec3 light_intensity = vec3(0.0);
 
     // NOTE: Implement here your fragment shader code
 
@@ -47,29 +47,15 @@ void main()
     {
         if (lights[i].enabled == 1)
         {
-            vec3 light = vec3(0.0);
-
-            if (lights[i].type == LIGHT_DIRECTIONAL)
-            {
-                light = -normalize(lights[i].target - lights[i].position);
-            }
-
-            if (lights[i].type == LIGHT_POINT)
-            {
-                light = normalize(lights[i].position - fragPosition);
-            }
-
-            float NdotL = max(dot(normal, light), 0.0);
-            lightDot += lights[i].color.rgb*NdotL*length(light)/8;
-
-            float specCo = 0.0;
-            if (NdotL > 0.0) specCo = pow(max(0.0, dot(viewD, reflect(-(light), normal))), 1.0); // 16 refers to shine
-            specular += specCo;
+            float dist = length(lights[i].position - fragPosition);
+            light_intensity += lights[i].color.rgb * pow(0.92, dist);
         }
     }
 
-    finalColor = (texelColor*((colDiffuse + vec4(specular, 1.0))*vec4(lightDot, 1.0)));
-    finalColor += texelColor*(ambient/2.0)*colDiffuse;
+    finalColor = vec4(texelColor.rgb * colDiffuse.rgb * light_intensity, 1);
+
+    //finalColor = (texelColor*((colDiffuse + vec4(specular, 1.0))*vec4(lightDot, 1.0)));
+    //finalColor += texelColor*(ambient/8.0)*colDiffuse;
 
     // Gamma correction
     //finalColor = pow(finalColor, vec4(1.0/2.2));

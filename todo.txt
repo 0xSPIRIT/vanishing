@@ -1,5 +1,25 @@
 TODO : Today
 
+x Intro
+x Train station
+x With the pyramid head person with eye
+x Dialogue I
+x Rotating pyramid head
+x Black screen
+x Dialogue II
+x Ticket
+x New head
+x Train,
+- and setting off
+- Next model scene (load)
+- Exit train
+- Dinner party (II)
+- Exit door
+- Next model scene (load): beginner's guide esque modern house
+- J dialogue text
+- Walk through another door, teleport to apartment (atari)
+- Phone call: "I'm you from the future!"
+
 A phone call with a future version of yourself:
   The universe does not stop behaving chaotically just because you
   don't want it to. We must all come to terms with our situations.

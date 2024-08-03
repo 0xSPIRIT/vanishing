@@ -4,6 +4,7 @@
 #define RL_CULL_DISTANCE_FAR  1000
 
 #include <raylib.h>
+#include <rlgl.h>
 #include <raymath.h>
 #define RLIGHTS_IMPLEMENTATION
 #include <rlights.h>
@@ -33,6 +34,8 @@
 #define DIM_3D_WIDTH  320
 #define DIM_3D_HEIGHT 240
 
+#define FOV_DEFAULT 62
+
 const int default_width  = 192*5;
 const int default_height = 144*5;
 
@@ -49,6 +52,9 @@ Game_Mode game_mode = GAME_MODE_INVALID;
 int chapter = 5;
 
 Font global_font, comic_sans, bitmap_font;
+
+bool toggled_fullscreen_this_frame = false;
+bool fullscreen = false;
 
 enum Keyboard_Focus {
     NO_KEYBOARD_FOCUS, // we're free to move around
@@ -110,14 +116,10 @@ Game_Intro game_intro;
 Game       game_atari;
 
 void toggle_fullscreen() {
-    if (!IsWindowFullscreen()) {
-        int monitor = GetCurrentMonitor();
-        SetWindowSize(GetMonitorWidth(monitor), GetMonitorHeight(monitor));
-        ToggleFullscreen();
-    } else {
-        ToggleFullscreen();
-        SetWindowSize(default_width, default_height);
-    }
+    toggled_fullscreen_this_frame = true;
+    fullscreen = !fullscreen;
+
+    ToggleBorderlessWindowed();
 }
 
 void set_game_mode(Game_Mode mode) {
@@ -134,10 +136,13 @@ MainFunction() {
     set_global_system_timer_frequency();
 
     SetTraceLogLevel(LOG_WARNING);
-    SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT);
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
 
     InitWindow(default_width, default_height, "Video Game");
     SetTargetFPS(60);
+
+    if (fullscreen)
+        toggle_fullscreen();
 
     SetExitKey(0);
 
@@ -148,11 +153,28 @@ MainFunction() {
 
     //DisableCursor();
 
-    set_game_mode(GAME_MODE_INTRO);
+    set_game_mode(GAME_MODE_ATARI);
 
     while (!WindowShouldClose()) {
+        toggled_fullscreen_this_frame = false;
+
         if (IsKeyPressed(KEY_F11))
             toggle_fullscreen();
+
+        if (IsKeyPressed(KEY_F10)) {
+            Image image = {};
+            image.data = rlReadScreenPixels(GetRenderWidth(), GetRenderHeight());
+            image.width = GetRenderWidth();
+            image.height = GetRenderHeight();
+            image.mipmaps = 1;
+            image.format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8;
+
+            ExportImage(image, "screenshot.png");
+        }
+
+        if (fullscreen && !IsWindowFocused()) {
+            MinimizeWindow();
+        }
 
         if ((IsKeyPressed(KEY_F4) && IsKeyDown(KEY_LEFT_ALT)) || IsKeyPressed(KEY_ESCAPE)) {
             exit(0);

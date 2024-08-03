@@ -1,7 +1,7 @@
 FileVersion = 1
 LastConfig = "Debug"
 LastPlatform = "Win64"
-RecentFilesList = ["c:\\dev\\vanishing\\text.cpp", "c:\\dev\\vanishing\\atari.cpp", "c:\\dev\\vanishing\\chapter_3.cpp", "c:\\dev\\vanishing\\main.cpp"]
+RecentFilesList = ["c:\\dev\\vanishing\\chapter_5.cpp", "c:\\dev\\vanishing\\main.cpp", "Disassembly"]
 
 [MainWindow]
 X = 614
@@ -24,42 +24,32 @@ DefaultDocumentsTabbedView = true
 Type = "TabbedView"
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
-Active = true
-TabLabel = "text.cpp"
-TabWidth = 74.0
-TabIsPinned = false
-Type = "SourceViewPanel"
-FilePath = "c:\\dev\\vanishing\\text.cpp"
-CursorPos = 3401
-VertPos = 3450.0
-
-[[MainDockingFrame.DockedWidgets.Tabs]]
-TabLabel = "atari.cpp"
-TabWidth = 78.66666
-TabIsPinned = false
-Type = "SourceViewPanel"
-FilePath = "c:\\dev\\vanishing\\atari.cpp"
-CursorPos = 12448
-VertPos = 11086.0
-
-[[MainDockingFrame.DockedWidgets.Tabs]]
-TabLabel = "chapter_3.cpp"
-TabWidth = 108.0
-TabIsPinned = false
-Type = "SourceViewPanel"
-FilePath = "c:\\dev\\vanishing\\chapter_3.cpp"
-CursorPos = 62208
-
-[[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "main.cpp"
-TabWidth = 81.33334
+TabWidth = 91.33334
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\main.cpp"
-CursorPos = 3409
+CursorPos = 2869
+VertPos = 2668.0
+
+[[MainDockingFrame.DockedWidgets.Tabs]]
+TabLabel = "Disassembly"
+TabWidth = 108.6667
+TabIsPinned = false
+Type = "DisassemblyPanel"
+
+[[MainDockingFrame.DockedWidgets.Tabs]]
+Active = true
+TabLabel = "chapter_5.cpp"
+TabWidth = 108.0
+TabIsPinned = false
+Type = "SourceViewPanel"
+FilePath = "c:\\dev\\vanishing\\chapter_5.cpp"
+CursorPos = 7938
+VertPos = 4274.0
 
 [[MainDockingFrame.DockedWidgets]]
-RequestedWidth = 856.0
+RequestedWidth = 465.0
 RequestedHeight = 250.0
 Type = "DockingFrame"
 SplitType = 2
@@ -85,7 +75,7 @@ TabWidth = 85.33334
 TabIsPinned = false
 Type = "WatchPanel"
 Columns = [{Width = 250.0}, {Width = 362.0}, {Width = 250.0}]
-Items = ["sizeof(Game) / 1024 / 1024", ""]
+Items = ["ray.position", "result", ""]
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 TabLabel = "Auto"

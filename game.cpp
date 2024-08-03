@@ -75,6 +75,7 @@ enum Entity_Type {
 // You can include specialized variables by adding a new
 // struct to the union.
 
+// 2D entity:
 struct Entity {
     Entity     *next_free;
     Entity_Type type;
@@ -118,6 +119,7 @@ struct Game {
     RenderTexture2D textbox_target;
 
     Arena level_arena;
+    Arena frame_arena; // 32k scratch space
     Array<Entity*> entities;
 
     Text_List  text[128];
@@ -592,6 +594,7 @@ void atari_mid_text_list_init(Text_List *list, char *line,
 #include "chapter_2.cpp"
 #include "chapter_3.cpp"
 #include "chapter_4.cpp"
+#include "chapter_5.cpp"
 
 void game_atari_init(Game *game) {
     assert(game->level == nullptr); // So we can make sure we had called deinit before
@@ -631,6 +634,10 @@ void game_atari_init(Game *game) {
             game->level = arena_push(&game->level_arena, sizeof(Level_Chapter_4));
             chapter_4_init(game);
         } break;
+        case 5: {
+            game->level = arena_push(&game->level_arena, sizeof(Level_Chapter_5));
+            chapter_5_init(game);
+        } break;
     }
 }
 
@@ -664,11 +671,18 @@ void atari_deinit(Game *game) {
 void game_atari_run(Game *game) {
     float dt = GetFrameTime();
 
+    if (game->frame_arena.buffer == nullptr) {
+        game->frame_arena = make_arena(16 * 1024);
+    } else {
+        arena_reset(&game->frame_arena);
+    }
+
     switch (chapter) {
         case 1: chapter_1_update(game, dt); break;
         case 2: chapter_2_update(game, dt); break;
         case 3: chapter_3_update(game, dt); break;
         case 4: chapter_4_update(game, dt); break;
+        case 5: chapter_5_update(game, dt); break;
     }
 
     BeginDrawing();
@@ -688,6 +702,7 @@ void game_atari_run(Game *game) {
             case 2: chapter_2_draw(game); break;
             case 3: chapter_3_draw(game, dt); break;
             case 4: chapter_4_draw(game, dt); break;
+            case 5: chapter_5_draw(game); break;
         }
 
         atari_update_and_draw_textbox(game);

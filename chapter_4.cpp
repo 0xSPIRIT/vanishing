@@ -97,8 +97,8 @@ void chapter_4_3d_init(Game *game) {
 
     DisableCursor();
 
-    render_width  = 320;
-    render_height = 240;
+    render_width  = DIM_3D_WIDTH;
+    render_height = DIM_3D_HEIGHT;
 
     // TODO: memory leak
     game->textbox_target = LoadRenderTexture(render_width, render_height);
@@ -113,10 +113,10 @@ void chapter_4_3d_init(Game *game) {
     level->camera.position = { 2.81f, height, -0.126f };
     level->camera.target   = { 2.46f, 1.094f, 0.793f };
     level->camera.up       = { 0, 1, 0 };
-    level->camera.fovy     = 62;
+    level->camera.fovy     = FOV_DEFAULT;
     level->camera.projection = CAMERA_PERSPECTIVE;
 
-    level->shader = LoadShader("shaders/basic.vs", "shaders/basic.fs");
+    level->shader = LoadShader("shaders/basic.vs", "shaders/chapter_4.fs");
 
     level->shader.locs[SHADER_LOC_MATRIX_MODEL] = GetShaderLocation(level->shader, "matModel");
     level->shader.locs[SHADER_LOC_VECTOR_VIEW]  = GetShaderLocation(level->shader, "viewPos");
