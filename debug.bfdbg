@@ -1,7 +1,7 @@
 FileVersion = 1
 LastConfig = "Debug"
 LastPlatform = "Win64"
-RecentFilesList = ["c:\\dev\\vanishing\\chapter_5.cpp", "c:\\dev\\vanishing\\main.cpp", "Disassembly"]
+RecentFilesList = ["c:\\dev\\vanishing\\chapter_5.cpp", "c:\\dev\\vanishing\\util.cpp", "c:\\dev\\vanishing\\game.cpp", "c:\\dev\\vanishing\\main.cpp", "Disassembly"]
 
 [MainWindow]
 X = 614
@@ -24,17 +24,35 @@ DefaultDocumentsTabbedView = true
 Type = "TabbedView"
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
+TabLabel = "util.cpp"
+TabWidth = 81.33334
+TabIsPinned = false
+Type = "SourceViewPanel"
+FilePath = "c:\\dev\\vanishing\\util.cpp"
+CursorPos = 3372
+VertPos = 3082.0
+
+[[MainDockingFrame.DockedWidgets.Tabs]]
+TabLabel = "game.cpp"
+TabWidth = 94.66666
+TabIsPinned = false
+Type = "SourceViewPanel"
+FilePath = "c:\\dev\\vanishing\\game.cpp"
+CursorPos = 18067
+VertPos = 15019.0
+
+[[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "main.cpp"
-TabWidth = 91.33334
+TabWidth = 81.33334
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\main.cpp"
-CursorPos = 2869
-VertPos = 2668.0
+CursorPos = 4267
+VertPos = 3703.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "Disassembly"
-TabWidth = 108.6667
+TabWidth = 118.6667
 TabIsPinned = false
 Type = "DisassemblyPanel"
 
@@ -45,11 +63,11 @@ TabWidth = 108.0
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\chapter_5.cpp"
-CursorPos = 7938
-VertPos = 4274.0
+CursorPos = 11938
+VertPos = 6670.0
 
 [[MainDockingFrame.DockedWidgets]]
-RequestedWidth = 465.0
+RequestedWidth = 830.0
 RequestedHeight = 250.0
 Type = "DockingFrame"
 SplitType = 2
@@ -75,7 +93,7 @@ TabWidth = 85.33334
 TabIsPinned = false
 Type = "WatchPanel"
 Columns = [{Width = 250.0}, {Width = 362.0}, {Width = 250.0}]
-Items = ["ray.position", "result", ""]
+Items = ["a", "b", "speed", "result", ""]
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 TabLabel = "Auto"

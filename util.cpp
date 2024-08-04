@@ -146,6 +146,26 @@ void array_print(Array<T> array, const char *t_format_specifier) {
 
 // Misc
 
+float go_to(float a, float b, float speed) {
+    float dir;
+
+    if (a == b) return a;
+
+    if (b < a)
+        dir = -1;
+    else
+        dir = +1;
+
+    float result = a + speed * dir;
+
+    if (b < a)
+        result = Clamp(result, b, a);
+    else
+        result = Clamp(result, a, b);
+
+    return result;
+}
+
 void print_rectangle(Rectangle rect) {
     printf("{%f, %f, %f, %f}", rect.x, rect.y, rect.width, rect.height);
 }

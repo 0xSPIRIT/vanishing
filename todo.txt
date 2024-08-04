@@ -10,6 +10,9 @@ x Dialogue II
 x Ticket
 x New head
 x Train,
+x Limiting player position to train
+x Closing doors
+- Collision detection for train
 - and setting off
 - Next model scene (load)
 - Exit train

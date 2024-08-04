@@ -32,10 +32,17 @@ struct Chapter_5_Clerk {
 
 struct Chapter_5_Train {
     Vector3     position;
+    bool        closed;
+    bool        moving;
+    bool        player_in;
+    float       door_openness; // 0.0 to 1.0
     BoundingBox bounding_box;
     Model       model;
+    Model       door_model;
     int         instances;
     float       time;
+    float       door_open_alarm;
+    Vector3     instance_positions;
 };
 
 struct Level_Chapter_5 {
@@ -60,6 +67,8 @@ void chapter_5_update_camera(Camera3D *camera, float dt);
 void chapter_5_begin_head_flip(void *game_ptr);
 void chapter_5_begin_black_transition(void *game_ptr);
 void chapter_5_give_ticket(void *game_ptr);
+void chapter_5_draw_train(Chapter_5_Train *train);
+void chapter_5_train_move(void *game_ptr);
 
 void chapter_5_init_positions(Game *game) {
     Level_Chapter_5 *level = (Level_Chapter_5 *)game->level;
@@ -71,14 +80,14 @@ void chapter_5_init_positions(Game *game) {
     clerk->position = { 16.3f, 2.f, -14.1f };
     clerk->body_rotation = -90;
     clerk->head_rotation = -90;
-    level->clerk.saved_head_rotation = clerk->head_rotation;
+    clerk->saved_head_rotation = clerk->head_rotation;
     clerk->has_real_head = false;
     clerk->talked = false;
 
-    level->camera.position = {-7.19f, 2.00f, 6.68f};
-    level->camera.target = {11.60f, 18.12f, -46.27f};
-    level->camera.up       = {0, 1, 0};
-    level->camera.fovy     = FOV_DEFAULT;
+    level->camera.position   = { -7.19f, 2.00f, 6.68f };
+    level->camera.target     = { 11.60f, 18.12f, -46.27f };
+    level->camera.up         = { 0, 1, 0 };
+    level->camera.fovy       = FOV_DEFAULT;
     level->camera.projection = CAMERA_PERSPECTIVE;
 }
 
@@ -104,11 +113,15 @@ void chapter_5_init(Game *game) {
 
     level->scenes[0] = LoadModel("models/train_station.glb");
 
-    level->train.position     = {-500, 1.8f, -21.5f};
+    level->train.position     = {-500, 1.8f, -22.0f};
     level->train.model        = LoadModel("models/train.glb");
+    level->train.door_model   = LoadModel("models/train_door.glb");
     level->train.bounding_box = GetMeshBoundingBox(level->train.model.meshes[0]);
     level->train.instances    = 10;
-    level->train.time = 0;
+    level->train.time         = 0;
+    //level->train.door_open_alarm = 2;
+    level->train.closed       = true;
+    level->train.moving       = false;
 
     level->clerk.body = LoadModel("models/guy.glb");
 
@@ -227,6 +240,7 @@ void chapter_5_init(Game *game) {
                    "Thanks.",
                    30,
                    nullptr);
+    game->text[17].callbacks[0] = chapter_5_train_move;
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {
@@ -252,7 +266,10 @@ void chapter_5_update_clerk(Game *game, float dt) {
             if (fabs(diff) > 2) {
                 int dir = sign(diff);
 
-                clerk->head_rotation += dir * 0.5;
+                float speed = 30;
+                speed = 120;
+
+                clerk->head_rotation += dir * speed * dt;
             } else if (level->black_screen_timer == -1) {
                 game->current = &game->text[8];
                 clerk->head_rotation = to;
@@ -290,24 +307,92 @@ void chapter_5_update_clerk(Game *game, float dt) {
     }
 }
 
+void chapter_5_update_train(Chapter_5_Train *train, float dt) {
+    if (train->moving) {
+        if (train->position.x < 0) {
+            train->position.x += 2.5;
+            if (train->position.x >= 0) {
+                train->position.x = 0;
+                train->moving = false;
+                train->door_open_alarm = 2;
+            }
+        } else {
+            train->position.x += 2.5;
+        }
+    }
+
+    if (train->door_open_alarm > 0) {
+        train->door_open_alarm -= dt;
+        if (train->door_open_alarm <= 0) {
+            train->door_open_alarm = 0;
+            train->closed = false;
+        }
+    }
+
+    float openness_to;
+    if (train->closed)
+        openness_to = 0;
+    else
+        openness_to = 1;
+
+    // TODO: dt
+    train->door_openness = go_to(train->door_openness,
+                                 openness_to,
+                                 1 * dt);
+}
+
 void chapter_5_update_player(Game *game, float dt) {
     Level_Chapter_5 *level = (Level_Chapter_5 *)game->level;
 
     Vector3 stored_camera_pos = level->camera.position;
     Vector3 stored_camera_target = level->camera.target;
 
-    if (keyboard_focus(game) == 0)
-        if (!level->clerk.do_180_head)
+    if (keyboard_focus(game) == 0) {
+        if (!level->clerk.do_180_head) {
             chapter_5_update_camera(&level->camera, dt);
+        }
+    }
 
-    BoundingBox train_box = level->train.bounding_box;
-    Vector3 translation = level->train.position;
-    train_box.min = Vector3Add(train_box.min, translation);
-    train_box.max = Vector3Add(train_box.max, translation);
+    Chapter_5_Train *train = &level->train;
+    Vector3 *camera = &level->camera.position;
 
-    if (CheckCollisionBoxSphere(train_box, level->camera.position, 1)) {
-        level->camera.position.y = 4;
-    } else {
+    float curb          = -20.0;
+    float train_start_z = -20.5;
+    float train_end_z   = -23.0;
+    float door_start    =  -3.5;
+    float door_end      =  +0.5;
+
+    if (train->player_in) {
+        camera->y = 4;
+
+        if (camera->z > train_start_z) { // trying back out
+            if (train->closed) {
+                camera->z = train_start_z;
+            } else {
+                if (camera->x >= door_start && camera->x <= door_end) {
+                    train->player_in = false;
+                } else {
+                    camera->z = train_start_z;
+                }
+            }
+        }
+
+        if (camera->z < train_end_z)
+            camera->z = train_end_z;
+    } else if (camera->z < curb) { // trying to go in
+        if (train->closed) {
+            camera->z = curb;
+        } else { 
+            if (camera->x >= door_start && camera->x <= door_end) {
+                if (camera->z < train_start_z)
+                    train->player_in = true;
+            } else {
+                camera->z = curb;
+            }
+        }
+    }
+
+    if (!train->player_in && camera->z > curb) {
         Ray ray = {};
 
         ray.position = level->camera.position;
@@ -347,7 +432,6 @@ void chapter_5_update_player(Game *game, float dt) {
         }
     }
 
-    /*
     printf("{%.2ff, %.2ff, %.2ff} {%.2ff, %.2ff, %.2ff}\n",
            level->camera.position.x,
            level->camera.position.y,
@@ -355,7 +439,6 @@ void chapter_5_update_player(Game *game, float dt) {
            level->camera.target.x,
            level->camera.target.y,
            level->camera.target.z);
-           */
 }
 
 void chapter_5_update(Game *game, float dt) {
@@ -367,6 +450,26 @@ void chapter_5_update(Game *game, float dt) {
                 level->state = CHAPTER_5_STATE_TRAIN_STATION_1;
             }
         } break;
+        case CHAPTER_5_STATE_TRAIN_STATION_1: {
+            if (level->black_screen_timer > 0) {
+                level->black_screen_timer -= dt;
+                if (level->black_screen_timer <= 0) {
+                    level->black_screen_timer = 0.5;
+                    level->state = CHAPTER_5_STATE_TRAIN_STATION_2;
+                }
+            }
+
+            Chapter_5_Train *train = &level->train;
+
+            if (IsKeyPressed(KEY_K))
+                train->position.x = 0, train->closed = false;
+            if (IsKeyPressed(KEY_C))
+                train->closed = true;
+
+            chapter_5_update_train(train, dt);
+            chapter_5_update_clerk(game, dt);
+            chapter_5_update_player(game, dt);
+        } break;
         case CHAPTER_5_STATE_TRAIN_STATION_2: {
             if (level->black_screen_timer > 0) {
                 level->black_screen_timer -= dt;
@@ -374,26 +477,6 @@ void chapter_5_update(Game *game, float dt) {
                     level->black_screen_timer = 0;
                     chapter_5_init_positions(game);
                     level->clerk.has_real_head = true;
-                }
-            }
-
-            if (IsKeyDown(KEY_P)) {
-                if (level->train.position.x < 0) {
-                    level->train.position.x += 2.5;
-                    if (level->train.position.x > 0)
-                        level->train.position.x = 0;
-                }
-            }
-
-            chapter_5_update_clerk(game, dt);
-            chapter_5_update_player(game, dt);
-        } break;
-        case CHAPTER_5_STATE_TRAIN_STATION_1: {
-            if (level->black_screen_timer > 0) {
-                level->black_screen_timer -= dt;
-                if (level->black_screen_timer <= 0) {
-                    level->black_screen_timer = 0.5;
-                    level->state = CHAPTER_5_STATE_TRAIN_STATION_2;
                 }
             }
 
@@ -433,48 +516,7 @@ void chapter_5_draw(Game *game) {
 
             // Draw train
 
-            //DrawModel(level->train.model, level->train.position, 1, WHITE);
-            /*
-            DrawMesh(level->train.model.meshes[0],
-                     level->train.model.materials[1],
-                     MatrixTranslate(level->train.position.x,
-                                     level->train.position.y,
-                                     level->train.position.z));
-                                     */
-
-            /*
-            Matrix *transforms = (Matrix *)arena_push(&game->frame_arena, level->train.instances * sizeof(Matrix));
-
-            Vector3 p = level->train.position;
-            for (int i = 0; i < level->train.instances; i++) {
-                transforms[i] = MatrixTranslate(p.x, p.y, p.z);
-                //p.x += level->train.bounding_box.max.x - level->train.bounding_box.min.x;
-            }
-
-            DrawMeshInstanced(level->train.model.meshes[0],
-                              level->train.model.materials[1],
-                              transforms,
-            1);
-
-            Matrix transforms[1] = {MatrixIdentity()};
-            DrawMeshInstanced(level->train.model.meshes[0],
-                              level->train.model.materials[1],
-                              transforms,
-                              1);
-            */
-
-
-            int length = level->train.bounding_box.max.x - level->train.bounding_box.min.x + 1;
-
-            for (int i = 0; i < level->train.instances; i++) {
-                int k = i - level->train.instances/2;
-
-                DrawMesh(level->train.model.meshes[0],
-                         level->train.model.materials[1],
-                         MatrixTranslate(level->train.position.x + k * length,
-                                         level->train.position.y,
-                                         level->train.position.z));
-            }
+            chapter_5_draw_train(&level->train);
 
             EndShaderMode();
 
@@ -572,4 +614,64 @@ void chapter_5_begin_black_transition(void *game_ptr) {
     Level_Chapter_5 *level = (Level_Chapter_5 *)game->level;
     
     level->black_screen_timer = 2;
+}
+
+void chapter_5_draw_train(Chapter_5_Train *train) {
+    int length = train->bounding_box.max.x - train->bounding_box.min.x + 1;
+
+    for (int i = 0; i < train->instances; i++) {
+        int k = i - train->instances/2;
+
+        DrawMesh(train->model.meshes[0],
+                 train->model.materials[1],
+                 MatrixTranslate(train->position.x + k * length,
+                                 train->position.y,
+                                 train->position.z));
+    }
+
+    float openness = train->door_openness * 2;
+
+    {
+        Vector3 door_position = train->position;
+        door_position = Vector3Add(door_position, {-1.2f, 0.3f, 1.9f});
+
+        door_position.x += openness;
+
+        DrawMesh(train->door_model.meshes[0],
+                 train->door_model.materials[1],
+                 MatrixTranslate(door_position.x,
+                                 door_position.y,
+                                 door_position.z));
+    }
+
+    {
+        Vector3 door_position = train->position;
+        door_position = Vector3Add(door_position, {-2.9f, 0.3f, 1.9f});
+
+        door_position.x -= openness;
+
+        float x_inverse_floats[] = {
+            -1, 0, 0, 0,
+             0, 1, 0, 0,
+             0, 0, 1, 0,
+             0, 0, 0, 1,
+        };
+        Matrix x_inverse;
+        memcpy(&x_inverse, x_inverse_floats, sizeof(x_inverse_floats));
+
+        Matrix translate = MatrixTranslate(door_position.x,
+                                           door_position.y,
+                                           door_position.z);
+
+        DrawMesh(train->door_model.meshes[0],
+                 train->door_model.materials[1],
+                 MatrixMultiply(x_inverse, translate));
+    }
+}
+
+void chapter_5_train_move(void *game_ptr) {
+    Game *game = (Game *)game_ptr;
+    Level_Chapter_5 *level = (Level_Chapter_5 *)game->level;
+
+    level->train.moving = true;
 }
