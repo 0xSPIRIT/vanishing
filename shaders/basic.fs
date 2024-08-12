@@ -29,11 +29,12 @@ struct Light {
 
 // Input lighting values
 uniform Light lights[MAX_LIGHTS];
-uniform vec4 ambient;
 uniform vec3 viewPos;
 
-void main()
-{
+void main() {
+    if (colDiffuse.rgb == vec3(1,0,0))
+        discard;
+
     // Texel color fetching from texture sampler
     vec4 texelColor = texture(texture0, fragTexCoord);
     vec3 lightDot = vec3(0.0);
@@ -43,20 +44,15 @@ void main()
 
     // NOTE: Implement here your fragment shader code
 
-    for (int i = 0; i < MAX_LIGHTS; i++)
-    {
-        if (lights[i].enabled == 1)
-        {
+    for (int i = 0; i < MAX_LIGHTS; i++) {
+        if (lights[i].enabled == 1) {
             float dist = length(lights[i].position - fragPosition);
             light_intensity += lights[i].color.rgb * pow(0.92, dist);
         }
     }
 
+    const float ambient = 0.10;
+    light_intensity = max(light_intensity, ambient);
+
     finalColor = vec4(texelColor.rgb * colDiffuse.rgb * light_intensity, 1);
-
-    //finalColor = (texelColor*((colDiffuse + vec4(specular, 1.0))*vec4(lightDot, 1.0)));
-    //finalColor += texelColor*(ambient/8.0)*colDiffuse;
-
-    // Gamma correction
-    //finalColor = pow(finalColor, vec4(1.0/2.2));
 }

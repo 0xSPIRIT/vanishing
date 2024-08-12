@@ -1247,14 +1247,13 @@ void chapter_2_draw(Game *game) {
 
     if (level->show_window) {
         Texture2D *texture = 0;
-        float scale = 1;
 
         texture = &atari_assets.textures[11];
         game->textbox_alpha = 255;
 
         assert(texture);
 
-        DrawTextureEx(*texture, {}, 0, scale, WHITE);
+        DrawTextureEx(*texture, {}, 0, 1, WHITE);
     } else {
         BeginMode2D(level->camera);
 

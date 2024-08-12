@@ -558,7 +558,7 @@ void chapter_3_init(Game *game) {
 
     level->camera.zoom = 1;
 
-    game->entities = make_array<Entity*>(512);
+    game->entities = make_array<Entity*>(64);
 
     float speed = 30;
 

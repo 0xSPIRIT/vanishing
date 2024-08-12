@@ -487,7 +487,7 @@ void default_entity_draw(Entity *e) {
     }
 }
 
-void draw_popup(const char *text) {
+void draw_popup(const char *text, Color color) {
     int pad = 6;
 
     Vector2 size = MeasureTextEx(atari_font, text, atari_font.baseSize, 1);
@@ -495,7 +495,12 @@ void draw_popup(const char *text) {
         render_width/2 - size.x/2,
         render_height - size.y - pad
     };
-    DrawTextEx(atari_font, text, pos, atari_font.baseSize, 1, GOLD);
+
+    DrawTextEx(atari_font, text, pos, atari_font.baseSize, 1, color);
+}
+
+void draw_popup(const char *text) {
+    draw_popup(text, GOLD);
 }
 
 void atari_update_and_draw_textbox(Game *game) {
@@ -588,6 +593,12 @@ void atari_mid_text_list_init(Text_List *list, char *line,
     list->take_keyboard_focus = false;
 
     text_list_init(list, 0, line, next);
+}
+
+void model_set_shader(Model *model, Shader shader) {
+    for (int i = 0; i < model->materialCount; i++) {
+        model->materials[i].shader = shader;
+    }
 }
 
 #include "chapter_1.cpp"

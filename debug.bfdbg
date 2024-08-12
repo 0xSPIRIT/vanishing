@@ -1,7 +1,7 @@
 FileVersion = 1
 LastConfig = "Debug"
 LastPlatform = "Win64"
-RecentFilesList = ["c:\\dev\\vanishing\\chapter_5.cpp", "c:\\dev\\vanishing\\util.cpp", "c:\\dev\\vanishing\\game.cpp", "c:\\dev\\vanishing\\main.cpp", "Disassembly"]
+RecentFilesList = ["c:\\dev\\vanishing\\util.cpp", "c:\\dev\\vanishing\\main.cpp", "c:\\dev\\vanishing\\chapter_5.cpp", "c:\\dev\\vanishing\\game.cpp", "Disassembly"]
 
 [MainWindow]
 X = 614
@@ -24,22 +24,23 @@ DefaultDocumentsTabbedView = true
 Type = "TabbedView"
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
+Active = true
 TabLabel = "util.cpp"
-TabWidth = 81.33334
+TabWidth = 71.33334
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\util.cpp"
-CursorPos = 3372
+CursorPos = 3464
 VertPos = 3082.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "game.cpp"
-TabWidth = 94.66666
+TabWidth = 84.66666
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\game.cpp"
-CursorPos = 18067
-VertPos = 15019.0
+CursorPos = 18227
+VertPos = 15180.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "main.cpp"
@@ -47,8 +48,8 @@ TabWidth = 81.33334
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\main.cpp"
-CursorPos = 4267
-VertPos = 3703.0
+CursorPos = 980
+VertPos = 2645.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "Disassembly"
@@ -57,14 +58,13 @@ TabIsPinned = false
 Type = "DisassemblyPanel"
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
-Active = true
 TabLabel = "chapter_5.cpp"
 TabWidth = 108.0
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\chapter_5.cpp"
-CursorPos = 11938
-VertPos = 6670.0
+CursorPos = 25732
+VertPos = 13570.0
 
 [[MainDockingFrame.DockedWidgets]]
 RequestedWidth = 830.0
@@ -93,7 +93,7 @@ TabWidth = 85.33334
 TabIsPinned = false
 Type = "WatchPanel"
 Columns = [{Width = 250.0}, {Width = 362.0}, {Width = 250.0}]
-Items = ["a", "b", "speed", "result", ""]
+Items = ["camera", "pos_vel", ""]
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 TabLabel = "Auto"
@@ -127,11 +127,17 @@ TabIsPinned = false
 Type = "ImmediatePanel"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
-Active = true
 TabLabel = "Output"
 TabWidth = 89.33334
 TabIsPinned = false
 Type = "OutputPanel"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+Active = true
+TabLabel = "Breakpoints"
+TabWidth = 116.0
+TabIsPinned = false
+Type = "BreakpointPanel"
 
 [[BookmarkFolders]]
 Title = ""

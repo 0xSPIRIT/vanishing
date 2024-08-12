@@ -49,7 +49,7 @@ enum Game_Mode {
 };
 Game_Mode game_mode = GAME_MODE_INVALID;
 
-int chapter = 5;
+int chapter = 4;
 
 Font global_font, comic_sans, bitmap_font;
 
@@ -57,7 +57,7 @@ bool toggled_fullscreen_this_frame = false;
 bool fullscreen = false;
 
 enum Keyboard_Focus {
-    NO_KEYBOARD_FOCUS, // we're free to move around
+    NO_KEYBOARD_FOCUS,      // we're free to move around
     KEYBOARD_FOCUS_TEXTBOX, // a textbox is currently opened.
 };
 

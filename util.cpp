@@ -197,6 +197,13 @@ int sign(float a) {
     return 0;
 }
 
+// An approximation.
+// If you're feeling frisky, replace it with lerp(a, b, 1 - f^dt),
+// where f = remaining percentage after one second.
+float lerp_dt(float a, float b, float t, float dt) {
+    return Lerp(a, b, 60 * dt * t);
+}
+
 Color lerp_color(Color a, Color b, double t) {
     Color result = a;
 

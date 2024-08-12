@@ -137,11 +137,18 @@ Text Appears:
 - You're at the dinner party again and you talk to one of the people;
   they say things way differently now that they don't have triangle
   heads.
-- You enter another exit door.
+- You enter another train, and get off once more.
 - You're in a modern-style minimalist house similar to houses in
   The Beginner's Guide.
 
-  J is a triangle-headed person.
+  Here, you play a minigame where you do repetitive tasks in
+  an attempt to calm down, similar to the cleaning game in
+  the Beginner's Guide.
+
+  J is a triangle-headed person, and you have dialogue in
+  between doing the cleaning. It's about trying to find
+  meaning in the repetitive nature of things, a direct
+  response to Chapter 3.
 
   J: "Have you found what you're looking for?"
      "Purpose?"

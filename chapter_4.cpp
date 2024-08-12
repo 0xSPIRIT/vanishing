@@ -252,9 +252,10 @@ void chapter_4_init(Game *game) {
     game->text[9].font_spacing = 4;
     game->text[9].scale        = 0.125;
     game->text[9].alpha_speed  = 0.125;
+    game->text[9].scroll_speed = 120;
     game->text[9].color        = RED;
     game->text[9].center_text  = true;
-    game->text[9].scroll_type  = EntireLine;
+    game->text[9].scroll_type  = LetterByLetter;
     game->text[9].render_type  = Bare;
     game->text[9].location     = Top;
     game->text[9].take_keyboard_focus = true;
@@ -294,7 +295,7 @@ void chapter_4_init(Game *game) {
 
     chapter_4_window_text(true,
                           &game->text[11],
-                          "I- well... I don't know how that will...",
+                          "I...",
                           WHITE,
                           &game->text[12]);
 
