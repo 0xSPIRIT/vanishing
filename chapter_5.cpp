@@ -47,16 +47,21 @@ struct Chapter_5_Train {
 };
 
 // Represents both the guy and the chair.
-struct Chapter_5_Guy {
-    bool  is_male;
-    float table_angle;
+struct Chapter_5_Chair {
+    bool   is_male;
+    bool   is_penny;
+    bool   empty;
+    float  table_angle;
     struct Chapter_5_Table *table;
 };
 
 struct Chapter_5_Table {
-    Vector3       position;
-    int           num_guys;
-    Chapter_5_Guy guys[16];
+    Vector3         position;
+    int             num_chairs;
+    Chapter_5_Chair chairs[16];
+
+    int  text_index; // index into game->text
+    bool talked;
 };
 
 struct Level_Chapter_5 {
@@ -66,6 +71,7 @@ struct Level_Chapter_5 {
     // Dinner Party scene
     Chapter_5_Table *tables;
     int              num_tables;
+    bool             sitting_at_table;
 
     struct Models {
         Model guy_sitting,
@@ -78,6 +84,7 @@ struct Level_Chapter_5 {
     } models;
 
     bool     door_popup;
+    bool     talk_popup;
 
     int      state;
 
@@ -125,18 +132,42 @@ int chapter_5_train_length(Chapter_5_Train *train) {
     return train->bounding_box.max.x - train->bounding_box.min.x + 1;
 }
 
-void chapter_5_table(Chapter_5_Table *table, Vector2 pos, int num_guys) {
-    assert(num_guys < StaticArraySize(table->guys));
+//
+
+void chapter_5_sit_at_table(void *game_ptr) {
+    Game *game = (Game *)game_ptr;
+    Level_Chapter_5 *level = (Level_Chapter_5 *)game->level;
+
+    level->sitting_at_table = true;
+
+    Vector3 *camera = &level->camera.position;
+
+    camera->x = -33.5f;
+    camera->y = 1.0f;
+    camera->z = 2.19f;
+
+    Vector3 *target = &level->camera.target;
+
+    target->x = -32.98f;
+    target->y = 0.81f; // for some reason it adds 1.0f, probably because of camera->y. so our desired value is actually 1.81f.
+    target->z = 3.54f;
+}
+
+void chapter_5_table(Chapter_5_Table *table, Vector2 pos, int num_chairs, float angle_offset) {
+    assert(num_chairs < StaticArraySize(table->chairs));
 
     table->position = { pos.x, 0, pos.y };
-    table->num_guys = num_guys;
+    table->num_chairs = num_chairs;
+    table->text_index = -1;
 
-    for (int i = 0; i < num_guys; i++) {
-        Chapter_5_Guy *guy = &table->guys[i];
+    for (int i = 0; i < num_chairs; i++) {
+        Chapter_5_Chair *chair = &table->chairs[i];
 
-        guy->is_male = rand()%2==0;
-        guy->table_angle = i * 2 * PI / (float)num_guys;
-        guy->table = table;
+        chair->is_male = rand()%2==0;
+        chair->table_angle = i * 2 * PI / (float)num_chairs;
+        chair->table_angle += angle_offset;
+
+        chair->table = table;
     }
 }
 
@@ -161,7 +192,7 @@ void chapter_5_train_station_init_positions(Game *game, bool refresh) {
     level->camera.up         = { 0, 1, 0 };
     level->camera.fovy       = FOV_DEFAULT;
     level->camera.projection = CAMERA_PERSPECTIVE;
-    
+
     if (refresh) {
         level->camera.position = {13.59f, 4.00f, -14.02f};
         level->camera.target = {71.95f, 7.18f, -15.17f};
@@ -236,7 +267,6 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
             train->moving       = true;
             train->player_in    = true;
             train->able_to_close = false;
-            //level->train.player_in    = false;
         } break;
         case CHAPTER_5_SCENE_DINNER_PARTY: {
             level->shader = LoadShader("shaders/basic.vs", "shaders/dinner.fs");
@@ -267,8 +297,38 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
 
             Chapter_5_Table *tables = level->tables;
             for (int i = 0; i < level->num_tables; i++) {
-                chapter_5_table(tables+i, table_positions[i], 2 + (i+2) % 5);
+                int num_chairs = 2 + (i+2) % 5;
+
+                float angle_offset = 0;
+
+                if (i == 3) {
+                    num_chairs = 4;
+                    angle_offset = PI / 4;
+                }
+
+                chapter_5_table(tables+i, table_positions[i], num_chairs, angle_offset);
             }
+
+            level->tables[3].chairs[2].empty = true;
+            level->tables[3].chairs[0].is_male = false;
+            level->tables[3].chairs[1].is_male = true;
+            level->tables[3].chairs[3].is_male = true;
+
+            // penny
+            level->tables[5].chairs[1].is_penny = true;
+            level->tables[5].chairs[1].is_male = false;
+
+            level->tables[0].text_index = 34;
+            level->tables[1].text_index = 32;
+            level->tables[2].text_index = 30;
+            level->tables[3].text_index = 53;
+            level->tables[4].text_index = 37;
+            level->tables[5].text_index = 46;
+            level->tables[6].text_index = 45;
+            level->tables[7].text_index = 40;
+            level->tables[8].text_index = 49;
+            level->tables[9].text_index = 51;
+            level->tables[10].text_index = 52;
         } break;
         case CHAPTER_5_SCENE_COTTAGE: {
         } break;
@@ -313,6 +373,8 @@ void chapter_5_text(Text_List *list, char *speaker, char *line, float scroll_spe
     list->textbox_height = render_height / 3.5f;
 }
 
+// init chapter 5
+
 void chapter_5_init(Game *game) {
     Level_Chapter_5 *level = (Level_Chapter_5 *)game->level;
 
@@ -332,16 +394,16 @@ void chapter_5_init(Game *game) {
     level->scenes[1]           = LoadModel("models/chap_5_dinner.glb");
     level->scenes[2]           = LoadModel("models/dinner_party.glb");
 
-    level->models.train         = LoadModel("models/train.glb");
-    level->models.train_door    = LoadModel("models/train_door.glb");
+    level->models.train        = LoadModel("models/train.glb");
+    level->models.train_door   = LoadModel("models/train_door.glb");
 
     level->clerk.body          = LoadModel("models/guy.glb");
 
-    level->models.guy_sitting   = LoadModel("models/guy_sitting.glb");
-    level->models.chair         = LoadModel("models/chair.glb");
-    level->models.table         = LoadModel("models/dinner_table.glb");
-    level->models.pyramid_head  = LoadModel("models/pyramid_head.glb");
-    level->models.real_head     = LoadModel("models/real_head.glb");
+    level->models.guy_sitting  = LoadModel("models/guy_sitting.glb");
+    level->models.chair        = LoadModel("models/chair.glb");
+    level->models.table        = LoadModel("models/dinner_table.glb");
+    level->models.pyramid_head = LoadModel("models/pyramid_head.glb");
+    level->models.real_head    = LoadModel("models/real_head.glb");
 
     chapter_5_window_text(true,
                           &game->text[0],
@@ -457,6 +519,146 @@ void chapter_5_init(Game *game) {
                    30,
                    nullptr);
     game->text[22].callbacks[0] = chapter_5_train_move;
+
+    // Dinner table dialogue
+
+    chapter_5_text(&game->text[30],
+                   "Jenny",
+                   "...\rUm... hi?",
+                   30,
+                   &game->text[31]);
+    chapter_5_text(&game->text[31],
+                   "Mark",
+                   "What's your problem?",
+                   30,
+                   nullptr);
+
+    chapter_5_text(&game->text[32],
+                   "Kevin",
+                   "We didn't think you'd come.",
+                   30,
+                   &game->text[33]);
+    chapter_5_text(&game->text[33],
+                   "Chase",
+                   "What's that supposed to mean?",
+                   30,
+                   nullptr);
+
+    chapter_5_text(&game->text[34],
+                   "Kevin",
+                   "Oh it's, uh, you!\rWhat's your name again?",
+                   30,
+                   &game->text[35]);
+    chapter_5_text(&game->text[35],
+                   "Chase",
+                   "We went to the same class for years,\nKevin.",
+                   30,
+                   &game->text[36]);
+    chapter_5_text(&game->text[36],
+                   "Kevin",
+                   "...",
+                   30,
+                   nullptr);
+
+    chapter_5_text(&game->text[37],
+                   "Chase",
+                   "Is there any space for me?",
+                   30,
+                   &game->text[38]);
+    chapter_5_text(&game->text[38],
+                   "Amy",
+                   "Um... who are you?",
+                   30,
+                   &game->text[39]);
+    chapter_5_text(&game->text[39],
+                   "Chase",
+                   "...",
+                   30,
+                   nullptr);
+
+    chapter_5_text(&game->text[40],
+                   "Kenny",
+                   "Oh, hey, you.",
+                   30,
+                   &game->text[41]);
+    chapter_5_text(&game->text[41],
+                   "Chase",
+                   "Hi Kenny, what's up?",
+                   30,
+                   &game->text[42]);
+    chapter_5_text(&game->text[42],
+                   "Kenny",
+                   "If you're looking for Eleanor and\nthe rest of them, they're somewhere back\nthere.",
+                   30,
+                   &game->text[43]);
+    chapter_5_text(&game->text[43],
+                   "Chase",
+                   "... Uh, thanks.",
+                   30,
+                   &game->text[44]);
+    chapter_5_text(&game->text[44],
+                   "Kenny",
+                   "So anyways, as I was saying, Darlene,",
+                   30,
+                   nullptr);
+
+    chapter_5_text(&game->text[45],
+                   "Joanne",
+                   "What's your problem?",
+                   30,
+                   nullptr);
+
+    chapter_5_text(&game->text[46],
+                   "Penny",
+                   "Hi, Chase.",
+                   30,
+                   &game->text[47]);
+    chapter_5_text(&game->text[47],
+                   "Chase",
+                   "...\rOh gosh, hi Penny.\rI didn't realize you were gonna be here.",
+                   30,
+                   &game->text[48]);
+    chapter_5_text(&game->text[48],
+                   "Penny",
+                   "We're not that close yet.\rCall me Penelope.\rCreep.",
+                   30,
+                   nullptr);
+
+
+    chapter_5_text(&game->text[49],
+                   "Luke",
+                   "Why are you just walking around,\ntalking to random people?\rFind somewhere to sit down, man.\rIt's embarassing.",
+                   30,
+                   &game->text[50]);
+    chapter_5_text(&game->text[50],
+                   "Chase",
+                   "...\rOh.",
+                   30,
+                   nullptr);
+
+    chapter_5_text(&game->text[51],
+                   "Adam",
+                   "... Hi?",
+                   30,
+                   nullptr);
+
+    chapter_5_text(&game->text[52],
+                   "Lorane",
+                   "... What?",
+                   30,
+                   nullptr);
+
+    String choices[] = { const_string("Sit now"), const_string("No, look around more first") };
+    Text_List *next[] = { nullptr, nullptr };
+    void (*hooks[2])(void*) = { chapter_5_sit_at_table, nullptr };
+
+    atari_choice_text_list_init(&game->text[53],
+                                "Eleanor",
+                                "Oh hey Chase!\rWe have a seat here,\ndo you wanna sit now or?",
+                                choices,
+                                next,
+                                hooks,
+                                2);
 
     chapter_5_goto_scene(game, CHAPTER_5_SCENE_DINNER_PARTY);
 }
@@ -618,22 +820,34 @@ void chapter_5_draw_table(Level_Chapter_5 *level, Chapter_5_Table *table) {
     DrawModel(level->models.table, table->position, 1, WHITE);
 
     // Draw the chairs
-    Model *chair = &level->models.chair;
-    Model *person = &level->models.guy_sitting;
-    Model *head = &level->models.pyramid_head;
+    Model *chair_model = &level->models.chair;
+    Model *person_model = &level->models.guy_sitting;
+    Model *pyramid_head_model = &level->models.pyramid_head;
+    Model *real_head_model = &level->models.real_head;
 
-    for (int i = 0; i < table->num_guys; i++) {
-        Chapter_5_Guy *guy = &table->guys[i];
+    for (int i = 0; i < table->num_chairs; i++) {
+        Chapter_5_Chair *chair = &table->chairs[i];
+
+        Model *head_model = pyramid_head_model;
 
         Color color = PINK;
-        if (guy->is_male) {
+        if (chair->is_male) {
             color = BLUE;
+        }
+
+        Color head_color = WHITE;
+        float head_size = 0.75;
+
+        if (chair->is_penny) {
+            head_model = real_head_model;
+            head_color = color;
+            head_size = 1;
         }
 
         float radius = 1.5;
 
-        float x = table->position.x + radius * cosf(guy->table_angle);
-        float z = table->position.z + radius * sinf(guy->table_angle);
+        float x = table->position.x + radius * cosf(chair->table_angle);
+        float z = table->position.z + radius * sinf(chair->table_angle);
 
         float angle = atan2f(table->position.z - z, table->position.x - x);
 
@@ -645,9 +859,11 @@ void chapter_5_draw_table(Level_Chapter_5 *level, Chapter_5_Table *table) {
         head_angle += 0.02f * sine;
 
         Vector3 chair_pos = { x, 0, z };
-        DrawModelEx(*chair, chair_pos, {0,1,0}, RAD2DEG * -angle, {1,1,1}, WHITE);
-        DrawModelEx(*person, chair_pos, {0,1,0}, RAD2DEG * -angle, {1,1,1}, color);
-        DrawModelEx(*head, Vector3Add(chair_pos, {0,1.6f,0}), {0,1,0}, 90 + RAD2DEG * -head_angle, {0.75f,0.75f,0.75f}, WHITE);
+        DrawModelEx(*chair_model,  chair_pos, {0,1,0}, RAD2DEG * -angle, {1,1,1}, WHITE);
+        if (!chair->empty) {
+            DrawModelEx(*person_model, chair_pos, {0,1,0}, RAD2DEG * -angle, {1,1,1}, color);
+            DrawModelEx(*head_model, Vector3Add(chair_pos, {0,1.6f,0}), {0,1,0}, 90 + RAD2DEG * -head_angle, {head_size,head_size,head_size}, head_color);
+        }
     }
 }
 
@@ -1001,13 +1217,46 @@ void chapter_5_update_player_dinner_party(Game *game, float dt) {
 
     Vector3 stored_camera_pos = level->camera.position;
 
-    chapter_5_update_camera(&level->camera, dt);
+    bool can_move = (game->current == 0);
+
+    if (can_move && !level->sitting_at_table) {
+        chapter_5_update_camera(&level->camera, dt);
+    }
+
     Vector3 velocity = Vector3Subtract(level->camera.position, stored_camera_pos);
     level->camera.position = stored_camera_pos;
 
     apply_3d_velocity(&level->camera, level->scenes[2], velocity);
 
     chapter_5_update_camera_look(&level->camera);
+
+    level->talk_popup = false;
+    
+    if (can_move) {
+        for (int i = 0; i < level->num_tables; i++) {
+            Vector3 table = level->tables[i].position;
+
+            float distance = Vector3Distance(level->camera.position, table);
+
+            if (level->tables[i].text_index != -1 && distance < 4) {
+                if (!level->tables[i].talked || i == 3) {
+                    level->talk_popup = true;
+
+                    if (game->current == 0 && is_action_pressed()) {
+                        game->current = &game->text[level->tables[i].text_index];
+                        level->tables[i].talked = true;
+                    }
+                }
+            }
+        }
+    }
+    printf("{%.2ff, %.2ff, %.2ff} {%.2ff, %.2ff, %.2ff}\n",
+           level->camera.position.x,
+           level->camera.position.y,
+           level->camera.position.z,
+           level->camera.target.x,
+           level->camera.target.y,
+           level->camera.target.z);
 }
 
 void chapter_5_update(Game *game, float dt) {
@@ -1138,10 +1387,10 @@ void chapter_5_draw(Game *game) {
             EndMode3D();
 
             if (level->door_popup)
-                draw_popup("Open door", BLACK);
+                draw_popup("OPEN DOOR", BLACK);
         } break;
         case CHAPTER_5_SCENE_DINNER_PARTY: {
-            game->textbox_alpha = 180;
+            game->textbox_alpha = 200;
 
             BeginMode3D(level->camera);
 
@@ -1154,6 +1403,10 @@ void chapter_5_draw(Game *game) {
             EndShaderMode();
 
             EndMode3D();
+
+            if (level->talk_popup) {
+                draw_popup("TALK TO THEM\nTALK TO THEM\nTALK TO THEM\nTALK TO THEM\nTALK TO THEM", GOLD, Top);
+            }
         } break;
         case CHAPTER_5_SCENE_COTTAGE: {
         } break;

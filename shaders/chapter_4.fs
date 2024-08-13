@@ -60,10 +60,10 @@ void main()
             if (lights[i].type == LIGHT_POINT) light = normalize(lights[i].position - fragPosition);
 
             float NdotL = max(dot(normal, light), 0.0);
-            lightDot += lights[i].color.rgb*NdotL;
+            lightDot += 0.5 * lights[i].color.rgb*NdotL;
 
             float specCo = 0.0;
-            if (NdotL > 0.0) specCo = pow(max(0.0, dot(viewD, reflect(-(light), normal))), 16.0); // Shine: 16.0
+            if (NdotL > 0.0) specCo = pow(max(0.0, dot(viewD, reflect(-(light), normal))), 2.0); // Shine: 16.0
             specular += specCo;
         }
     }

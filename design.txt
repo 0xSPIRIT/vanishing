@@ -283,9 +283,8 @@ them, a message appears:
 
   You get to the other side.
 
-  You make a phone call.
-
   Wow, I got out! I need to make a phone call.
+
   The future you is written as "You" as the speaker text,
   and the previous you is written as "Chase".
 
@@ -392,6 +391,8 @@ things easily.
   perceiving in a different way than objective reality.
   Their huge eyes watching you make you feel disturbed,
   that's how Chase feels when he's talking to them.
+- Penny is not a triangle head person because he views her as
+  perfect and on a pedestal that is unreachable.
 - The 3D graphics is used to heighten tension and give a
   pacing difference. It's also when Chase is confused.
 

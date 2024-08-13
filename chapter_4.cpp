@@ -500,9 +500,9 @@ void chapter_4_draw(Game *game, float dt) {
         case CHAPTER_4_STATE_BED_1: {
             ClearBackground(BLACK);
 
+                chapter_4_3d_init(game);
             draw_cutscene(&level->bed_cutscene, dt);
             if (!level->bed_cutscene.active) {
-                chapter_4_3d_init(game);
             }
         } break;
         case CHAPTER_4_STATE_3D: {

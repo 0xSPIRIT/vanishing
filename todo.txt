@@ -1,32 +1,28 @@
 TODO : Today
 
-- Next model scene (load)
-- Dinner party (II)
-  x Exit the train onto the new scene
-  x Model the new scene; beginner's guide
-    esque. The point is it's supposed to be
-    contrasted with the previous part.
-    Spiral staircase with blue sky,
-    concrete and modern styles. Spend some
-    time on it to get it right. After the
-  x staircase at the top is a door. When
-    you open it, you're back in the dinner
-    party.
-  - Dinner party scene. Dark. All the heads
-    are looking at you. Model it the same as
-    the 2D version.
-  - They have the same dialogue
-    from before, but then at the end Chase says,
-    "Wait, say that again?".
-  - The screen flashes, and the dialogue is replaced
-    with much more friendly and warm conversation-
-    it's just Chase's mind having a negatively
-    skewed perception. Their heads are also replaced
-    with regular heads.
-  - Thinking: are we going to ignore penny? She should
-    appear, shouldn't she? Or maybe he's still blocked
-    here.
-  - Exit door
+x Do the rest of weird dialogue for each table
+x Sit down at your table, looking at penny.
+- Zoom in to penny slowly while you talk with
+  your friends. You give dry responses and
+  don't act like you're in it totally. Your
+  friends talk about something random but
+  funny.
+- The textbox fades away slowly, as you
+  focus more on her.
+- Reset FOV immediately with the textbox
+  alpha coming back to 255. "CHASE!"
+  "Are you good bro?"
+- Everyone's heads rotates to the whiteness, then...
+- Cut to black, reset dinner scene with
+  regular heads now.
+- The scene is way more joyous, and everyone
+  is polite. There are more empty seats.
+- You sit down with your friends and you
+  are much more engaged, you're talkative,
+  and are having fun. Slow fade out.
+
+TODO : Later
+
 - Next model scene (load): beginner's guide esque modern house
 - Penny dialogue text
 - Walk through another door, teleport to apartment (atari)

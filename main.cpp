@@ -36,7 +36,7 @@
 #define DIM_3D_WIDTH  320
 #define DIM_3D_HEIGHT 240
 
-#define FOV_DEFAULT 62
+#define FOV_DEFAULT 65
 
 const int default_width  = 192*5;
 const int default_height = 144*5;

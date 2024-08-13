@@ -487,20 +487,35 @@ void default_entity_draw(Entity *e) {
     }
 }
 
-void draw_popup(const char *text, Color color) {
+void draw_popup(const char *text, Color color, Location location) {
     int pad = 6;
 
     Vector2 size = MeasureTextEx(atari_font, text, atari_font.baseSize, 1);
-    Vector2 pos = {
-        render_width/2 - size.x/2,
-        render_height - size.y - pad
-    };
+    Vector2 pos = {};
+
+    if (location == Bottom) {
+        pos = {
+            render_width/2 - size.x/2,
+            render_height - size.y - pad
+        };
+    } else if (location == Top) {
+        pos = {
+            render_width/2 - size.x/2,
+            (float)pad
+        };
+    } else {
+        assert(false);
+    }
 
     DrawTextEx(atari_font, text, pos, atari_font.baseSize, 1, color);
 }
 
+void draw_popup(const char *text, Color color) {
+    draw_popup(text, color, Bottom);
+}
+
 void draw_popup(const char *text) {
-    draw_popup(text, GOLD);
+    draw_popup(text, GOLD, Bottom);
 }
 
 void atari_update_and_draw_textbox(Game *game) {

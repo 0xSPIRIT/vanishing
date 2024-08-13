@@ -7,7 +7,7 @@
 #define CHOICE_MAX     4
 #define SCROLL_SPEED   30
 
-#define const_string(str) { str, strlen(str) }
+#define const_string(str) { str, sizeof(str)-1 }
 
 enum Scroll_Type {
     LetterByLetter,
@@ -542,7 +542,7 @@ Text_List *text_list_update_and_draw(Text_List *list, void *user_data) {
                 case Bottom: {
                     Vector2 size = MeasureTextEx(*list->font, list->choices[0].text,
                                                  (float)list->font->baseSize, list->font_spacing);
-                    pos = { list->padding*2, -speaker_box_height - list->padding*2 - list->choice_count * size.y };
+                    pos = { list->padding*2, -speaker_box_height - list->padding*3 - list->choice_count * size.y };
                 } break;
             }
             pos = Vector2Add(pos, offset);
@@ -555,6 +555,8 @@ Text_List *text_list_update_and_draw(Text_List *list, void *user_data) {
                 Vector2 size = MeasureTextEx(*list->font, choice->text,
                                              (float)list->font->baseSize,
                                              list->font_spacing);
+
+                DrawRectangleRec({pos.x, pos.y, size.x, size.y}, BLACK);
 
                 DrawTextEx(*list->font, choice->text, pos, (float)list->font->baseSize, list->font_spacing, color);
                 pos.y += size.y;
