@@ -14,9 +14,8 @@ enum Chapter_5_Scene {
 
 struct Chapter_5_Clerk {
     Vector3 position;
+
     Model   body;
-    Model   pyramid_head;
-    Model   real_head;
 
     float saved_head_rotation;
 
@@ -41,17 +40,42 @@ struct Chapter_5_Train {
     float       player_in_timer;
     float       door_openness; // 0.0 to 1.0
     BoundingBox bounding_box;
-    Model       model;
-    Model       door_model;
     int         instances;
     float       setoff_timer;
     float       door_open_alarm;
     Vector3     instance_positions;
 };
 
+// Represents both the guy and the chair.
+struct Chapter_5_Guy {
+    bool  is_male;
+    float table_angle;
+    struct Chapter_5_Table *table;
+};
+
+struct Chapter_5_Table {
+    Vector3       position;
+    int           num_guys;
+    Chapter_5_Guy guys[16];
+};
+
 struct Level_Chapter_5 {
     Chapter_5_Clerk clerk;
     Chapter_5_Train train;
+
+    // Dinner Party scene
+    Chapter_5_Table *tables;
+    int              num_tables;
+
+    struct Models {
+        Model guy_sitting,
+              chair,
+              table,
+              pyramid_head,
+              real_head,
+              train,
+              train_door;
+    } models;
 
     bool     door_popup;
 
@@ -101,6 +125,21 @@ int chapter_5_train_length(Chapter_5_Train *train) {
     return train->bounding_box.max.x - train->bounding_box.min.x + 1;
 }
 
+void chapter_5_table(Chapter_5_Table *table, Vector2 pos, int num_guys) {
+    assert(num_guys < StaticArraySize(table->guys));
+
+    table->position = { pos.x, 0, pos.y };
+    table->num_guys = num_guys;
+
+    for (int i = 0; i < num_guys; i++) {
+        Chapter_5_Guy *guy = &table->guys[i];
+
+        guy->is_male = rand()%2==0;
+        guy->table_angle = i * 2 * PI / (float)num_guys;
+        guy->table = table;
+    }
+}
+
 void chapter_5_train_station_init_positions(Game *game, bool refresh) {
     Level_Chapter_5 *level = (Level_Chapter_5 *)game->level;
 
@@ -144,14 +183,18 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
 
             chapter_5_train_station_init_positions(game, false);
 
-            level->train.position     = {-500, 1.8f, -22.0f};
-            level->train.bounding_box = GetMeshBoundingBox(level->train.model.meshes[0]);
-            level->train.instances    = 5;
-            level->train.setoff_timer = 0;
-            //level->train.door_open_alarm = 2;
-            level->train.closed       = true;
-            level->train.moving       = false;
-            level->train.able_to_close = true;
+            Chapter_5_Train *train = &level->train;
+
+            train->position     = {-500, 1.8f, -22.0f};
+            train->bounding_box = GetMeshBoundingBox(level->models.train.meshes[0]);
+            train->instances    = 5;
+            train->setoff_timer = 0;
+            train->closed       = true;
+            train->moving       = false;
+            train->able_to_close = true;
+
+            train->door_open_alarm = 2;
+            train->position.x = 0;
 
             level->shader = LoadShader("shaders/basic.vs", "shaders/basic.fs");
 
@@ -160,8 +203,8 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
 
             // TODO: Apply to all scenes
             model_set_shader(&level->scenes[0],        level->shader);
-            model_set_shader(&level->train.model,      level->shader);
-            model_set_shader(&level->train.door_model, level->shader);
+            model_set_shader(&level->models.train,      level->shader);
+            model_set_shader(&level->models.train_door, level->shader);
 
             CreateLight(LIGHT_POINT, { 0, 1, 0 }, Vector3Zero(), ORANGE, level->shader);
             CreateLight(LIGHT_POINT, { 0, 1, 9 }, Vector3Zero(), ORANGE, level->shader);
@@ -183,16 +226,49 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
             level->camera.fovy       = FOV_DEFAULT;
             level->camera.projection = CAMERA_PERSPECTIVE;
 
-            level->train.position     = { train_distance, 0, 0};
-            level->train.bounding_box = GetMeshBoundingBox(level->train.model.meshes[0]);
-            level->train.instances    = 5;
-            level->train.setoff_timer = 0;
-            level->train.closed       = true;
-            level->train.moving       = true;
-            level->train.player_in    = true;
+            Chapter_5_Train *train = &level->train;
+
+            train->position     = { train_distance, 0, 0 };
+            train->bounding_box = GetMeshBoundingBox(level->models.train.meshes[0]);
+            train->instances    = 5;
+            train->setoff_timer = 0;
+            train->closed       = true;
+            train->moving       = true;
+            train->player_in    = true;
+            train->able_to_close = false;
             //level->train.player_in    = false;
         } break;
         case CHAPTER_5_SCENE_DINNER_PARTY: {
+            level->shader = LoadShader("shaders/basic.vs", "shaders/dinner.fs");
+            model_set_shader(&level->scenes[2], level->shader);
+
+            level->camera.position   = { 0, 2, 0 };
+            level->camera.target     = { 0.00f, 2.00f, 2.00f };
+            level->camera.up         = { 0, 1, 0 };
+            level->camera.fovy       = FOV_DEFAULT;
+            level->camera.projection = CAMERA_PERSPECTIVE;
+
+            Vector2 table_positions[] = {
+                {-39.0f, -3.7f}, 
+                {-25.6f, -4.4f}, 
+                {-13.0f, -1.0f}, 
+                {-32.5f, +3.2f}, 
+                {-22.1f, +2.3f}, 
+                {-30.0f, +11.7f},
+                {-21.0f, +12.5f},
+                {-12.7f, +9.6f}, 
+                {-33.2f, +20.2f},
+                {-22.4f, +22.3f},
+                {-13.9f, +19.6f},
+            };
+
+            level->num_tables = StaticArraySize(table_positions);
+            level->tables = (Chapter_5_Table *)arena_push(&game->level_arena, sizeof(Chapter_5_Table) * level->num_tables);
+
+            Chapter_5_Table *tables = level->tables;
+            for (int i = 0; i < level->num_tables; i++) {
+                chapter_5_table(tables+i, table_positions[i], 2 + (i+2) % 5);
+            }
         } break;
         case CHAPTER_5_SCENE_COTTAGE: {
         } break;
@@ -252,13 +328,20 @@ void chapter_5_init(Game *game) {
     game->textbox_target = LoadRenderTexture(render_width, render_height);
     game->textbox_alpha = 255;
 
-    level->train.model        = LoadModel("models/train.glb");
-    level->scenes[0]          = LoadModel("models/train_station.glb");
-    level->scenes[1]          = LoadModel("models/chap_5_dinner.glb");
-    level->train.door_model   = LoadModel("models/train_door.glb");
-    level->clerk.body         = LoadModel("models/guy.glb");
-    level->clerk.real_head    = LoadModel("models/real_head.glb");
-    level->clerk.pyramid_head = LoadModel("models/pyramid_head.glb");
+    level->scenes[0]           = LoadModel("models/train_station.glb");
+    level->scenes[1]           = LoadModel("models/chap_5_dinner.glb");
+    level->scenes[2]           = LoadModel("models/dinner_party.glb");
+
+    level->models.train         = LoadModel("models/train.glb");
+    level->models.train_door    = LoadModel("models/train_door.glb");
+
+    level->clerk.body          = LoadModel("models/guy.glb");
+
+    level->models.guy_sitting   = LoadModel("models/guy_sitting.glb");
+    level->models.chair         = LoadModel("models/chair.glb");
+    level->models.table         = LoadModel("models/dinner_table.glb");
+    level->models.pyramid_head  = LoadModel("models/pyramid_head.glb");
+    level->models.real_head     = LoadModel("models/real_head.glb");
 
     chapter_5_window_text(true,
                           &game->text[0],
@@ -375,7 +458,7 @@ void chapter_5_init(Game *game) {
                    nullptr);
     game->text[22].callbacks[0] = chapter_5_train_move;
 
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_STAIRCASE);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_DINNER_PARTY);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {
@@ -479,6 +562,7 @@ void chapter_5_update_train(Game *game, float dt) {
 
     if (train->door_open_alarm > 0) {
         train->door_open_alarm -= dt;
+
         if (train->door_open_alarm <= 0) {
             train->door_open_alarm = 0;
             train->closed = false;
@@ -503,13 +587,14 @@ void chapter_5_update_train(Game *game, float dt) {
         if (train->setoff_timer <= 0) {
             train->setoff_timer = 0;
             train->moving = true;
-
             level->ticket = false;
         }
     }
 
-    if (train->moving && train->player_in) {
-        level->transition_fade += 0.025 * dt;
+    if (level->current_scene == CHAPTER_5_SCENE_TRAIN_STATION &&
+        train->moving && train->player_in)
+    {
+        level->transition_fade += 0.5 * dt;
 
         if (level->transition_fade >= 1) {
             level->transition_fade = 0;
@@ -529,14 +614,51 @@ void chapter_5_update_train(Game *game, float dt) {
                                  1 * dt);
 }
 
-void chapter_5_draw_train(Chapter_5_Train *train) {
+void chapter_5_draw_table(Level_Chapter_5 *level, Chapter_5_Table *table) {
+    DrawModel(level->models.table, table->position, 1, WHITE);
+
+    // Draw the chairs
+    Model *chair = &level->models.chair;
+    Model *person = &level->models.guy_sitting;
+    Model *head = &level->models.pyramid_head;
+
+    for (int i = 0; i < table->num_guys; i++) {
+        Chapter_5_Guy *guy = &table->guys[i];
+
+        Color color = PINK;
+        if (guy->is_male) {
+            color = BLUE;
+        }
+
+        float radius = 1.5;
+
+        float x = table->position.x + radius * cosf(guy->table_angle);
+        float z = table->position.z + radius * sinf(guy->table_angle);
+
+        float angle = atan2f(table->position.z - z, table->position.x - x);
+
+        float head_angle = atan2f(level->camera.position.z - z, level->camera.position.x - x);
+
+        float time = GetTime();
+        float sine = 1.5f * (sinf(time) + sinf(2 * time) + sinf(2.5f * time)); 
+        
+        head_angle += 0.02f * sine;
+
+        Vector3 chair_pos = { x, 0, z };
+        DrawModelEx(*chair, chair_pos, {0,1,0}, RAD2DEG * -angle, {1,1,1}, WHITE);
+        DrawModelEx(*person, chair_pos, {0,1,0}, RAD2DEG * -angle, {1,1,1}, color);
+        DrawModelEx(*head, Vector3Add(chair_pos, {0,1.6f,0}), {0,1,0}, 90 + RAD2DEG * -head_angle, {0.75f,0.75f,0.75f}, WHITE);
+    }
+}
+
+void chapter_5_draw_train(Level_Chapter_5 *level, Chapter_5_Train *train) {
     int length = chapter_5_train_length(train);
 
     for (int i = 0; i < train->instances; i++) {
         int k = i - train->instances/2;
 
-        DrawMesh(train->model.meshes[0],
-                 train->model.materials[1],
+        DrawMesh(level->models.train.meshes[0],
+                 level->models.train.materials[1],
                  MatrixTranslate(train->position.x + k * length,
                                  train->position.y,
                                  train->position.z));
@@ -555,8 +677,8 @@ void chapter_5_draw_train(Chapter_5_Train *train) {
             if (k == 0)
                 door_position.x += openness;
 
-            DrawMesh(train->door_model.meshes[0],
-                     train->door_model.materials[1],
+            DrawMesh(level->models.train_door.meshes[0],
+                     level->models.train_door.materials[1],
                      MatrixTranslate(door_position.x,
                                      door_position.y,
                                      door_position.z));
@@ -583,8 +705,8 @@ void chapter_5_draw_train(Chapter_5_Train *train) {
                                                door_position.y,
                                                door_position.z);
 
-            DrawMesh(train->door_model.meshes[0],
-                     train->door_model.materials[1],
+            DrawMesh(level->models.train_door.meshes[0],
+                     level->models.train_door.materials[1],
                      MatrixMultiply(x_inverse, translate));
         }
     }
@@ -863,6 +985,7 @@ void chapter_5_update_player_staircase(Game *game, float dt) {
     if (can_move)
         chapter_5_update_camera_look(&level->camera);
 
+    /*
     printf("{%.2ff, %.2ff, %.2ff} {%.2ff, %.2ff, %.2ff}\n",
            level->camera.position.x,
            level->camera.position.y,
@@ -870,6 +993,21 @@ void chapter_5_update_player_staircase(Game *game, float dt) {
            level->camera.target.x,
            level->camera.target.y,
            level->camera.target.z);
+           */
+}
+
+void chapter_5_update_player_dinner_party(Game *game, float dt) {
+    Level_Chapter_5 *level = (Level_Chapter_5 *)game->level;
+
+    Vector3 stored_camera_pos = level->camera.position;
+
+    chapter_5_update_camera(&level->camera, dt);
+    Vector3 velocity = Vector3Subtract(level->camera.position, stored_camera_pos);
+    level->camera.position = stored_camera_pos;
+
+    apply_3d_velocity(&level->camera, level->scenes[2], velocity);
+
+    chapter_5_update_camera_look(&level->camera);
 }
 
 void chapter_5_update(Game *game, float dt) {
@@ -917,6 +1055,9 @@ void chapter_5_update(Game *game, float dt) {
             chapter_5_update_train(game, dt);
             chapter_5_update_player_staircase(game, dt);
         } break;
+        case CHAPTER_5_SCENE_DINNER_PARTY: {
+            chapter_5_update_player_dinner_party(game, dt);
+        } break;
         case CHAPTER_5_SCENE_COTTAGE: {
         } break;
     }
@@ -946,17 +1087,17 @@ void chapter_5_draw(Game *game) {
 
                     DrawModelEx(level->clerk.body, level->clerk.position, {0,1,0}, level->clerk.body_rotation, {1,1,1}, WHITE);
 
-                    Model *model = &level->clerk.pyramid_head;
+                    Model *model = &level->models.pyramid_head;
                     Vector3 scale = { 1, 1, 1 };
 
                     if (level->clerk.has_real_head) {
-                        model = &level->clerk.real_head;
+                        model = &level->models.real_head;
                         scale = { 0.75, 0.75, 0.75 };
                     }
 
                     DrawModelEx(model[0], Vector3Add(level->clerk.position, {0,1.95f,0}), {0,1,0}, level->clerk.head_rotation, scale, WHITE);
 
-                    chapter_5_draw_train(&level->train);
+                    chapter_5_draw_train(level, &level->train);
 
                     EndShaderMode();
 
@@ -990,7 +1131,7 @@ void chapter_5_draw(Game *game) {
 
             BeginShaderMode(level->shader);
             DrawModel(level->scenes[1], {}, 1, WHITE);
-            chapter_5_draw_train(&level->train);
+            chapter_5_draw_train(level, &level->train);
 
             EndShaderMode();
 
@@ -998,6 +1139,21 @@ void chapter_5_draw(Game *game) {
 
             if (level->door_popup)
                 draw_popup("Open door", BLACK);
+        } break;
+        case CHAPTER_5_SCENE_DINNER_PARTY: {
+            game->textbox_alpha = 180;
+
+            BeginMode3D(level->camera);
+
+            BeginShaderMode(level->shader);
+            DrawModel(level->scenes[2], {}, 1, WHITE);
+
+            for (int i = 0; i < level->num_tables; i++) {
+                chapter_5_draw_table(level, level->tables + i);
+            }
+            EndShaderMode();
+
+            EndMode3D();
         } break;
         case CHAPTER_5_SCENE_COTTAGE: {
         } break;

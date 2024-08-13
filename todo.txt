@@ -28,7 +28,7 @@ TODO : Today
     here.
   - Exit door
 - Next model scene (load): beginner's guide esque modern house
-- J dialogue text
+- Penny dialogue text
 - Walk through another door, teleport to apartment (atari)
 - Phone call: "I'm you from the future!"
 

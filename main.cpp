@@ -19,6 +19,8 @@
 #include <math.h>
 #include <time.h>
 
+#include <iostream>
+
 #define GLSL_VERSION 330
 
 #ifdef RELEASE
@@ -49,7 +51,7 @@ enum Game_Mode {
 };
 Game_Mode game_mode = GAME_MODE_INVALID;
 
-int chapter = 4;
+int chapter = 5;
 
 Font global_font, comic_sans, bitmap_font;
 
