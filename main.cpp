@@ -38,8 +38,8 @@
 
 #define FOV_DEFAULT 65
 
-const int default_width  = 192*5;
-const int default_height = 144*5;
+const int default_width  = 192*6;
+const int default_height = 144*6;
 
 int render_width = default_width;
 int render_height = default_height;
@@ -89,7 +89,7 @@ Vector2 get_mouse() {
     Vector2 result   = GetMousePosition();
     Rectangle screen = get_screen_rectangle();
 
-    float scale_x = screen.width / (float)render_width;
+    float scale_x = screen.width  / (float)render_width;
     float scale_y = screen.height / (float)render_height;
 
     result.x -= screen.x;
@@ -164,12 +164,13 @@ MainFunction() {
             toggle_fullscreen();
 
         if (IsKeyPressed(KEY_F10)) {
-            Image image = {};
-            image.data = rlReadScreenPixels(GetRenderWidth(), GetRenderHeight());
-            image.width = GetRenderWidth();
-            image.height = GetRenderHeight();
+            Image image   = {};
+
+            image.data    = rlReadScreenPixels(GetRenderWidth(), GetRenderHeight());
+            image.width   = GetRenderWidth();
+            image.height  = GetRenderHeight();
             image.mipmaps = 1;
-            image.format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8;
+            image.format  = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8;
 
             ExportImage(image, "screenshot.png");
         }

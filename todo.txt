@@ -1,20 +1,5 @@
 TODO : Today
 
-x Do the rest of weird dialogue for each table
-x Sit down at your table, looking at penny.
-- Zoom in to penny slowly while you talk with
-  your friends. You give dry responses and
-  don't act like you're in it totally. Your
-  friends talk about something random but
-  funny.
-- The textbox fades away slowly, as you
-  focus more on her.
-- Reset FOV immediately with the textbox
-  alpha coming back to 255. "CHASE!"
-  "Are you good bro?"
-- Everyone's heads rotates to the whiteness, then...
-- Cut to black, reset dinner scene with
-  regular heads now.
 - The scene is way more joyous, and everyone
   is polite. There are more empty seats.
 - You sit down with your friends and you

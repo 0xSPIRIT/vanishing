@@ -77,8 +77,8 @@ enum Entity_Type {
 
 // 2D entity:
 struct Entity {
-    Entity     *next_free;
     Entity_Type type;
+    Entity     *next_free;
     int         texture_id;      // Index into atari_assets.textures[]
     Vector2     pos;
     Rectangle   base_collider;   // At origin. add pos to get collision box
@@ -111,6 +111,11 @@ enum Render_State {
     RENDER_STATE_3D
 };
 
+struct Event {
+    void (*action)(struct Game *);
+    float time;
+};
+
 struct Game {
     Render_State render_state;
 
@@ -125,7 +130,10 @@ struct Game {
     Text_List  text[128];
     Text_List *current;
 
-    uint8_t textbox_alpha;
+    Event events[64];
+    int   num_events;
+
+    float textbox_alpha; // 0.0f to 255.0f
 
     bool  queue_deinit_and_goto_intro;
     void *level; // Points to the specific chapter level struct.
@@ -162,6 +170,25 @@ Keyboard_Focus keyboard_focus(Game *game) {
         return KEYBOARD_FOCUS_TEXTBOX;
     } else {
         return NO_KEYBOARD_FOCUS;
+    }
+}
+
+void add_event(Game *game, void (*action)(Game *), float time) {
+    if (game->num_events+1 <= StaticArraySize(game->events)) {
+        Event event = { action, time };
+        game->events[game->num_events++] = event;
+    }
+}
+
+void tick_events(Game *game, float dt) {
+    for (int i = 0; i < game->num_events; i++) {
+        Event *event = &game->events[i];
+
+        event->time -= dt;
+        if (event->time <= 0) {
+            event->action(game);
+            game->events[i--] = game->events[--game->num_events];
+        }
     }
 }
 
@@ -542,7 +569,7 @@ void atari_update_and_draw_textbox(Game *game) {
                    {0, 0, (float)render_width, (float)render_height},
                    {0, 0},
                    0,
-                   {255, 255, 255, game->textbox_alpha});
+                   {255, 255, 255, (uint8_t)game->textbox_alpha});
 }
 
 void atari_text_list_init(Text_List *list, char *speaker,
@@ -702,6 +729,8 @@ void game_atari_run(Game *game) {
     } else {
         arena_reset(&game->frame_arena);
     }
+
+    tick_events(game, dt);
 
     switch (chapter) {
         case 1: chapter_1_update(game, dt); break;

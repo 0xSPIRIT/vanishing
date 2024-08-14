@@ -173,28 +173,28 @@ Specific Design:
       errors in them and you correct them by clicking
       on them. When you found all the errors, you click
       finish.
-  - Snap cut to eating lunch with your coworkers.
-  - They're talking about random bullshit that you're pretending to
+  x Snap cut to eating lunch with your coworkers.
+  x They're talking about random bullshit that you're pretending to
     care about.
-  - You snap cut back to the minigame again, and do a few more
+  x You snap cut back to the minigame again, and do a few more
     requests.
-  - Then you snap cut to lunch. They're talking more BS.
-  - You snap cut back to the minigame again, and do a few more
+  x Then you snap cut to lunch. They're talking more BS.
+  x You snap cut back to the minigame again, and do a few more
     requests.
-  - Snap cut to lunch. You stop one of them this time, the music
+  x Snap cut to lunch. You stop one of them this time, the music
     cuts, and you talk about a recurring dream that you've had.
     You're in a prison with no way out, and you get a call from
     someone. You know that in the dream you're surprised that
     you get the call, but somehow also infuriated afterwards.
     After you wake up, you always forget who was calling.
-  - You say, "anyways, where's XYZ person?", you haven't seen him.
+  x You say, "anyways, where's XYZ person?", you haven't seen him.
     No one knows what you're talking about...
-  - Chase is frightened.
-  - Stares at open window, increase tension
-  - Cut to driving home (Mareux - Underground esque music)
+  x Chase is frightened.
+  x Stares at open window, increase tension
+  x Cut to driving home (Mareux - Underground esque music)
     (first person but atari, 2 frame loop)
-  - Cut to home. Collapse on bed.
-  - Scroll on your phone for like 30 seconds until
+  x Cut to home. Collapse on bed.
+  x Scroll on your phone for like 30 seconds until
     you pass out.
 
 

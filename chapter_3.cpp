@@ -819,7 +819,7 @@ void chapter_3_init(Game *game) {
                          &game->text[49]);
     atari_text_list_init(&game->text[49],
                          "Chase",
-                         "After one thousand years,\rI finally made enough of\na dent so I could pass.",
+                         "After a thousand years,\rI finally made enough of\na dent so I could pass.",
                          speed,
                          &game->text[50]);
     atari_text_list_init(&game->text[50],
@@ -834,7 +834,7 @@ void chapter_3_init(Game *game) {
                          &game->text[52]);
     atari_text_list_init(&game->text[52],
                          "Chase",
-                         "And then I wake up.",
+                         "Infinite darkness.\r...\rAnd then I wake up.",
                          speed,
                          &game->text[53]);
     atari_text_list_init(&game->text[53],

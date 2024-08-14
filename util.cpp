@@ -204,6 +204,16 @@ float lerp_dt(float a, float b, float t, float dt) {
     return Lerp(a, b, 60 * dt * t);
 }
 
+Vector3 lerp_vector3(Vector3 a, Vector3 b, float t) {
+    Vector3 result;
+
+    result.x = Lerp(a.x, b.x, t);
+    result.y = Lerp(a.y, b.y, t);
+    result.z = Lerp(a.z, b.z, t);
+
+    return result;
+}
+
 Color lerp_color(Color a, Color b, double t) {
     Color result = a;
 
@@ -229,6 +239,10 @@ float rand_range(float start, float end) {
     result += rand_float() * (end - start);
 
     return result;
+}
+
+int rand_int(int min, int max) {
+    return min + rand() % (max - min + 1);
 }
 
 bool colors_equal(Color a, Color b) {
