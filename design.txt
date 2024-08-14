@@ -145,6 +145,19 @@ Text Appears:
   an attempt to calm down, similar to the cleaning game in
   the Beginner's Guide.
 
+  It's very retrospective and you get a bunch of different
+  philosophies on finding meaning in suffering.
+
+  The universe does not stop behaving chaotically just because you
+  don't want it to. We must all come to terms with our situations.
+  It sounds like a fancier way of saying, "shit happens", but it
+  IS our situation, and we MUST find meaning in our predicaments.
+  When bad things happen to you, that is not God disgracing you,
+  or punishing you-- that is being human.
+
+  You also get flashed with the Camus quotes from document review
+  again as well.
+
   J is a triangle-headed person, and you have dialogue in
   between doing the cleaning. It's about trying to find
   meaning in the repetitive nature of things, a direct
@@ -256,7 +269,6 @@ Text Appears: "Patience and Blasphemy"
 
 
 The screen goes RED, with a deafening noise amping up the tension.
-Then BLACKNESS.
 
 Text Appears: "Epilogue"
 
@@ -327,7 +339,7 @@ them, a message appears:
 (Atari graphics)
 Having a smoke with Penny.
 You talk to her about something that interests you both.
-She says "haha you're really funny"
+She says "haha you're really funny" or something
 
                 -- the end --
             created by spiritwolf

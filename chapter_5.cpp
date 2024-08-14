@@ -86,7 +86,7 @@ struct Level_Chapter_5 {
     bool             sitting_at_table;
     bool             rotating_heads;
     float            sitting_timer;
-
+    float            whiteness_overlay;
     bool             black_state;
 
     struct Models {
@@ -156,6 +156,10 @@ void chapter_5_start_sitting_text(Game *game) {
     game->current = &game->text[54];
 }
 
+void chapter_5_start_sitting_text_good(Game *game) {
+    game->current = &game->text[95];
+}
+
 void chapter_5_sit_at_table(void *game_ptr) {
     Game *game = (Game *)game_ptr;
     Level_Chapter_5 *level = (Level_Chapter_5 *)game->level;
@@ -174,14 +178,24 @@ void chapter_5_sit_at_table(void *game_ptr) {
     target->y = 0.81f; // for some reason it adds 1.0f, probably because of camera->y. so our desired value is actually 1.81f.
     target->z = 3.54f;
 
-    add_event(game, chapter_5_start_sitting_text, 3);
+    if (level->good) {
+        add_event(game, chapter_5_start_sitting_text_good, 3);
+    } else {
+        add_event(game, chapter_5_start_sitting_text, 3);
+    }
 }
 
 void chapter_5_dinner_goto_good_part(Game *game) {
     Level_Chapter_5 *level = (Level_Chapter_5 *)game->level;
 
-    level->black_state = false;
     level->good = true;
+    level->sitting_at_table = false;
+    level->penny = nullptr;
+    level->rotating_heads = false;
+    level->sitting_timer = 0;
+    level->whiteness_overlay = 0;
+    level->black_state = false;
+
     chapter_5_goto_scene(game, CHAPTER_5_SCENE_DINNER_PARTY);
 }
 
@@ -191,6 +205,10 @@ void chapter_5_dinner_goto_black(Game *game) {
     level->black_state = true;
 
     add_event(game, chapter_5_dinner_goto_good_part, 0.5f);
+}
+
+void chapter_5_finish_dinner_party(Game *game) {
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_COTTAGE);
 }
 
 void chapter_5_table(Chapter_5_Table *table, Vector2 pos, int num_chairs, float angle_offset) {
@@ -340,7 +358,8 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
             };
 
             level->num_tables = StaticArraySize(table_positions);
-            level->tables = (Chapter_5_Table *)arena_push(&game->level_arena, sizeof(Chapter_5_Table) * level->num_tables);
+            if (!level->tables)
+                level->tables = (Chapter_5_Table *)arena_push(&game->level_arena, sizeof(Chapter_5_Table) * level->num_tables);
 
             Chapter_5_Table *tables = level->tables;
             for (int i = 0; i < level->num_tables; i++) {
@@ -365,17 +384,30 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
             level->tables[5].chairs[1].state = CHAIR_HAS_PENNY;
             level->penny = &level->tables[5].chairs[1];
 
-            level->tables[0].text_index = 34;
-            level->tables[1].text_index = 32;
-            level->tables[2].text_index = 30;
-            level->tables[3].text_index = 53;
-            level->tables[4].text_index = 37;
-            level->tables[5].text_index = 46;
-            level->tables[6].text_index = 45;
-            level->tables[7].text_index = 40;
-            level->tables[8].text_index = 49;
-            level->tables[9].text_index = 51;
-            level->tables[10].text_index = 52;
+            if (level->good) {
+                level->tables[0].text_index = 75;
+                level->tables[1].text_index = 73;
+                level->tables[2].text_index = 71;
+                level->tables[3].text_index = 93;
+                level->tables[4].text_index = 78;
+                level->tables[5].text_index = 84;
+                level->tables[6].text_index = 80;
+                level->tables[7].text_index = 89;
+                level->tables[8].text_index = 91;
+                level->tables[9].text_index = 92;
+            } else {
+                level->tables[0].text_index = 34;
+                level->tables[1].text_index = 32;
+                level->tables[2].text_index = 30;
+                level->tables[3].text_index = 53;
+                level->tables[4].text_index = 37;
+                level->tables[5].text_index = 46;
+                level->tables[6].text_index = 45;
+                level->tables[7].text_index = 40;
+                level->tables[8].text_index = 49;
+                level->tables[9].text_index = 51;
+                level->tables[10].text_index = 52;
+            }
         } break;
         case CHAPTER_5_SCENE_COTTAGE: {
         } break;
@@ -582,7 +614,7 @@ void chapter_5_init(Game *game) {
                    nullptr);
 
     chapter_5_text(&game->text[32],
-                   "Kevin",
+                   "Kate",
                    "We didn't think you'd come.",
                    30,
                    &game->text[33]);
@@ -696,21 +728,19 @@ void chapter_5_init(Game *game) {
                    30,
                    nullptr);
 
-    String choices[] = { const_string("Sit now"), const_string("No, look around more first") };
-    Text_List *next[] = { nullptr, nullptr };
-    void (*hooks[2])(void*) = { chapter_5_sit_at_table, nullptr };
+    {
+        String choices[] = { const_string("Sit now"), const_string("No, look around more first") };
+        Text_List *next[] = { nullptr, nullptr };
+        void (*hooks[2])(void*) = { chapter_5_sit_at_table, nullptr };
 
-    atari_choice_text_list_init(&game->text[53],
-                                "Eleanor",
-                                "Oh hey Chase!\rWe have a seat here,\ndo you wanna sit now or?",
-                                choices,
-                                next,
-                                hooks,
-                                2);
-
-    // Eleanor - Aliyah
-    // Trey - Tyler
-    // Siphor (Si) - Vishaal
+        atari_choice_text_list_init(&game->text[53],
+                                    "Eleanor",
+                                    "Oh hey Chase!\rWe have a seat here,\ndo you wanna sit now or?",
+                                    choices,
+                                    next,
+                                    hooks,
+                                    2);
+    }
 
     chapter_5_text(&game->text[54],
                    "Eleanor",
@@ -734,7 +764,160 @@ void chapter_5_init(Game *game) {
                    30,
                    nullptr);
 
-    level->good = true;
+    chapter_5_text(&game->text[71],
+                   "Jenny",
+                   "Oh, hi Chase!",
+                   30,
+                   &game->text[72]);
+    chapter_5_text(&game->text[72],
+                   "Mark",
+                   "Hey man!\rIt's good to see you!",
+                   30,
+                   nullptr);
+
+    chapter_5_text(&game->text[73],
+                   "Kevin",
+                   "What's up man?\rWe didn't think you were coming,\rbut I'm glad you did.",
+                   30,
+                   &game->text[74]);
+    chapter_5_text(&game->text[74],
+                   "Chase",
+                   "Thanks!",
+                   30,
+                   nullptr);
+
+    chapter_5_text(&game->text[75],
+                   "Kevin",
+                   "Oh it's you!\rHi Chase.",
+                   30,
+                   &game->text[76]);
+    chapter_5_text(&game->text[76],
+                   "Chase",
+                   "You remembered my name!",
+                   30,
+                   &game->text[77]);
+    chapter_5_text(&game->text[77],
+                   "Kevin",
+                   "... Why wouldn't I?",
+                   30,
+                   nullptr);
+
+    chapter_5_text(&game->text[78],
+                   "Chase",
+                   "Is there any space for me?",
+                   30,
+                   &game->text[79]);
+    chapter_5_text(&game->text[79],
+                   "Amy",
+                   "Oh, sorry Chase.\rWe're all booked here sadly.",
+                   30,
+                   nullptr);
+
+    chapter_5_text(&game->text[80],
+                   "Kenny",
+                   "Oh, hey, Chase.",
+                   30,
+                   &game->text[81]);
+    chapter_5_text(&game->text[81],
+                   "Chase",
+                   "Hey Kenny, what's up?",
+                   30,
+                   &game->text[82]);
+    chapter_5_text(&game->text[82],
+                   "Kenny",
+                   "Nothin' much, we just came a few minutes ago.\rGood to see you, man.",
+                   30,
+                   &game->text[83]);
+    chapter_5_text(&game->text[83],
+                   "Darlene",
+                   "Hi Chase!",
+                   30,
+                   nullptr);
+
+    chapter_5_text(&game->text[84],
+                   "Penny",
+                   "Hi, Chase.",
+                   30,
+                   &game->text[85]);
+    chapter_5_text(&game->text[85],
+                   "Chase",
+                   "Oh, hi Penny!",
+                   30,
+                   &game->text[86]);
+    chapter_5_text(&game->text[86],
+                   "Penny",
+                   "It's good to see you!",
+                   30,
+                   &game->text[87]);
+    chapter_5_text(&game->text[87],
+                   "Chase",
+                   "You too!!\rI guess we finally met in-person, then.\rThat's good, haha.",
+                   30,
+                   &game->text[88]);
+    chapter_5_text(&game->text[88],
+                   "Penny",
+                   "Yep.\rWell, I'll talk to you later.",
+                   30,
+                   nullptr);
+
+    chapter_5_text(&game->text[89],
+                   "Luke",
+                   "Hey Chase, do you need a seat?",
+                   30,
+                   &game->text[90]);
+    chapter_5_text(&game->text[90],
+                   "Chase",
+                   "Ah, hi Luke.\rNah I think Eleanor has a seat for me.\rThanks, though.",
+                   30,
+                   nullptr);
+
+    chapter_5_text(&game->text[91],
+                   "Adam",
+                   "Hi!",
+                   30,
+                   nullptr);
+
+    chapter_5_text(&game->text[92],
+                   "Lorane",
+                   "Hey man, what's up?",
+                   30,
+                   nullptr);
+    {
+        String choices[] = { const_string("Sit now"), const_string("No, look around more first") };
+        Text_List *next[] = { nullptr, nullptr };
+        void (*hooks[2])(void*) = { chapter_5_sit_at_table, nullptr };
+
+        atari_choice_text_list_init(&game->text[93],
+                                    "Eleanor",
+                                    "Oh hey Chase!\rWe have a seat here,\ndo you wanna sit now or?",
+                                    choices,
+                                    next,
+                                    hooks,
+                                    2);
+    }
+
+    chapter_5_text(&game->text[95],
+                   "Eleanor",
+                   "I am saying something cool now.",
+                   30,
+                   &game->text[96]);
+    chapter_5_text(&game->text[96],
+                   "Trey",
+                   "Me as well!\rHello!",
+                   30,
+                   &game->text[97]);
+    chapter_5_text(&game->text[97],
+                   "Siphor",
+                   "Wowie!\rI am a person.",
+                   30,
+                   &game->text[98]);
+    chapter_5_text(&game->text[97],
+                   "Chase",
+                   "I'm here having fun too!!!",
+                   30,
+                   &game->text[95]);
+
+    //level->good = true;
     chapter_5_goto_scene(game, CHAPTER_5_SCENE_DINNER_PARTY);
 }
 
@@ -1358,44 +1541,56 @@ void chapter_5_update_player_dinner_party(Game *game, float dt) {
 
     Vector3 stored_camera_pos = level->camera.position;
 
+    bool look = true;
+
     if (level->sitting_timer != -1 && level->sitting_at_table)
         level->sitting_timer += dt;
 
-    bool look = true;
-    if (level->sitting_timer >= 6) {
-        float debug_speed_slider = 1;
+    if (!level->good) {
+        if (level->sitting_timer >= 6) {
+            float debug_speed_slider = 1;
 
-        level->camera.target = lerp_vector3(level->camera.target,
-                                           Vector3Add(get_chair_position(level->penny), {0,1.95f,0}),
-                                           0.005f);
+            level->camera.target = lerp_vector3(level->camera.target,
+                                                Vector3Add(get_chair_position(level->penny), {0,1.95f,0}),
+                                                0.005f);
 
-        level->camera.fovy  -= debug_speed_slider * 1.5f * dt;
-        if (game->textbox_alpha < 0)
-            game->textbox_alpha = 0;
-        else
-            game->textbox_alpha -= debug_speed_slider * 4.0f * dt;
+            level->camera.fovy  -= debug_speed_slider * 1.5f * dt;
+            if (game->textbox_alpha < 0)
+                game->textbox_alpha = 0;
+            else
+                game->textbox_alpha -= debug_speed_slider * 4.0f * dt;
 
-        if (level->camera.fovy <= -25) {
-            // Jumpscare!
-            level->camera.fovy = FOV_DEFAULT;
-            level->sitting_timer = -1;
-            game->textbox_alpha = 255;
-            game->current = &game->text[70];
+            if (level->camera.fovy <= -25) {
+                // Jumpscare!
+                level->camera.fovy = FOV_DEFAULT;
+                level->sitting_timer = -1;
+                game->textbox_alpha = 255;
+                game->current = &game->text[70];
 
-            level->rotating_heads = true;
+                level->rotating_heads = true;
 
-            for (int i = 0; i < level->num_tables; i++) {
-                Chapter_5_Table *table = &level->tables[i];
+                for (int i = 0; i < level->num_tables; i++) {
+                    Chapter_5_Table *table = &level->tables[i];
 
-                for (int j = 0; j < table->num_chairs; j++) {
-                    Chapter_5_Chair *chair = &table->chairs[j];
-                    chair->looking_at = nullptr;
+                    for (int j = 0; j < table->num_chairs; j++) {
+                        Chapter_5_Chair *chair = &table->chairs[j];
+                        chair->looking_at = nullptr;
+                    }
                 }
             }
-        }
 
-        if (level->camera.fovy < 30)
-            look = false;
+            if (level->camera.fovy < 30)
+                look = false;
+        }
+    } else {
+        if (level->sitting_timer >= 6) {
+            level->whiteness_overlay += 0.02f * dt;
+            game->textbox_alpha = 200 * (1 - level->whiteness_overlay);
+            if (level->whiteness_overlay >= 1) {
+                level->whiteness_overlay = 1;
+                add_event(game, chapter_5_finish_dinner_party, 5);
+            }
+        }
     }
 
     bool can_move = (game->current == 0);
@@ -1593,7 +1788,6 @@ void chapter_5_draw(Game *game) {
                 ClearBackground(WHITE);
             }
 
-
             BeginMode3D(level->camera);
 
             BeginShaderMode(level->shader);
@@ -1617,6 +1811,14 @@ void chapter_5_draw(Game *game) {
                 } else {
                     draw_popup("TALK TO THEM\nTALK TO THEM\nTALK TO THEM\nTALK TO THEM\nTALK TO THEM", GOLD, Top);
                 }
+            }
+
+            if (level->whiteness_overlay > 0) {
+                Color color = WHITE;
+
+                color.a = (uint8_t) (255 * level->whiteness_overlay);
+
+                DrawRectangleRec({0,0,(float)render_width,(float)render_height}, color);
             }
         } break;
         case CHAPTER_5_SCENE_COTTAGE: {
