@@ -512,7 +512,7 @@ void chapter_3_job_init(Game *game, int which_document_list) {
             documents[count++] =
                 "\"How can they find meaning in something so meaningless?\"";
             documents[count++] =
-                "At times he thought of them as inferior to himself, placing himself on a throne of intellect above all.\n\nBut truthfully, he envied them!";
+                "He thought of them as inferior to himself, placing himself on a throne above all.\n\nBut truthfully, he envied them!";
             documents[count++] =
                 "\"It doesn't make sense; they had to have made a deal with the devil himself!\"";
             documents[count++] =

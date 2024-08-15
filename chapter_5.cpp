@@ -1,3 +1,5 @@
+#define GUY_HEIGHT 1.7f
+
 enum {
     CHAPTER_5_STATE_INTRO,
     CHAPTER_5_STATE_TRAIN_STATION_1,
@@ -75,19 +77,36 @@ struct Chapter_5_Table {
 };
 
 struct Level_Chapter_5 {
-    Chapter_5_Clerk clerk;
-    Chapter_5_Train train;
+    // Train station
+    struct {
+        Chapter_5_Clerk clerk;
+        Chapter_5_Train train;
 
-    // Dinner Party scene
-    bool             good;
-    Chapter_5_Table *tables;
-    int              num_tables;
-    Chapter_5_Chair *penny;
-    bool             sitting_at_table;
-    bool             rotating_heads;
-    float            sitting_timer;
-    float            whiteness_overlay;
-    bool             black_state;
+        bool     ticket;
+
+        float    black_screen_timer;
+        float    transition_fade;
+    };
+
+    // Staircase
+    struct {
+        bool door_popup;
+    };
+
+    // Dinner Party
+    struct {
+        bool             good;
+        Chapter_5_Table *tables;
+        int              num_tables;
+        Chapter_5_Chair *penny;
+        bool             sitting_at_table;
+        bool             rotating_heads;
+        float            sitting_timer;
+        float            whiteness_overlay;
+        bool             black_state;
+
+        bool             talk_popup;
+    };
 
     struct Models {
         Model guy_sitting,
@@ -99,21 +118,13 @@ struct Level_Chapter_5 {
               train_door;
     } models;
 
-    bool     door_popup;
-    bool     talk_popup;
-
     int      state;
 
     Camera3D camera;
     Shader   shader;
 
-    float    black_screen_timer;
-    float    transition_fade;
-
     Model    scenes[CHAPTER_5_SCENE_COUNT];
     int      current_scene;
-
-    bool     ticket;
 };
 
 void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene);
@@ -196,6 +207,11 @@ void chapter_5_dinner_goto_good_part(Game *game) {
     level->whiteness_overlay = 0;
     level->black_state = false;
 
+    // Reset if we talked to them before.
+    for (int i = 0; i < level->num_tables; i++) {
+        level->tables[i].talked = false;
+    }
+
     chapter_5_goto_scene(game, CHAPTER_5_SCENE_DINNER_PARTY);
 }
 
@@ -238,7 +254,7 @@ void chapter_5_train_station_init_positions(Game *game, bool refresh) {
 
     clerk->do_180_head = false;
     clerk->talk_popup = false;
-    clerk->position = { 16.3f, 2.f, -14.1f };
+    clerk->position = { 0.7225f * 16.3f, 0.7225f * 2.f, 0.7225f * -14.3f };
     clerk->body_rotation = -90;
     clerk->head_rotation = -90;
     clerk->saved_head_rotation = clerk->head_rotation;
@@ -247,15 +263,12 @@ void chapter_5_train_station_init_positions(Game *game, bool refresh) {
 
     if (refresh) clerk->talked = true;
 
-    level->camera.position   = { -7.19f, 2.00f, 6.68f };
-    level->camera.target     = { 11.60f, 18.12f, -46.27f };
-    level->camera.up         = { 0, 1, 0 };
-    level->camera.fovy       = FOV_DEFAULT;
-    level->camera.projection = CAMERA_PERSPECTIVE;
-
-    if (refresh) {
-        level->camera.position = {13.59f, 4.00f, -14.02f};
-        level->camera.target = {71.95f, 7.18f, -15.17f};
+    if (!refresh) {
+        level->camera.position   = { -7.19f, GUY_HEIGHT, 6.68f };
+        level->camera.target     = { 11.60f, 18.12f, -46.27f };
+        level->camera.up         = { 0, 1, 0 };
+        level->camera.fovy       = FOV_DEFAULT;
+        level->camera.projection = CAMERA_PERSPECTIVE;
     }
 }
 
@@ -276,7 +289,7 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
 
             Chapter_5_Train *train = &level->train;
 
-            train->position     = {-500, 1.8f, -22.0f};
+            train->position     = {-0, 0.7225f * 1.8f, 0.7225f * -22.5f};
             train->bounding_box = GetMeshBoundingBox(level->models.train.meshes[0]);
             train->instances    = 5;
             train->setoff_timer = 0;
@@ -314,7 +327,7 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
             float train_distance = -600;
 
             level->camera.position   = { train_distance, 2, 0 };
-            level->camera.target     = { 0.00f, 2.00f, 2.00f };
+            level->camera.target     = { 0.00f, GUY_HEIGHT, 2.00f };
             level->camera.up         = { 0, 1, 0 };
             level->camera.fovy       = FOV_DEFAULT;
             level->camera.projection = CAMERA_PERSPECTIVE;
@@ -338,7 +351,7 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
             model_set_shader(&level->scenes[3], level->shader);
 
             level->camera.position   = { 0, 2, 0 };
-            level->camera.target     = { -2.00f, 2.00f, 0.00f };
+            level->camera.target     = { -2.00f, GUY_HEIGHT, 0.00f };
             level->camera.up         = { 0, 1, 0 };
             level->camera.fovy       = FOV_DEFAULT;
             level->camera.projection = CAMERA_PERSPECTIVE;
@@ -918,7 +931,7 @@ void chapter_5_init(Game *game) {
                    &game->text[95]);
 
     //level->good = true;
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_DINNER_PARTY);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_TRAIN_STATION);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {
@@ -1003,7 +1016,7 @@ void chapter_5_update_train(Game *game, float dt) {
 
     float prev_x = train->position.x;
 
-    float train_speed = 60;
+    float train_speed = 10;
 
     if (train->moving) {
         if (train->position.x < 0) {
@@ -1054,7 +1067,7 @@ void chapter_5_update_train(Game *game, float dt) {
     if (level->current_scene == CHAPTER_5_SCENE_TRAIN_STATION &&
         train->moving && train->player_in)
     {
-        level->transition_fade += 0.5 * dt;
+        level->transition_fade += 0.025f * dt;
 
         if (level->transition_fade >= 1) {
             level->transition_fade = 0;
@@ -1131,7 +1144,7 @@ void chapter_5_draw_table(Game *game, Chapter_5_Table *table) {
         }
 
         Color head_color = WHITE;
-        float head_size = 0.75;
+        float head_size = 0.85f;
 
         if (chair->state == CHAIR_HAS_PENNY || level->good) {
             head_model = real_head_model;
@@ -1186,7 +1199,7 @@ void chapter_5_draw_table(Game *game, Chapter_5_Table *table) {
         DrawModelEx(*chair_model,  chair_pos, {0,1,0}, RAD2DEG * -angle, {1,1,1}, WHITE);
         if (chair->state != CHAIR_EMPTY) {
             DrawModelEx(*person_model, chair_pos, {0,1,0}, RAD2DEG * -angle, {1,1,1}, color);
-            DrawModelEx(*head_model, Vector3Add(chair_pos, {0,1.6f,0}), {0,1,0}, 90 + RAD2DEG * -chair->look_angle, {head_size,head_size,head_size}, head_color);
+            DrawModelEx(*head_model, Vector3Add(chair_pos, {0,1.4f,0}), {0,1,0}, 90 + RAD2DEG * -chair->look_angle, {head_size,head_size,head_size}, head_color);
         }
     }
 }
@@ -1204,7 +1217,7 @@ void chapter_5_draw_train(Level_Chapter_5 *level, Chapter_5_Train *train) {
                                  train->position.z));
     }
 
-    float openness = train->door_openness * 2;
+    float openness = train->door_openness * 1.5f;
 
     for (int i = 0; i < train->instances; i++) {
         int k = i - train->instances/2;
@@ -1212,7 +1225,7 @@ void chapter_5_draw_train(Level_Chapter_5 *level, Chapter_5_Train *train) {
         {
             Vector3 door_position = train->position;
             door_position.x += k * length;
-            door_position = Vector3Add(door_position, {-1.2f, 0.3f, 1.9f});
+            door_position = Vector3Add(door_position, {-1.2f * 0.7225f, 0.3f * 0.7225f, 1.95f * 0.7225f});
 
             if (k == 0)
                 door_position.x += openness;
@@ -1227,7 +1240,7 @@ void chapter_5_draw_train(Level_Chapter_5 *level, Chapter_5_Train *train) {
         {
             Vector3 door_position = train->position;
             door_position.x += k * length;
-            door_position = Vector3Add(door_position, {-2.9f, 0.3f, 1.9f});
+            door_position = Vector3Add(door_position, {-2.9f * 0.7225f, 0.3f * 0.7225f, 1.95f * 0.7225f});
 
             if (k == 0)
                 door_position.x -= openness;
@@ -1361,7 +1374,7 @@ void apply_3d_velocity(Camera3D *camera, Model world, Vector3 pos_vel) {
         if (!result.ok) {
             *axis -= axis_vel;
         } else {
-            cam->position.y = result.collision_result.point.y + 2;
+            cam->position.y = result.collision_result.point.y + GUY_HEIGHT;
         }
     };
 
@@ -1384,13 +1397,13 @@ void chapter_5_update_player_on_train(Game *game) {
 
     switch (level->current_scene) {
         case CHAPTER_5_SCENE_TRAIN_STATION: {
-            curb          = -20.0;
-            train_start_z = -20.5;
-            train_end_z   = -23.0;
-            door_start    =  -3.5;
-            door_end      =  +0.5;
+            curb          = 0.7225f * -20.0f;
+            train_start_z = 0.7225f * -20.5f;
+            train_end_z   = 0.7225f * -23.0f;
+            door_start    = 0.7225f *  -3.5f;
+            door_end      = 0.7225f *  +0.5f;
 
-            player_y = 4;
+            player_y = 3.19f;
         } break;
         case CHAPTER_5_SCENE_STAIRCASE: {
             curb = 2.5;
@@ -1401,7 +1414,7 @@ void chapter_5_update_player_on_train(Game *game) {
             door_start = -3.5;
             door_end = 0;
 
-            player_y = 2;
+            player_y = GUY_HEIGHT;
         } break;
     }
 
@@ -1457,6 +1470,8 @@ void chapter_5_update_player_on_train(Game *game) {
 void chapter_5_update_player_train_station(Game *game, float dt) {
     Level_Chapter_5 *level = (Level_Chapter_5 *)game->level;
 
+    chapter_5_update_player_on_train(game);
+
     Vector3 stored_camera_pos = level->camera.position;
 
     bool can_move = keyboard_focus(game) == 0 && !level->clerk.do_180_head;
@@ -1465,12 +1480,10 @@ void chapter_5_update_player_train_station(Game *game, float dt) {
         chapter_5_update_camera(&level->camera, dt);
     }
 
-    chapter_5_update_player_on_train(game);
-
     Vector3 *camera = &level->camera.position;
     Chapter_5_Train *train = &level->train;
 
-    float curb          = -20.0;
+    float curb = 0.7225f * -20.0f;
     if (camera->z > curb && camera->z < -8 && camera->x > 15) {
         *camera = stored_camera_pos;
         //level->camera.target = stored_camera_target;
@@ -1548,10 +1561,10 @@ void chapter_5_update_player_dinner_party(Game *game, float dt) {
 
     if (!level->good) {
         if (level->sitting_timer >= 6) {
-            float debug_speed_slider = 1;
+            float debug_speed_slider = 10;
 
             level->camera.target = lerp_vector3(level->camera.target,
-                                                Vector3Add(get_chair_position(level->penny), {0,1.95f,0}),
+                                                Vector3Add(get_chair_position(level->penny), {0,1.65f,0}),
                                                 0.005f);
 
             level->camera.fovy  -= debug_speed_slider * 1.5f * dt;
@@ -1729,14 +1742,14 @@ void chapter_5_draw(Game *game) {
                     DrawModelEx(level->clerk.body, level->clerk.position, {0,1,0}, level->clerk.body_rotation, {1,1,1}, WHITE);
 
                     Model *model = &level->models.pyramid_head;
-                    Vector3 scale = { 1, 1, 1 };
+                    Vector3 scale = { 0.85f, 0.85f, 0.85f };
 
                     if (level->clerk.has_real_head) {
                         model = &level->models.real_head;
                         scale = { 0.75, 0.75, 0.75 };
                     }
 
-                    DrawModelEx(model[0], Vector3Add(level->clerk.position, {0,1.95f,0}), {0,1,0}, level->clerk.head_rotation, scale, WHITE);
+                    DrawModelEx(model[0], Vector3Add(level->clerk.position, {0,1.55f,0}), {0,1,0}, level->clerk.head_rotation, scale, WHITE);
 
                     chapter_5_draw_train(level, &level->train);
 
@@ -1822,6 +1835,7 @@ void chapter_5_draw(Game *game) {
             }
         } break;
         case CHAPTER_5_SCENE_COTTAGE: {
+            ClearBackground(WHITE);
         } break;
     }
 }

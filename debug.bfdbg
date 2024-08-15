@@ -1,7 +1,7 @@
 FileVersion = 1
 LastConfig = "Debug"
 LastPlatform = "Win64"
-RecentFilesList = ["c:\\dev\\vanishing\\game.cpp", "c:\\dev\\vanishing\\chapter_5.cpp", "c:\\dev\\vanishing\\main.cpp", "c:\\dev\\vanishing\\util.cpp"]
+RecentFilesList = ["c:\\dev\\vanishing\\chapter_5.cpp", "c:\\dev\\vanishing\\game.cpp", "c:\\dev\\vanishing\\main.cpp", "c:\\dev\\vanishing\\util.cpp"]
 
 [MainWindow]
 X = 614
@@ -33,14 +33,13 @@ CursorPos = 3464
 VertPos = 3082.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
-Active = true
 TabLabel = "game.cpp"
 TabWidth = 84.66666
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\game.cpp"
-CursorPos = 12930
-VertPos = 10856.0
+CursorPos = 4243
+VertPos = 3657.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "main.cpp"
@@ -49,16 +48,16 @@ TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\main.cpp"
 CursorPos = 3889
-VertPos = 3749.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
+Active = true
 TabLabel = "chapter_5.cpp"
 TabWidth = 108.0
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\chapter_5.cpp"
-CursorPos = 45236
-VertPos = 27623.0
+CursorPos = 6896
+VertPos = 5957.0
 
 [[MainDockingFrame.DockedWidgets]]
 RequestedWidth = 830.0
@@ -69,7 +68,7 @@ SplitType = 2
 [[MainDockingFrame.DockedWidgets.DockedWidgets]]
 RequestedWidth = 958.0
 RequestedHeight = 250.0
-SizePriority = 0.74197
+SizePriority = 0.6498929
 Type = "TabbedView"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
@@ -87,7 +86,7 @@ TabWidth = 85.33334
 TabIsPinned = false
 Type = "WatchPanel"
 Columns = [{Width = 250.0}, {Width = 362.0}, {Width = 250.0}]
-Items = ["pos", "size", "color", ""]
+Items = ["pos", "size", "color", "game->num_events", "game.events", "level.shader", ""]
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 TabLabel = "Auto"
@@ -99,7 +98,7 @@ Columns = [{Width = 250.0}, {Width = 250.0}, {Width = 250.0}]
 [[MainDockingFrame.DockedWidgets.DockedWidgets]]
 RequestedWidth = 957.0
 RequestedHeight = 250.0
-SizePriority = 0.25803
+SizePriority = 0.3501071
 Type = "TabbedView"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
@@ -109,6 +108,7 @@ TabIsPinned = false
 Type = "ThreadPanel"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+Active = true
 TabLabel = "Call Stack"
 TabWidth = 104.0
 TabIsPinned = false
@@ -121,7 +121,6 @@ TabIsPinned = false
 Type = "ImmediatePanel"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
-Active = true
 TabLabel = "Output"
 TabWidth = 89.33334
 TabIsPinned = false
