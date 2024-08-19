@@ -5,6 +5,8 @@
 #define Megabytes(mb) ((size_t)mb * 1024 * 1024)
 #define Gigabytes(gb) ((size_t)gb * 1024 * 1024 * 1024)
 
+#define BlenderPosition3D(x, y, z) {(x), (z), -(y)}
+
 // Arena Alloactor
 
 extern "C" {

@@ -10,7 +10,7 @@ enum Chapter_5_Scene {
     CHAPTER_5_SCENE_TRAIN_STATION,
     CHAPTER_5_SCENE_STAIRCASE,
     CHAPTER_5_SCENE_DINNER_PARTY,
-    CHAPTER_5_SCENE_COTTAGE,
+    CHAPTER_5_SCENE_GALLERY,
 };
 
 struct Chapter_5_Clerk {
@@ -75,6 +75,12 @@ struct Chapter_5_Table {
     bool talked;
 };
 
+struct Chapter_5_Podium {
+    Text_List *text;
+    Vector3    position;
+    float      rotation;
+};
+
 struct Level_Chapter_5 {
     // Train station
     struct {
@@ -108,6 +114,14 @@ struct Level_Chapter_5 {
         bool             talk_popup;
     };
 
+    // Museum
+    struct {
+        Chapter_5_Podium podiums[64];
+        int              podium_count;
+
+        bool             read_popup;
+    };
+
     struct Models {
         Model guy_sitting,
               chair,
@@ -115,7 +129,8 @@ struct Level_Chapter_5 {
               pyramid_head,
               real_head,
               train,
-              train_door;
+              train_door,
+              podium;
     } models;
 
     int      state;
@@ -224,7 +239,7 @@ void chapter_5_dinner_goto_black(Game *game) {
 }
 
 void chapter_5_finish_dinner_party(Game *game) {
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_COTTAGE);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_GALLERY);
 }
 
 void chapter_5_table(Chapter_5_Table *table, Vector2 pos, int num_chairs, float angle_offset) {
@@ -270,6 +285,65 @@ void chapter_5_train_station_init_positions(Game *game, bool refresh) {
         level->camera.fovy       = FOV_DEFAULT;
         level->camera.projection = CAMERA_PERSPECTIVE;
     }
+}
+
+void chapter_5_window_text(bool scroll, Text_List *list, char *line, Color color, Text_List *next) {
+    list->font         = &atari_font;
+    list->font_spacing = 1;
+    list->scale        = 0.125;
+    list->scroll_speed = 30;
+    list->color        = color;
+    list->center_text  = true;
+
+    if (scroll)
+        list->scroll_type = LetterByLetter;
+    else
+        list->scroll_type  = EntireLine;
+
+    list->render_type  = Bare;
+    list->location     = Middle;
+    list->take_keyboard_focus = true;
+
+    text_list_init(list, 0, line, next);
+}
+
+void chapter_5_text(Text_List *list, char *speaker, char *line, float scroll_speed, Text_List *next) {
+    list->font = &atari_font;
+    list->font_spacing = 1;
+    list->scale = 0.125;
+    list->scroll_speed = scroll_speed;
+
+    list->color = SKYBLUE;
+    list->bg_color = BLACK;
+
+    list->render_type = DrawTextbox;
+    list->location = Bottom;
+    list->take_keyboard_focus = true;
+
+    text_list_init(list, speaker, line, next);
+
+    list->textbox_height = render_height / 3.5f;
+}
+
+void chapter_5_podium_text(Text_List *list, bool italics, char *line, Text_List *next) {
+    list->font = &bold_font;
+
+    if (italics)
+        list->font = &italics_font;
+
+    list->font_spacing = 1;
+    list->scale = 0.125;
+    list->render_type = DrawTextbox;
+    list->location = Top;
+    list->take_keyboard_focus = true;
+    list->scroll_type = EntireLine;
+    list->alpha_speed = 7;
+    list->center_text = true;
+
+    list->color = WHITE;
+    list->bg_color = BLACK;
+
+    text_list_init(list, 0, line, next);
 }
 
 void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
@@ -416,58 +490,114 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
                 level->tables[10].text_index = 52;
             }
         } break;
-        case CHAPTER_5_SCENE_COTTAGE: {
+        case CHAPTER_5_SCENE_GALLERY: {
             level->shader = LoadShader("shaders/basic.vs", "shaders/cottage.fs");
 
             model_set_shader(&level->scenes[4], level->shader);
 
             CreateLight(LIGHT_POINT, { 0, 2, -30 }, Vector3Zero(), {255, 214, 179, 255}, level->shader);
 
-            level->camera.position   = { 0, GUY_HEIGHT, 0 };
-            level->camera.target     = { 0.00f, GUY_HEIGHT, -2.00f };
+            level->camera.position   = BlenderPosition3D(-239.1f, -131.f, 53.62f + GUY_HEIGHT);
+            level->camera.target     = { 0, 0, 0 };
             level->camera.up         = { 0, 1, 0 };
             level->camera.fovy       = FOV_DEFAULT;
             level->camera.projection = CAMERA_PERSPECTIVE;
+
+            game->textbox_alpha = 220;
+
+            memset(game->text, 0, sizeof(game->text));
+
+            chapter_5_podium_text(&game->text[0],
+                                  true,
+                                  "Again, I awoke.",
+                                  nullptr);
+
+            chapter_5_podium_text(&game->text[1],
+                                  true,
+                                  "Again, I found myself in the boiling void.\rI was THIRSTY.",
+                                  nullptr);
+
+            chapter_5_podium_text(&game->text[2],
+                                  true,
+                                  "After an eternity of unbearable pain,\nI finally found a house.\rI opened the door.",
+                                  nullptr);
+
+            chapter_5_podium_text(&game->text[3],
+                                  false,
+                                  "A wave of chill soothed his aching body,\nhalf-dead from the outside.\rThere was a stock of crisp, ice-cold water.\rSweet, sweet relief.",
+                                  nullptr);
+            game->text[3].text[2].font = &italics_font;
+
+            chapter_5_podium_text(&game->text[4],
+                                  false,
+                                  "Collapsing on the ground,\nat last he had a moment to think!",
+                                  nullptr);
+
+            chapter_5_podium_text(&game->text[5],
+                                  false,
+                                  "Although the questions of how and why\nhe came here persisted in his mind,\none remained at the forefront:",
+                                  &game->text[6]);
+            chapter_5_podium_text(&game->text[6],
+                                  true,
+                                  "484F572043414E2057452046494E44204D4\n5414E494E4720494E2054484520434F4E53\n54414E542C2053484152502053554646455\n2494E47204F46204558495354454E43453F",
+                                  nullptr);
+            // HOW CAN WE FIND MEANING IN THE CONSTANT, SHARP SUFFERING OF EXISTENCE?
+
+            chapter_5_podium_text(&game->text[7],
+                                  false,
+                                  "This question chiseled lines into his face\nthe more he pondered it.\rDread filled him!",
+                                  &game->text[8]);
+            game->text[7].text[1].font = &italics_font;
+
+            chapter_5_podium_text(&game->text[8],
+                                  false,
+                                  "No matter what the answer was,\nit would mean cosmic horror.\rIt would mean that God had surely\nforsaken him.",
+                                  nullptr);
+
+            chapter_5_podium_text(&game->text[9],
+                                  true,
+                                  "After a night's stay,\nI exited the house, renewed.\rI kept walking North.\rBut why, exactly, I didn't understand.",
+                                  nullptr);
+
+            chapter_5_podium_text(&game->text[10],
+                                  true,
+                                  "Something compells me to brave this\nhellscape.\rAnd it fascinates me.",
+                                  nullptr);
+
+            auto add_podium = [&](Text_List *text, Vector2 position_2d, float rotation) -> void {
+                Vector3 position = {
+                    position_2d.x,
+                    999,
+                    -position_2d.y
+                };
+
+                Ray ray = {};
+                ray.direction = {0, -1, 0};
+                ray.position = position;
+
+                // Check bottom collision
+                RayCollision highest = {};
+                highest.point.y = -9999;
+
+                RayCollision result = GetRayCollisionMesh(ray, level->scenes[4].meshes[0], MatrixIdentity());
+
+                position.y = result.point.y;
+
+                Chapter_5_Podium podium = { text, position, rotation };
+                level->podiums[level->podium_count++] = podium;
+            };
+
+            add_podium(&game->text[0], {-226.8f, -123.9f}, -62);
+            add_podium(&game->text[1], {-216.5f, -110.2f}, -68);
+            add_podium(&game->text[2], {-202.8f, -103.2f}, -52);
+            add_podium(&game->text[3], {-187.0f, -87.51f}, -72);
+            add_podium(&game->text[4], {-169.4f, -78.83f}, -70);
+            add_podium(&game->text[5], {-136.f, -63}, -82);
+            add_podium(&game->text[7], {-109.f, -67}, -52);
+            add_podium(&game->text[9], {-74, -47}, -72);
+            add_podium(&game->text[10], {-39, -27}, -68);
         } break;
     }
-}
-
-void chapter_5_window_text(bool scroll, Text_List *list, char *line, Color color, Text_List *next) {
-    list->font         = &atari_font;
-    list->font_spacing = 1;
-    list->scale        = 0.125;
-    list->scroll_speed = 30;
-    list->color        = color;
-    list->center_text  = true;
-
-    if (scroll)
-        list->scroll_type = LetterByLetter;
-    else
-        list->scroll_type  = EntireLine;
-
-    list->render_type  = Bare;
-    list->location     = Middle;
-    list->take_keyboard_focus = true;
-
-    text_list_init(list, 0, line, next);
-}
-
-void chapter_5_text(Text_List *list, char *speaker, char *line, float scroll_speed, Text_List *next) {
-    list->font = &atari_font;
-    list->font_spacing = 1;
-    list->scale = 0.125;
-    list->scroll_speed = scroll_speed;
-
-    list->color = GOLD;
-    list->bg_color = BLACK;
-
-    list->render_type = DrawTextbox;
-    list->location = Bottom;
-    list->take_keyboard_focus = true;
-
-    text_list_init(list, speaker, line, next);
-
-    list->textbox_height = render_height / 3.5f;
 }
 
 // init chapter 5
@@ -505,6 +635,7 @@ void chapter_5_init(Game *game) {
     level->models.table        = LoadModel("models/dinner_table.glb");
     level->models.pyramid_head = LoadModel("models/pyramid_head.glb");
     level->models.real_head    = LoadModel("models/real_head.glb");
+    level->models.podium       = LoadModel("models/podium.glb");
 
     chapter_5_window_text(true,
                           &game->text[0],
@@ -754,6 +885,9 @@ void chapter_5_init(Game *game) {
         Text_List *next[] = { nullptr, nullptr };
         void (*hooks[2])(void*) = { chapter_5_sit_at_table, nullptr };
 
+        game->text[53].color = SKYBLUE;
+        game->text[53].bg_color = BLACK;
+
         atari_choice_text_list_init(&game->text[53],
                                     "Eleanor",
                                     "Oh hey Chase!\rWe have a seat here,\ndo you wanna sit now or?",
@@ -761,6 +895,8 @@ void chapter_5_init(Game *game) {
                                     next,
                                     hooks,
                                     2);
+
+        game->text[53].textbox_height = render_height / 3.5f;
     }
 
     chapter_5_text(&game->text[54],
@@ -922,6 +1058,10 @@ void chapter_5_init(Game *game) {
         Text_List *next[] = { nullptr, nullptr };
         void (*hooks[2])(void*) = { chapter_5_sit_at_table, nullptr };
 
+
+        game->text[93].color = SKYBLUE;
+        game->text[93].bg_color = BLACK;
+
         atari_choice_text_list_init(&game->text[93],
                                     "Eleanor",
                                     "Oh hey Chase!\rWe have a seat here,\ndo you wanna sit now or?",
@@ -929,6 +1069,8 @@ void chapter_5_init(Game *game) {
                                     next,
                                     hooks,
                                     2);
+
+        game->text[93].textbox_height = render_height / 3.5f;
     }
 
     chapter_5_text(&game->text[95],
@@ -997,8 +1139,8 @@ void chapter_5_init(Game *game) {
                    30,
                    nullptr);
 
-    level->good = true;
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_DINNER_PARTY);
+    //level->good = true;
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_GALLERY);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {
@@ -1606,8 +1748,10 @@ void chapter_5_update_player_staircase(Game *game, float dt) {
         chapter_5_update_camera_look(&level->camera);
 }
 
-void chapter_5_update_player_cottage(Game *game, float dt) {
+void chapter_5_update_player_gallery(Game *game, float dt) {
     Level_Chapter_5 *level = (Level_Chapter_5 *)game->level;
+
+    if (keyboard_focus(game)) return;
 
     Vector3 stored_camera_pos = level->camera.position;
     chapter_5_update_camera(&level->camera, dt);
@@ -1790,8 +1934,34 @@ void chapter_5_update(Game *game, float dt) {
                 }
             }
         } break;
-        case CHAPTER_5_SCENE_COTTAGE: {
-            chapter_5_update_player_cottage(game, dt);
+        case CHAPTER_5_SCENE_GALLERY: {
+            chapter_5_update_player_gallery(game, dt);
+
+            level->read_popup = false;
+
+            if (game->current == 0) {
+                for (int i = 0; i < level->podium_count; i++) {
+                    Vector3 pos = level->podiums[i].position;
+                    Vector2 player = {level->camera.position.x, level->camera.position.z};
+
+                    if (Vector2Distance({pos.x, pos.z}, player) < 3) {
+                        if (IsKeyDown(KEY_EQUAL)) {
+                            level->podiums[i].rotation += 10 * PI * dt;
+                        }
+                        if (IsKeyDown(KEY_MINUS)) {
+                            level->podiums[i].rotation -= 10 * PI * dt;
+                        }
+
+                        //printf("%f\n", level->podiums[i].rotation);
+
+                        level->read_popup = true;
+
+                        if (is_action_pressed()) {
+                            game->current = level->podiums[i].text;
+                        }
+                    }
+                }
+            }
         } break;
     }
 }
@@ -1913,15 +2083,22 @@ void chapter_5_draw(Game *game) {
                 DrawRectangleRec({0,0,(float)render_width,(float)render_height}, color);
             }
         } break;
-        case CHAPTER_5_SCENE_COTTAGE: {
+        case CHAPTER_5_SCENE_GALLERY: {
             ClearBackground(SKYBLUE);
 
             BeginMode3D(level->camera);
 
             DrawModel(level->scenes[4], {}, 1, WHITE);
-            chapter_5_draw_train(level, &level->train);
+            //DrawModel(level->models.podium, {-9.308f, -3.294f, -10.69f}, 2.5, WHITE);
+            for (int i = 0; i < level->podium_count; i++) {
+                DrawModelEx(level->models.podium, level->podiums[i].position, {0,1,0}, level->podiums[i].rotation, {1.3f, 1.3f, 1.3f}, WHITE);
+            }
 
             EndMode3D();
+
+            if (level->read_popup) {
+                draw_popup("Read the Text", BLACK, Top);
+            }
         } break;
     }
 }

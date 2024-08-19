@@ -53,7 +53,7 @@ Game_Mode game_mode = GAME_MODE_INVALID;
 
 int chapter = 5;
 
-Font global_font, comic_sans, bitmap_font;
+Font global_font, comic_sans, italics_font, bold_font;
 
 bool toggled_fullscreen_this_frame = false;
 bool fullscreen = false;
@@ -148,10 +148,15 @@ MainFunction() {
 
     SetExitKey(0);
 
-    global_font = LoadFontEx("frabk.ttf", 32, 0, 0);
-    comic_sans  = LoadFontEx("comic.ttf", 16, 0, 0);
+    global_font  = LoadFontEx("frabk.ttf", 32, 0, 0);
+    comic_sans   = LoadFontEx("comic.ttf", 16, 0, 0);
+    italics_font = LoadFontEx("cambriaz.ttf", 16, 0, 0);
+    bold_font    = LoadFontEx("cambriab.ttf", 16, 0, 0);
 
     assert(IsFontReady(global_font));
+    assert(IsFontReady(comic_sans));
+    assert(IsFontReady(italics_font));
+    assert(IsFontReady(bold_font));
 
     //DisableCursor();
 

@@ -242,7 +242,7 @@ bool text_update_and_draw(Text *text, Vector2 offset) {
             pos.x = render_width/2.f - size.x/2.f;
         }
 
-        DrawTextEx(*text->font, line.text, pos, (float)text->font->baseSize, text->font_spacing, color);
+        DrawTextEx(*text->font, line.text, {(float)((int)pos.x), (float)((int)pos.y)}, (float)text->font->baseSize, text->font_spacing, color);
         pos.y += line_height;
     }
 
@@ -312,9 +312,11 @@ void text_list_init(Text_List *list, char *speaker, char *text_string,
             text.scroll_speed  = list->scroll_speed;
             text.alpha_speed   = list->alpha_speed;
 
+            Vector2 pos = { list->padding, list->padding + cum };
+
             text_init(&text,
                       list->scroll_type,
-                      { list->padding, list->padding + cum },
+                      pos,
                       line);
 
             cum += text.height;
@@ -486,7 +488,10 @@ Text_List *text_list_update_and_draw(Text_List *list, void *user_data) {
             list->textbox_height,
         };
 
-        DrawRectangleRounded(rectangle, 0.125, 4, {0, 0, 0, 255});
+        Color c = list->bg_color;
+        c.a = 215;
+
+        DrawRectangleRounded(rectangle, 0.125, 4, c);
     }
         
     for (int i = 0; i <= list->text_index; i++) {
