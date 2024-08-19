@@ -1,5 +1,5 @@
 Chapters
-  0. Prologue / Epilogue        1 min
+  0. Prologue / Epilogue        2 min
   1. Dysania                    7 mins (x)
   2. Dinner Party               5 mins (x)
   3. Repetitions                9 mins (x)
@@ -8,7 +8,7 @@ Chapters
   6. Patience and Blasphemy     3 mins
   7. Epilogue / Prologue       10 mins
 
-  = 44 minutes
+  = 45 minutes
 
 If you play the game forwards, you get the "good" narrative
 whereas if you play it backwards, you get the "bad" story,
@@ -141,9 +141,10 @@ Text Appears:
 - You're in a modern-style minimalist house similar to houses in
   The Beginner's Guide.
 
-  Here, you play a minigame where you do repetitive tasks in
-  an attempt to calm down, similar to the cleaning game in
-  the Beginner's Guide.
+  Here, you play a minigame where you look through various
+  schools of thought on meaning in life, and we utilize
+  the 3D environment to see literally different perspectives
+  on things via looking around.
 
   It's very retrospective and you get a bunch of different
   philosophies on finding meaning in suffering.

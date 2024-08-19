@@ -87,7 +87,11 @@ struct Level_Chapter_3 {
 
     bool lunch_devil_effect;
 
-    bool window_popup;
+    float end_steps;
+
+    bool black_screen;
+
+    //bool window_popup;
     bool open_door_popup;
     bool bed_popup;
 
@@ -95,6 +99,8 @@ struct Level_Chapter_3 {
 
     int screens_scrolled;
 };
+
+void chapter_3_job_init(Game *game, int which_document_list);
 
 void chapter_3_next_document(Chapter_3_Job_Minigame *minigame) {
     if (minigame->current_document+1 < minigame->document_count) {
@@ -313,6 +319,16 @@ void chapter_3_goto_job_minigame(void *game_ptr) {
     level->minigame.active = true;
 }
 
+void chapter_3_goto_window_text(Game *game) {
+    Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
+
+    level->state = CHAPTER_3_STATE_WINDOW;
+    chapter_3_job_init(game, 3);
+    level->minigame.active = true;
+
+    level->black_screen = false;
+}
+
 Entity *add_lunch_table(Array<Entity*> *entities, int x, int y, int num_people) {
     Entity *table = chapter_3_make_entity(ENTITY_CHAP_3_LUNCH_TABLE, x, y);
     array_add(entities, table);
@@ -489,7 +505,7 @@ void chapter_3_job_init(Game *game, int which_document_list) {
             documents[count++] =
                 "Email\n-------\n\nPeggy,\n  The dinner was great. I suppose we don't need a reason to email on this thing anymore since we have each other's numbers, but something compelled me to.\n  Anyways, have a nice night, and I hope we see each other again :)\n\nRegards,\nHunter";
             documents[count++] =
-                "  \"It is during that return, that pause, that Sisyphus interests me. A face that toils so close to stones is already stone itself! I see that man going back down with a heavy yet measured step toward the torment of which he will never know the end. That hour like a breathing-space which returns as surely as his suffering, that is the hour of consciousness. At each of those moments when he leaves the heights and gradually sinks toward the lairs of the gods, he is superior to his fate. He is stronger than his rock.\"\n\n----\n\n  \"One does not discover the absurd without being tempted to write a manual of happiness.\" [2]";
+                "\"One does not discover the absurd without being tempted to write a manual of happiness.\" [2]";
 
             level->minigame = chapter_3_make_job_minigame(&game->level_arena, documents, count);
 
@@ -504,7 +520,7 @@ void chapter_3_job_init(Game *game, int which_document_list) {
         } break;
         case 3: {
             documents[count++] =
-                "Chase stared out the window.";
+                "Chase stared out a window.";
             documents[count++] =
                 "Although his eyes were fixated on an insignificant patch of grass outside, his mind wandered someplace else.";
             documents[count++] =
@@ -877,12 +893,11 @@ void chapter_3_init(Game *game) {
 
     chapter_3_job_init(game, 0);
 
-    /*
     chapter_3_goto_lunch_room(game, CHAPTER_3_LUNCH_TEXT_3);
-    chapter_3_job_init(game, 3);
-    */
+    //chapter_3_job_init(game, 3);
 
-    //level->state = CHAPTER_3_STATE_ROAD;
+    level->state = CHAPTER_3_STATE_LUNCH;
+    level->current_lunch_text = CHAPTER_3_LUNCH_TEXT_3;
 }
 
 void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,
@@ -1216,7 +1231,10 @@ void chapter_3_entity_update(Entity *entity, Game *game, float dt) {
                 dir_x = dir_y = 0;
 
             Vector2 velocity = { dir_x * player_speed * dt, dir_y * player_speed * dt };
+
+            Vector2 before_pos = entity->pos;
             apply_velocity(entity, velocity, &game->entities);
+
 
             if (level->state == CHAPTER_3_STATE_LUNCH && level->current_lunch_text == CHAPTER_3_LUNCH_TEXT_3) {
                 level->lunch_devil_effect = dir_x || dir_y;
@@ -1228,12 +1246,23 @@ void chapter_3_entity_update(Entity *entity, Game *game, float dt) {
                     entity->base_collider.height
                 };
 
+                level->end_steps += Vector2Distance(entity->pos, before_pos);
+
+                printf("%f\n", level->end_steps);
+
+                if (level->end_steps >= 500) {
+                    add_event(game, chapter_3_goto_window_text, 3);
+                    level->black_screen = true;
+                }
+
+                /*
                 level->window_popup = !level->lunch_devil_effect && CheckCollisionRecs(player_rectangle, {0, 0, 192, 20});
                 if (level->window_popup && is_action_pressed()) {
                     level->state = CHAPTER_3_STATE_WINDOW;
                     chapter_3_job_init(game, 3);
                     level->minigame.active = true;
                 }
+                */
             }
 
             int width = entity_texture_width(entity);
@@ -1574,6 +1603,11 @@ void chapter_3_draw(Game *game, float dt) {
             }
         } break;
         case CHAPTER_3_STATE_LUNCH: {
+            if (level->black_screen) {
+                ClearBackground(BLACK);
+                break;
+            }
+
             if (level->lunch_devil_effect) {
                 ClearBackground(BLACK);
             } else {
@@ -1589,9 +1623,11 @@ void chapter_3_draw(Game *game, float dt) {
                 chapter_3_entity_draw(game->entities.data[i], game);
             }
 
+            /*
             if (level->window_popup) {
                 draw_popup("Stare outside.");
             }
+            */
 
             EndMode2D();
         } break;

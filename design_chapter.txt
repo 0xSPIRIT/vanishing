@@ -308,3 +308,24 @@ Part 2
   skewed perception. Their heads are also replaced
   with regular heads.
 - You go through another door.
+
+- Modern, minimalist-style museum.
+- In each room of the museum there's a different
+  topic- meaning in life, suffering, etc.
+- Depending on how you look around in the room,
+  different things pop out to your perspective.
+  When you lock onto a particular perspective,
+  the podium in the middle of the room gives
+  a little quote based on that particular
+  perspective. There's also a story that's told
+  at the start when nothing is selected as yet
+  as you go through each of the rooms. This
+  story also gives the idea that the game
+  can be played in reverse order.
+- When you unlock all perspectives in all
+  rooms, a door unlocks. You're out on the
+  balcony. You see Penny, and you have
+  a little discussion together.
+- You walk back through the door you came
+  from and now you're back in your room (Atari)
+- Phone call with your future self.

@@ -24,6 +24,16 @@ DefaultDocumentsTabbedView = true
 Type = "TabbedView"
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
+Active = true
+TabLabel = "chapter_5.cpp"
+TabWidth = 108.0
+TabIsPinned = false
+Type = "SourceViewPanel"
+FilePath = "c:\\dev\\vanishing\\chapter_5.cpp"
+CursorPos = 12908
+VertPos = 9384.0
+
+[[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "util.cpp"
 TabWidth = 71.33334
 TabIsPinned = false
@@ -38,7 +48,7 @@ TabWidth = 84.66666
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\game.cpp"
-CursorPos = 4243
+CursorPos = 4244
 VertPos = 3657.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
@@ -49,18 +59,8 @@ Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\main.cpp"
 CursorPos = 3889
 
-[[MainDockingFrame.DockedWidgets.Tabs]]
-Active = true
-TabLabel = "chapter_5.cpp"
-TabWidth = 108.0
-TabIsPinned = false
-Type = "SourceViewPanel"
-FilePath = "c:\\dev\\vanishing\\chapter_5.cpp"
-CursorPos = 6896
-VertPos = 5957.0
-
 [[MainDockingFrame.DockedWidgets]]
-RequestedWidth = 830.0
+RequestedWidth = 639.0
 RequestedHeight = 250.0
 Type = "DockingFrame"
 SplitType = 2
@@ -86,7 +86,7 @@ TabWidth = 85.33334
 TabIsPinned = false
 Type = "WatchPanel"
 Columns = [{Width = 250.0}, {Width = 362.0}, {Width = 250.0}]
-Items = ["pos", "size", "color", "game->num_events", "game.events", "level.shader", ""]
+Items = ["level.scenes[4]", "level.camera", ""]
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 TabLabel = "Auto"
@@ -108,7 +108,6 @@ TabIsPinned = false
 Type = "ThreadPanel"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
-Active = true
 TabLabel = "Call Stack"
 TabWidth = 104.0
 TabIsPinned = false
@@ -121,6 +120,7 @@ TabIsPinned = false
 Type = "ImmediatePanel"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+Active = true
 TabLabel = "Output"
 TabWidth = 89.33334
 TabIsPinned = false

@@ -1,11 +1,10 @@
 TODO : Today
 
-TODO : Later
+- Include the theme of SOMETHING COMPELLED ME TO.
+  It's the same thing that Hunter said to Peggy,
+  and how Chase kept going in the desert.
 
-- Next model scene (load): beginner's guide esque modern house
-- Penny dialogue text
-- Walk through another door, teleport to apartment (atari)
-- Phone call: "I'm you from the future!"
+TODO : Later
 
 A phone call with a future version of yourself:
   The universe does not stop behaving chaotically just because you

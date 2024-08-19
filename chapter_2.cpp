@@ -318,7 +318,7 @@ void chapter_2_init(Game *game) {
                          &game->text[11]);
     atari_text_list_init(&game->text[11],
                          "Chase",
-                         "I'm 23.",
+                         "I'm 19.",
                          speed,
                          &game->text[12]);
     atari_text_list_init(&game->text[12],
