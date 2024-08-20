@@ -1,0 +1,4 @@
+- Fix the issue with the camera moving on the train.
+- When transitioning from train station to staircase,
+  sometimes the train doesn't load? But the code still
+  functions correctly. It just doesn't render.
