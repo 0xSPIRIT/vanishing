@@ -154,8 +154,6 @@ void chapter_4_init(Game *game) {
     textures[6] = load_texture(RES_DIR "art/chap4_scene_3.png");
     textures[7] = load_texture(RES_DIR "art/chap4_scene_4.png");
 
-    level->state = CHAPTER_4_STATE_ATARI;
-
     // Setup cutscene
     Cutscene *cutscene = &level->bed_cutscene;
 

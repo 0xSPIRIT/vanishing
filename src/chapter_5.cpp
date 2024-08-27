@@ -382,7 +382,7 @@ void chapter_5_text(Text_List *list, char *speaker, char *line, float scroll_spe
     list->scale = 0.125;
     list->scroll_speed = scroll_speed;
 
-    list->color = {200, 0, 0, 255};
+    list->color = {255, 199, 199, 255};
     list->bg_color = BLACK;
 
     list->render_type = DrawTextbox;
@@ -1621,8 +1621,8 @@ void chapter_5_init(Game *game) {
                    30,
                    nullptr);
 
-    level->good = true;
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_SEASIDE);
+    //level->good = true;
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_DINNER_PARTY);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {

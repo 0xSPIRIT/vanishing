@@ -20,8 +20,8 @@ void intro_init_text_list(Text_List *list,
 }
 
 void game_intro_init(Game_Intro *game) {
-    render_width = 640;
-    render_height = 480;
+    render_width = DIM_3D_WIDTH;
+    render_height = DIM_3D_HEIGHT;
 
     game->render_target = LoadRenderTexture(render_width, render_height);
 
@@ -50,6 +50,9 @@ void game_intro_init(Game_Intro *game) {
         } break;
         case 6: {
             intro_init_text_list(&game->text[0], "6. Patience and Blasphemy", 0);
+        } break;
+        case 7: {
+            intro_init_text_list(&game->text[0], "Epilogue", 0);
         } break;
     }
 

@@ -648,6 +648,7 @@ void model_set_shader(Model *model, Shader shader) {
 #include "chapter_3.cpp"
 #include "chapter_4.cpp"
 #include "chapter_5.cpp"
+#include "chapter_6.cpp"
 
 void game_atari_init(Game *game) {
     assert(game->level == nullptr); // So we can make sure we had called deinit before
@@ -690,6 +691,10 @@ void game_atari_init(Game *game) {
         case 5: {
             game->level = arena_push(&game->level_arena, sizeof(Level_Chapter_5));
             chapter_5_init(game);
+        } break;
+        case 6: {
+            game->level = arena_push(&game->level_arena, sizeof(Level_Chapter_6));
+            chapter_6_init(game);
         } break;
     }
 }
@@ -738,6 +743,7 @@ void game_atari_run(Game *game) {
         case 3: chapter_3_update(game, dt); break;
         case 4: chapter_4_update(game, dt); break;
         case 5: chapter_5_update(game, dt); break;
+        case 6: chapter_6_update(game, dt); break;
     }
 
     BeginDrawing();
@@ -758,6 +764,7 @@ void game_atari_run(Game *game) {
             case 3: chapter_3_draw(game, dt); break;
             case 4: chapter_4_draw(game, dt); break;
             case 5: chapter_5_draw(game); break;
+            case 6: chapter_6_draw(game); break;
         }
 
         atari_update_and_draw_textbox(game);

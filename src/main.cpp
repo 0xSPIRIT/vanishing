@@ -55,9 +55,10 @@ enum Game_Mode {
 };
 Game_Mode game_mode = GAME_MODE_INVALID;
 
-int chapter = 5;
+int chapter = 6;
 
-Font global_font, comic_sans, italics_font, bold_font, bold_2_font;
+Font global_font, comic_sans, italics_font, bold_font, bold_2_font,
+     mono_font;
 
 bool toggled_fullscreen_past_second = false;
 float fullscreen_timer = 0;
@@ -160,10 +161,11 @@ MainFunction() {
     italics_font = LoadFontEx(RES_DIR "art/cambriaz.ttf", 16, 0, 0);
     bold_font    = LoadFontEx(RES_DIR "art/cambriab.ttf", 16, 0, 0);
     bold_2_font  = LoadFontEx(RES_DIR "art/BOOKOSB.TTF", 32, 0, 0);
+    mono_font    = LoadFontEx(RES_DIR "art/cour.ttf", 8, 0, 0);
 
     //DisableCursor();
 
-    set_game_mode(GAME_MODE_ATARI);
+    set_game_mode(GAME_MODE_INTRO);
 
     while (!WindowShouldClose()) {
         fullscreen_timer -= GetFrameTime();

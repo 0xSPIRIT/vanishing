@@ -4,7 +4,7 @@ Chapters
   2. Dinner Party               5 mins (x)
   3. Repetitions                9 mins (x)
   4. Theophany                  2 mins (x)
-  5. Perception                 7 mins
+  5. Perception                 7 mins (x)
   6. Patience and Blasphemy     3 mins
   7. Epilogue / Prologue       10 mins
 
@@ -243,13 +243,7 @@ Text Appears: "Patience and Blasphemy"
             CONJURED TH3 KN0WN FROM TH3 UNKNOWN!
              YOU BELIEVE YOU CAN 0VERPOWER ME?
 
-              0f961574366631de13e5343b05bcf0a5
-              5107cca865d6662eee032b4848277692
-              ccef10e666e666r66266666636261666
-              f8e75ff9835716664db31032088f0d3e
-              c34aafc3d123f91666dc05c7bc220c76
-              1b8d971549ba141eb666c75d192dd9c0
-
+504C454153452048454C50204D450A47495645204D4520535452454E47544820544F0A4F564552504F574552205448495320454E544954590A484520495320544F4F205354524F4E470A4920554E444552455354494D415445442048494D
                            ______              
                       .d$$$******$$$$c.        
                    .d$P"            "$$c      

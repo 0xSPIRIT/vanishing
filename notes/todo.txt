@@ -1,17 +1,9 @@
 TODO : Today
 
-TODO : Later
-
 - Improve the story between Peggy and Hunter. Give them a better
   reason for them to be emailing. Also, the "love" replacement
   at the end isn't as warranted. Maybe they're long lost
   lovers reconnecting rather than strangers.
-
-- We need to have a really short 2 minute intro
-  (3d) which shows the overarching God themes as well
-  as the theme of meaninglessness.
-    - running away from an invisible monster
-    - "didn't you see it?!!" -> no i didn't see anything.
 
 - Chapter 1: follow the footsteps in the ending rather than
              following the water so that it lines you up
@@ -19,6 +11,14 @@ TODO : Later
              otu of bed. Also change the text at the end
 
 - Add an interactible object in chapter 1 to "pray to god".
+
+TODO : Later
+
+- We need to have a really short 2 minute intro
+  (3d) which shows the overarching God themes as well
+  as the theme of meaninglessness.
+    - running away from an invisible monster
+    - "didn't you see it?!!" -> no i didn't see anything.
 
 Later
 - In chapter 5, add parts in each of the three parts where you have to look
