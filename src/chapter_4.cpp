@@ -403,7 +403,6 @@ void chapter_4_update(Game *game, float dt) {
     if (level->end_timer > 0) {
         level->end_timer -= dt;
         if (level->end_timer <= 0) {
-            chapter++;
             atari_queue_deinit_and_goto_intro(game);
             return;
         }

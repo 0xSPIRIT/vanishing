@@ -442,7 +442,7 @@ void chapter_3_job_init(Game *game, int which_document_list) {
             documents[count++] =
                 "Memo\n-------\n\nNotice for all employees:\n  Please be adviesd that the copier machien is not wokring. We brought a replacemnet and it is arriving next Monday.";
             documents[count++] =
-                "Email\n-------\n\nDear Peggy,\n  Hopefully this isn't picked up by the system. We met a few weeks ago at the business meeting in Sydney; we had dinner together. I'm following up on potential collaboration opportunities between our branches that may be beneficial to us both.\n  If there are any barriers or concerns, please let me know.\n\nWarm regards,\nHunter (Business Development Manager, Toronto)";
+                "Email\n-------\n\nDear Peggy,\n  Hopefully this isn't picked up by the system. We met a few weeks ago at the business meeting in Sydney; we had dinner together. I'm following up on potential collaboration opportunities between our branches that may be beneficial to us both.\n  If there are any barriers or concerns, please let me know.\n\nWarm regards,\nHunter (Business Development Manager, Nebraska)";
 
             level->minigame = chapter_3_make_job_minigame(&game->level_arena, documents, count);
 
@@ -493,7 +493,7 @@ void chapter_3_job_init(Game *game, int which_document_list) {
             Document *d2 = &level->minigame.document_list[2];
             document_register_error_first_occurence(d2, "great", "some");
             document_register_error_first_occurence(d2, "thestrongest", "a");
-            document_register_error_first_occurence(d2, "Earth", "Toronto");
+            document_register_error_first_occurence(d2, "Earth", "Nebraska");
             document_register_error_first_occurence(d2, "trusted", "underpaid");
             document_register_error_first_occurence(d2, "honour", "experience");
             document_register_error_first_occurence(d2, "thecompany", "myself");
@@ -655,7 +655,7 @@ void chapter_3_init(Game *game) {
                          &game->text[12]);
     atari_text_list_init(&game->text[12],
                          "Jake",
-                         "By the way, did y'all\nsee Jenny and Mark\nyesterday?",
+                         "By the way, did y'all\nhear that John is\nretiring?",
                          speed,
                          &game->text[13]);
     atari_text_list_init(&game->text[13],
@@ -840,12 +840,12 @@ void chapter_3_init(Game *game) {
                          &game->text[50]);
     atari_text_list_init(&game->text[50],
                          "Chase",
-                         "But, as the tip of my feet\nbarely brushed against the\nfloor of the oustide,",
+                         "But, as the tip of my feet\nbarely touched the ground\non the oustide,",
                          speed,
                          &game->text[51]);
     atari_text_list_init(&game->text[51],
                          "Chase",
-                         "I dropped dead,\rcollpasing onto the\nground.",
+                         "I dropped dead,\rcollapsing onto the\nground.",
                          speed,
                          &game->text[52]);
     atari_text_list_init(&game->text[52],
@@ -893,11 +893,13 @@ void chapter_3_init(Game *game) {
 
     chapter_3_job_init(game, 0);
 
+    /*
     chapter_3_goto_lunch_room(game, CHAPTER_3_LUNCH_TEXT_3);
     //chapter_3_job_init(game, 3);
 
     level->state = CHAPTER_3_STATE_LUNCH;
     level->current_lunch_text = CHAPTER_3_LUNCH_TEXT_3;
+    */
 }
 
 void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,
@@ -1247,8 +1249,6 @@ void chapter_3_entity_update(Entity *entity, Game *game, float dt) {
                 };
 
                 level->end_steps += Vector2Distance(entity->pos, before_pos);
-
-                printf("%f\n", level->end_steps);
 
                 if (level->end_steps >= 500) {
                     add_event(game, chapter_3_goto_window_text, 3);

@@ -22,6 +22,10 @@ void main() {
         discard;
     }
 
+    if (texelColor.a == 0) {
+        discard;
+    }
+
     finalColor = texelColor * fragColor * colDiffuse;
 }
 

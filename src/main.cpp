@@ -35,8 +35,10 @@
 #define DIM_ATARI_WIDTH  192
 #define DIM_ATARI_HEIGHT 160
 
-#define DIM_3D_WIDTH  320
-#define DIM_3D_HEIGHT 240
+#define DIM_3D_WIDTH  (320)
+#define DIM_3D_HEIGHT (240)
+
+#define PLAYER_SPEED_3D 3
 
 #define FOV_DEFAULT 65
 
@@ -55,7 +57,7 @@ Game_Mode game_mode = GAME_MODE_INVALID;
 
 int chapter = 5;
 
-Font global_font, comic_sans, italics_font, bold_font;
+Font global_font, comic_sans, italics_font, bold_font, bold_2_font;
 
 bool toggled_fullscreen_past_second = false;
 float fullscreen_timer = 0;
@@ -157,11 +159,7 @@ MainFunction() {
     comic_sans   = LoadFontEx(RES_DIR "art/comic.ttf", 16, 0, 0);
     italics_font = LoadFontEx(RES_DIR "art/cambriaz.ttf", 16, 0, 0);
     bold_font    = LoadFontEx(RES_DIR "art/cambriab.ttf", 16, 0, 0);
-
-    assert(IsFontReady(global_font));
-    assert(IsFontReady(comic_sans));
-    assert(IsFontReady(italics_font));
-    assert(IsFontReady(bold_font));
+    bold_2_font  = LoadFontEx(RES_DIR "art/BOOKOSB.TTF", 32, 0, 0);
 
     //DisableCursor();
 

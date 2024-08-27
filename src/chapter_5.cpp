@@ -10,8 +10,20 @@ enum Chapter_5_Scene {
     CHAPTER_5_SCENE_TRAIN_STATION,
     CHAPTER_5_SCENE_STAIRCASE,
     CHAPTER_5_SCENE_DINNER_PARTY,
+    CHAPTER_5_SCENE_DESERT,
     CHAPTER_5_SCENE_GALLERY,
-    CHAPTER_5_SCENE_TEST,
+    CHAPTER_5_SCENE_SEASIDE,
+};
+
+enum {
+    QUOTE_CAMUS,
+    QUOTE_ROMANS,
+    QUOTE_QURAN,
+    QUOTE_BHAGAVAD_GITA_1,
+    QUOTE_BHAGAVAD_GITA_2,
+    QUOTE_SARTRE,
+    QUOTE_NIETZSCHE,
+    QUOTE_COUNT,
 };
 
 struct Chapter_5_Clerk {
@@ -46,6 +58,18 @@ struct Chapter_5_Train {
     float       setoff_timer;
     float       door_open_alarm;
     Vector3     instance_positions;
+};
+
+struct Chapter_5_Quote {
+    Text_List *text;
+    Vector3 position;
+    Vector3 target;
+    float   fov;
+};
+
+struct Chapter_5_Perspective_Door {
+    Vector3 position;
+    float   rotation;
 };
 
 enum Chair_State {
@@ -96,7 +120,7 @@ struct Level_Chapter_5 {
 
     // Staircase
     struct {
-        bool door_popup;
+        bool staircase_door_popup;
     };
 
     // Dinner Party
@@ -115,12 +139,33 @@ struct Level_Chapter_5 {
         bool             talk_popup;
     };
 
-    // Museum
+    // Desert
     struct {
-        Chapter_5_Podium podiums[64];
+        Chapter_5_Podium podiums[32];
         int              podium_count;
 
         bool             read_popup;
+        bool             desert_door_popup;
+    };
+
+    // Gallery
+    struct {
+        Chapter_5_Quote  quotes[QUOTE_COUNT];
+        Chapter_5_Quote *current_quote;
+        float            current_quote_time;
+
+        Vector3          camera_target_saved;
+        Vector3          camera_position_saved;
+
+        Vector2          door_position;
+        bool             gallery_door_popup;
+    };
+
+    // Seaside
+    struct {
+        bool talk_to_penny_popup;
+        bool talked_to_penny;
+        bool seaside_ending; // a little hang time before cutting to the next chapter.
     };
 
     struct Models {
@@ -144,6 +189,29 @@ struct Level_Chapter_5 {
 };
 
 void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene);
+
+void chapter_5_end(void *game_ptr) {
+    atari_queue_deinit_and_goto_intro((Game *)game_ptr);
+}
+
+void chapter_5_begin_phone_call(Game *game) {
+    game->current = &game->text[0];
+}
+
+void end_chapter_5_after_stop(void *game_ptr) {
+    Game *game = (Game *)game_ptr;
+    Level_Chapter_5 *level = (Level_Chapter_5 *)game->level;
+
+    level->seaside_ending = true;
+
+    add_event(game, chapter_5_begin_phone_call, 2);
+}
+
+void chapter_5_exit_gallery(void *game_ptr) {
+    Game *game = (Game *)game_ptr;
+
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_SEASIDE);
+}
 
 void chapter_5_begin_head_flip(void *game_ptr) {
     Game *game = (Game *)game_ptr;
@@ -240,7 +308,7 @@ void chapter_5_dinner_goto_black(Game *game) {
 }
 
 void chapter_5_finish_dinner_party(Game *game) {
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_GALLERY);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_DESERT);
 }
 
 void chapter_5_table(Chapter_5_Table *table, Vector2 pos, int num_chairs, float angle_offset) {
@@ -314,7 +382,7 @@ void chapter_5_text(Text_List *list, char *speaker, char *line, float scroll_spe
     list->scale = 0.125;
     list->scroll_speed = scroll_speed;
 
-    list->color = SKYBLUE;
+    list->color = {200, 0, 0, 255};
     list->bg_color = BLACK;
 
     list->render_type = DrawTextbox;
@@ -360,7 +428,7 @@ void chapter_5_sacred_text(Text_List *list, char *line, Text_List *next) {
     list->center_text = true;
 
     list->color = WHITE;
-    list->bg_color = BLACK;
+    list->bg_color = {0, 0, 0, 160};
 
     text_list_init(list, 0, line, next);
 
@@ -511,12 +579,13 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
                 level->tables[10].text_index = 52;
             }
         } break;
-        case CHAPTER_5_SCENE_GALLERY: {
+        case CHAPTER_5_SCENE_DESERT: {
             level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/cottage.fs");
 
-            model_set_shader(&level->scenes[4], level->shader);
+            Model *scene_model = &level->scenes[4];
+            set_model_bilinear(scene_model);
 
-            CreateLight(LIGHT_POINT, { 0, 2, -30 }, Vector3Zero(), {255, 214, 179, 255}, level->shader);
+            model_set_shader(&level->scenes[4], level->shader);
 
             level->camera.position   = BlenderPosition3D(-239.1f, -131.f, 53.62f + GUY_HEIGHT);
             level->camera.target     = { 0, 0, 0 };
@@ -591,8 +660,81 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
             chapter_5_podium_text(&game->text[12],
                                   true,
                                   "Blisters became the bottoms of my feet.\r"
-                                  "And yet, something compells me to brave this\nhellscape.\rAnd it fascinates me.",
+                                  "And yet, something compels me to brave this\nhellscape.\rAnd it fascinates me.",
                                   nullptr);
+
+            chapter_5_podium_text(&game->text[45],
+                                  false,
+                                  "Perhaps he didn't understand what he found.",
+                                  &game->text[46]);
+            chapter_5_podium_text(&game->text[46],
+                                  false,
+                                  "Maybe the right moment had not reached him yet.\r"
+                                  "Or, the right person had not reached him yet.\r"
+                                  "Or, the right relationship had not reached him yet.",
+                                  &game->text[47]);
+            chapter_5_podium_text(&game->text[47],
+                                  false,
+                                  "How do you create your own meaning?",
+                                  &game->text[48]);
+            chapter_5_podium_text(&game->text[48],
+                                  false,
+                                  "But something inside him still urged him to go on.\r"
+                                  "For what reason?\r"
+                                  "He didn't know that either.\r"
+                                  "He doesn't know anything.",
+                                  &game->text[49]);
+            chapter_5_podium_text(&game->text[49],
+                                  true,
+                                  "\nHe remained unenlightened.",
+                                  nullptr);
+
+            for (int i = 45; i <= 49; i++) {
+                game->text[i].location = Middle;
+            }
+
+            level->podium_count = 0;
+
+            auto add_podium = [&](Text_List *text, Vector2 position_2d, float rotation) -> void {
+                // position_2d you get from blender's (x, y)
+
+                Vector3 position = {
+                    position_2d.x,
+                    999,
+                    -position_2d.y
+                };
+
+                Ray ray = {};
+                ray.direction = {0, -1, 0};
+                ray.position = position;
+
+                // Check bottom collision
+                RayCollision highest = {};
+                highest.point.y = -9999;
+
+                RayCollision result = GetRayCollisionMesh(ray, level->scenes[4].meshes[6], MatrixIdentity());
+
+                position.y = result.point.y;
+
+                Chapter_5_Podium podium = { text, position, rotation };
+                level->podiums[level->podium_count++] = podium;
+            };
+
+            add_podium(&game->text[0], {-226.8f, -123.9f}, -62);
+            add_podium(&game->text[1], {-216.5f, -110.2f}, -68);
+            add_podium(&game->text[2], {-202.8f, -103.2f}, -52);
+            add_podium(&game->text[3], {-187.0f, -87.51f}, -72);
+            add_podium(&game->text[4], {-169.4f, -78.83f}, -70);
+            add_podium(&game->text[5], {-136.f, -63}, -82);
+            add_podium(&game->text[7], {-109.f, -67}, -52);
+            add_podium(&game->text[9], {-74, -47}, -72);
+            add_podium(&game->text[10], {-39, -27}, -68);
+        } break;
+        case CHAPTER_5_SCENE_GALLERY: {
+            level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/cottage.fs");
+            model_set_shader(&level->scenes[5], level->shader);
+
+            memset(game->text, 0, sizeof(game->text));
 
             chapter_5_sacred_text(&game->text[20],
                                   "\"It is during that return, that pause, that Sisyphus\n"
@@ -607,7 +749,7 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
                                   "of the gods, he is superior to his fate.\"",
                                   &game->text[21]);
             chapter_5_sacred_text(&game->text[21],
-                                  "\n\n\n\n\n\"... He is stronger than his rock.\"\rAlbert Camus, The Myth of Sisyphus.",
+                                  "\n\"... He is stronger than his rock.\"\rAlbert Camus, The Myth of Sisyphus.",
                                   nullptr);
             game->text[21].text[1].font = &bold_font;
 
@@ -642,13 +784,33 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
             game->text[24].text[1].font = &bold_font;
 
             chapter_5_sacred_text(&game->text[25],
-                                  "\n\n\n\"As the ocean is filled with water flowing into it from\n"
-                                  "all sides and remains immovable, so the man into\n"
-                                  "whom all desires flow, but is not a bit affected attains\n"
-                                  "peace and not the man who craves the desires.\"\n\r"
-                                  "Bhagavad Gita 2:70",
+                                  "\"We are what we think.\n"
+                                  "All that we are arises with our\n"
+                                  "thoughts.\n\n"
+                                  "With our thoughts we make the world.\n"
+                                  "Speak or act with an impure mind\n"
+                                  "And trouble will follow you\n"
+                                  "As the wheel follows the ox that draws\n"
+                                  "the cart.\"",
+                                  &game->text[50]);
+            chapter_5_sacred_text(&game->text[50],
+                                  "\"We are what we think.\n"
+                                  "All that we are arises with our\n"
+                                  "thoughts.\n\n"
+                                  "With our thoughts we make the world.\n"
+                                  "Speak or act with a pure mind\n"
+                                  "And happiness will follow you\n"
+                                  "As your shadow, unshakable.\"",
+                                  &game->text[51]);
+            chapter_5_sacred_text(&game->text[51],
+                                  "\"'Look how he abused me and hurt me,\n"
+                                  "How he threw me down and robbed me.'\n\n"
+                                  "Live with such thoughts and you live in\n"
+                                  "hate.\"\n\r"
+                                  "The Dhammapada (1)",
                                   nullptr);
-            game->text[25].text[1].font = &bold_font;
+            game->text[51].text[1].font = &bold_font;
+
 
             chapter_5_sacred_text(&game->text[26],
                                   "\n\n\"Atheistic existentialism, of which I am a\n"
@@ -663,7 +825,7 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
             chapter_5_sacred_text(&game->text[27],
                                   "\n\"What do we mean by saying that existence precedes\n"
                                   "essence? We mean that man first of all exists,\n"
-                                  "encounters himself, surges up in the world — and\n"
+                                  "encounters himself, surges up in the world - and\n"
                                   "defines himself afterwards. If man as the\n"
                                   "existentialist sees him is not definable, it is because\n"
                                   "to begin with he is nothing.\"\n\n\r"
@@ -682,7 +844,166 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
                                   nullptr);
             game->text[28].text[1].font = &bold_font;
 
+            {
+                String choices[] = { const_string("I've seen enough"), const_string("No, I'd like to look around more") };
+                Text_List *next[] = { nullptr, nullptr };
+                void (*hooks[2])(void*) = { chapter_5_exit_gallery, nullptr };
+
+                game->text[100].color = WHITE;
+                game->text[100].bg_color = BLACK;
+                game->text[100].location = Bottom;
+                game->text[100].render_type = DrawTextbox;
+
+                atari_choice_text_list_init(&game->text[100],
+                                            nullptr,
+                                            "Exit the gallery?\rYou won't be able to come back.",
+                                            choices,
+                                            next,
+                                            hooks,
+                                            2);
+
+                game->text[100].textbox_height = render_height / 3.5f;
+            }
+
+            // Set all the textures to bilinear.
+            Model *scene_model = &level->scenes[5];
+            set_model_bilinear(scene_model);
+
+            level->camera.position   = { 0, GUY_HEIGHT, 0 };
+            level->camera.target     = { 0, GUY_HEIGHT, -2 };
+            level->camera.up         = { 0, 1, 0 };
+            level->camera.fovy       = FOV_DEFAULT;
+            level->camera.projection = CAMERA_PERSPECTIVE;
+
+            level->door_position = { -8.392f, -202.2f };
+
+            Chapter_5_Quote *quote = &level->quotes[0];
+
+            quote->text     = &game->text[20];
+            quote->position = { 1.8562f, 1.8f, -31.239f };
+            quote->target   = { -4.36f, 0.71f, -0.64f };
+            quote->fov      = FOV_DEFAULT/2;
+
+            quote = &level->quotes[1];
+            quote->text = &game->text[22];
+            quote->position = { 8.2117f, 1.8f, -69.794f };
+            quote->target = {7.27f, 3.35f, -70.18f};//-30.14f, 56.12f, -85.32f};
+            quote->fov      = FOV_DEFAULT/2;
+
+            quote = &level->quotes[2];
+            quote->text = &game->text[23];
+            quote->position = { -11.432f, 1.8f, -147.07f };
+            quote->target = {-40.34f, 8.11f, -2.54f};
+            quote->fov      = FOV_DEFAULT/2;
+
+            quote = &level->quotes[3];
+            quote->text = &game->text[24];
+            quote->position = { -8.4255f, 1.8f, -140.33f };
+            quote->target = { 46.18f, 3.86f, -270.94f };
+            quote->fov      = FOV_DEFAULT/2;
+
+            quote = &level->quotes[4];
+            quote->text = &game->text[25];
+            quote->position = { 23.59f, 1.8f, -144.08f };
+            quote->target = { -103.69f, 3.22f, -164.23f };
+            quote->fov      = FOV_DEFAULT/6;
+
+            quote = &level->quotes[5];
+            quote->text = &game->text[28];
+            quote->position = { 13.524f, 1.8f, -190.22f };
+            quote->target = { -94.74f, 113.83f, -269.42f };
+            quote->fov      = FOV_DEFAULT/2;
+        } break;
+        case CHAPTER_5_SCENE_SEASIDE: {
+            level->camera.position   = { 0, GUY_HEIGHT, 0 };
+            level->camera.target     = { -2, GUY_HEIGHT, 0 };
+            level->camera.up         = { 0, 1, 0 };
+            level->camera.fovy       = FOV_DEFAULT;
+            level->camera.projection = CAMERA_PERSPECTIVE;
+
             float speed = 30;
+
+            memset(game->text, 0, sizeof(game->text));
+
+            game->textbox_alpha = 255;
+
+            chapter_5_text(&game->text[0],
+                           0,
+                           "*ring ring*\r*click*",
+                           speed,
+                           &game->text[1]);
+            chapter_5_text(&game->text[1],
+                           "Chase",
+                           "Hello?",
+                           speed,
+                           &game->text[2]);
+            chapter_5_text(&game->text[2],
+                           "F",
+                           "Oh, hello.",
+                           speed,
+                           &game->text[3]);
+            chapter_5_text(&game->text[3],
+                           "Chase",
+                           "Who is this?",
+                           speed,
+                           &game->text[4]);
+            chapter_5_text(&game->text[4],
+                           "F",
+                           "I'm you from the future!",
+                           speed,
+                           &game->text[5]);
+            chapter_5_text(&game->text[5],
+                           "Chase",
+                           "Did you escape the prison?",
+                           speed,
+                           &game->text[6]);
+            chapter_5_text(&game->text[6],
+                           "F",
+                           "Yes! I did,\rwould you like to know\nhow I did it?",
+                           speed,
+                           &game->text[7]);
+            chapter_5_text(&game->text[7],
+                           "Chase",
+                           "Yes.",
+                           speed,
+                           &game->text[8]);
+            chapter_5_text(&game->text[8],
+                           "F",
+                           "Ok, so all you have to do\nis have patience, and-\r...\r...",
+                           speed,
+                           &game->text[9]);
+            chapter_5_text(&game->text[9],
+                           "Chase",
+                           "Are you still there...?",
+                           speed,
+                           &game->text[10]);
+            chapter_5_text(&game->text[10],
+                           "F",
+                           "I'm sorry.\rI just realized I didn't escape after all.",
+                           speed,
+                           &game->text[11]);
+            chapter_5_text(&game->text[11],
+                           "F",
+                           "It turns out I'm still in the prison,\rthere was just a bigger one around\nthe previous one.",
+                           speed,
+                           &game->text[12]);
+            chapter_5_text(&game->text[12],
+                           "F",
+                           "I'll call you back if I do escape.\rPromise.",
+                           speed,
+                           &game->text[13]);
+            chapter_5_text(&game->text[13],
+                           "Chase",
+                           "Wait wh-",
+                           speed,
+                           &game->text[14]);
+            chapter_5_text(&game->text[14],
+                           0,
+                           "*click*",
+                           speed,
+                           nullptr);
+
+            game->text[14].callbacks[0] = chapter_5_end;
 
             chapter_5_text(&game->text[30],
                            "Penny",
@@ -696,7 +1017,7 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
                            &game->text[32]);
             chapter_5_text(&game->text[32],
                            "Penny",
-                           "Have you found what you're looking for?\nMeaning in your suffering?",
+                           "Have you found what you're looking for?\rMeaning in your suffering?",
                            speed,
                            &game->text[33]);
             chapter_5_text(&game->text[33],
@@ -706,7 +1027,7 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
                            &game->text[34]);
             chapter_5_text(&game->text[34],
                            "Penny",
-                           "Me too. What,\rdo you think you're the only one who hasn't?",
+                           "Me too.\rWhat, do you think you're the only one who\nhasn't?",
                            speed,
                            &game->text[35]);
             chapter_5_text(&game->text[35],
@@ -721,7 +1042,7 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
                            &game->text[37]);
             chapter_5_text(&game->text[37],
                            "Chase",
-                           "Seriously? \"It is what it is?\"\rYou have to be kidding.",
+                           "Seriously? \"That is how it is?\"\rYou've got to be kidding.",
                            speed,
                            &game->text[38]);
             chapter_5_text(&game->text[38],
@@ -736,7 +1057,7 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
                            &game->text[40]);
             chapter_5_text(&game->text[40],
                            "Penny",
-                           "But not always?",
+                           "Not always?",
                            speed,
                            &game->text[41]);
             chapter_5_text(&game->text[41],
@@ -749,85 +1070,11 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
 
             for (int i = 30; i <= 41; i++) {
                 game->text[i].color = WHITE;
+                game->text[i].location = Bottom;
                 for (int j = 0; j < game->text[i].text_count; j++) {
                     game->text[i].text[j].color = WHITE;
                 }
             }
-
-            chapter_5_podium_text(&game->text[45],
-                                  false,
-                                  "Perhaps he didn't understand what he found.",
-                                  &game->text[46]);
-            chapter_5_podium_text(&game->text[46],
-                                  false,
-                                  "Maybe the right moment had not reached him yet.\r"
-                                  "Or, the right person had not reached him yet.\r"
-                                  "Or, the right relationship had not reached him yet.",
-                                  &game->text[47]);
-            chapter_5_podium_text(&game->text[47],
-                                  false,
-                                  "How do you create your own meaning?",
-                                  &game->text[48]);
-            chapter_5_podium_text(&game->text[48],
-                                  false,
-                                  "But something inside him still urged him to go on.\r"
-                                  "For what reason?\r"
-                                  "He didn't know that either.\r"
-                                  "He doesn't know anything.",
-                                  &game->text[49]);
-            chapter_5_podium_text(&game->text[49],
-                                  true,
-                                  "\nHe remained unenlightened.",
-                                  nullptr);
-
-            for (int i = 45; i <= 49; i++) {
-                game->text[i].location = Middle;
-            }
-
-            auto add_podium = [&](Text_List *text, Vector2 position_2d, float rotation) -> void {
-                // position_2d you get from blender's (x, y)
-
-                Vector3 position = {
-                    position_2d.x,
-                    999,
-                    -position_2d.y
-                };
-
-                Ray ray = {};
-                ray.direction = {0, -1, 0};
-                ray.position = position;
-
-                // Check bottom collision
-                RayCollision highest = {};
-                highest.point.y = -9999;
-
-                RayCollision result = GetRayCollisionMesh(ray, level->scenes[4].meshes[0], MatrixIdentity());
-
-                position.y = result.point.y;
-
-                Chapter_5_Podium podium = { text, position, rotation };
-                level->podiums[level->podium_count++] = podium;
-            };
-
-            add_podium(&game->text[0], {-226.8f, -123.9f}, -62);
-            add_podium(&game->text[1], {-216.5f, -110.2f}, -68);
-            add_podium(&game->text[2], {-202.8f, -103.2f}, -52);
-            add_podium(&game->text[3], {-187.0f, -87.51f}, -72);
-            add_podium(&game->text[4], {-169.4f, -78.83f}, -70);
-            add_podium(&game->text[5], {-136.f, -63}, -82);
-            add_podium(&game->text[7], {-109.f, -67}, -52);
-            add_podium(&game->text[9], {-74, -47}, -72);
-            add_podium(&game->text[10], {-39, -27}, -68);
-        } break;
-        case CHAPTER_5_SCENE_TEST: {
-            level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/cottage.fs");
-            model_set_shader(&level->scenes[5], level->shader);
-
-            level->camera.position   = {0, GUY_HEIGHT, 0};
-            level->camera.target     = { 2, GUY_HEIGHT, 0 };
-            level->camera.up         = { 0, 1, 0 };
-            level->camera.fovy       = FOV_DEFAULT;
-            level->camera.projection = CAMERA_PERSPECTIVE;
         } break;
     }
 }
@@ -854,9 +1101,11 @@ void chapter_5_init(Game *game) {
     level->scenes[2]           = LoadModel(RES_DIR "models/dinner_party.glb");
     level->scenes[3]           = LoadModel(RES_DIR "models/dinner_party_good.glb");
     level->scenes[4]           = LoadModel(RES_DIR "models/chap_5_cottage.glb");
+    //level->scenes[5]           = LoadModel(RES_DIR "models/testetset.glb");
     level->scenes[5]           = LoadModel(RES_DIR "models/artgallery.glb");
+    level->scenes[6]           = LoadModel(RES_DIR "models/balcony.glb");
 
-    assert(IsModelReady(level->scenes[4]));
+    assert(IsModelReady(level->scenes[5]));
 
     level->models.train        = LoadModel(RES_DIR "models/train.glb");
     level->models.train_door   = LoadModel(RES_DIR "models/train_door.glb");
@@ -1372,8 +1621,8 @@ void chapter_5_init(Game *game) {
                    30,
                    nullptr);
 
-    //level->good = true;
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_GALLERY);
+    level->good = true;
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_SEASIDE);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {
@@ -1603,7 +1852,7 @@ void chapter_5_draw_table(Game *game, Chapter_5_Table *table) {
 
         float desired_head_angle;
 
-        if (!level->good) {
+        if (!level->good && chair->state != CHAIR_HAS_PENNY) {
             if (chair->looking_at == nullptr) {
                 desired_head_angle = atan2f(level->camera.position.z - z, level->camera.position.x - x);
             } else {
@@ -1707,11 +1956,10 @@ void chapter_5_draw_train(Level_Chapter_5 *level, Chapter_5_Train *train) {
     }
 }
 
-void chapter_5_update_camera(Camera3D *camera, float dt) {
+void chapter_5_update_camera(Camera3D *camera, float speed, float dt) {
     int dir_x = key_right() - key_left();
     int dir_y = key_down() - key_up();
 
-    float speed = 5;
     if (IsKeyDown(KEY_LEFT_SHIFT)) speed = 30;
 
     Vector3 saved = camera->target;
@@ -1745,7 +1993,7 @@ bool is_mesh_collider(Model *model, int mesh_index) {
     return false;
 }
 
-void apply_3d_velocity(Camera3D *camera, Model world, Vector3 pos_vel) {
+void apply_3d_velocity(Camera3D *camera, Model world, Vector3 pos_vel, bool use_red_material_for_collision) {
     struct Is_Bad_Position_Result {
         bool ok;
         RayCollision collision_result;
@@ -1763,7 +2011,7 @@ void apply_3d_velocity(Camera3D *camera, Model world, Vector3 pos_vel) {
         highest.point.y = -9999;
 
         for (int j = 0; j < model.meshCount; j++) {
-            if (!is_mesh_collider(&model, j)) {
+            if (use_red_material_for_collision && !is_mesh_collider(&model, j)) {
                 continue;
             }
 
@@ -1791,7 +2039,7 @@ void apply_3d_velocity(Camera3D *camera, Model world, Vector3 pos_vel) {
         float distance = Vector3Distance(pos, initial_pos);
 
         for (int j = 0; j < model.meshCount; j++) {
-            if (!is_mesh_collider(&model, j)) {
+            if (use_red_material_for_collision && !is_mesh_collider(&model, j)) {
                 continue;
             }
 
@@ -1919,7 +2167,7 @@ void chapter_5_update_player_train_station(Game *game, float dt) {
     bool can_move = keyboard_focus(game) == 0 && !level->clerk.do_180_head;
 
     if (can_move) {
-        chapter_5_update_camera(&level->camera, dt);
+        chapter_5_update_camera(&level->camera, PLAYER_SPEED_3D, dt);
     }
 
     Vector3 *camera = &level->camera.position;
@@ -1935,10 +2183,114 @@ void chapter_5_update_player_train_station(Game *game, float dt) {
         Vector3 velocity = Vector3Subtract(level->camera.position, stored_camera_pos);
         level->camera.position = stored_camera_pos;
 
-        apply_3d_velocity(&level->camera, level->scenes[0], velocity);
+        apply_3d_velocity(&level->camera, level->scenes[0], velocity, true);
     }
 
     if (can_move) {
+        chapter_5_update_camera_look(&level->camera);
+    }
+}
+
+void chapter_5_update_player_staircase(Game *game, float dt) {
+    Level_Chapter_5 *level = (Level_Chapter_5 *)game->level;
+
+    Vector3 stored_camera_pos = level->camera.position;
+
+    bool can_move = keyboard_focus(game) == 0;
+
+    if (can_move)
+        chapter_5_update_camera(&level->camera, PLAYER_SPEED_3D, dt);
+
+    level->staircase_door_popup = (Vector3Distance(level->camera.position, {13.25f, 25.75f, 48.25f}) < 5);
+    if (level->staircase_door_popup && is_action_pressed()) {
+        chapter_5_goto_scene(game, CHAPTER_5_SCENE_DINNER_PARTY);
+    }
+
+    chapter_5_update_player_on_train(game);
+
+    if (!level->train.player_in && level->camera.position.z > 0) {
+        Vector3 velocity = Vector3Subtract(level->camera.position, stored_camera_pos);
+        level->camera.position = stored_camera_pos;
+
+        apply_3d_velocity(&level->camera, level->scenes[1], velocity, true);
+    }
+
+    if (can_move)
+        chapter_5_update_camera_look(&level->camera);
+}
+
+void gallery_check_quotes(Game *game, float dt) {
+    Level_Chapter_5 *level = (Level_Chapter_5 *)game->level;
+
+    if (level->current_quote == 0) {
+        for (int i = 0; i < QUOTE_COUNT; i++) {
+            Chapter_5_Quote *quote = level->quotes + i;
+
+            if (quote->text) {
+                Vector3 camera_pos = level->camera.position;
+                float angle_delta  = Vector3Angle(Vector3Subtract(level->camera.target, level->camera.position),
+                                                  Vector3Subtract(quote->target, quote->position));
+
+                if (Vector3Distance(camera_pos, quote->position) < 0.5f &&
+                    angle_delta < 1)
+                {
+                    level->current_quote = quote;
+                    level->camera_target_saved = level->camera.target;
+                    level->camera_position_saved = level->camera.position;
+                }
+            }
+        }
+    }
+
+    // Interpolate to the position and angle!
+    Chapter_5_Quote *quote = level->current_quote;
+
+    if (quote) {
+        level->current_quote_time += 0.1f * dt;
+        /*
+        if (level->current_quote_time > 0.5)
+            level->current_quote_time = 1;
+            */
+
+        level->camera.target = smoothstep_vector3(level->camera_target_saved,
+                                                  quote->target,
+                                                  level->current_quote_time);
+        level->camera.position = smoothstep_vector3(level->camera_position_saved,
+                                                    quote->position,
+                                                    level->current_quote_time);
+        level->camera.fovy = smoothstep(FOV_DEFAULT, quote->fov, level->current_quote_time);
+
+        if (level->current_quote_time >= 1) {
+            game->current             = quote->text;
+            quote->text               = 0;
+            level->current_quote      = 0;
+            level->current_quote_time = 0;
+            quote                     = 0;
+        }
+    } else if (game->current == 0) {
+        level->camera.fovy = FOV_DEFAULT;
+    }
+}
+
+void chapter_5_update_player_desert(Game *game, float dt) {
+    Level_Chapter_5 *level = (Level_Chapter_5 *)game->level;
+
+    if (game->current) return;
+
+    if (level->current_quote == 0) {
+        Vector3 stored_camera_pos = level->camera.position;
+        chapter_5_update_camera(&level->camera, 4, dt);
+
+        Vector3 velocity = Vector3Subtract(level->camera.position, stored_camera_pos);
+        level->camera.position = stored_camera_pos;
+
+        if (level->current_scene == CHAPTER_5_SCENE_GALLERY)
+            apply_3d_velocity(&level->camera, level->scenes[5], velocity, false);
+        else if (level->current_scene == CHAPTER_5_SCENE_SEASIDE)
+            apply_3d_velocity(&level->camera, level->scenes[6], velocity, false);
+        else
+            apply_3d_velocity(&level->camera, level->scenes[4], velocity, false);
+
         chapter_5_update_camera_look(&level->camera);
     }
 
@@ -1951,53 +2303,6 @@ void chapter_5_update_player_train_station(Game *game, float dt) {
            level->camera.target.y,
            level->camera.target.z);
            */
-}
-
-void chapter_5_update_player_staircase(Game *game, float dt) {
-    Level_Chapter_5 *level = (Level_Chapter_5 *)game->level;
-
-    Vector3 stored_camera_pos = level->camera.position;
-
-    bool can_move = keyboard_focus(game) == 0;
-
-    if (can_move)
-        chapter_5_update_camera(&level->camera, dt);
-
-    level->door_popup = (Vector3Distance(level->camera.position, {13.25f, 25.75f, 48.25f}) < 5);
-    if (level->door_popup && is_action_pressed()) {
-        chapter_5_goto_scene(game, CHAPTER_5_SCENE_DINNER_PARTY);
-    }
-
-    chapter_5_update_player_on_train(game);
-
-    if (!level->train.player_in && level->camera.position.z > 0) {
-        Vector3 velocity = Vector3Subtract(level->camera.position, stored_camera_pos);
-        level->camera.position = stored_camera_pos;
-
-        apply_3d_velocity(&level->camera, level->scenes[1], velocity);
-    }
-
-    if (can_move)
-        chapter_5_update_camera_look(&level->camera);
-}
-
-void chapter_5_update_player_gallery(Game *game, float dt) {
-    Level_Chapter_5 *level = (Level_Chapter_5 *)game->level;
-
-    if (keyboard_focus(game)) return;
-
-    Vector3 stored_camera_pos = level->camera.position;
-    chapter_5_update_camera(&level->camera, dt);
-
-    Vector3 velocity = Vector3Subtract(level->camera.position, stored_camera_pos);
-    level->camera.position = stored_camera_pos;
-
-    if (level->current_scene == CHAPTER_5_SCENE_TEST)
-        apply_3d_velocity(&level->camera, level->scenes[5], velocity);
-    else
-        apply_3d_velocity(&level->camera, level->scenes[4], velocity);
-
-    chapter_5_update_camera_look(&level->camera);
 }
 
 void chapter_5_update_player_dinner_party(Game *game, float dt) {
@@ -2067,7 +2372,7 @@ void chapter_5_update_player_dinner_party(Game *game, float dt) {
     bool can_move = (game->current == 0);
 
     if (can_move && !level->sitting_at_table) {
-        chapter_5_update_camera(&level->camera, dt);
+        chapter_5_update_camera(&level->camera, PLAYER_SPEED_3D, dt);
     }
 
     Vector3 velocity = Vector3Subtract(level->camera.position, stored_camera_pos);
@@ -2080,7 +2385,7 @@ void chapter_5_update_player_dinner_party(Game *game, float dt) {
     } else {
         scene = &level->scenes[2];
     }
-    apply_3d_velocity(&level->camera, *scene, velocity);
+    apply_3d_velocity(&level->camera, *scene, velocity, true);
 
     if (look)
         chapter_5_update_camera_look(&level->camera);
@@ -2170,15 +2475,16 @@ void chapter_5_update(Game *game, float dt) {
                 }
             }
         } break;
-        case CHAPTER_5_SCENE_GALLERY: {
-            chapter_5_update_player_gallery(game, dt);
+        case CHAPTER_5_SCENE_DESERT: {
+            chapter_5_update_player_desert(game, dt);
 
             level->read_popup = false;
+
+            Vector2 player = {level->camera.position.x, level->camera.position.z};
 
             if (game->current == 0) {
                 for (int i = 0; i < level->podium_count; i++) {
                     Vector3 pos = level->podiums[i].position;
-                    Vector2 player = {level->camera.position.x, level->camera.position.z};
 
                     if (Vector2Distance({pos.x, pos.z}, player) < 3) {
                         if (IsKeyDown(KEY_EQUAL)) {
@@ -2198,9 +2504,47 @@ void chapter_5_update(Game *game, float dt) {
                     }
                 }
             }
+
+            level->desert_door_popup = (Vector2Distance({5.915f, -15.37f}, player) < 3);
+            if (level->desert_door_popup && is_action_pressed()) {
+                chapter_5_goto_scene(game, CHAPTER_5_SCENE_GALLERY);
+            }
         } break;
-        case CHAPTER_5_SCENE_TEST: {
-            chapter_5_update_player_gallery(game, dt);
+        case CHAPTER_5_SCENE_GALLERY: {
+            chapter_5_update_player_desert(game, dt);
+
+            gallery_check_quotes(game, dt);
+
+            level->gallery_door_popup = Vector2Distance(level->door_position, {level->camera.position.x, level->camera.position.z}) < 3;
+
+            if (level->gallery_door_popup && is_action_pressed()) {
+                game->current = &game->text[100];
+            }
+        } break;
+        case CHAPTER_5_SCENE_SEASIDE: {
+            if (level->seaside_ending) break;
+
+            chapter_5_update_player_desert(game, dt);
+
+            Vector2 cam = { level->camera.position.x, level->camera.position.z };
+            Vector2 penny = { -16.47f, -18.84f };
+
+            level->talk_to_penny_popup = game->current == 0 && (Vector2Distance(cam, penny) < 2) && !level->talked_to_penny;
+
+            if (level->talk_to_penny_popup && is_action_pressed()) {
+                level->talked_to_penny = true;
+                game->current = &game->text[30];
+            }
+
+            if (level->talked_to_penny) {
+                if (level->camera.position.z < -22) {
+                    end_chapter_5_after_stop(game);
+                }
+            } else {
+                if (level->camera.position.z < -22)
+                    level->camera.position.z = -22;
+            }
+
         } break;
     }
 }
@@ -2279,7 +2623,7 @@ void chapter_5_draw(Game *game) {
 
             EndMode3D();
 
-            if (level->door_popup)
+            if (level->staircase_door_popup)
                 draw_popup("OPEN DOOR", BLACK);
         } break;
         case CHAPTER_5_SCENE_DINNER_PARTY: {
@@ -2322,13 +2666,13 @@ void chapter_5_draw(Game *game) {
                 DrawRectangleRec({0,0,(float)render_width,(float)render_height}, color);
             }
         } break;
-        case CHAPTER_5_SCENE_GALLERY: {
+        case CHAPTER_5_SCENE_DESERT: {
             ClearBackground(SKYBLUE);
 
             BeginMode3D(level->camera);
 
             DrawModel(level->scenes[4], {}, 1, WHITE);
-            //DrawModel(level->models.podium, {-9.308f, -3.294f, -10.69f}, 2.5, WHITE);
+
             for (int i = 0; i < level->podium_count; i++) {
                 DrawModelEx(level->models.podium, level->podiums[i].position, {0,1,0}, level->podiums[i].rotation, {1.3f, 1.3f, 1.3f}, WHITE);
             }
@@ -2338,14 +2682,36 @@ void chapter_5_draw(Game *game) {
             if (level->read_popup) {
                 draw_popup("Read the Text", BLACK, Top);
             }
+
+            if (level->desert_door_popup) {
+                draw_popup("Open Door", BLACK, Top);
+            }
         } break;
-        case CHAPTER_5_SCENE_TEST: {
+        case CHAPTER_5_SCENE_GALLERY: {
             ClearBackground(SKYBLUE);
 
             BeginMode3D(level->camera);
 
             DrawModel(level->scenes[5], {}, 1, WHITE);
             EndMode3D();
+
+            if (level->gallery_door_popup) {
+                draw_popup("Exit the Gallery?", BLACK, Top);
+            }
+        } break;
+        case CHAPTER_5_SCENE_SEASIDE: {
+            ClearBackground(BLACK);
+
+            if (level->seaside_ending) break;
+
+            BeginMode3D(level->camera);
+
+            DrawModel(level->scenes[6], {}, 1, WHITE);
+            EndMode3D();
+
+            if (level->talk_to_penny_popup) {
+                draw_popup("Talk to Penny", GOLD, Top);
+            }
         } break;
     }
 }

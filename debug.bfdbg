@@ -1,7 +1,7 @@
 FileVersion = 1
 LastConfig = "Debug"
 LastPlatform = "Win64"
-RecentFilesList = ["c:\\dev\\vanishing\\chapter_5.cpp", "c:\\dev\\vanishing\\game.cpp", "c:\\dev\\vanishing\\main.cpp", "c:\\dev\\vanishing\\util.cpp"]
+RecentFilesList = ["c:\\dev\\vanishing\\src\\game.cpp", "c:\\dev\\vanishing\\src\\chapter_5.cpp", "c:\\dev\\vanishing\\src\\util.cpp", "c:\\dev\\vanishing\\chapter_5.cpp", "c:\\dev\\vanishing\\game.cpp", "c:\\dev\\vanishing\\main.cpp", "c:\\dev\\vanishing\\util.cpp"]
 
 [MainWindow]
 X = 614
@@ -25,37 +25,30 @@ Type = "TabbedView"
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 Active = true
+TabLabel = "game.cpp"
+TabWidth = 94.66666
+TabIsPinned = false
+Type = "SourceViewPanel"
+FilePath = "c:\\dev\\vanishing\\src\\game.cpp"
+CursorPos = 20906
+VertPos = 17871.0
+
+[[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "chapter_5.cpp"
 TabWidth = 108.0
 TabIsPinned = false
 Type = "SourceViewPanel"
-FilePath = "c:\\dev\\vanishing\\chapter_5.cpp"
-CursorPos = 14279
-VertPos = 10425.71
+FilePath = "c:\\dev\\vanishing\\src\\chapter_5.cpp"
+CursorPos = 3965
+VertPos = 4140.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "util.cpp"
 TabWidth = 71.33334
 TabIsPinned = false
 Type = "SourceViewPanel"
-FilePath = "c:\\dev\\vanishing\\util.cpp"
-CursorPos = 261
-
-[[MainDockingFrame.DockedWidgets.Tabs]]
-TabLabel = "game.cpp"
-TabWidth = 84.66666
-TabIsPinned = false
-Type = "SourceViewPanel"
-FilePath = "c:\\dev\\vanishing\\game.cpp"
-CursorPos = 4244
-
-[[MainDockingFrame.DockedWidgets.Tabs]]
-TabLabel = "main.cpp"
-TabWidth = 81.33334
-TabIsPinned = false
-Type = "SourceViewPanel"
-FilePath = "c:\\dev\\vanishing\\main.cpp"
-CursorPos = 3499
+FilePath = "c:\\dev\\vanishing\\src\\util.cpp"
+CursorPos = 4802
 
 [[MainDockingFrame.DockedWidgets]]
 RequestedWidth = 813.0
@@ -66,7 +59,7 @@ SplitType = 2
 [[MainDockingFrame.DockedWidgets.DockedWidgets]]
 RequestedWidth = 958.0
 RequestedHeight = 250.0
-SizePriority = 0.6498929
+SizePriority = 0.6509636
 Type = "TabbedView"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
@@ -84,7 +77,7 @@ TabWidth = 85.33334
 TabIsPinned = false
 Type = "WatchPanel"
 Columns = [{Width = 250.0}, {Width = 362.0}, {Width = 250.0}]
-Items = ["level", ""]
+Items = ["start", "end", "result", "chapter", ""]
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 TabLabel = "Auto"
@@ -96,7 +89,7 @@ Columns = [{Width = 250.0}, {Width = 250.0}, {Width = 250.0}]
 [[MainDockingFrame.DockedWidgets.DockedWidgets]]
 RequestedWidth = 957.0
 RequestedHeight = 250.0
-SizePriority = 0.3501071
+SizePriority = 0.3490364
 Type = "TabbedView"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]

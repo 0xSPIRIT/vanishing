@@ -1,5 +1,6 @@
 #define StaticArraySize(array) (sizeof(array)/sizeof(array[0]))
 #define Radians(degrees) (PI * degrees / 180.0)
+#define Degrees(radians) (180.0 * radians / PI)
 
 #define Kilobytes(kb) ((size_t)kb * 1024)
 #define Megabytes(mb) ((size_t)mb * 1024 * 1024)
@@ -193,6 +194,23 @@ Texture2D load_texture(const char *filename) {
     return result;
 }
 
+void set_model_bilinear(Model *model) {
+    for (int i = 0; i < model->materialCount; i++) {
+        Material material = model->materials[i];
+
+        // Loop through each texture type in the material (Diffuse, Specular, etc.)
+        const int MAX_MATERIAL_MAPS = 12;
+        for (int j = 0; j < MAX_MATERIAL_MAPS; j++) {
+            Texture2D texture = material.maps[j].texture;
+
+            if (texture.id > 0) {
+                SetTextureFilter(texture, TEXTURE_FILTER_BILINEAR);
+            }
+        }
+    }
+
+}
+
 int sign(float a) {
     if (a < 0) return -1;
     if (a > 0) return +1;
@@ -206,12 +224,32 @@ float lerp_dt(float a, float b, float t, float dt) {
     return Lerp(a, b, 60 * dt * t);
 }
 
+// t = (0.0, 1.0)
+float smoothstep(float start, float end, float t) {
+    if (t < 0) t = 0;
+    if (t > 1) t = 1;
+
+    float fac = 3 * t * t - 2 * t * t * t;
+
+    return start + (end - start) * fac;
+}
+
 Vector3 lerp_vector3(Vector3 a, Vector3 b, float t) {
     Vector3 result;
 
     result.x = Lerp(a.x, b.x, t);
     result.y = Lerp(a.y, b.y, t);
     result.z = Lerp(a.z, b.z, t);
+
+    return result;
+}
+
+Vector3 smoothstep_vector3(Vector3 start, Vector3 end, float t) {
+    Vector3 result = start;
+
+    result.x = smoothstep(start.x, end.x, t);
+    result.y = smoothstep(start.y, end.y, t);
+    result.z = smoothstep(start.z, end.z, t);
 
     return result;
 }

@@ -1,19 +1,11 @@
 TODO : Today
 
-- Figure out how to do the perspective thing.
-- Model art gallery
-- Camus
-- Romans
-- Quran
-- Bhagavad Gita 5:29
-- Bhagavad Gita 2:70
-- Jean-Paul Sartre
-- Nietzsche
-
 TODO : Later
 
-- Perhaps change the order of chapter 5 to
-  train station -> gallery -> dinner party (II)
+- Improve the story between Peggy and Hunter. Give them a better
+  reason for them to be emailing. Also, the "love" replacement
+  at the end isn't as warranted. Maybe they're long lost
+  lovers reconnecting rather than strangers.
 
 - We need to have a really short 2 minute intro
   (3d) which shows the overarching God themes as well
