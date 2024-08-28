@@ -661,7 +661,7 @@ void chapter_2_init(Game *game) {
     game->text[73].text[0].font = &comic_sans;
     atari_text_list_init(&game->text[74],
                          "Chase",
-                         "No. Way.",
+                         "No way.",
                          speed,
                          &game->text[75]);
     atari_text_list_init(&game->text[75],

@@ -194,14 +194,14 @@ void text_set_to_end(Text *text) {
     text->scroll_index = (float)(text->lines[text->current_line].length - 1);
 }
 
-bool text_update_and_draw(Text *text, Vector2 offset) {
+bool text_update_and_draw(Text *text, Vector2 offset, float dt) {
     switch (text->scroll_type) {
         case Scroll_Type::LetterByLetter: {
             do {
                 size_t line_length = text->lines[text->current_line].length;
 
                 if (text->scroll_index < line_length-1) {
-                    text->scroll_index += text->scroll_speed * GetFrameTime();
+                    text->scroll_index += text->scroll_speed * dt;
                     if (text->scroll_index >= line_length-1) {
                         text->scroll_index = (float)line_length-1;
                     }
@@ -216,7 +216,7 @@ bool text_update_and_draw(Text *text, Vector2 offset) {
             } while (is_newline(text->lines[text->current_line].text[(int)text->scroll_index]));
         } break;
         case Scroll_Type::EntireLine: {
-            text->alpha += text->alpha_speed * GetFrameTime();
+            text->alpha += text->alpha_speed * dt;
             text->alpha = min(text->alpha, 1);
         } break;
     }
@@ -409,7 +409,7 @@ bool is_text_list_at_end(Text_List *list) {
     return result;
 }
 
-Text_List *text_list_update_and_draw(Text_List *list, void *user_data) {
+Text_List *text_list_update_and_draw(Text_List *list, void *user_data, float dt) {
     Text_List *result = list;
 
     Vector2 offset = text_list_offset(list);
@@ -497,7 +497,7 @@ Text_List *text_list_update_and_draw(Text_List *list, void *user_data) {
     for (int i = 0; i <= list->text_index; i++) {
         Text *text = &list->text[i];
 
-        bool done = text_update_and_draw(text, Vector2Add(offset, {rectangle_pad + list->padding, rectangle_pad + list->padding}));
+        bool done = text_update_and_draw(text, Vector2Add(offset, {rectangle_pad + list->padding, rectangle_pad + list->padding}), dt);
 
         if (done) {
             // Note: done is only true for text[text_index]
@@ -615,6 +615,6 @@ Text_List *text_list_update_and_draw(Text_List *list, void *user_data) {
     return result;
 }
 
-Text_List *text_list_update_and_draw(Text_List *list) {
-    return text_list_update_and_draw(list, 0);
+Text_List *text_list_update_and_draw(Text_List *list, float dt) {
+    return text_list_update_and_draw(list, 0, dt);
 }

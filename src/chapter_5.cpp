@@ -1,4 +1,5 @@
 #define GUY_HEIGHT 1.8f
+#define QUOTE_COUNT 7
 
 enum {
     CHAPTER_5_STATE_INTRO,
@@ -13,17 +14,6 @@ enum Chapter_5_Scene {
     CHAPTER_5_SCENE_DESERT,
     CHAPTER_5_SCENE_GALLERY,
     CHAPTER_5_SCENE_SEASIDE,
-};
-
-enum {
-    QUOTE_CAMUS,
-    QUOTE_ROMANS,
-    QUOTE_QURAN,
-    QUOTE_BHAGAVAD_GITA_1,
-    QUOTE_BHAGAVAD_GITA_2,
-    QUOTE_SARTRE,
-    QUOTE_NIETZSCHE,
-    QUOTE_COUNT,
 };
 
 struct Chapter_5_Clerk {
@@ -153,6 +143,8 @@ struct Level_Chapter_5 {
         Chapter_5_Quote  quotes[QUOTE_COUNT];
         Chapter_5_Quote *current_quote;
         float            current_quote_time;
+
+        int              quote_count;
 
         Vector3          camera_target_saved;
         Vector3          camera_position_saved;
@@ -856,7 +848,7 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
 
                 atari_choice_text_list_init(&game->text[100],
                                             nullptr,
-                                            "Exit the gallery?\rYou won't be able to come back.",
+                                            "Exit the gallery?\rYou won't be able to come back.\rFound: X/7",
                                             choices,
                                             next,
                                             hooks,
@@ -877,8 +869,9 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
 
             level->door_position = { -8.392f, -202.2f };
 
-            Chapter_5_Quote *quote = &level->quotes[0];
+            Chapter_5_Quote *quote = 0;
 
+            quote = &level->quotes[0];
             quote->text     = &game->text[20];
             quote->position = { 1.8562f, 1.8f, -31.239f };
             quote->target   = { -4.36f, 0.71f, -0.64f };
@@ -913,6 +906,12 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
             quote->position = { 13.524f, 1.8f, -190.22f };
             quote->target = { -94.74f, 113.83f, -269.42f };
             quote->fov      = FOV_DEFAULT/2;
+
+            quote = &level->quotes[6];
+            quote->text     = &game->text[26];
+            quote->position = {18.06f, 1.80f, -125.51f};
+            quote->target   = {16.45f, 0.98f, -126.37f};
+            quote->fov      = FOV_DEFAULT/4;
         } break;
         case CHAPTER_5_SCENE_SEASIDE: {
             level->camera.position   = { 0, GUY_HEIGHT, 0 };
@@ -938,7 +937,7 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
                            speed,
                            &game->text[2]);
             chapter_5_text(&game->text[2],
-                           "F",
+                           "      ",
                            "Oh, hello.",
                            speed,
                            &game->text[3]);
@@ -948,17 +947,17 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
                            speed,
                            &game->text[4]);
             chapter_5_text(&game->text[4],
-                           "F",
+                           "      ",
                            "I'm you from the future!",
                            speed,
                            &game->text[5]);
             chapter_5_text(&game->text[5],
-                           "Chase",
+                           "      ",
                            "Did you escape the prison?",
                            speed,
                            &game->text[6]);
             chapter_5_text(&game->text[6],
-                           "F",
+                           "      ",
                            "Yes! I did,\rwould you like to know\nhow I did it?",
                            speed,
                            &game->text[7]);
@@ -968,8 +967,8 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
                            speed,
                            &game->text[8]);
             chapter_5_text(&game->text[8],
-                           "F",
-                           "Ok, so all you have to do\nis have patience, and-\r...\r...",
+                           "      ",
+                           "Ok, so all you have to do is have patience,\nand-\r...\r...",
                            speed,
                            &game->text[9]);
             chapter_5_text(&game->text[9],
@@ -978,17 +977,17 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
                            speed,
                            &game->text[10]);
             chapter_5_text(&game->text[10],
-                           "F",
+                           "      ",
                            "I'm sorry.\rI just realized I didn't escape after all.",
                            speed,
                            &game->text[11]);
             chapter_5_text(&game->text[11],
-                           "F",
+                           "      ",
                            "It turns out I'm still in the prison,\rthere was just a bigger one around\nthe previous one.",
                            speed,
                            &game->text[12]);
             chapter_5_text(&game->text[12],
-                           "F",
+                           "      ",
                            "I'll call you back if I do escape.\rPromise.",
                            speed,
                            &game->text[13]);
@@ -1622,7 +1621,7 @@ void chapter_5_init(Game *game) {
                    nullptr);
 
     //level->good = true;
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_DINNER_PARTY);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_GALLERY);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {
@@ -1961,6 +1960,7 @@ void chapter_5_update_camera(Camera3D *camera, float speed, float dt) {
     int dir_y = key_down() - key_up();
 
     if (IsKeyDown(KEY_LEFT_SHIFT)) speed = 30;
+    if (IsKeyDown(KEY_LEFT_ALT)) speed = 0.5f;
 
     Vector3 saved = camera->target;
     CameraMoveForward(camera, -dir_y * speed * dt, true);
@@ -2237,6 +2237,8 @@ void gallery_check_quotes(Game *game, float dt) {
                     level->current_quote = quote;
                     level->camera_target_saved = level->camera.target;
                     level->camera_position_saved = level->camera.position;
+
+                    level->quote_count++;
                 }
             }
         }
@@ -2254,10 +2256,10 @@ void gallery_check_quotes(Game *game, float dt) {
 
         level->camera.target = smoothstep_vector3(level->camera_target_saved,
                                                   quote->target,
-                                                  level->current_quote_time);
+                                                  min(1, 3 * level->current_quote_time));
         level->camera.position = smoothstep_vector3(level->camera_position_saved,
                                                     quote->position,
-                                                    level->current_quote_time);
+                                                    min(1, 3 * level->current_quote_time));
         level->camera.fovy = smoothstep(FOV_DEFAULT, quote->fov, level->current_quote_time);
 
         if (level->current_quote_time >= 1) {
@@ -2269,6 +2271,11 @@ void gallery_check_quotes(Game *game, float dt) {
         }
     } else if (game->current == 0) {
         level->camera.fovy = FOV_DEFAULT;
+
+        if (IsKeyDown(KEY_F))
+            level->camera.fovy = FOV_DEFAULT/2;
+        else
+            level->camera.fovy = FOV_DEFAULT;
     }
 }
 
@@ -2519,6 +2526,8 @@ void chapter_5_update(Game *game, float dt) {
 
             if (level->gallery_door_popup && is_action_pressed()) {
                 game->current = &game->text[100];
+                Text *line = &game->text[100].text[2];
+                line->lines[0].text[7] = '0' + level->quote_count;
             }
         } break;
         case CHAPTER_5_SCENE_SEASIDE: {

@@ -144,7 +144,6 @@ struct Entity_Allocator {
     Arena  *level_arena;
 };
 
-Font atari_font;
 Entity_Allocator entity_allocator;
 
 Entity *allocate_entity(void) {
@@ -545,13 +544,13 @@ void draw_popup(const char *text) {
     draw_popup(text, GOLD, Bottom);
 }
 
-void atari_update_and_draw_textbox(Game *game) {
+void atari_update_and_draw_textbox(Game *game, float dt) {
     BeginTextureMode(game->textbox_target);
 
     ClearBackground({0, 0, 0, 0});
 
     if (game->current)
-        game->current = text_list_update_and_draw(game->current, game);
+        game->current = text_list_update_and_draw(game->current, game, dt);
 
     EndTextureMode();
 
@@ -580,10 +579,11 @@ void atari_text_list_init(Text_List *list, char *speaker,
     list->font_spacing = 1;
     list->scale        = 0.125;
     list->scroll_speed = scroll_speed;
+
     switch (chapter) {
         case 1: {
-            list->color    = BLACK;
-            list->bg_color = {186, 158, 78, 255};
+            list->color    = WHITE;
+            list->bg_color = BLACK;
         } break;
         case 2: {
             list->color    = WHITE;
@@ -656,8 +656,6 @@ void game_atari_init(Game *game) {
     render_width  = DIM_ATARI_WIDTH;
     render_height = DIM_ATARI_HEIGHT;
 
-    atari_font = LoadFont(RES_DIR "art/romulus.png");
-
     game->atari_render_target = LoadRenderTexture(render_width, render_height);
     game->render_target_3d = LoadRenderTexture(DIM_3D_WIDTH, DIM_3D_HEIGHT);
     game->textbox_target = LoadRenderTexture(render_width, render_height);
@@ -729,6 +727,9 @@ void atari_deinit(Game *game) {
 void game_atari_run(Game *game) {
     float dt = GetFrameTime();
 
+    if (dt < 1.0f/144.0f) dt = 1.0f/144.0f;
+    if (dt > 1.0f/30.0f)  dt = 1.0f/30.0f;
+
     if (game->frame_arena.buffer == nullptr) {
         game->frame_arena = make_arena(16 * 1024);
     } else {
@@ -767,7 +768,7 @@ void game_atari_run(Game *game) {
             case 6: chapter_6_draw(game); break;
         }
 
-        atari_update_and_draw_textbox(game);
+        atari_update_and_draw_textbox(game, dt);
 
         EndTextureMode();
     }

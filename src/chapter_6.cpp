@@ -101,7 +101,7 @@ Entity *chapter_6_make_entity(Entity_Type type, float x, float y) {
 
 void chapter_6_init(Game *game) {
     Level_Chapter_6 *level = (Level_Chapter_6 *)game->level;
-    level;
+    memset(level, 0, sizeof(Level_Chapter_6));
 
     render_width = DIM_ATARI_WIDTH;
     render_height = DIM_ATARI_HEIGHT;
@@ -109,6 +109,8 @@ void chapter_6_init(Game *game) {
     // TODO
     game->textbox_target = LoadRenderTexture(render_width, render_height);
     game->textbox_alpha = 255;
+
+    game->render_state = RENDER_STATE_ATARI;
 
     Texture *textures = atari_assets.textures;
     textures[0]  = load_texture(RES_DIR "art/player.png");
@@ -404,7 +406,6 @@ void chapter_6_draw(Game *game) {
             DrawRectangle(0, level->god_scroll, render_width, render_height, BLACK);
 
             DrawRectangle(0, 0, render_width, render_height, {255, 0, 0, (uint8_t)(255 * level->red_fade_alpha)});
-
         } break;
     }
 }

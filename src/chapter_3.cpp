@@ -145,7 +145,7 @@ Chapter_3_Job_Minigame chapter_3_make_job_minigame(Arena *level_arena,
     result.draw_background = true;
 
     result.document_count = document_count;
-    result.current_document = 0;//(int)document_count - 1;
+    result.current_document = 0;
 
     for (int i = 0; i < document_count; i++) {
         Document *document = &result.document_list[i];
@@ -505,7 +505,7 @@ void chapter_3_job_init(Game *game, int which_document_list) {
             documents[count++] =
                 "Email\n-------\n\nPeggy,\n  The dinner was great. I suppose we don't need a reason to email on this thing anymore since we have each other's numbers, but something compelled me to.\n  Anyways, have a nice night, and I hope we see each other again :)\n\nRegards,\nHunter";
             documents[count++] =
-                "\"One does not discover the absurd without being tempted to write a manual of happiness.\" [2]";
+                "Dear Team, It's assumed that you all are aware of the new policy on bathrooms...";
 
             level->minigame = chapter_3_make_job_minigame(&game->level_arena, documents, count);
 
@@ -517,6 +517,23 @@ void chapter_3_job_init(Game *game, int which_document_list) {
             Document *d1 = &level->minigame.document_list[1];
             document_register_error_first_occurence(d1, "great.", "amazing.");
             document_register_error_first_occurence(d1, "Regards,", "Love,");
+
+            Document *d2 = &level->minigame.document_list[2];
+            document_register_error_first_occurence(d2, "Dear", "\"One");
+            document_register_error_first_occurence(d2, "Team,", "does");
+            document_register_error_first_occurence(d2, "It's", "not");
+            document_register_error_first_occurence(d2, "assumed", "discover");
+            document_register_error_first_occurence(d2, "that", "the");
+            document_register_error_first_occurence(d2, "you", "absurd");
+            document_register_error_first_occurence(d2, "all", "without");
+            document_register_error_first_occurence(d2, "are", "being");
+            document_register_error_first_occurence(d2, "aware", "tempted");
+            document_register_error_first_occurence(d2, "of", "to");
+            document_register_error_first_occurence(d2, "the", "write");
+            document_register_error_first_occurence(d2, "new", "a");
+            document_register_error_first_occurence(d2, "policy", "manual");
+            document_register_error_first_occurence(d2, "on", "of");
+            document_register_error_first_occurence(d2, "bathrooms...", "happiness.\" [2]");
         } break;
         case 3: {
             documents[count++] =
@@ -893,13 +910,11 @@ void chapter_3_init(Game *game) {
 
     chapter_3_job_init(game, 0);
 
-    /*
-    chapter_3_goto_lunch_room(game, CHAPTER_3_LUNCH_TEXT_3);
-    //chapter_3_job_init(game, 3);
+    //chapter_3_goto_lunch_room(game, CHAPTER_3_LUNCH_TEXT_3);
+    //level->minigame.active = true;
 
-    level->state = CHAPTER_3_STATE_LUNCH;
-    level->current_lunch_text = CHAPTER_3_LUNCH_TEXT_3;
-    */
+    //level->state = CHAPTER_3_STATE_LUNCH;
+    //level->current_lunch_text = CHAPTER_3_LUNCH_TEXT_3;
 }
 
 void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,

@@ -1,23 +1,9 @@
 struct Game_Intro {
-    Text_List text[32];
-    Text_List *current_text_list;
-
     RenderTexture2D render_target;
+    const char *message;
+
+    float fader; // 0.0 is 0 alpha, 1.0 is 255 alpha, 2.0 is 0 alpha.
 };
-
-void intro_init_text_list(Text_List *list,
-                          char *string,
-                          Text_List *next)
-{
-    *list = Text_List();
-    list->center_text = true;
-    list->render_type = Render_Type::Bare;
-    list->location = Location::Middle;
-    list->scroll_type = Scroll_Type::EntireLine;
-    list->alpha_speed = 3;
-
-    text_list_init(list, 0, string, next);
-}
 
 void game_intro_init(Game_Intro *game) {
     render_width = DIM_3D_WIDTH;
@@ -25,38 +11,31 @@ void game_intro_init(Game_Intro *game) {
 
     game->render_target = LoadRenderTexture(render_width, render_height);
 
+    game->fader = 0;
+
     switch (chapter) {
         case 1: {
-            intro_init_text_list(&game->text[0], "1. Dysania", &game->text[1]);
-            intro_init_text_list(&game->text[1], "Chase sat despondently at a cafe on a bright\nSaturday morning.\rHe listened to the hustle and bustle of the commuters,\rsaw their happy faces eating breakfast.", &game->text[2]);
-            intro_init_text_list(&game->text[2], "Laughter erupted at a nearby table--\ra group of friends.", &game->text[3]);
-            intro_init_text_list(&game->text[3], "A sinking feeling engulfed his entire body.", &game->text[4]);
-            intro_init_text_list(&game->text[4], "He tried looking outside;\rtrying to feel something-- anything!", &game->text[5]);
-            intro_init_text_list(&game->text[5], "But couldn't.", &game->text[6]);
-            intro_init_text_list(&game->text[6], "He went to sleep that night\nparticularly perturbed.", &game->text[7]);
-            intro_init_text_list(&game->text[7], "He twisted and turned in his bed\nas he slowly dozed off...", nullptr);
+            game->message = "\"DYSANIA\"";
         } break;
         case 2: {
-            intro_init_text_list(&game->text[0], "2. Dinner Party", 0);
+            game->message = "\"DINNER PARTY\"";
         } break;
         case 3: {
-            intro_init_text_list(&game->text[0], "3. Repetitions", 0);
+            game->message = "\"REPITITIONS\"";
         } break;
         case 4: {
-            intro_init_text_list(&game->text[0], "4. Theophany", 0);
+            game->message = "\"THEOPHANY\"";
         } break;
         case 5: {
-            intro_init_text_list(&game->text[0], "5. Perception", 0);
+            game->message = "\"PERCEPTION\"";
         } break;
         case 6: {
-            intro_init_text_list(&game->text[0], "6. Patience and Blasphemy", 0);
+            game->message = "\"PATIENCE &\n\nBLASPHEMY\"";
         } break;
         case 7: {
-            intro_init_text_list(&game->text[0], "Epilogue", 0);
+            game->message = "\"EPILOGUE\"";
         } break;
     }
-
-    game->current_text_list = &game->text[0];
 }
 
 void game_intro_run(Game_Intro *game) {
@@ -67,10 +46,37 @@ void game_intro_run(Game_Intro *game) {
     BeginTextureMode(game->render_target);
 
     ClearBackground(BLACK);
-    if (game->current_text_list)
-        game->current_text_list = text_list_update_and_draw(game->current_text_list);
 
-    if (game->current_text_list == nullptr) {
+    int spacing = 2;
+
+    float dt = GetFrameTime();
+
+    game->fader += dt * 0.2f;
+
+    float x = game->fader;
+    float fade = 0;
+
+    if (x < 1) {
+        fade = 3*x*x - 2*x*x*x;
+    } else if (x <= 2) {
+        fade = (2-x) * (2-x) * (2*x-1);
+    }
+
+    uint8_t alpha = 255 * fade;
+
+    Font *font = &bold_font_big;
+
+    Vector2 size = MeasureTextEx(*font, game->message, font->baseSize, spacing);
+    DrawTextEx(*font,
+               game->message,
+               { render_width/2 - size.x/2, render_height/2 - size.y/2 },
+               font->baseSize,
+               spacing,
+               {255,255,255,alpha});
+
+    bool debug = true;
+
+    if (x >= 2 || (debug && is_action_pressed())) {
         set_game_mode(GAME_MODE_ATARI);
     }
 

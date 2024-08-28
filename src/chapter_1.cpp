@@ -20,6 +20,9 @@ enum Direction {
     DIRECTION_RIGHT
 };
 
+int chapter_1_god_text_y[] = { 38, 5, 55, 16 };
+int chapter_1_god_text_y_end[] = { 120, 153, 103, 146};
+
 struct Level_Chapter_1 {
     Color background_color;
 
@@ -37,6 +40,11 @@ struct Level_Chapter_1 {
     bool final_text_is_done; // the final part when you're crawling- when this is true you get to go to the forest.
 
     Direction last_movements[4];
+
+    int god_index;
+    bool intro;
+    float god_scroll;
+    int godtext;
 };
 
 Entity *chapter_1_make_entity(Entity_Type type, float x, float y) {
@@ -122,6 +130,9 @@ void set_player_alarm(void *game_ptr) {
 void chapter_1_init(Game *game) {
     Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
 
+    level->intro = true;
+    level->god_scroll = chapter_1_god_text_y[0];
+
     Texture2D *textures = atari_assets.textures;
 
     textures[0]  = load_texture(RES_DIR "art/player.png");
@@ -142,6 +153,11 @@ void chapter_1_init(Game *game) {
     textures[15] = load_texture(RES_DIR "art/apartment.png");
     textures[16] = load_texture(RES_DIR "art/player_huff_puff.png");
 
+    textures[17] = load_texture(RES_DIR "art/intro1.png");
+    textures[18] = load_texture(RES_DIR "art/intro2.png");
+    textures[19] = load_texture(RES_DIR "art/intro3.png");
+    textures[20] = load_texture(RES_DIR "art/intro4.png");
+
     level->background_color = DESERT_COLOR;
 
     level->flashing_shader = LoadShader(0, RES_DIR "shaders/flashing.fs");
@@ -157,7 +173,7 @@ void chapter_1_init(Game *game) {
 
     atari_text_list_init(&game->text[0],
                          0,
-                         "He awoke.",
+                         "And he awoke.",
                          speed,
                          &game->text[1]);
     atari_text_list_init(&game->text[1],
@@ -210,11 +226,11 @@ void chapter_1_init(Game *game) {
 
     atari_text_list_init(&game->text[11],
                          "Chase",
-                         "H... he- hello?",
+                         "*ring ring*\r*click*\rH... he- hello?",
                          speed,
                          &game->text[12]);
     atari_text_list_init(&game->text[12],
-                         "     ",
+                         "      ",
                          "Yes?",
                          speed,
                          &game->text[13]);
@@ -224,12 +240,12 @@ void chapter_1_init(Game *game) {
                          speed,
                          &game->text[14]);
     atari_text_list_init(&game->text[14],
-                         "     ",
+                         "      ",
                          "Oh, you're stuck in the\ndesert?",
                          speed,
                          &game->text[15]);
     atari_text_list_init(&game->text[15],
-                         "     ",
+                         "      ",
                          "Most people find their\nway out pretty easily.",
                          speed,
                          &game->text[16]);
@@ -244,12 +260,12 @@ void chapter_1_init(Game *game) {
                          speed,
                          &game->text[18]);
     atari_text_list_init(&game->text[18],
-                         "     ",
+                         "      ",
                          "It's simple, silly!\rThere's water everywhere!",
                          speed,
                          &game->text[19]);
     atari_text_list_init(&game->text[19],
-                         "     ",
+                         "      ",
                          "You just go up, then down,\nthen up, then left.\rYou'll find what you need.",
                          speed,
                          &game->text[20]);
@@ -259,12 +275,12 @@ void chapter_1_init(Game *game) {
                          speed,
                          &game->text[21]);
     atari_text_list_init(&game->text[21],
-                         "     ",
+                         "      ",
                          "Huh?\rWhen everyone else drinks\nit their thirst is quenched.",
                          speed,
                          &game->text[22]);
     atari_text_list_init(&game->text[22],
-                         "     ",
+                         "      ",
                          "... Whatever-\rTrust me, you'll find\nit there.",
                          speed,
                          &game->text[23]);
@@ -300,11 +316,11 @@ void chapter_1_init(Game *game) {
                              &game->text[28]);
 
     atari_mid_text_list_init(&game->text[28],
-                             "The wall at infinity\nseparates us,\ras infinity itself\nis incomprehensible.",
+                             "I saw you up until that\nnight, staring at the\nstars.",
                              &game->text[29]);
 
     atari_mid_text_list_init(&game->text[29],
-                             "But, if you do exist,",
+                             "But, if you are here,",
                              &game->text[30]);
 
     atari_mid_text_list_init(&game->text[30],
@@ -313,12 +329,13 @@ void chapter_1_init(Game *game) {
 
 
     atari_mid_text_list_init(&game->text[31],
-                             "But it was only\na facade.",
+                             "He tried getting out\nof bed.",
+                             &game->text[32]);
+    atari_mid_text_list_init(&game->text[32],
+                             "Maybe next time.",
                              nullptr);
-    game->text[31].scroll_type = LetterByLetter;
-    game->text[31].callbacks[0] = set_player_alarm;
-
-    game->current = &game->text[0];
+    game->text[32].scroll_type = LetterByLetter;
+    game->text[32].callbacks[0] = set_player_alarm;
 }
 
 void chapter_1_deinit(Game *game) {
@@ -415,6 +432,9 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
             int dir_x = key_right() - key_left();
             int dir_y = key_down()  - key_up();
 
+            if (level->state == LEVEL_CHAPTER_1_STATE_FOREST)
+                dir_x = 0;
+
             if (e->alarm[0] == 0) {
                 e->chap_1_player.is_hurt = false;
             }
@@ -443,7 +463,7 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
             }
 
             if (level->state == LEVEL_CHAPTER_1_STATE_APARTMENT)
-                e->texture_id = (sin(GetTime()*10) > 0) ? 16 : 0;
+                e->texture_id = 10;
 
             float texture_width  = entity_texture_width(player);
             float texture_height = entity_texture_height(player);
@@ -458,7 +478,7 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
             apply_velocity(e, velocity, &game->entities);
 
             if (level->state == LEVEL_CHAPTER_1_STATE_FOREST) {
-                if (e->pos.y < render_height/2) {
+                if (e->pos.y < 2*render_height/3) {
                     level->state = LEVEL_CHAPTER_1_STATE_APARTMENT;
                     e->chap_1_player.walking_state = PLAYER_WALKING_STATE_SLOWED_1;
 
@@ -471,6 +491,11 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                             array_remove(&game->entities, i--);
                         }
                     }
+
+                    add_wall(&game->entities, {53,73,19,78});
+                    add_wall(&game->entities, {70,72,50,7});
+                    add_wall(&game->entities, {116,76,7,77});
+                    add_wall(&game->entities, {71,136,47,16});
                 }
             } else if (level->state == LEVEL_CHAPTER_1_STATE_APARTMENT) {
                 if (e->pos.y < 50)
@@ -627,8 +652,10 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                     }
 
                     if (level->screens_scrolled_while_crawling >= 2 &&
-                        level->final_text_is_done) {
+                        level->final_text_is_done)
+                    {
                         level->state = LEVEL_CHAPTER_1_STATE_FOREST;
+                        e->pos.x = render_width/2 - entity_texture_width(e) / 2;
                     }
 
                     if (level->state == LEVEL_CHAPTER_1_STATE_SUCCESSFUL_DIRECTIONS) {
@@ -710,6 +737,27 @@ void chapter_1_entity_draw(Entity *e, Game *game) {
 void chapter_1_update(Game *game, float dt) {
     Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
 
+    if (level->intro) {
+        level->god_scroll += 8 * dt;
+
+        if (level->god_scroll > chapter_1_god_text_y_end[level->god_index])
+            level->god_scroll = render_height;
+
+        if (is_action_pressed()) {
+            if (level->god_scroll == render_height) {
+                level->god_index++;
+                if (level->god_index > 3) {
+                    level->intro = false;
+                    game->current = &game->text[0];
+                }
+                level->god_scroll = chapter_1_god_text_y[level->god_index];
+            } else {
+                level->god_scroll = render_height;
+            }
+        }
+        return;
+    }
+
     for (int i = 0; i < game->entities.length; i++) {
         Entity *e = game->entities.data[i];
         chapter_1_entity_update(e, game, dt);
@@ -751,12 +799,18 @@ void chapter_1_update(Game *game, float dt) {
 void chapter_1_draw(Game *game) {
     Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
 
+    ClearBackground(level->background_color);
+
+    if (level->intro) {
+        DrawTexture(atari_assets.textures[17 + level->god_index], 0, 0, WHITE);
+        DrawRectangle(0, level->god_scroll, render_width, render_height, BLACK);
+        return;
+    }
+
     if (level->final_text)
         game->textbox_alpha = 255;
     else 
         game->textbox_alpha = 200;
-
-    ClearBackground(level->background_color);
 
     switch (level->state) {
         case LEVEL_CHAPTER_1_STATE_FOREST: {

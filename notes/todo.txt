@@ -5,12 +5,16 @@ TODO : Today
   at the end isn't as warranted. Maybe they're long lost
   lovers reconnecting rather than strangers.
 
-- Chapter 1: follow the footsteps in the ending rather than
-             following the water so that it lines you up
-             better to be looking like you're getting
-             otu of bed. Also change the text at the end
+x In chapter 1, we need to create a better explanation of
+  nihilism so we set it up for the ending. We want everything
+  to feel meaningless.
 
-- Add an interactible object in chapter 1 to "pray to god".
+x Chapter 5: make the position interpolate faster than target
+x Chapter 5: make the skull one, maybe some sort of thing on death.
+- Redo train station to be more threatening,
+- add the white version of train station.
+- Fix the bug on the train going into staircase
+- Redo the entirety of chapter 5 staircase
 
 TODO : Later
 
