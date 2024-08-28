@@ -5,12 +5,9 @@ TODO : Today
   at the end isn't as warranted. Maybe they're long lost
   lovers reconnecting rather than strangers.
 
-x In chapter 1, we need to create a better explanation of
-  nihilism so we set it up for the ending. We want everything
-  to feel meaningless.
-
 x Chapter 5: make the position interpolate faster than target
 x Chapter 5: make the skull one, maybe some sort of thing on death.
+- Add a separate intro segment for the desert area.
 - Redo train station to be more threatening,
 - add the white version of train station.
 - Fix the bug on the train going into staircase
@@ -25,13 +22,13 @@ TODO : Later
     - "didn't you see it?!!" -> no i didn't see anything.
 
 Later
-- In chapter 5, add parts in each of the three parts where you have to look
+x In chapter 5, add parts in each of the three parts where you have to look
   at an object at a certain perspective to go progress, taking advantage of
   the 3D.
 - Chapter 4:
   Really distorted, pitched-down text to speech voice for chase
   rather than text scroll sound.
-- Somehow include a window in the first chapter somewhere?
+x Somehow include a window in the first chapter somewhere?
 - chapter 2: add white vhs thing right before teleporting to bathroom with penny
 x Make sure that nothing overlaps in the first chapter
   when you move screens. Especially make sure that it
@@ -45,7 +42,7 @@ x For the devil text in one of the chapters you can
          Introduce the mysterious monster which hooks people
          and also introduces the themes that will be covered.
 
-- At the end of chapter 1, make it so that the player is kept
+x At the end of chapter 1, make it so that the player is kept
   at the middle of the screen so it looks like he's getting out
   of bed when the switch occurs.
 - Add a white vhs overlay that slowly increases in intensity over time

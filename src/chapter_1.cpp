@@ -76,6 +76,9 @@ Entity *chapter_1_make_entity(Entity_Type type, float x, float y) {
         case ENTITY_PHONE: {
             result->texture_id = 13;
         } break;
+        case ENTITY_WINDOW: {
+            result->texture_id = 21;
+        } break;
     }
 
     float texture_width  = entity_texture_width(result);
@@ -158,6 +161,8 @@ void chapter_1_init(Game *game) {
     textures[19] = load_texture(RES_DIR "art/intro3.png");
     textures[20] = load_texture(RES_DIR "art/intro4.png");
 
+    textures[21] = load_texture(RES_DIR "art/window_1.png");
+
     level->background_color = DESERT_COLOR;
 
     level->flashing_shader = LoadShader(0, RES_DIR "shaders/flashing.fs");
@@ -173,7 +178,7 @@ void chapter_1_init(Game *game) {
 
     atari_text_list_init(&game->text[0],
                          0,
-                         "And he awoke.",
+                         "He takes a deep breath.",
                          speed,
                          &game->text[1]);
     atari_text_list_init(&game->text[1],
@@ -336,6 +341,9 @@ void chapter_1_init(Game *game) {
                              nullptr);
     game->text[32].scroll_type = LetterByLetter;
     game->text[32].callbacks[0] = set_player_alarm;
+
+    Entity *e = chapter_1_make_entity(ENTITY_WINDOW, render_width/2 - 16, render_height/5);
+    array_add(&game->entities, e);
 }
 
 void chapter_1_deinit(Game *game) {
@@ -627,7 +635,8 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
 
                         if (type == ENTITY_CACTUS || type == ENTITY_ROCK ||
                             type == ENTITY_FOOTSTEPS || type == ENTITY_BLOOD ||
-                            type == ENTITY_NODE || type == ENTITY_PHONE)
+                            type == ENTITY_NODE || type == ENTITY_PHONE ||
+                            type == ENTITY_WINDOW)
                         {
                             free_entity(entity);
                             array_remove(&game->entities, i--);

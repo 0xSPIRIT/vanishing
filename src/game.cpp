@@ -33,6 +33,7 @@ enum Entity_Type {
     ENTITY_NODE,
     ENTITY_PHONE,
     ENTITY_WALL,
+    ENTITY_WINDOW,
 
     ENTITY_CHAP_2_DOOR,
     ENTITY_CHAP_2_TABLE,

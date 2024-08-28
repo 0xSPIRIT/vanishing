@@ -182,8 +182,27 @@ struct Level_Chapter_5 {
 
 void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene);
 
+void chapter_5_end_text_begin(Game *game) {
+    game->current = &game->text[50];
+}
+
+void chapter_5_end_text_begin_delayed(void *game_ptr) {
+    Game *game = (Game *)game_ptr;
+
+    add_event(game, chapter_5_end_text_begin, 2);
+}
+
 void chapter_5_end(void *game_ptr) {
     atari_queue_deinit_and_goto_intro((Game *)game_ptr);
+}
+
+void chapter_5_2_second_hang_goto_text(Game *game) {
+    game->current = &game->text[53];
+}
+
+void chapter_5_2_second_hang_end_text(void *game_ptr) {
+    Game *game = (Game *)game_ptr;
+    add_event(game, chapter_5_2_second_hang_goto_text, 2);
 }
 
 void chapter_5_begin_phone_call(Game *game) {
@@ -405,6 +424,29 @@ void chapter_5_podium_text(Text_List *list, bool italics, char *line, Text_List 
     list->bg_color = BLACK;
 
     text_list_init(list, 0, line, next);
+}
+
+void chapter_5_end_text(Text_List *list, bool italics, char *line, Text_List *next) {
+    list->font = &bold_font;
+
+    if (italics)
+        list->font = &italics_font;
+
+    list->font_spacing = 0;
+    list->scale = 0.125;
+    list->render_type = DrawTextbox;
+    list->location = Top;
+    list->take_keyboard_focus = true;
+    list->scroll_type = EntireLine;
+    list->alpha_speed = 2;
+    list->center_text = true;
+
+    list->color = WHITE;
+    list->bg_color = BLACK;
+
+    text_list_init(list, 0, line, next);
+
+    list->textbox_height = render_height / 2;
 }
 
 void chapter_5_sacred_text(Text_List *list, char *line, Text_List *next) {
@@ -653,32 +695,6 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
                                   true,
                                   "Blisters became the bottoms of my feet.\r"
                                   "And yet, something compels me to brave this\nhellscape.\rAnd it fascinates me.",
-                                  nullptr);
-
-            chapter_5_podium_text(&game->text[45],
-                                  false,
-                                  "Perhaps he didn't understand what he found.",
-                                  &game->text[46]);
-            chapter_5_podium_text(&game->text[46],
-                                  false,
-                                  "Maybe the right moment had not reached him yet.\r"
-                                  "Or, the right person had not reached him yet.\r"
-                                  "Or, the right relationship had not reached him yet.",
-                                  &game->text[47]);
-            chapter_5_podium_text(&game->text[47],
-                                  false,
-                                  "How do you create your own meaning?",
-                                  &game->text[48]);
-            chapter_5_podium_text(&game->text[48],
-                                  false,
-                                  "But something inside him still urged him to go on.\r"
-                                  "For what reason?\r"
-                                  "He didn't know that either.\r"
-                                  "He doesn't know anything.",
-                                  &game->text[49]);
-            chapter_5_podium_text(&game->text[49],
-                                  true,
-                                  "\nHe remained unenlightened.",
                                   nullptr);
 
             for (int i = 45; i <= 49; i++) {
@@ -1002,7 +1018,7 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
                            speed,
                            nullptr);
 
-            game->text[14].callbacks[0] = chapter_5_end;
+            game->text[14].callbacks[0] = chapter_5_end_text_begin_delayed;
 
             chapter_5_text(&game->text[30],
                            "Penny",
@@ -1074,6 +1090,33 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
                     game->text[i].text[j].color = WHITE;
                 }
             }
+
+            chapter_5_end_text(&game->text[50],
+                               false,
+                               "Perhaps he didn't understand what\nhe had found.",
+                               &game->text[51]);
+            chapter_5_end_text(&game->text[51],
+                               false,
+                               "Maybe the right moment had not\nreached him yet.\rOr, maybe the right person had not\nreached him yet.\rOr, maybe the right relationship had not\nreached him yet.",
+                               &game->text[52]);
+            chapter_5_end_text(&game->text[52],
+                               false,
+                               "How do you create your own\nmeaning?",
+                               nullptr);
+            game->text[52].callbacks[0] = chapter_5_2_second_hang_end_text;
+
+            chapter_5_end_text(&game->text[53],
+                               false,
+                               "But something inside him still urged\nhim to go on.\rFor what reason?\rHe didn't know that either.\rHe doesn't know anything.",
+                               &game->text[54]);
+            chapter_5_end_text(&game->text[54],
+                               false,
+                               "He remained unenlightened.",
+                               nullptr);
+
+            game->text[54].callbacks[0] = chapter_5_end;
+
+            //game->current = &game->text[50];
         } break;
     }
 }
@@ -1621,7 +1664,7 @@ void chapter_5_init(Game *game) {
                    nullptr);
 
     //level->good = true;
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_GALLERY);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_SEASIDE);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {

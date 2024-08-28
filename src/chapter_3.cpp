@@ -145,7 +145,7 @@ Chapter_3_Job_Minigame chapter_3_make_job_minigame(Arena *level_arena,
     result.draw_background = true;
 
     result.document_count = document_count;
-    result.current_document = 0;
+    result.current_document = (int)document_count - 1;//0;
 
     for (int i = 0; i < document_count; i++) {
         Document *document = &result.document_list[i];
@@ -442,7 +442,7 @@ void chapter_3_job_init(Game *game, int which_document_list) {
             documents[count++] =
                 "Memo\n-------\n\nNotice for all employees:\n  Please be adviesd that the copier machien is not wokring. We brought a replacemnet and it is arriving next Monday.";
             documents[count++] =
-                "Email\n-------\n\nDear Peggy,\n  Hopefully this isn't picked up by the system. We met a few weeks ago at the business meeting in Sydney; we had dinner together. I'm following up on potential collaboration opportunities between our branches that may be beneficial to us both.\n  If there are any barriers or concerns, please let me know.\n\nWarm regards,\nHunter (Business Development Manager, Nebraska)";
+                "Email\n-------\n\nDear Peggy,\n  Hopefully this isn't picked up by the system. We met a few weeks ago at the business meeting in Sydney; we went to high school together, and we had dinner that evening. I'm following up on potential collaboration opportunities between our branches that may be beneficial to us both.\n  If there are any barriers or concerns, please let me know.\n\nWarm regards,\nHunter (Business Development Manager, Nebraska)";
 
             level->minigame = chapter_3_make_job_minigame(&game->level_arena, documents, count);
 
@@ -475,7 +475,7 @@ void chapter_3_job_init(Game *game, int which_document_list) {
             documents[count++] =
                 "Memo\n-------\n\nDear Team,\n  Over the past three and a half years, we have made great progress as a company under my leadership.\n  Today, we have thestrongest foothold on our market in Earth.\n  I know none of this could have been done without you, my trusted employees. It has been an honour to serve as your CEO, but I believe it is in the best interest of thecompany for me to stand down, and focus on the remainder of my position, until August 22nd.\n  Just remember, there's nothing this company can't do!\n\nLove,\nJohn Briden (CEO)";
             documents[count++] =
-                "Email\n-------\n\nDear Peggy,\n  I received your email, and I'm delighted to hear that you're excited about a collaboration between our two branches. I'm free for lunch on Saturday June 8th, so we can discuss a proposal. Is that fine with your schedule?\n\nRegards,\nHunter (Business Development Manager, ABC City)";
+                "Email\n-------\n\nDear Peggy,\n  I received your email, and I'm delighted to hear that you're excited about a collaboration between our two branches. I'm free for lunch on Saturday June 8th, so we can discuss a proposal. Is that fine with your schedule?\n\nRegards,\nHunter (Business Development Manager, Nebraska)";
             documents[count++] = 
                 "\"This work was strictly voluntary, but any animal who absented himself from it would have his rations reduced by half.\" [1]";
 
@@ -908,7 +908,8 @@ void chapter_3_init(Game *game) {
 
     chapter_3_init_outside(game);
 
-    chapter_3_job_init(game, 0);
+    chapter_3_job_init(game, 2);
+    level->minigame.active = true;
 
     //chapter_3_goto_lunch_room(game, CHAPTER_3_LUNCH_TEXT_3);
     //level->minigame.active = true;
