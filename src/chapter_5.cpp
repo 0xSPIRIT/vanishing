@@ -97,6 +97,8 @@ struct Chapter_5_Podium {
 };
 
 struct Level_Chapter_5 {
+    float camera_height;
+
     // Train station
     struct {
         Chapter_5_Clerk clerk;
@@ -349,9 +351,9 @@ void chapter_5_train_station_init_positions(Game *game, bool refresh) {
 
     clerk->do_180_head = false;
     clerk->talk_popup = false;
-    clerk->position = { 0.7225f * 16.3f, 0.7225f * 2.f, 0.7225f * -14.3f };
-    clerk->body_rotation = -90;
-    clerk->head_rotation = -90;
+    clerk->position = { 0, 0, -30.78f };
+    clerk->body_rotation = 0;
+    clerk->head_rotation = 0;
     clerk->saved_head_rotation = clerk->head_rotation;
     clerk->has_real_head = false;
     clerk->talked = false;
@@ -359,8 +361,10 @@ void chapter_5_train_station_init_positions(Game *game, bool refresh) {
     if (refresh) clerk->talked = true;
 
     if (!refresh) {
-        level->camera.position   = { -7.19f, GUY_HEIGHT, 6.68f };
-        level->camera.target     = { 11.60f, 18.12f, -46.27f };
+        //level->camera.position   = { -7.19f, level->camera_height, 6.68f };
+        //level->camera.target     = { 11.60f, 18.12f, -46.27f };
+        level->camera.position   = { 0, level->camera_height, 27.28f };
+        level->camera.target     = { 0, level->camera_height, 0 };
         level->camera.up         = { 0, 1, 0 };
         level->camera.fovy       = FOV_DEFAULT;
         level->camera.projection = CAMERA_PERSPECTIVE;
@@ -479,6 +483,8 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
 
     switch (scene) {
         case CHAPTER_5_SCENE_TRAIN_STATION: {
+            level->camera_height = 1.7f;
+
             level->state = CHAPTER_5_STATE_INTRO;//CHAPTER_5_STATE_TRAIN_STATION_1;
             level->black_screen_timer = -1;
 
@@ -494,32 +500,27 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
             train->moving       = false;
             train->able_to_close = true;
 
-            level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/basic.fs");
+            level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/cottage.fs");
 
-            level->shader.locs[SHADER_LOC_MATRIX_MODEL] = GetShaderLocation(level->shader, "matModel");
-            level->shader.locs[SHADER_LOC_VECTOR_VIEW]  = GetShaderLocation(level->shader, "viewPos");
+            set_model_bilinear(&level->scenes[0]);
 
-            // TODO: Apply to all scenes
             model_set_shader(&level->scenes[0],         level->shader);
             model_set_shader(&level->models.train,      level->shader);
             model_set_shader(&level->models.train_door, level->shader);
 
-            CreateLight(LIGHT_POINT, { 0, 1, 0 }, Vector3Zero(), ORANGE, level->shader);
-            CreateLight(LIGHT_POINT, { 0, 1, 9 }, Vector3Zero(), ORANGE, level->shader);
-            CreateLight(LIGHT_POINT, { 4, 4, 4 }, Vector3Zero(), ORANGE, level->shader);
-            CreateLight(LIGHT_POINT, { 0, 1, -28 }, Vector3Zero(), ORANGE, level->shader);
-
-            game->current = &game->text[0];
+            //game->current = &game->text[0];
         } break;
         case CHAPTER_5_SCENE_STAIRCASE: {
+            level->camera_height = GUY_HEIGHT;
+
             level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/dinner.fs");
 
             model_set_shader(&level->scenes[1], level->shader);
 
             float train_distance = -600;
 
-            level->camera.position   = { train_distance, GUY_HEIGHT, 0 };
-            level->camera.target     = { 0.00f, GUY_HEIGHT, 2.00f };
+            level->camera.position   = { train_distance, level->camera_height, 0 };
+            level->camera.target     = { 0.00f, level->camera_height, 2.00f };
             level->camera.up         = { 0, 1, 0 };
             level->camera.fovy       = FOV_DEFAULT;
             level->camera.projection = CAMERA_PERSPECTIVE;
@@ -536,14 +537,16 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
             train->able_to_close = false;
         } break;
         case CHAPTER_5_SCENE_DINNER_PARTY: {
+            level->camera_height = GUY_HEIGHT;
+
             game->textbox_alpha = 200;
 
             level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/dinner.fs");
             model_set_shader(&level->scenes[2], level->shader);
             model_set_shader(&level->scenes[3], level->shader);
 
-            level->camera.position   = { 0, GUY_HEIGHT, 0 };
-            level->camera.target     = { -2.00f, GUY_HEIGHT, 0.00f };
+            level->camera.position   = { 0, level->camera_height, 0 };
+            level->camera.target     = { -2.00f, level->camera_height, 0.00f };
             level->camera.up         = { 0, 1, 0 };
             level->camera.fovy       = FOV_DEFAULT;
             level->camera.projection = CAMERA_PERSPECTIVE;
@@ -614,6 +617,8 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
             }
         } break;
         case CHAPTER_5_SCENE_DESERT: {
+            level->camera_height = GUY_HEIGHT;
+
             level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/cottage.fs");
 
             Model *scene_model = &level->scenes[4];
@@ -621,7 +626,7 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
 
             model_set_shader(&level->scenes[4], level->shader);
 
-            level->camera.position   = BlenderPosition3D(-239.1f, -131.f, 53.62f + GUY_HEIGHT);
+            level->camera.position   = BlenderPosition3D(-239.1f, -131.f, 53.62f + level->camera_height);
             level->camera.target     = { 0, 0, 0 };
             level->camera.up         = { 0, 1, 0 };
             level->camera.fovy       = FOV_DEFAULT;
@@ -739,6 +744,8 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
             add_podium(&game->text[10], {-39, -27}, -68);
         } break;
         case CHAPTER_5_SCENE_GALLERY: {
+            level->camera_height = GUY_HEIGHT;
+
             level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/cottage.fs");
             model_set_shader(&level->scenes[5], level->shader);
 
@@ -877,8 +884,8 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
             Model *scene_model = &level->scenes[5];
             set_model_bilinear(scene_model);
 
-            level->camera.position   = { 0, GUY_HEIGHT, 0 };
-            level->camera.target     = { 0, GUY_HEIGHT, -2 };
+            level->camera.position   = { 0, level->camera_height, 0 };
+            level->camera.target     = { 0, level->camera_height, -2 };
             level->camera.up         = { 0, 1, 0 };
             level->camera.fovy       = FOV_DEFAULT;
             level->camera.projection = CAMERA_PERSPECTIVE;
@@ -930,8 +937,10 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
             quote->fov      = FOV_DEFAULT/4;
         } break;
         case CHAPTER_5_SCENE_SEASIDE: {
-            level->camera.position   = { 0, GUY_HEIGHT, 0 };
-            level->camera.target     = { -2, GUY_HEIGHT, 0 };
+            level->camera_height = GUY_HEIGHT;
+
+            level->camera.position   = { 0, level->camera_height, 0 };
+            level->camera.target     = { -2, level->camera_height, 0 };
             level->camera.up         = { 0, 1, 0 };
             level->camera.fovy       = FOV_DEFAULT;
             level->camera.projection = CAMERA_PERSPECTIVE;
@@ -1115,8 +1124,6 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
                                nullptr);
 
             game->text[54].callbacks[0] = chapter_5_end;
-
-            //game->current = &game->text[50];
         } break;
     }
 }
@@ -1138,7 +1145,7 @@ void chapter_5_init(Game *game) {
 
     atari_assets.textures[0]   = load_texture(RES_DIR "art/ticket_pov.png");
 
-    level->scenes[0]           = LoadModel(RES_DIR "models/train_station.glb");
+    level->scenes[0]           = LoadModel(RES_DIR "models/train_station2.glb");
     level->scenes[1]           = LoadModel(RES_DIR "models/chap_5_dinner.glb");
     level->scenes[2]           = LoadModel(RES_DIR "models/dinner_party.glb");
     level->scenes[3]           = LoadModel(RES_DIR "models/dinner_party_good.glb");
@@ -1146,6 +1153,8 @@ void chapter_5_init(Game *game) {
     //level->scenes[5]           = LoadModel(RES_DIR "models/testetset.glb");
     level->scenes[5]           = LoadModel(RES_DIR "models/artgallery.glb");
     level->scenes[6]           = LoadModel(RES_DIR "models/balcony.glb");
+
+    level->camera_height = GUY_HEIGHT;
 
     assert(IsModelReady(level->scenes[5]));
 
@@ -1664,7 +1673,7 @@ void chapter_5_init(Game *game) {
                    nullptr);
 
     //level->good = true;
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_SEASIDE);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_GALLERY);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {
@@ -1715,7 +1724,7 @@ void chapter_5_update_clerk(Game *game, float dt) {
     }
 
     clerk->talk_popup = (game->current == nullptr &&
-                         Vector2Distance(player_p, clerk_p) <= 6 &&
+                         Vector2Distance(player_p, clerk_p) <= 3 &&
                          clerk->do_180_head == false &&
                          !clerk->talked);
 
@@ -1999,8 +2008,8 @@ void chapter_5_draw_train(Level_Chapter_5 *level, Chapter_5_Train *train) {
 }
 
 void chapter_5_update_camera(Camera3D *camera, float speed, float dt) {
-    int dir_x = key_right() - key_left();
-    int dir_y = key_down() - key_up();
+    float dir_x = input_movement_x_axis();//key_right() - key_left();
+    float dir_y = input_movement_y_axis();//key_down()  - key_up();
 
     if (IsKeyDown(KEY_LEFT_SHIFT)) speed = 30;
     if (IsKeyDown(KEY_LEFT_ALT)) speed = 0.5f;
@@ -2012,15 +2021,9 @@ void chapter_5_update_camera(Camera3D *camera, float speed, float dt) {
 }
 
 void chapter_5_update_camera_look(Camera3D *camera) {
-    Vector2 mouse = get_mouse_delta();
-
-    const float sensitivity = 0.005f;
-
-    mouse.x *= sensitivity;
-    mouse.y *= sensitivity;
-
-    CameraYaw(camera, -mouse.x, false);
-    CameraPitch(camera, -mouse.y, true, false, false);
+    Vector2 look = input_movement_look();
+    CameraYaw(camera, -look.x, false);
+    CameraPitch(camera, -look.y, true, false, false);
 }
 
 bool is_mesh_collider(Model *model, int mesh_index) {
@@ -2036,7 +2039,7 @@ bool is_mesh_collider(Model *model, int mesh_index) {
     return false;
 }
 
-void apply_3d_velocity(Camera3D *camera, Model world, Vector3 pos_vel, bool use_red_material_for_collision) {
+void apply_3d_velocity(Camera3D *camera, float camera_height, Model world, Vector3 pos_vel, bool use_red_material_for_collision) {
     struct Is_Bad_Position_Result {
         bool ok;
         RayCollision collision_result;
@@ -2107,7 +2110,7 @@ void apply_3d_velocity(Camera3D *camera, Model world, Vector3 pos_vel, bool use_
         if (!result.ok) {
             *axis -= axis_vel;
         } else {
-            cam->position.y = result.collision_result.point.y + GUY_HEIGHT;
+            cam->position.y = result.collision_result.point.y + camera_height;
         }
     };
 
@@ -2120,90 +2123,10 @@ void apply_3d_velocity(Camera3D *camera, Model world, Vector3 pos_vel, bool use_
     camera->target = Vector3Add(camera->target, diff);
 }
 
-void chapter_5_update_player_on_train(Game *game) {
-    Level_Chapter_5 *level = (Level_Chapter_5 *)game->level;
-
-    Chapter_5_Train *train = &level->train;
-    Vector3 *camera = &level->camera.position;
-
-    float curb = 0, train_start_z = 0, train_end_z = 0, door_start = 0, door_end = 0, player_y = 0;
-
-    switch (level->current_scene) {
-        case CHAPTER_5_SCENE_TRAIN_STATION: {
-            curb          = 0.7225f * -20.0f;
-            train_start_z = 0.7225f * -20.5f;
-            train_end_z   = 0.7225f * -23.0f;
-            door_start    = 0.7225f *  -3.5f;
-            door_end      = 0.7225f *  +0.5f;
-
-            player_y = 3.19f;
-        } break;
-        case CHAPTER_5_SCENE_STAIRCASE: {
-            curb = 2.5;
-
-            train_start_z = 1.5;
-            train_end_z   = -1.5;
-
-            door_start = -3.5;
-            door_end = 0;
-
-            player_y = GUY_HEIGHT;
-        } break;
-    }
-
-    door_start += train->position.x;
-    door_end   += train->position.x;
-
-    if (train->player_in) {
-        camera->y = player_y;
-
-        level->camera.position.x += train->delta_x;
-        level->camera.target.x   += train->delta_x;
-
-        if (camera->z > train_start_z) { // trying back out
-            if (train->closed) {
-                camera->z = train_start_z;
-            } else {
-                if (camera->x >= door_start && camera->x <= door_end) {
-                    train->player_in = false;
-                } else {
-                    camera->z = train_start_z;
-                }
-            }
-        }
-
-        int length = chapter_5_train_length(train);
-        int x_start = -length * train->instances/2;
-        int x_end   = +length * train->instances/2;
-
-        x_start += train->position.x;
-        x_end   += train->position.x;
-
-        if (camera->x < x_start)
-            camera->x = x_start;
-        else if (camera->x > x_end)
-            camera->x = x_end;
-
-        if (camera->z < train_end_z)
-            camera->z = train_end_z;
-    } else if (camera->z < curb) { // trying to go in
-        if (train->closed) {
-            camera->z = curb;
-        } else { 
-            if (camera->x >= door_start && camera->x <= door_end) {
-                if (camera->z < train_start_z)
-                    train->player_in = true;
-            } else {
-                camera->z = curb;
-            }
-        }
-    }
-}
-
 void chapter_5_update_player_train_station(Game *game, float dt) {
     Level_Chapter_5 *level = (Level_Chapter_5 *)game->level;
 
-    chapter_5_update_player_on_train(game);
+    //chapter_5_update_player_on_train(game);
 
     Vector3 stored_camera_pos = level->camera.position;
 
@@ -2213,9 +2136,10 @@ void chapter_5_update_player_train_station(Game *game, float dt) {
         chapter_5_update_camera(&level->camera, PLAYER_SPEED_3D, dt);
     }
 
-    Vector3 *camera = &level->camera.position;
-    Chapter_5_Train *train = &level->train;
+    //Vector3 *camera = &level->camera.position;
+    //Chapter_5_Train *train = &level->train;
 
+    /*
     float curb = 0.7225f * -20.0f;
     if (camera->z > curb && camera->z < -8 && camera->x > 15) {
         *camera = stored_camera_pos;
@@ -2223,15 +2147,26 @@ void chapter_5_update_player_train_station(Game *game, float dt) {
     }
 
     if (!train->player_in && camera->z > curb) {
+    */
         Vector3 velocity = Vector3Subtract(level->camera.position, stored_camera_pos);
         level->camera.position = stored_camera_pos;
 
-        apply_3d_velocity(&level->camera, level->scenes[0], velocity, true);
+        apply_3d_velocity(&level->camera, level->camera_height, level->scenes[0], velocity, false);
+        /*
     }
+    */
 
     if (can_move) {
         chapter_5_update_camera_look(&level->camera);
     }
+
+    printf("{%.2ff, %.2ff, %.2ff} {%.2ff, %.2ff, %.2ff}\n",
+           level->camera.position.x,
+           level->camera.position.y,
+           level->camera.position.z,
+           level->camera.target.x,
+           level->camera.target.y,
+           level->camera.target.z);
 }
 
 void chapter_5_update_player_staircase(Game *game, float dt) {
@@ -2249,13 +2184,13 @@ void chapter_5_update_player_staircase(Game *game, float dt) {
         chapter_5_goto_scene(game, CHAPTER_5_SCENE_DINNER_PARTY);
     }
 
-    chapter_5_update_player_on_train(game);
+    //chapter_5_update_player_on_train(game);
 
     if (!level->train.player_in && level->camera.position.z > 0) {
         Vector3 velocity = Vector3Subtract(level->camera.position, stored_camera_pos);
         level->camera.position = stored_camera_pos;
 
-        apply_3d_velocity(&level->camera, level->scenes[1], velocity, true);
+        apply_3d_velocity(&level->camera, level->camera_height, level->scenes[1], velocity, true);
     }
 
     if (can_move)
@@ -2335,11 +2270,11 @@ void chapter_5_update_player_desert(Game *game, float dt) {
         level->camera.position = stored_camera_pos;
 
         if (level->current_scene == CHAPTER_5_SCENE_GALLERY)
-            apply_3d_velocity(&level->camera, level->scenes[5], velocity, false);
+            apply_3d_velocity(&level->camera, level->camera_height, level->scenes[5], velocity, false);
         else if (level->current_scene == CHAPTER_5_SCENE_SEASIDE)
-            apply_3d_velocity(&level->camera, level->scenes[6], velocity, false);
+            apply_3d_velocity(&level->camera, level->camera_height, level->scenes[6], velocity, false);
         else
-            apply_3d_velocity(&level->camera, level->scenes[4], velocity, false);
+            apply_3d_velocity(&level->camera, level->camera_height, level->scenes[4], velocity, false);
 
         chapter_5_update_camera_look(&level->camera);
     }
@@ -2435,7 +2370,7 @@ void chapter_5_update_player_dinner_party(Game *game, float dt) {
     } else {
         scene = &level->scenes[2];
     }
-    apply_3d_velocity(&level->camera, *scene, velocity, true);
+    apply_3d_velocity(&level->camera, level->camera_height, *scene, velocity, true);
 
     if (look)
         chapter_5_update_camera_look(&level->camera);

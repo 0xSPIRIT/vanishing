@@ -437,8 +437,8 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
 
             float player_speed = 30;
 
-            int dir_x = key_right() - key_left();
-            int dir_y = key_down()  - key_up();
+            int dir_x = input_movement_x_axis_int();//key_right() - key_left();
+            int dir_y = input_movement_y_axis_int();//key_down()  - key_up();
 
             if (level->state == LEVEL_CHAPTER_1_STATE_FOREST)
                 dir_x = 0;
