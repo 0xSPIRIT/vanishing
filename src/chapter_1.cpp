@@ -10,6 +10,7 @@ enum Level_Chapter_1_State {
     LEVEL_CHAPTER_1_STATE_CRAWLING,
     LEVEL_CHAPTER_1_STATE_FOREST,
     LEVEL_CHAPTER_1_STATE_APARTMENT,
+    LEVEL_CHAPTER_1_PHONE_CALL,
 };
 
 enum Direction {
@@ -46,6 +47,20 @@ struct Level_Chapter_1 {
     float god_scroll;
     int godtext;
 };
+
+void chapter_1_goto_next_text(Game *game) {
+    if (game->current == &game->text[57])
+        game->current = game->current->next[0];
+}
+
+void chapter_1_end(void *game_ptr) {
+    Game *game = (Game *)game_ptr;
+    add_event(game, atari_queue_deinit_and_goto_intro, 2);
+}
+
+void chapter_1_start_phone_call(Game *game) {
+    game->current = &game->text[35];
+}
 
 Entity *chapter_1_make_entity(Entity_Type type, float x, float y) {
     Entity *result = allocate_entity();
@@ -342,6 +357,131 @@ void chapter_1_init(Game *game) {
     game->text[32].scroll_type = LetterByLetter;
     game->text[32].callbacks[0] = set_player_alarm;
 
+    speed = 30;
+
+    atari_text_list_init(&game->text[35],
+                         0,
+                         "*ring ring*\r*click*",
+                         speed,
+                         &game->text[36]);
+    atari_text_list_init(&game->text[36],
+                         "Chase",
+                         "Uh hello?",
+                         speed,
+                         &game->text[37]);
+    atari_text_list_init(&game->text[37],
+                         "Eleanor",
+                         "Heyyyy Chase!!\rI got someone for you.",
+                         speed,
+                         &game->text[38]);
+    atari_text_list_init(&game->text[38],
+                         "Chase",
+                         "Uhhh what?",
+                         speed,
+                         &game->text[39]);
+    atari_text_list_init(&game->text[39],
+                         "Eleanor",
+                         "Y'know, SOMEONE!!!",
+                         speed,
+                         &game->text[40]);
+    atari_text_list_init(&game->text[40],
+                         "Chase",
+                         "Does this really require\na phone call?",
+                         speed,
+                         &game->text[41]);
+    atari_text_list_init(&game->text[41],
+                         "Chase",
+                         "You could've sent me a\ntext that I would have\npretended not to read.",
+                         speed,
+                         &game->text[42]);
+    atari_text_list_init(&game->text[42],
+                         "Eleanor",
+                         "UGH. FINE.\rYou're an ass, you know\nthat?!",
+                         speed,
+                         &game->text[43]);
+    atari_text_list_init(&game->text[43],
+                         "Chase",
+                         "Waaait hold on,\rI've been trying to get\nup for the past 45 minutes.",
+                         speed,
+                         &game->text[44]);
+    atari_text_list_init(&game->text[44],
+                         "Chase",
+                         "I'm just cranky.\rWe're already here.\nWho do you got?",
+                         speed,
+                         &game->text[45]);
+    atari_text_list_init(&game->text[45],
+                         "Eleanor",
+                         "Penny.",
+                         speed,
+                         &game->text[46]);
+    atari_text_list_init(&game->text[46],
+                         "Chase",
+                         "Penelope?\rBaron's Penelope?",
+                         speed,
+                         &game->text[47]);
+    atari_text_list_init(&game->text[47],
+                         "Eleanor",
+                         "Come on, she's perfect.\rShe even composes like\nyou!!!",
+                         speed,
+                         &game->text[48]);
+    atari_text_list_init(&game->text[48],
+                         "Chase",
+                         "Oh damn.\rWhat type of music?",
+                         speed,
+                         &game->text[49]);
+    atari_text_list_init(&game->text[49],
+                         "Eleanor",
+                         "Talk to her yourself and\nfind out.",
+                         speed,
+                         &game->text[50]);
+    atari_text_list_init(&game->text[50],
+                         "Chase",
+                         "Can I state the obvious\nhere sis?\r",
+                         speed,
+                         &game->text[51]);
+    atari_text_list_init(&game->text[51],
+                         "Chase",
+                         "It's BARON's Penny.",
+                         speed,
+                         &game->text[52]);
+    atari_text_list_init(&game->text[52],
+                         "Eleanor",
+                         "Uh, the same Baron that\nswears at her and treats\nher like shit?",
+                         speed,
+                         &game->text[53]);
+    atari_text_list_init(&game->text[53],
+                         "Eleanor",
+                         "That doesn't matter,\rtrust me.",
+                         speed,
+                         &game->text[54]);
+    atari_text_list_init(&game->text[54],
+                         "Chase",
+                         "...",
+                         speed,
+                         &game->text[55]);
+    atari_text_list_init(&game->text[55],
+                         "Eleanor",
+                         "Soooo what do you think\nbro?",
+                         speed,
+                         &game->text[56]);
+    atari_text_list_init(&game->text[56],
+                         "Chase",
+                         "...\r...\rI'll think about it.",
+                         speed,
+                         &game->text[57]);
+    atari_text_list_init(&game->text[57],
+                         "Eleanor",
+                         "*sigh*\rWe all know what that\nmea--",
+                         speed,
+                         &game->text[58]);
+    atari_text_list_init(&game->text[58],
+                         "Chase",
+                         "*click*",
+                         speed,
+                         nullptr);
+
+    game->text[58].callbacks[0] = chapter_1_end;
+
     Entity *e = chapter_1_make_entity(ENTITY_WINDOW, render_width/2 - 16, render_height/5);
     array_add(&game->entities, e);
 }
@@ -430,7 +570,9 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
 
             if (e->chap_1_player.huffing_and_puffing) {
                 if (level->about_to_exit && e->alarm[2] == 0) {
-                    atari_queue_deinit_and_goto_intro(game);
+                    level->state = LEVEL_CHAPTER_1_PHONE_CALL;
+                    level->background_color = BLACK;
+                    add_event(game, chapter_1_start_phone_call, 3);
                 }
                 break;
             }
@@ -490,7 +632,7 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                     level->state = LEVEL_CHAPTER_1_STATE_APARTMENT;
                     e->chap_1_player.walking_state = PLAYER_WALKING_STATE_SLOWED_1;
 
-                    e->alarm[1] = 5;
+                    e->alarm[1] = 3;
 
                     for (int i = 0; i < game->entities.length; i++) {
                         Entity *entity = game->entities.data[i];
@@ -746,6 +888,10 @@ void chapter_1_entity_draw(Entity *e, Game *game) {
 void chapter_1_update(Game *game, float dt) {
     Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
 
+    if (level->state == LEVEL_CHAPTER_1_PHONE_CALL) {
+        return;
+    }
+
     if (level->intro) {
         level->god_scroll += 8 * dt;
 
@@ -800,6 +946,12 @@ void chapter_1_update(Game *game, float dt) {
         }
     }
 
+    if (game->current == &game->text[57] &&
+        is_text_list_at_end(game->current))
+    {
+        add_event(game, chapter_1_goto_next_text, 0.1f);
+    }
+
     if (level->state == LEVEL_CHAPTER_1_STATE_FOREST) {
         level->background_color = FOREST_COLOR;
     }
@@ -809,6 +961,8 @@ void chapter_1_draw(Game *game) {
     Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
 
     ClearBackground(level->background_color);
+
+    if (level->state == LEVEL_CHAPTER_1_PHONE_CALL) return;
 
     if (level->intro) {
         DrawTexture(atari_assets.textures[17 + level->god_index], 0, 0, WHITE);

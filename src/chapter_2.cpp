@@ -610,7 +610,7 @@ void chapter_2_init(Game *game) {
                          &game->text[64]);
     atari_text_list_init(&game->text[64],
                          "Chase",
-                         "Woah cool, which\nrestaurant was it?",
+                         "Which restaurant?",
                          speed,
                          &game->text[65]);
     atari_text_list_init(&game->text[65],
@@ -620,7 +620,7 @@ void chapter_2_init(Game *game) {
                          &game->text[66]);
     atari_text_list_init(&game->text[66],
                          "Eleanor",
-                         "Damn, moving up in the\nworld...\rAnyways, continue.",
+                         "Damn, nice...\rAnyways, continue.",
                          speed,
                          &game->text[67]);
     atari_text_list_init(&game->text[67],

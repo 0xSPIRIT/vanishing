@@ -21,7 +21,7 @@ void game_intro_init(Game_Intro *game) {
             game->message = "\"DINNER PARTY\"";
         } break;
         case 3: {
-            game->message = "\"REPITITIONS\"";
+            game->message = "\"REPETITIONS\"";
         } break;
         case 4: {
             game->message = "\"THEOPHANY\"";
