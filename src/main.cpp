@@ -55,7 +55,7 @@ enum Game_Mode {
 };
 Game_Mode game_mode = GAME_MODE_INVALID;
 
-int chapter = 1;
+int chapter = 5;
 
 Font global_font, atari_font, comic_sans, italics_font, bold_font, bold_2_font, mono_font, bold_font_big;
 
@@ -202,8 +202,6 @@ MainFunction() {
             case GAME_MODE_ATARI:   game_atari_run(&game_atari); break;
             case GAME_MODE_INVALID: assert(false);
         }
-
-        gamepad_movement_angle();
     }
 
     CloseWindow();

@@ -442,7 +442,7 @@ void chapter_3_job_init(Game *game, int which_document_list) {
             documents[count++] =
                 "Memo\n-------\n\nNotice for all employees:\n  Please be adviesd that the copier machien is not wokring. We brought a replacemnet and it is arriving next Monday.";
             documents[count++] =
-                "Email\n-------\n\nDear Peggy,\n  Hopefully this isn't picked up by the system. We met a few weeks ago at the business meeting in Sydney; we went to high school together, and we had dinner that evening. I'm following up on potential collaboration opportunities between our branches that may be beneficial to us both.\n  If there are any barriers or concerns, please let me know.\n\nWarm regards,\nHunter (Business Development Manager, Nebraska)";
+                "Email\n-------\n\nDear Peggy,\n  Hopefully this isn't picked up by the system. We met a few weeks ago at the business meeting in Sydney; we had dinner that evening. I'm following up on potential collaboration opportunities between our branches that may be beneficial to us both.\n  If there are any barriers or concerns, please let me know.\n\nWarm regards,\nHunter (Business Development Manager, Nebraska)";
 
             level->minigame = chapter_3_make_job_minigame(&game->level_arena, documents, count);
 
@@ -908,8 +908,8 @@ void chapter_3_init(Game *game) {
 
     chapter_3_init_outside(game);
 
-    chapter_3_job_init(game, 2);
-    level->minigame.active = true;
+    chapter_3_job_init(game, 0);
+    //level->minigame.active = true;
 
     //chapter_3_goto_lunch_room(game, CHAPTER_3_LUNCH_TEXT_3);
     //level->minigame.active = true;

@@ -10,13 +10,17 @@ struct Level_Chapter_6 {
 
     float fade_alpha;
     float white_fade_alpha;
-    float red_fade_alpha;
+    float red_fade_time; // 0.0 to 1.0
     bool  started_text;
 
     float god_scroll;
 
     int godtext;
 };
+
+float chapter_6_red_fade_alpha(float time) {
+    return time * time * time;
+}
 
 void chapter_6_goto_home(Game *game) {
     Level_Chapter_6 *level = (Level_Chapter_6 *)game->level;
@@ -335,7 +339,11 @@ void chapter_6_update(Game *game, float dt) {
             }
         } break;
         case CHAPTER_6_STATE_TEXT: {
-            level->god_scroll += 8 * dt;
+            if (level->godtext != 2)
+                level->god_scroll += 8 * dt;
+            else
+                level->god_scroll += 12 * dt;
+
             if (level->god_scroll > render_height) {
                 level->god_scroll = render_height;
             }
@@ -347,7 +355,7 @@ void chapter_6_update(Game *game, float dt) {
                         if (level->godtext == 1)
                             level->god_scroll = 36;
                         else
-                            level->god_scroll = 10;
+                            level->god_scroll = 0;
                     }
                 } else {
                     level->god_scroll = render_height;
@@ -355,10 +363,10 @@ void chapter_6_update(Game *game, float dt) {
             }
 
             if (level->godtext == 2) {
-                level->red_fade_alpha += 0.05f * dt;
+                level->red_fade_time += 0.05f * dt;
 
-                if (level->red_fade_alpha > 1) {
-                    level->red_fade_alpha = 1;
+                if (level->red_fade_time > 1) {
+                    level->red_fade_time = 1;
                     atari_queue_deinit_and_goto_intro(game);
                 }
             }
@@ -405,7 +413,9 @@ void chapter_6_draw(Game *game) {
 
             DrawRectangle(0, level->god_scroll, render_width, render_height, BLACK);
 
-            DrawRectangle(0, 0, render_width, render_height, {255, 0, 0, (uint8_t)(255 * level->red_fade_alpha)});
+            float red_fade_alpha = chapter_6_red_fade_alpha(level->red_fade_time);
+
+            DrawRectangle(0, 0, render_width, render_height, {255, 0, 0, (uint8_t)(255 * red_fade_alpha)});
         } break;
     }
 }

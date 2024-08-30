@@ -1,17 +1,32 @@
 TODO : Today
 
+I think that the whole story with Penny and not being able
+to talk to her in the Dinner Party doesn't really jive with
+the rest of the themes in the story, about meaninglessness
+etc.
+
+I'm not even like that with people. I can talk to whoever.
+
+- Are you ready for the party tomorrow night?
+  Tomorrow you're going to have to meet them and talk to them
+  Are you ready for the party tomorrow night?
+  How are you going to enter the room?
+  What are you going to say?
+  What will they say in return..?
+  They might hate you.
+  Come, let me show you what could happen.
+
+- In the white parts, use intro font: Ex pluribus unum veritas
+
 - Improve the story between Peggy and Hunter. Give them a better
   reason for them to be emailing. Also, the "love" replacement
   at the end isn't as warranted. Maybe they're long lost
   lovers reconnecting rather than strangers.
-
-x Chapter 5: make the position interpolate faster than target
-x Chapter 5: make the skull one, maybe some sort of thing on death.
-- Add a separate intro segment for the desert area.
-- Redo train station to be more threatening,
-- add the white version of train station.
+- You can get stuck in the paintings
 - Fix the bug on the train going into staircase
 - Redo the entirety of chapter 5 staircase
+
+- Make sure all the God text is Black at first, not red.
 
 TODO : Later
 
@@ -33,7 +48,6 @@ x Somehow include a window in the first chapter somewhere?
 x Make sure that nothing overlaps in the first chapter
   when you move screens. Especially make sure that it
   can't spawn inside the player.
-- Make sure all the God text is Black at first, not red.
 x For the devil text in one of the chapters you can
   use the Document Review instead of regular textboxes.
 - Intro: Make it the same setting as the epilogue-- the jail.
