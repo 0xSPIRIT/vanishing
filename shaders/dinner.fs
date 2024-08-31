@@ -22,5 +22,11 @@ void main() {
         discard;
     }
 
-    finalColor = texelColor * fragColor * colDiffuse;
+    vec4 window_color = vec4(0.3, 0.5, 1.0, 0.35);
+
+    if (colDiffuse.r == 0 && colDiffuse.g == 0 && colDiffuse.b == 1) {
+        finalColor = window_color;
+    } else {
+        finalColor = texelColor * fragColor * colDiffuse;
+    }
 }

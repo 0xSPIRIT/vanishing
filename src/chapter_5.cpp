@@ -505,6 +505,121 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
             model_set_shader(&level->models.train,      level->shader);
             model_set_shader(&level->models.train_door, level->shader);
 
+            chapter_5_window_text(true,
+                                  &game->text[0],
+                                  "I don't have the courage to do\nwhat the Lord has asked.",
+                                  WHITE,
+                                  &game->text[1]);
+            chapter_5_window_text(true,
+                                  &game->text[1],
+                                  "It's been weeks.",
+                                  WHITE,
+                                  &game->text[2]);
+            chapter_5_window_text(true,
+                                  &game->text[2],
+                                  "I need to clear my head.",
+                                  WHITE,
+                                  nullptr);
+
+            // clerk dialogue
+
+            chapter_5_text(&game->text[3],
+                           "Chase",
+                           "Um...\rGood night.",
+                           30,
+                           &game->text[4]);
+            chapter_5_text(&game->text[4],
+                           "Clerk",
+                           "What the hell do you want?\rWhy are you out here so late?",
+                           30,
+                           &game->text[5]);
+            chapter_5_text(&game->text[5],
+                           "Chase",
+                           "Um...",
+                           30,
+                           &game->text[6]);
+            chapter_5_text(&game->text[6],
+                           "Clerk",
+                           "Do your parents know that you're here?\rCome on, spit it out, boy!",
+                           30,
+                           &game->text[7]);
+            chapter_5_text(&game->text[7],
+                           "Chase",
+                           "C-can you stop looking at me like that?\rIt's a bit creepy.",
+                           30,
+                           &game->text[8]);
+            chapter_5_text(&game->text[8],
+                           "Clerk",
+                           "Looking at you like what, sir?",
+                           30,
+                           nullptr);
+
+            game->text[8].callbacks[0] = chapter_5_begin_head_flip;
+
+            chapter_5_text(&game->text[10],
+                           "Clerk",
+                           "Looking at you like what, sir?",
+                           30,
+                           &game->text[11]);
+            chapter_5_text(&game->text[11],
+                           "Clerk",
+                           "Looking at you like what, sir?",
+                           30,
+                           &game->text[12]);
+            chapter_5_text(&game->text[12],
+                           "Clerk",
+                           "Looking at you like what, sir?",
+                           30,
+                           nullptr);
+
+            game->text[12].callbacks[0] = chapter_5_begin_black_transition;
+
+            chapter_5_text(&game->text[15],
+                           "Clerk",
+                           "Um... sir?\r... Good night.",
+                           30,
+                           &game->text[16]);
+            chapter_5_text(&game->text[16],
+                           "Clerk",
+                           "I was just saying,\ryou should be careful out there, it's very late.\r"
+                           "... Erm, how old are you?",
+                           30,
+                           &game->text[17]);
+            chapter_5_text(&game->text[17],
+                           "Chase",
+                           "Don't worry, I get that a lot.\rI look young.",
+                           30,
+                           &game->text[18]);
+            chapter_5_text(&game->text[18],
+                           "Chase",
+                           "Uh, one ticket to Nirvana, please.",
+                           30,
+                           &game->text[19]);
+            chapter_5_text(&game->text[19],
+                           "Clerk",
+                           "Going for quite an adventure today, are we?",
+                           30,
+                           &game->text[20]);
+            chapter_5_text(&game->text[20],
+                           "Chase",
+                           "Like you won't believe.",
+                           30,
+                           &game->text[21]);
+
+            game->text[20].callbacks[0] = chapter_5_give_ticket;
+
+            chapter_5_text(&game->text[21],
+                           "Clerk",
+                           "Here's the ticket.\rBe safe.\rThe train is coming any minute.",
+                           30,
+                           &game->text[22]);
+            chapter_5_text(&game->text[22],
+                           "Chase",
+                           "Thanks.",
+                           30,
+                           nullptr);
+            game->text[22].callbacks[0] = chapter_5_train_move;
+
             //game->current = &game->text[0];
         } break;
         case CHAPTER_5_SCENE_STAIRCASE: {
@@ -517,7 +632,7 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
             level->camera.position   = { 0, level->camera_height, 0 };
             level->camera.target     = { 0.00f, level->camera_height, 2.00f };
             level->camera.up         = { 0, 1, 0 };
-            level->camera.fovy       = 50;
+            level->camera.fovy       = FOV_DEFAULT;
             level->camera.projection = CAMERA_PERSPECTIVE;
 
             Chapter_5_Train *train = &level->train;
@@ -536,6 +651,37 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
 
             model_set_shader(&level->models.train,      level->shader);
             model_set_shader(&level->models.train_door, level->shader);
+
+            chapter_5_podium_text(&game->text[0],
+                                  true,
+                                  "Are you ready for the dinner tomorrow night?",
+                                  nullptr);
+            chapter_5_podium_text(&game->text[1],
+                                  true,
+                                  "Tomorrow you're going to have to meet them and\ntalk to them.",
+                                  nullptr);
+            chapter_5_podium_text(&game->text[2],
+                                  true,
+                                  "How are you going to enter the room?",
+                                  nullptr);
+            chapter_5_podium_text(&game->text[3],
+                                  true,
+                                  "What are you going to say?",
+                                  nullptr);
+            chapter_5_podium_text(&game->text[4],
+                                  true,
+                                  "What will they say in return..?",
+                                  nullptr);
+            chapter_5_podium_text(&game->text[5],
+                                  true,
+                                  "It might be awkward.\rSoooooooooooooooo awkward.",
+                                  nullptr);
+            chapter_5_podium_text(&game->text[6],
+                                  true,
+                                  "Come, let me show you what could happen.",
+                                  nullptr);
+
+            game->current = &game->text[0];
         } break;
         case CHAPTER_5_SCENE_DINNER_PARTY: {
             level->camera_height = GUY_HEIGHT;
@@ -1169,121 +1315,6 @@ void chapter_5_init(Game *game) {
     level->models.pyramid_head = LoadModel(RES_DIR "models/pyramid_head.glb");
     level->models.real_head    = LoadModel(RES_DIR "models/real_head.glb");
     level->models.podium       = LoadModel(RES_DIR "models/podium.glb");
-
-    chapter_5_window_text(true,
-                          &game->text[0],
-                          "I don't have the courage to do\nwhat the Lord has asked.",
-                          WHITE,
-                          &game->text[1]);
-    chapter_5_window_text(true,
-                          &game->text[1],
-                          "It's been weeks.",
-                          WHITE,
-                          &game->text[2]);
-    chapter_5_window_text(true,
-                          &game->text[2],
-                          "I need to clear my head.",
-                          WHITE,
-                          nullptr);
-
-    // clerk dialogue
-
-    chapter_5_text(&game->text[3],
-                   "Chase",
-                   "Um...\rGood night.",
-                   30,
-                   &game->text[4]);
-    chapter_5_text(&game->text[4],
-                   "Clerk",
-                   "What the hell do you want?\rWhy are you out here so late?",
-                   30,
-                   &game->text[5]);
-    chapter_5_text(&game->text[5],
-                   "Chase",
-                   "Um...",
-                   30,
-                   &game->text[6]);
-    chapter_5_text(&game->text[6],
-                   "Clerk",
-                   "Do your parents know that you're here?\rCome on, spit it out, boy!",
-                   30,
-                   &game->text[7]);
-    chapter_5_text(&game->text[7],
-                   "Chase",
-                   "C-can you stop looking at me like that?\rIt's a bit creepy.",
-                   30,
-                   &game->text[8]);
-    chapter_5_text(&game->text[8],
-                   "Clerk",
-                   "Looking at you like what, sir?",
-                   30,
-                   nullptr);
-
-    game->text[8].callbacks[0] = chapter_5_begin_head_flip;
-
-    chapter_5_text(&game->text[10],
-                   "Clerk",
-                   "Looking at you like what, sir?",
-                   30,
-                   &game->text[11]);
-    chapter_5_text(&game->text[11],
-                   "Clerk",
-                   "Looking at you like what, sir?",
-                   30,
-                   &game->text[12]);
-    chapter_5_text(&game->text[12],
-                   "Clerk",
-                   "Looking at you like what, sir?",
-                   30,
-                   nullptr);
-
-    game->text[12].callbacks[0] = chapter_5_begin_black_transition;
-
-    chapter_5_text(&game->text[15],
-                   "Clerk",
-                   "Um... sir?\r... Good night.",
-                   30,
-                   &game->text[16]);
-    chapter_5_text(&game->text[16],
-                   "Clerk",
-                   "I was just saying,\ryou should be careful out there, it's very late.\r"
-                   "... Erm, how old are you?",
-                   30,
-                   &game->text[17]);
-    chapter_5_text(&game->text[17],
-                   "Chase",
-                   "Don't worry, I get that a lot.\rI look young.",
-                   30,
-                   &game->text[18]);
-    chapter_5_text(&game->text[18],
-                   "Chase",
-                   "Uh, one ticket to Nirvana, please.",
-                   30,
-                   &game->text[19]);
-    chapter_5_text(&game->text[19],
-                   "Clerk",
-                   "Going for quite an adventure today, are we?",
-                   30,
-                   &game->text[20]);
-    chapter_5_text(&game->text[20],
-                   "Chase",
-                   "Like you won't believe.",
-                   30,
-                   &game->text[21]);
-
-    game->text[20].callbacks[0] = chapter_5_give_ticket;
-
-    chapter_5_text(&game->text[21],
-                   "Clerk",
-                   "Here's the ticket.\rBe safe.\rThe train is coming any minute.",
-                   30,
-                   &game->text[22]);
-    chapter_5_text(&game->text[22],
-                   "Chase",
-                   "Thanks.",
-                   30,
-                   nullptr);
-    game->text[22].callbacks[0] = chapter_5_train_move;
 
     // Dinner table dialogue
 
@@ -2763,6 +2794,7 @@ void chapter_5_draw(Game *game) {
 
             BeginMode3D(level->camera);
 
+            rlEnableColorBlend();
             DrawModel(level->scenes[6], {}, 1, WHITE);
             EndMode3D();
 

@@ -416,7 +416,7 @@ void chapter_1_init(Game *game) {
                          &game->text[46]);
     atari_text_list_init(&game->text[46],
                          "Chase",
-                         "Penelope?\rBaron's Penelope?",
+                         "Penelope?\rJason's Penelope?",
                          speed,
                          &game->text[47]);
     atari_text_list_init(&game->text[47],
@@ -441,12 +441,12 @@ void chapter_1_init(Game *game) {
                          &game->text[51]);
     atari_text_list_init(&game->text[51],
                          "Chase",
-                         "It's BARON's Penny.",
+                         "It's JASON's Penny.",
                          speed,
                          &game->text[52]);
     atari_text_list_init(&game->text[52],
                          "Eleanor",
-                         "Uh, the same Baron that\nswears at her and treats\nher like shit?",
+                         "Uh, the same Jason that\ncusses at her and treats\nher like shit?",
                          speed,
                          &game->text[53]);
     atari_text_list_init(&game->text[53],

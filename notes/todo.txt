@@ -1,39 +1,23 @@
 TODO : Today
 
-I think that the whole story with Penny and not being able
-to talk to her in the Dinner Party doesn't really jive with
-the rest of the themes in the story, about meaninglessness
-etc.
+- Chapter 5 stairacse redo: hotel.
 
-I'm not even like that with people. I can talk to whoever.
-
-What does Penny represent?
-  - An unattainable standard
-  - Unreliable narration: chase thinks she's perfect.
-  - We use penny to portray how Chase isn't taking
-    opportunities that come his way due to his
-    mental state.
-
-- Are you ready for the party tomorrow night?
-  Tomorrow you're going to have to meet them and talk to them
-  Are you ready for the party tomorrow night?
-  How are you going to enter the room?
-  What are you going to say?
-  What will they say in return..?
-  They might hate you.
-  Come, let me show you what could happen.
+- Podiums in hotel staircase scene:
+  - Are you ready for the party tomorrow night?
+    Tomorrow you're going to have to meet them and talk to them
+    Are you ready for the party tomorrow night?
+    How are you going to enter the room?
+    What are you going to say?
+    What will they say in return..?
+    They might hate you.
+    Come, let me show you what could happen.
 
 - In the white parts, use intro font: Ex pluribus unum veritas
 
-- Improve the story between Peggy and Hunter. Give them a better
-  reason for them to be emailing. Also, the "love" replacement
-  at the end isn't as warranted. Maybe they're long lost
-  lovers reconnecting rather than strangers.
 - You can get stuck in the paintings
-- Fix the bug on the train going into staircase
-- Redo the entirety of chapter 5 staircase
 
-- Make sure all the God text is Black at first, not red.
+- Make sure all the God text is Black at first with white
+  outline, not red.
 
 TODO : Later
 
