@@ -56,7 +56,7 @@ enum Entity_Type {
     ENTITY_CHAP_2_RANDOM_GIRL,
     ENTITY_CHAP_2_BOUNCER,
     ENTITY_CHAP_2_BARTENDER,
-    ENTITY_CHAP_2_PENNY,
+    ENTITY_CHAP_2_HOPE,
 
     ENTITY_CHAP_3_CUBICLE_TOP,
     ENTITY_CHAP_3_CUBICLE_VERTICAL,
@@ -96,7 +96,7 @@ struct Entity {
         // Chapter 2 entities
         Chapter_2_Player  chap_2_player;
         Chapter_2_Door    chap_2_door;
-        Chapter_2_Penny   chap_2_penny;
+        Chapter_2_Hope    chap_2_hope;
 
         // Chapter 3 entities
         Chapter_3_Cubicle chap_3_cubicle;

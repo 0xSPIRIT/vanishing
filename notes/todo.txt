@@ -1,5 +1,8 @@
 TODO : Today
 
+- "I'm sick of Chasing" - double entendre
+x Rename penny to hope
+
 - Chapter 5 stairacse redo: hotel.
 
 - Podiums in hotel staircase scene:
@@ -8,6 +11,7 @@ TODO : Today
     Are you ready for the party tomorrow night?
     How are you going to enter the room?
     What are you going to say?
+    Make sure to smile.
     What will they say in return..?
     They might hate you.
     Come, let me show you what could happen.
@@ -35,7 +39,7 @@ x In chapter 5, add parts in each of the three parts where you have to look
   Really distorted, pitched-down text to speech voice for chase
   rather than text scroll sound.
 x Somehow include a window in the first chapter somewhere?
-- chapter 2: add white vhs thing right before teleporting to bathroom with penny
+- chapter 2: add white vhs thing right before teleporting to bathroom with hope
 x Make sure that nothing overlaps in the first chapter
   when you move screens. Especially make sure that it
   can't spawn inside the player.

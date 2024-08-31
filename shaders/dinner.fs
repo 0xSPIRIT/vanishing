@@ -22,7 +22,7 @@ void main() {
         discard;
     }
 
-    vec4 window_color = vec4(0.3, 0.5, 1.0, 0.35);
+    vec4 window_color = vec4(0.0, 0.0, 0.7, 0.5);
 
     if (colDiffuse.r == 0 && colDiffuse.g == 0 && colDiffuse.b == 1) {
         finalColor = window_color;

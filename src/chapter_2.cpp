@@ -5,22 +5,22 @@ enum Chapter_2_Area {
     CHAPTER_2_AREA_BATHROOM,
 };
 
-enum Chapter_2_Penny_State {
-    CHAPTER_2_PENNY_STATE_INVALID,
-    CHAPTER_2_PENNY_STATE_WALKING, // camera follows penny
-    CHAPTER_2_PENNY_STATE_STOP_FIRST,
-    CHAPTER_2_PENNY_STATE_STOP_SECOND,
-    CHAPTER_2_PENNY_STATE_THE_REST, // camera follows penny
-    CHAPTER_2_PENNY_STATE_STOP,    // stops at the group of girls
-    CHAPTER_2_PENNY_STATE_DONE,
+enum Chapter_2_Hope_State {
+    CHAPTER_2_HOPE_STATE_INVALID,
+    CHAPTER_2_HOPE_STATE_WALKING, // camera follows hope
+    CHAPTER_2_HOPE_STATE_STOP_FIRST,
+    CHAPTER_2_HOPE_STATE_STOP_SECOND,
+    CHAPTER_2_HOPE_STATE_THE_REST, // camera follows hope
+    CHAPTER_2_HOPE_STATE_STOP,    // stops at the group of girls
+    CHAPTER_2_HOPE_STATE_DONE,
 };
 
 struct Level_Chapter_2 {
     Chapter_2_Area current_area;
     Entity *player; // quick access to the player
-    Entity *penny;
+    Entity *hope;
 
-    Chapter_2_Penny_State penny_state;
+    Chapter_2_Hope_State hope_state;
 
     float final_dialogue_alarm;
 
@@ -93,7 +93,7 @@ Entity *chapter_2_make_entity(Entity_Type type, float x, float y) {
         case ENTITY_CHAP_2_RANDOM_GUY: {
             result->texture_id = 2;
         } break;
-        case ENTITY_CHAP_2_PENNY: {
+        case ENTITY_CHAP_2_HOPE: {
             result->texture_id = 7;
         } break;
         case ENTITY_CHAP_2_JAKE: case ENTITY_CHAP_2_MIKE:
@@ -206,10 +206,10 @@ void chapter_2_end_eleanor_second_text(void *game_ptr) {
     Game *game = (Game *)game_ptr;
     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
 
-    level->penny_state = CHAPTER_2_PENNY_STATE_WALKING;
-    level->penny = chapter_2_make_entity(ENTITY_CHAP_2_PENNY, 620, 70);
-    level->penny->alarm[0] = 1;
-    array_add(&game->entities, level->penny);
+    level->hope_state = CHAPTER_2_HOPE_STATE_WALKING;
+    level->hope = chapter_2_make_entity(ENTITY_CHAP_2_HOPE, 620, 70);
+    level->hope->alarm[0] = 1;
+    array_add(&game->entities, level->hope);
 }
 
 void chapter_2_end_eleanor_third_text(void *game_ptr) {
@@ -218,7 +218,7 @@ void chapter_2_end_eleanor_third_text(void *game_ptr) {
 
     Entity *player = level->player;
     player->chap_2_player.sitting_state = false;
-    player->chap_2_player.speed_penny = 1;
+    player->chap_2_player.speed_hope = 1;
 }
 
 void chapter_2_end_fade(void *game_ptr) {
@@ -237,7 +237,7 @@ void chapter_2_init(Game *game) {
     textures[4]  = load_texture(RES_DIR "art/girl.png");
     textures[5]  = load_texture(RES_DIR "art/dinner_table.png");
     textures[6]  = load_texture(RES_DIR "art/real_girl.png");
-    textures[7]  = load_texture(RES_DIR "art/penny.png");
+    textures[7]  = load_texture(RES_DIR "art/hope.png");
     textures[8]  = load_texture(RES_DIR "art/fullscreen_1.png");
     textures[9]  = load_texture(RES_DIR "art/fullscreen_2.png");
     textures[10] = load_texture(RES_DIR "art/bathroom.png");
@@ -718,7 +718,7 @@ void chapter_2_init(Game *game) {
                          &game->text[84]);
     atari_text_list_init(&game->text[84],
                          "Eleanor",
-                         "Isn't that Penny over\nthere?",
+                         "Isn't that Hope over\nthere?",
                          speed,
                          &game->text[85]);
     atari_text_list_init(&game->text[85],
@@ -755,7 +755,7 @@ void chapter_2_init(Game *game) {
 
     atari_text_list_init(&game->text[90],
                          0,
-                         "\"Hi Penny!\", Chase said.",
+                         "\"Hi Hope!\", Chase said.",
                          speed,
                          &game->text[91]);
     atari_text_list_init(&game->text[91],
@@ -914,7 +914,7 @@ void chapter_2_entity_update(Entity *e, Game *game, float dt) {
 
     bool open_dialogue = is_action_pressed() &&
                          can_open_dialogue(game, e, player) &&
-                         level->penny_state != CHAPTER_2_PENNY_STATE_DONE;
+                         level->hope_state != CHAPTER_2_HOPE_STATE_DONE;
 
     switch (e->type) {
         case ENTITY_PLAYER: {
@@ -922,7 +922,7 @@ void chapter_2_entity_update(Entity *e, Game *game, float dt) {
             int dir_y = input_movement_y_axis_int();//key_down()  - key_up();
 
             if (level->current_area == CHAPTER_2_AREA_BATHROOM) {
-                e->chap_2_player.speed_penny = 0;
+                e->chap_2_player.speed_hope = 0;
             }
 
             if (player->chap_2_player.sitting_state) {
@@ -934,7 +934,7 @@ void chapter_2_entity_update(Entity *e, Game *game, float dt) {
                             game->current = &game->text[59];
                         } break;
                         case 2: {
-                            // Begin the part with Penny
+                            // Begin the part with Hope
                             game->current = &game->text[80];
                             player->chap_2_player.sitting_state = 3;
                         } break;
@@ -944,11 +944,11 @@ void chapter_2_entity_update(Entity *e, Game *game, float dt) {
 
             float player_speed = 60;
 
-            if (e->chap_2_player.speed_penny != 0) {
-                Entity *penny = level->penny;
+            if (e->chap_2_player.speed_hope != 0) {
+                Entity *hope = level->hope;
 
                 float distance = Vector2Length(Vector2Subtract(player->pos,
-                                                               penny->pos));
+                                                               hope->pos));
 
                 player_speed = Clamp(distance * 0.25, 5, 60);
             }
@@ -1047,24 +1047,24 @@ void chapter_2_entity_update(Entity *e, Game *game, float dt) {
                 e->dialogue_state++;
             }
         } break;
-        case ENTITY_CHAP_2_PENNY: {
+        case ENTITY_CHAP_2_HOPE: {
             bool dialogue = is_player_close_to_entity(e, player, 4);
 
-            if (dialogue && player->chap_2_player.speed_penny == 1) {
+            if (dialogue && player->chap_2_player.speed_hope == 1) {
                 level->current_area = CHAPTER_2_AREA_BATHROOM;
                 break;
             }
 
-            switch (level->penny_state) {
-                case CHAPTER_2_PENNY_STATE_WALKING: 
-                case CHAPTER_2_PENNY_STATE_THE_REST: {
+            switch (level->hope_state) {
+                case CHAPTER_2_HOPE_STATE_WALKING: 
+                case CHAPTER_2_HOPE_STATE_THE_REST: {
                     if (e->alarm[0] == 0) {
                         Vector2 velocity = { 30 * dt, 0 };
 
-                        if (level->penny_state == CHAPTER_2_PENNY_STATE_WALKING &&
+                        if (level->hope_state == CHAPTER_2_HOPE_STATE_WALKING &&
                             fabs(e->pos.x - player->pos.x) < 1)
                         {
-                            level->penny_state = CHAPTER_2_PENNY_STATE_STOP_FIRST;
+                            level->hope_state = CHAPTER_2_HOPE_STATE_STOP_FIRST;
                             e->alarm[0] = 0.5;
                             game->current = &game->text[105];
                         }
@@ -1076,38 +1076,38 @@ void chapter_2_entity_update(Entity *e, Game *game, float dt) {
                         Vector2 stored_pos = e->pos;
                         apply_velocity(e, velocity, &game->entities);
 
-                        if (e->chap_2_penny.state == 0 &&
+                        if (e->chap_2_hope.state == 0 &&
                             e->pos.x == stored_pos.x)
                         {
-                            level->penny_state = CHAPTER_2_PENNY_STATE_STOP;
+                            level->hope_state = CHAPTER_2_HOPE_STATE_STOP;
                             game->current = 0;
-                            e->chap_2_penny.state = 1;
+                            e->chap_2_hope.state = 1;
                             e->alarm[0] = 2;
                         }
                     }
                 } break;
-                case CHAPTER_2_PENNY_STATE_STOP_FIRST: {
+                case CHAPTER_2_HOPE_STATE_STOP_FIRST: {
                     if (game->current == 0 && e->alarm[0] == 0) {
-                        level->penny_state = CHAPTER_2_PENNY_STATE_THE_REST;
+                        level->hope_state = CHAPTER_2_HOPE_STATE_THE_REST;
                         e->alarm[0] = 0.5;
                     }
                 } break;
-                case CHAPTER_2_PENNY_STATE_STOP_SECOND: {
+                case CHAPTER_2_HOPE_STATE_STOP_SECOND: {
                     if (e->alarm[0] == 0) {
-                        level->penny_state = CHAPTER_2_PENNY_STATE_THE_REST;
+                        level->hope_state = CHAPTER_2_HOPE_STATE_THE_REST;
                         e->alarm[0] = 0;
                     }
                 } break;
-                case CHAPTER_2_PENNY_STATE_STOP: {
+                case CHAPTER_2_HOPE_STATE_STOP: {
                     if (e->alarm[0] == 0) {
-                        level->penny_state = CHAPTER_2_PENNY_STATE_DONE;
+                        level->hope_state = CHAPTER_2_HOPE_STATE_DONE;
                         e->alarm[0] = 2;
                     }
                 } break;
-                case CHAPTER_2_PENNY_STATE_DONE: {
-                    if (!e->chap_2_penny.final_text && e->alarm[0] == 0) {
+                case CHAPTER_2_HOPE_STATE_DONE: {
+                    if (!e->chap_2_hope.final_text && e->alarm[0] == 0) {
                         game->current = &game->text[86];
-                        e->chap_2_penny.final_text = true;
+                        e->chap_2_hope.final_text = true;
                     }
                 } break;
             }
@@ -1200,12 +1200,12 @@ void chapter_2_update(Game *game, float dt) {
                 level->bathroom_state = 1;
             }
 
-            Entity *penny = entities_find_from_type(&game->entities, ENTITY_CHAP_2_PENNY);
+            Entity *hope = entities_find_from_type(&game->entities, ENTITY_CHAP_2_HOPE);
 
             level->player->pos.x = fmod(level->player->pos.x, render_width);
             level->player->pos.y = fmod(level->player->pos.y, render_height);
 
-            if (penny) {
+            if (hope) {
                 for (int i = 0; i < game->entities.length; i++) {
                     Entity *e = game->entities.data[i];
 
@@ -1214,7 +1214,7 @@ void chapter_2_update(Game *game, float dt) {
                         array_remove(&game->entities, i--);
                     }
                 }
-                level->penny = 0;
+                level->hope = 0;
 
                 add_wall(&game->entities, {0, 0, 39, 160});
                 add_wall(&game->entities, {0, 0, 192, 37});
@@ -1222,10 +1222,10 @@ void chapter_2_update(Game *game, float dt) {
         }
     }
 
-    if (level->penny_state >= CHAPTER_2_PENNY_STATE_WALKING &&
-        level->penny_state <= CHAPTER_2_PENNY_STATE_STOP)
+    if (level->hope_state >= CHAPTER_2_HOPE_STATE_WALKING &&
+        level->hope_state <= CHAPTER_2_HOPE_STATE_STOP)
     {
-        level->camera.offset.x = -((int)level->penny->pos.x - render_width/2);
+        level->camera.offset.x = -((int)level->hope->pos.x - render_width/2);
     } else {
         int player_x = level->player->pos.x + entity_texture_width(level->player) / 2;
         int player_y = level->player->pos.y + entity_texture_height(level->player) / 2;

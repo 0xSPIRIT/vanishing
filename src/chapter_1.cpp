@@ -48,11 +48,6 @@ struct Level_Chapter_1 {
     int godtext;
 };
 
-void chapter_1_goto_next_text(Game *game) {
-    if (game->current == &game->text[57])
-        game->current = game->current->next[0];
-}
-
 void chapter_1_end(void *game_ptr) {
     Game *game = (Game *)game_ptr;
     add_event(game, atari_queue_deinit_and_goto_intro, 2);
@@ -411,12 +406,12 @@ void chapter_1_init(Game *game) {
                          &game->text[45]);
     atari_text_list_init(&game->text[45],
                          "Eleanor",
-                         "Penny.",
+                         "Hope.",
                          speed,
                          &game->text[46]);
     atari_text_list_init(&game->text[46],
                          "Chase",
-                         "Penelope?\rJason's Penelope?",
+                         "Hope?\rJason's Hope?",
                          speed,
                          &game->text[47]);
     atari_text_list_init(&game->text[47],
@@ -441,12 +436,12 @@ void chapter_1_init(Game *game) {
                          &game->text[51]);
     atari_text_list_init(&game->text[51],
                          "Chase",
-                         "It's JASON's Penny.",
+                         "It's JASON's Hope.",
                          speed,
                          &game->text[52]);
     atari_text_list_init(&game->text[52],
                          "Eleanor",
-                         "Uh, the same Jason that\ncusses at her and treats\nher like shit?",
+                         "Uh, the same Jason that\nswears at her and treats\nher like shit?",
                          speed,
                          &game->text[53]);
     atari_text_list_init(&game->text[53],
@@ -949,7 +944,7 @@ void chapter_1_update(Game *game, float dt) {
     if (game->current == &game->text[57] &&
         is_text_list_at_end(game->current))
     {
-        add_event(game, chapter_1_goto_next_text, 0.1f);
+        game->current = game->current->next[0];
     }
 
     if (level->state == LEVEL_CHAPTER_1_STATE_FOREST) {

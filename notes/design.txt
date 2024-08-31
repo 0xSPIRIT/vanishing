@@ -40,7 +40,7 @@ Text Appears: "Dinner Party"
 - You're joking with your friends, but it's just a mask, a show. You
   don't really care about what's going on, and you aren't adding much
   to the conversation.
-- You notice a girl (pink) sit at another table- Penelope (Penny)
+- You notice a girl (pink) sit at another table- Hope
 - You're in shock, you didn't think you'd see her there.
 - Both your eyes catch for a second.
 - Your friends say you should talk to her, but when you start walking
@@ -332,7 +332,7 @@ them, a message appears:
   Yes:
 
 (Atari graphics)
-Having a smoke with Penny.
+Having a smoke with Hope.
 You talk to her about something that interests you both.
 She says "haha you're really funny" or something
 
@@ -398,7 +398,7 @@ things easily.
   perceiving in a different way than objective reality.
   Their huge eyes watching you make you feel disturbed,
   that's how Chase feels when he's talking to them.
-- Penny is not a triangle head person because he views her as
+- Hope is not a triangle head person because he views her as
   perfect and on a pedestal that is unreachable.
 - The 3D graphics is used to heighten tension and give a
   pacing difference. It's also when Chase is confused.
@@ -424,7 +424,7 @@ Chapter 3:
   made a deal with the devil himself.
 - There are moments of reprieve such as the Peggy and
   Hunter scenario which you see, and is allegorical to
-  Penny and Chase (that's where he wants to be).
+  Hope and Chase (that's where he wants to be).
 - He talks about a recurring dream he had about being in
   a white void with no way out, surrounded by bars. This is
   the state of his life. He wants to talk about things that
