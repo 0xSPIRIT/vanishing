@@ -237,7 +237,7 @@ void chapter_2_init(Game *game) {
     textures[4]  = load_texture(RES_DIR "art/girl.png");
     textures[5]  = load_texture(RES_DIR "art/dinner_table.png");
     textures[6]  = load_texture(RES_DIR "art/real_girl.png");
-    textures[7]  = load_texture(RES_DIR "art/hope.png");
+    textures[7]  = load_texture(RES_DIR "art/penny.png");
     textures[8]  = load_texture(RES_DIR "art/fullscreen_1.png");
     textures[9]  = load_texture(RES_DIR "art/fullscreen_2.png");
     textures[10] = load_texture(RES_DIR "art/bathroom.png");

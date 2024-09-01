@@ -531,7 +531,10 @@ void draw_popup(const char *text, Color color, Location location) {
             (float)pad
         };
     } else {
-        assert(false);
+        pos = {
+            render_width/2 - size.x/2,
+            render_height/2 - size.y/2
+        };
     }
 
     DrawTextEx(atari_font, text, pos, atari_font.baseSize, 1, color);

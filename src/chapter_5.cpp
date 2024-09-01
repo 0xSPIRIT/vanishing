@@ -19,8 +19,6 @@ enum Chapter_5_Scene {
 struct Chapter_5_Clerk {
     Vector3 position;
 
-    Model body;
-
     float saved_head_rotation;
 
     bool  has_real_head;
@@ -32,6 +30,12 @@ struct Chapter_5_Clerk {
 
     bool  talk_popup;
     bool  talked;
+};
+
+struct Chapter_5_Bartender {
+    Vector3 position;
+    bool    talked_front, talked_behind;
+    bool    talk_popup;
 };
 
 struct Chapter_5_Train {
@@ -91,6 +95,7 @@ struct Chapter_5_Podium {
     Text_List *text;
     Vector3    position;
     float      rotation;
+    bool       read;
 };
 
 struct Level_Chapter_5 {
@@ -109,7 +114,9 @@ struct Level_Chapter_5 {
 
     // Staircase
     struct {
-        bool staircase_door_popup;
+        int                 staircase_podium_current;
+        Chapter_5_Podium    staircase_podiums[6];
+        Chapter_5_Bartender bartender;
     };
 
     // Dinner Party
@@ -163,6 +170,7 @@ struct Level_Chapter_5 {
         Model guy_sitting,
               chair,
               table,
+              body,
               pyramid_head,
               real_head,
               train,
@@ -426,6 +434,27 @@ void chapter_5_podium_text(Text_List *list, bool italics, char *line, Text_List 
     text_list_init(list, 0, line, next);
 }
 
+void chapter_5_podium_text_red(Text_List *list, bool italics, char *line, Text_List *next) {
+    list->font = &bold_font;
+
+    if (italics)
+        list->font = &italics_font;
+
+    list->font_spacing = 0;
+    list->scale = 0.125;
+    list->render_type = DrawTextbox;
+    list->location = Top;
+    list->take_keyboard_focus = true;
+    list->scroll_type = EntireLine;
+    list->alpha_speed = 7;
+    list->center_text = true;
+
+    list->color = RED;
+    list->bg_color = BLACK;
+
+    text_list_init(list, 0, line, next);
+}
+
 void chapter_5_end_text(Text_List *list, bool italics, char *line, Text_List *next) {
     list->font = &bold_font;
 
@@ -629,6 +658,8 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
 
             float train_distance = 600;
 
+            game->textbox_alpha = 220;
+
             level->camera.position   = { 0, level->camera_height, 0 };
             level->camera.target     = { 0.00f, level->camera_height, 2.00f };
             level->camera.up         = { 0, 1, 0 };
@@ -654,34 +685,118 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
             model_set_shader(&level->models.train,      level->shader);
             model_set_shader(&level->models.train_door, level->shader);
 
-            chapter_5_podium_text(&game->text[0],
-                                  true,
-                                  "Are you ready for the dinner tomorrow night?",
-                                  nullptr);
-            chapter_5_podium_text(&game->text[1],
-                                  true,
-                                  "Tomorrow you're going to have to meet them and\ntalk to them.",
-                                  nullptr);
-            chapter_5_podium_text(&game->text[2],
-                                  true,
-                                  "How are you going to enter the room?",
-                                  nullptr);
-            chapter_5_podium_text(&game->text[3],
-                                  true,
-                                  "What are you going to say?",
-                                  nullptr);
-            chapter_5_podium_text(&game->text[4],
-                                  true,
-                                  "What will they say in return..?",
-                                  nullptr);
-            chapter_5_podium_text(&game->text[5],
-                                  true,
-                                  "It might be awkward.\rSoooooooooooooooo awkward.",
-                                  nullptr);
-            chapter_5_podium_text(&game->text[6],
-                                  true,
-                                  "Come, let me show you what could happen.",
-                                  nullptr);
+            chapter_5_podium_text_red(&game->text[0],
+                                      true,
+                                      "Are you ready for the dinner tomorrow night?",
+                                      nullptr);
+            chapter_5_podium_text_red(&game->text[1],
+                                      true,
+                                      "Tomorrow you're going to have to meet them and\ntalk to them.",
+                                      nullptr);
+            chapter_5_podium_text_red(&game->text[2],
+                                      true,
+                                      "How are you going to enter the room?",
+                                      nullptr);
+            chapter_5_podium_text_red(&game->text[3],
+                                      true,
+                                      "What are you going to say?",
+                                      nullptr);
+            chapter_5_podium_text_red(&game->text[4],
+                                      true,
+                                      "What will they say in return..?",
+                                      nullptr);
+            chapter_5_podium_text_red(&game->text[5],
+                                      true,
+                                      "It might be awkward.\rSoooooooooooooooo awkward.",
+                                      nullptr);
+            chapter_5_podium_text_red(&game->text[6],
+                                      true,
+                                      "Come, let me show you what could happen.",
+                                      nullptr);
+
+            void chapter_5_text(Text_List *list, char *speaker, char *line, float scroll_speed, Text_List *next);
+
+            float speed = 30;
+            chapter_5_text(&game->text[10],
+                           "Bartender",
+                           "HEY KID!\rWhat're you doin' here?!",
+                           speed,
+                           &game->text[11]);
+            chapter_5_text(&game->text[11],
+                           "Bartender",
+                           "Aren't you 'spossed to be in school, or\nsomethin'?",
+                           speed,
+                           &game->text[12]);
+            chapter_5_text(&game->text[12],
+                           "Chase",
+                           "I'm 20.",
+                           speed,
+                           &game->text[13]);
+            chapter_5_text(&game->text[13],
+                           "Bartender",
+                           "Haha, sure little man.\rGet 'outta here before I--",
+                           speed,
+                           &game->text[14]);
+            chapter_5_text(&game->text[14],
+                           "Chase",
+                           "Haven't I heard this before?",
+                           speed,
+                           &game->text[15]);
+            chapter_5_text(&game->text[15],
+                           "Bartender",
+                           "...",
+                           speed,
+                           nullptr);
+
+            chapter_5_text(&game->text[16],
+                           "Bartender",
+                           "HEY!\rYou're not allowed back here, idiot.",
+                           speed,
+                           nullptr);
+            chapter_5_text(&game->text[17],
+                           "Bartender",
+                           "WHY ARE YOU STILL HERE???\rSTOP TALKING TO ME.",
+                           speed,
+                           nullptr);
+            chapter_5_text(&game->text[18],
+                           "Bartender",
+                           "...",
+                           speed,
+                           nullptr);
+
+            level->staircase_podiums[0] = {
+                &game->text[1],
+                { -15.9f, 52.43f },
+            };
+
+            level->staircase_podiums[1] = {
+                &game->text[2],
+                { -15.2f, 67.8f },
+            };
+
+            level->staircase_podiums[2] = {
+                &game->text[3],
+                { -2.1f, 61.1f },
+            };
+
+            level->staircase_podiums[3] = {
+                &game->text[4],
+                { -11.5f, 80.8f },
+            };
+
+            level->staircase_podiums[4] = {
+                &game->text[5],
+                { 2.4f, 80.8f },
+            };
+
+            level->staircase_podiums[5] = {
+                &game->text[6],
+                { 9.4f, 64.9f },
+            };
+
+            level->bartender.position = { 0, 0, 51 };
+            level->bartender.talked_front = false;
+            level->bartender.talked_behind = false;
 
             game->current = &game->text[0];
         } break;
@@ -714,6 +829,392 @@ void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene) {
                 {-13.9f, +19.6f},
             };
 
+            // Dinner table dialogue
+
+            chapter_5_text(&game->text[30],
+                           "Jenny",
+                           "...\rUm... hi?",
+                           30,
+                           &game->text[31]);
+            chapter_5_text(&game->text[31],
+                           "Mark",
+                           "What's your problem?",
+                           30,
+                           nullptr);
+
+            chapter_5_text(&game->text[32],
+                           "Kate",
+                           "We didn't think you'd come.",
+                           30,
+                           &game->text[33]);
+            chapter_5_text(&game->text[33],
+                           "Chase",
+                           "What's that supposed to mean?",
+                           30,
+                           nullptr);
+
+            chapter_5_text(&game->text[34],
+                           "Kevin",
+                           "Oh it's, uh, you!\rWhat's your name again?",
+                           30,
+                           &game->text[35]);
+            chapter_5_text(&game->text[35],
+                           "Chase",
+                           "We went to the same class for years,\nKevin.",
+                           30,
+                           &game->text[36]);
+            chapter_5_text(&game->text[36],
+                           "Kevin",
+                           "...",
+                           30,
+                           nullptr);
+
+            chapter_5_text(&game->text[37],
+                           "Chase",
+                           "Is there any space for me?",
+                           30,
+                           &game->text[38]);
+            chapter_5_text(&game->text[38],
+                           "Amy",
+                           "Um... who are you?",
+                           30,
+                           &game->text[39]);
+            chapter_5_text(&game->text[39],
+                           "Chase",
+                           "...",
+                           30,
+                           nullptr);
+
+            chapter_5_text(&game->text[40],
+                           "Kenny",
+                           "Oh, hey, you.",
+                           30,
+                           &game->text[41]);
+            chapter_5_text(&game->text[41],
+                           "Chase",
+                           "Hi Kenny, what's up?",
+                           30,
+                           &game->text[42]);
+            chapter_5_text(&game->text[42],
+                           "Kenny",
+                           "*sigh*\rIf you're looking for Eleanor and\nthe rest of them, they're somewhere back\nthere.",
+                           30,
+                           &game->text[43]);
+            chapter_5_text(&game->text[43],
+                           "Chase",
+                           "... Uh, thanks.",
+                           30,
+                           &game->text[44]);
+            chapter_5_text(&game->text[44],
+                           "Kenny",
+                           "So anyways, as I was saying, Darlene,",
+                           30,
+                           nullptr);
+
+            chapter_5_text(&game->text[45],
+                           "Joanne",
+                           "What's your problem?",
+                           30,
+                           nullptr);
+
+            chapter_5_text(&game->text[46],
+                           "Hope",
+                           "Hi, Chase.",
+                           30,
+                           &game->text[47]);
+            chapter_5_text(&game->text[47],
+                           "Chase",
+                           "...\rOh gosh, hi Hope.\rI didn't realize you were gonna be here.",
+                           30,
+                           &game->text[48]);
+            chapter_5_text(&game->text[48],
+                           "Hope",
+                           "We're not that close yet.\rCreep.",
+                           30,
+                           nullptr);
+
+
+            chapter_5_text(&game->text[49],
+                           "Luke",
+                           "Why are you just walking around,\ntalking to random people?\rFind somewhere to sit down, man.\rIt's embarassing.",
+                           30,
+                           &game->text[50]);
+            chapter_5_text(&game->text[50],
+                           "Chase",
+                           "...\rOh.",
+                           30,
+                           nullptr);
+
+            chapter_5_text(&game->text[51],
+                           "Adam",
+                           "... Hi?",
+                           30,
+                           nullptr);
+
+            chapter_5_text(&game->text[52],
+                           "Lorane",
+                           "... What?",
+                           30,
+                           nullptr);
+
+            {
+                String choices[] = { const_string("Sit now"), const_string("No, look around more first") };
+                Text_List *next[] = { nullptr, nullptr };
+                void (*hooks[2])(void*) = { chapter_5_sit_at_table, nullptr };
+
+                game->text[53].color = SKYBLUE;
+                game->text[53].bg_color = BLACK;
+
+                atari_choice_text_list_init(&game->text[53],
+                                            "Eleanor",
+                                            "Oh hey Chase!\rWe have a seat here,\ndo you wanna sit now or?",
+                                            choices,
+                                            next,
+                                            hooks,
+                                            2);
+
+                game->text[53].textbox_height = render_height / 3.5f;
+            }
+
+            chapter_5_text(&game->text[54],
+                           "Eleanor",
+                           "5AEEDF2BA00377AE1153792FB59A9A736C19CF43\n"
+                           "55DC24B22F201506FB00C5D486E770493CFC55CA\n"
+                           "ED970AFD7A0EE851E2A106F1C8E2BDB335004C6A\n"
+                           "6037E9CA12775B867B2BC33F86C3156905213E64\n",
+                           30,
+                           &game->text[55]);
+            chapter_5_text(&game->text[55],
+                           "Trey",
+                           "89A624687E892054EB11623F0470E9220C125F89\n"
+                           "F8AA8354E501877A54885BA749746C83CDE1A680\n"
+                           "F80994415B281B3B42CE83AFF8E10EA4D28644F3\n"
+                           "40ED8294FCAED9A48200119BEFFBF8185541AA7B\n",
+                           30,
+                           &game->text[56]);
+            chapter_5_text(&game->text[56],
+                           "Siphor",
+                           "B0DEA0E3122B637511DDA3F1BB2B02E241FD5A85\n"
+                           "78293A9E95E271929FC4DFF528A50F9984F8A562\n"
+                           "668E59A4D7DAA840214676573A664943AD0CCFAF\n"
+                           "A5EDA0F968549118BD7DCF32A73440B982A771B7\n",
+                           30,
+                           &game->text[54]);
+
+            chapter_5_text(&game->text[70],
+                           "Eleanor",
+                           "CHASE!\r... Are you good bro?",
+                           30,
+                           nullptr);
+
+            chapter_5_text(&game->text[71],
+                           "Jenny",
+                           "Oh, hi Chase!",
+                           30,
+                           &game->text[72]);
+            chapter_5_text(&game->text[72],
+                           "Mark",
+                           "Hey man!\rIt's good to see you!",
+                           30,
+                           nullptr);
+
+            chapter_5_text(&game->text[73],
+                           "Kevin",
+                           "What's up man?\rWe didn't think you were coming,\rbut I'm glad you did.",
+                           30,
+                           &game->text[74]);
+            chapter_5_text(&game->text[74],
+                           "Chase",
+                           "Thanks!",
+                           30,
+                           nullptr);
+
+            chapter_5_text(&game->text[75],
+                           "Kevin",
+                           "Oh it's you!\rHi Chase.",
+                           30,
+                           &game->text[76]);
+            chapter_5_text(&game->text[76],
+                           "Chase",
+                           "You remembered my name!",
+                           30,
+                           &game->text[77]);
+            chapter_5_text(&game->text[77],
+                           "Kevin",
+                           "... Why wouldn't I?",
+                           30,
+                           nullptr);
+
+            chapter_5_text(&game->text[78],
+                           "Chase",
+                           "Hi Amy!\nWhat's up?",
+                           30,
+                           &game->text[79]);
+            chapter_5_text(&game->text[79],
+                           "Amy",
+                           "Oh, hi Chase.\rWe're all booked here sadly...\rI think Eleanor's over there, they saved\na seat for you.",
+                           30,
+                           &game->text[127]);
+            chapter_5_text(&game->text[127],
+                           "Chase",
+                           "Thanks for letting me know!",
+                           30,
+                           nullptr);
+
+            chapter_5_text(&game->text[80],
+                           "Kenny",
+                           "Oh, hey, Chase.",
+                           30,
+                           &game->text[81]);
+            chapter_5_text(&game->text[81],
+                           "Chase",
+                           "Hey Kenny, what's up?",
+                           30,
+                           &game->text[82]);
+            chapter_5_text(&game->text[82],
+                           "Kenny",
+                           "Nothin' much, we just came a few minutes ago.\rGood to see you, man.",
+                           30,
+                           &game->text[83]);
+            chapter_5_text(&game->text[83],
+                           "Darlene",
+                           "Hi Chase!",
+                           30,
+                           nullptr);
+
+            chapter_5_text(&game->text[84],
+                           "Hope",
+                           "Hi, Chase.",
+                           30,
+                           &game->text[85]);
+            chapter_5_text(&game->text[85],
+                           "Chase",
+                           "Oh, hi Hope!",
+                           30,
+                           &game->text[86]);
+            chapter_5_text(&game->text[86],
+                           "Hope",
+                           "It's good to see you!",
+                           30,
+                           &game->text[87]);
+            chapter_5_text(&game->text[87],
+                           "Chase",
+                           "You too!!\rI guess we finally met in-person, then.\rThat's good, haha.",
+                           30,
+                           &game->text[88]);
+            chapter_5_text(&game->text[88],
+                           "Hope",
+                           "Yep.\rWell, I'll talk to you later.",
+                           30,
+                           nullptr);
+
+            chapter_5_text(&game->text[89],
+                           "Luke",
+                           "Hey Chase, do you need a seat?",
+                           30,
+                           &game->text[90]);
+            chapter_5_text(&game->text[90],
+                           "Chase",
+                           "Ah, hi Luke.\rNah I think Eleanor has a seat for me.\rThanks, though.",
+                           30,
+                           nullptr);
+
+            chapter_5_text(&game->text[91],
+                           "Adam",
+                           "Hi Chase!!!\rI'm glad you're here!",
+                           30,
+                           nullptr);
+
+            chapter_5_text(&game->text[92],
+                           "Lorane",
+                           "Hey man, what's up?",
+                           30,
+                           nullptr);
+            {
+                String choices[] = { const_string("Sit now"), const_string("No, look around more first") };
+                Text_List *next[] = { nullptr, nullptr };
+                void (*hooks[2])(void*) = { chapter_5_sit_at_table, nullptr };
+
+
+                game->text[93].color = SKYBLUE;
+                game->text[93].bg_color = BLACK;
+
+                atari_choice_text_list_init(&game->text[93],
+                                            "Eleanor",
+                                            "Oh hey Chase!\rWe have a seat here,\ndo you wanna sit now or?",
+                                            choices,
+                                            next,
+                                            hooks,
+                                            2);
+
+                game->text[93].textbox_height = render_height / 3.5f;
+            }
+
+            chapter_5_text(&game->text[95],
+                           "Eleanor",
+                           "Yo, the VIP cinema in Richlands has specials\non Tuesdays.",
+                           30,
+                           &game->text[96]);
+            chapter_5_text(&game->text[96],
+                           "Trey",
+                           "Oh yeahhh, I heard that.\rHow much?",
+                           30,
+                           &game->text[97]);
+            chapter_5_text(&game->text[97],
+                           "Eleanor",
+                           "Like $6 or something.\rThere's all like, recliner chairs and shit.\rThe fancy works.",
+                           30,
+                           &game->text[98]);
+            chapter_5_text(&game->text[98],
+                           "Chase",
+                           "Whoa, $6!?!\rThat's real good...\rWhen we going?\rNever went in that cinema before.",
+                           30,
+                           &game->text[99]);
+            chapter_5_text(&game->text[99],
+                           "Siphor",
+                           "Damn.\rIt is good but uh,\rTuesday is results day.",
+                           30,
+                           &game->text[100]);
+            chapter_5_text(&game->text[100],
+                           "Trey",
+                           "Ohhhhhhhhhhh don't remind meeee....",
+                           30,
+                           &game->text[101]);
+            chapter_5_text(&game->text[101],
+                           "Chase",
+                           "Ahaha Trey's getting flashbacks to him\nwriting that fuckin' pure maths exam.",
+                           30,
+                           &game->text[102]);
+            chapter_5_text(&game->text[102],
+                           "Siphor",
+                           "THAT REMINDS ME!\rDid you guys know, before the exam, right,\rTrey came up to me and asked what an\nintegral was?",
+                           30,
+                           &game->text[103]);
+            chapter_5_text(&game->text[103],
+                           "Eleanor",
+                           "Broooo are you serious?",
+                           30,
+                           &game->text[104]);
+            chapter_5_text(&game->text[104],
+                           "Trey",
+                           "Inte--what...?\rY'all must be making shit up at this point.\rWhat even is that.",
+                           30,
+                           &game->text[105]);
+            chapter_5_text(&game->text[105],
+                           "Chase",
+                           "Hey Trey what's the derivative of x squared?",
+                           30,
+                           &game->text[106]);
+            chapter_5_text(&game->text[106],
+                           "Trey",
+                           "Uhhhhhhhhhhhhhhhhhhhhhhhhhhhhh\nhhhhhhhhhhhhhhhhhhhhhhhhhhhh\nhhhhhhhhhhhhhhhhhhhhhhhhh...\rDoes anyone have a calculator?",
+                           30,
+                           &game->text[107]);
+            chapter_5_text(&game->text[107],
+                           "Siphor",
+                           "You are COOKED my guy.",
+                           30,
+                           nullptr);
             level->num_tables = StaticArraySize(table_positions);
             memset(level->tables, 0, sizeof(level->tables));
 
@@ -1309,7 +1810,7 @@ void chapter_5_init(Game *game) {
     level->models.train        = LoadModel(RES_DIR "models/train.glb");
     level->models.train_door   = LoadModel(RES_DIR "models/train_door.glb");
 
-    level->clerk.body          = LoadModel(RES_DIR "models/guy.glb");
+    level->models.body         = LoadModel(RES_DIR "models/guy.glb");
 
     level->models.guy_sitting  = LoadModel(RES_DIR "models/guy_sitting.glb");
     level->models.chair        = LoadModel(RES_DIR "models/chair.glb");
@@ -1317,393 +1818,6 @@ void chapter_5_init(Game *game) {
     level->models.pyramid_head = LoadModel(RES_DIR "models/pyramid_head.glb");
     level->models.real_head    = LoadModel(RES_DIR "models/real_head.glb");
     level->models.podium       = LoadModel(RES_DIR "models/podium.glb");
-
-    // Dinner table dialogue
-
-    chapter_5_text(&game->text[30],
-                   "Jenny",
-                   "...\rUm... hi?",
-                   30,
-                   &game->text[31]);
-    chapter_5_text(&game->text[31],
-                   "Mark",
-                   "What's your problem?",
-                   30,
-                   nullptr);
-
-    chapter_5_text(&game->text[32],
-                   "Kate",
-                   "We didn't think you'd come.",
-                   30,
-                   &game->text[33]);
-    chapter_5_text(&game->text[33],
-                   "Chase",
-                   "What's that supposed to mean?",
-                   30,
-                   nullptr);
-
-    chapter_5_text(&game->text[34],
-                   "Kevin",
-                   "Oh it's, uh, you!\rWhat's your name again?",
-                   30,
-                   &game->text[35]);
-    chapter_5_text(&game->text[35],
-                   "Chase",
-                   "We went to the same class for years,\nKevin.",
-                   30,
-                   &game->text[36]);
-    chapter_5_text(&game->text[36],
-                   "Kevin",
-                   "...",
-                   30,
-                   nullptr);
-
-    chapter_5_text(&game->text[37],
-                   "Chase",
-                   "Is there any space for me?",
-                   30,
-                   &game->text[38]);
-    chapter_5_text(&game->text[38],
-                   "Amy",
-                   "Um... who are you?",
-                   30,
-                   &game->text[39]);
-    chapter_5_text(&game->text[39],
-                   "Chase",
-                   "...",
-                   30,
-                   nullptr);
-
-    chapter_5_text(&game->text[40],
-                   "Kenny",
-                   "Oh, hey, you.",
-                   30,
-                   &game->text[41]);
-    chapter_5_text(&game->text[41],
-                   "Chase",
-                   "Hi Kenny, what's up?",
-                   30,
-                   &game->text[42]);
-    chapter_5_text(&game->text[42],
-                   "Kenny",
-                   "*sigh*\rIf you're looking for Eleanor and\nthe rest of them, they're somewhere back\nthere.",
-                   30,
-                   &game->text[43]);
-    chapter_5_text(&game->text[43],
-                   "Chase",
-                   "... Uh, thanks.",
-                   30,
-                   &game->text[44]);
-    chapter_5_text(&game->text[44],
-                   "Kenny",
-                   "So anyways, as I was saying, Darlene,",
-                   30,
-                   nullptr);
-
-    chapter_5_text(&game->text[45],
-                   "Joanne",
-                   "What's your problem?",
-                   30,
-                   nullptr);
-
-    chapter_5_text(&game->text[46],
-                   "Hope",
-                   "Hi, Chase.",
-                   30,
-                   &game->text[47]);
-    chapter_5_text(&game->text[47],
-                   "Chase",
-                   "...\rOh gosh, hi Hope.\rI didn't realize you were gonna be here.",
-                   30,
-                   &game->text[48]);
-    chapter_5_text(&game->text[48],
-                   "Hope",
-                   "We're not that close yet.\rCreep.",
-                   30,
-                   nullptr);
-
-
-    chapter_5_text(&game->text[49],
-                   "Luke",
-                   "Why are you just walking around,\ntalking to random people?\rFind somewhere to sit down, man.\rIt's embarassing.",
-                   30,
-                   &game->text[50]);
-    chapter_5_text(&game->text[50],
-                   "Chase",
-                   "...\rOh.",
-                   30,
-                   nullptr);
-
-    chapter_5_text(&game->text[51],
-                   "Adam",
-                   "... Hi?",
-                   30,
-                   nullptr);
-
-    chapter_5_text(&game->text[52],
-                   "Lorane",
-                   "... What?",
-                   30,
-                   nullptr);
-
-    {
-        String choices[] = { const_string("Sit now"), const_string("No, look around more first") };
-        Text_List *next[] = { nullptr, nullptr };
-        void (*hooks[2])(void*) = { chapter_5_sit_at_table, nullptr };
-
-        game->text[53].color = SKYBLUE;
-        game->text[53].bg_color = BLACK;
-
-        atari_choice_text_list_init(&game->text[53],
-                                    "Eleanor",
-                                    "Oh hey Chase!\rWe have a seat here,\ndo you wanna sit now or?",
-                                    choices,
-                                    next,
-                                    hooks,
-                                    2);
-
-        game->text[53].textbox_height = render_height / 3.5f;
-    }
-
-    chapter_5_text(&game->text[54],
-                   "Eleanor",
-                   "5AEEDF2BA00377AE1153792FB59A9A736C19CF43\n"
-                   "55DC24B22F201506FB00C5D486E770493CFC55CA\n"
-                   "ED970AFD7A0EE851E2A106F1C8E2BDB335004C6A\n"
-                   "6037E9CA12775B867B2BC33F86C3156905213E64\n",
-                   30,
-                   &game->text[55]);
-    chapter_5_text(&game->text[55],
-                   "Trey",
-                   "89A624687E892054EB11623F0470E9220C125F89\n"
-                   "F8AA8354E501877A54885BA749746C83CDE1A680\n"
-                   "F80994415B281B3B42CE83AFF8E10EA4D28644F3\n"
-                   "40ED8294FCAED9A48200119BEFFBF8185541AA7B\n",
-                   30,
-                   &game->text[56]);
-    chapter_5_text(&game->text[56],
-                   "Siphor",
-                   "B0DEA0E3122B637511DDA3F1BB2B02E241FD5A85\n"
-                   "78293A9E95E271929FC4DFF528A50F9984F8A562\n"
-                   "668E59A4D7DAA840214676573A664943AD0CCFAF\n"
-                   "A5EDA0F968549118BD7DCF32A73440B982A771B7\n",
-                   30,
-                   &game->text[54]);
-
-    chapter_5_text(&game->text[70],
-                   "Eleanor",
-                   "CHASE!\r... Are you good bro?",
-                   30,
-                   nullptr);
-
-    chapter_5_text(&game->text[71],
-                   "Jenny",
-                   "Oh, hi Chase!",
-                   30,
-                   &game->text[72]);
-    chapter_5_text(&game->text[72],
-                   "Mark",
-                   "Hey man!\rIt's good to see you!",
-                   30,
-                   nullptr);
-
-    chapter_5_text(&game->text[73],
-                   "Kevin",
-                   "What's up man?\rWe didn't think you were coming,\rbut I'm glad you did.",
-                   30,
-                   &game->text[74]);
-    chapter_5_text(&game->text[74],
-                   "Chase",
-                   "Thanks!",
-                   30,
-                   nullptr);
-
-    chapter_5_text(&game->text[75],
-                   "Kevin",
-                   "Oh it's you!\rHi Chase.",
-                   30,
-                   &game->text[76]);
-    chapter_5_text(&game->text[76],
-                   "Chase",
-                   "You remembered my name!",
-                   30,
-                   &game->text[77]);
-    chapter_5_text(&game->text[77],
-                   "Kevin",
-                   "... Why wouldn't I?",
-                   30,
-                   nullptr);
-
-    chapter_5_text(&game->text[78],
-                   "Chase",
-                   "Hi Amy!\nWhat's up?",
-                   30,
-                   &game->text[79]);
-    chapter_5_text(&game->text[79],
-                   "Amy",
-                   "Oh, hi Chase.\rWe're all booked here sadly...\rI think Eleanor's over there, they saved\na seat for you.",
-                   30,
-                   &game->text[127]);
-    chapter_5_text(&game->text[127],
-                   "Chase",
-                   "Thanks for letting me know!",
-                   30,
-                   nullptr);
-
-    chapter_5_text(&game->text[80],
-                   "Kenny",
-                   "Oh, hey, Chase.",
-                   30,
-                   &game->text[81]);
-    chapter_5_text(&game->text[81],
-                   "Chase",
-                   "Hey Kenny, what's up?",
-                   30,
-                   &game->text[82]);
-    chapter_5_text(&game->text[82],
-                   "Kenny",
-                   "Nothin' much, we just came a few minutes ago.\rGood to see you, man.",
-                   30,
-                   &game->text[83]);
-    chapter_5_text(&game->text[83],
-                   "Darlene",
-                   "Hi Chase!",
-                   30,
-                   nullptr);
-
-    chapter_5_text(&game->text[84],
-                   "Hope",
-                   "Hi, Chase.",
-                   30,
-                   &game->text[85]);
-    chapter_5_text(&game->text[85],
-                   "Chase",
-                   "Oh, hi Hope!",
-                   30,
-                   &game->text[86]);
-    chapter_5_text(&game->text[86],
-                   "Hope",
-                   "It's good to see you!",
-                   30,
-                   &game->text[87]);
-    chapter_5_text(&game->text[87],
-                   "Chase",
-                   "You too!!\rI guess we finally met in-person, then.\rThat's good, haha.",
-                   30,
-                   &game->text[88]);
-    chapter_5_text(&game->text[88],
-                   "Hope",
-                   "Yep.\rWell, I'll talk to you later.",
-                   30,
-                   nullptr);
-
-    chapter_5_text(&game->text[89],
-                   "Luke",
-                   "Hey Chase, do you need a seat?",
-                   30,
-                   &game->text[90]);
-    chapter_5_text(&game->text[90],
-                   "Chase",
-                   "Ah, hi Luke.\rNah I think Eleanor has a seat for me.\rThanks, though.",
-                   30,
-                   nullptr);
-
-    chapter_5_text(&game->text[91],
-                   "Adam",
-                   "Hi Chase!!!\rI'm glad you're here!",
-                   30,
-                   nullptr);
-
-    chapter_5_text(&game->text[92],
-                   "Lorane",
-                   "Hey man, what's up?",
-                   30,
-                   nullptr);
-    {
-        String choices[] = { const_string("Sit now"), const_string("No, look around more first") };
-        Text_List *next[] = { nullptr, nullptr };
-        void (*hooks[2])(void*) = { chapter_5_sit_at_table, nullptr };
-
-
-        game->text[93].color = SKYBLUE;
-        game->text[93].bg_color = BLACK;
-
-        atari_choice_text_list_init(&game->text[93],
-                                    "Eleanor",
-                                    "Oh hey Chase!\rWe have a seat here,\ndo you wanna sit now or?",
-                                    choices,
-                                    next,
-                                    hooks,
-                                    2);
-
-        game->text[93].textbox_height = render_height / 3.5f;
-    }
-
-    chapter_5_text(&game->text[95],
-                   "Eleanor",
-                   "Yo, the VIP cinema in Richlands has specials\non Tuesdays.",
-                   30,
-                   &game->text[96]);
-    chapter_5_text(&game->text[96],
-                   "Trey",
-                   "Oh yeahhh, I heard that.\rHow much?",
-                   30,
-                   &game->text[97]);
-    chapter_5_text(&game->text[97],
-                   "Eleanor",
-                   "Like $6 or something.\rThere's all like, recliner chairs and shit.\rThe fancy works.",
-                   30,
-                   &game->text[98]);
-    chapter_5_text(&game->text[98],
-                   "Chase",
-                   "Whoa, $6!?!\rThat's real good...\rWhen we going?\rNever went in that cinema before.",
-                   30,
-                   &game->text[99]);
-    chapter_5_text(&game->text[99],
-                   "Siphor",
-                   "Damn.\rIt is good but uh,\rTuesday is results day.",
-                   30,
-                   &game->text[100]);
-    chapter_5_text(&game->text[100],
-                   "Trey",
-                   "Ohhhhhhhhhhh don't remind meeee....",
-                   30,
-                   &game->text[101]);
-    chapter_5_text(&game->text[101],
-                   "Chase",
-                   "Ahaha Trey's getting flashbacks to him\nwriting that fuckin' pure maths exam.",
-                   30,
-                   &game->text[102]);
-    chapter_5_text(&game->text[102],
-                   "Siphor",
-                   "THAT REMINDS ME!\rDid you guys know, before the exam, right,\rTrey came up to me and asked what an\nintegral was?",
-                   30,
-                   &game->text[103]);
-    chapter_5_text(&game->text[103],
-                   "Eleanor",
-                   "Broooo are you serious?",
-                   30,
-                   &game->text[104]);
-    chapter_5_text(&game->text[104],
-                   "Trey",
-                   "Inte--what...?\rY'all must be making shit up at this point.\rWhat even is that.",
-                   30,
-                   &game->text[105]);
-    chapter_5_text(&game->text[105],
-                   "Chase",
-                   "Hey Trey what's the derivative of x squared?",
-                   30,
-                   &game->text[106]);
-    chapter_5_text(&game->text[106],
-                   "Trey",
-                   "Uhhhhhhhhhhhhhhhhhhhhhhhhhhhhh\nhhhhhhhhhhhhhhhhhhhhhhhhhhhh\nhhhhhhhhhhhhhhhhhhhhhhhhh...\rDoes anyone have a calculator?",
-                   30,
-                   &game->text[107]);
-    chapter_5_text(&game->text[107],
-                   "Siphor",
-                   "You are COOKED my guy.",
-                   30,
-                   nullptr);
 
     chapter_5_goto_scene(game, CHAPTER_5_SCENE_STAIRCASE);
 }
@@ -2058,7 +2172,7 @@ void chapter_5_update_camera(Camera3D *camera, float speed, float dt) {
     float dir_y = input_movement_y_axis(dt);//key_down()  - key_up();
 
     if (IsKeyDown(KEY_LEFT_SHIFT) ||
-        (IsGamepadAvailable(0) && IsGamepadButtonDown(0, GAMEPAD_BUTTON_RIGHT_TRIGGER_2))) speed = 7;
+        (IsGamepadAvailable(0) && IsGamepadButtonDown(0, GAMEPAD_BUTTON_RIGHT_TRIGGER_2))) speed=15;//speed = 7;
     if (IsKeyDown(KEY_LEFT_ALT)) speed = 0.5f;
 
     Vector3 saved = camera->target;
@@ -2284,15 +2398,6 @@ void chapter_5_update_player_staircase(Game *game, float dt) {
         level->camera.position.x += level->train.delta_x;
         level->camera.target.x   += level->train.delta_x;
 
-        /*
-        printf("{%.2ff, %.2ff, %.2ff} {%.2ff, %.2ff, %.2ff}\n",
-               level->camera.position.x,
-               level->camera.position.y,
-               level->camera.position.z,
-               level->camera.target.x,
-               level->camera.target.y,
-               level->camera.target.z);
-               */
     }
 
     if (can_move)
@@ -2523,6 +2628,7 @@ void chapter_5_update(Game *game, float dt) {
                 case CHAPTER_5_STATE_TRAIN_STATION_1: {
                     if (level->black_screen_timer > 0) {
                         level->black_screen_timer -= dt;
+
                         if (level->black_screen_timer <= 0) {
                             level->black_screen_timer = 0.5;
                             level->state = CHAPTER_5_STATE_TRAIN_STATION_2;
@@ -2552,6 +2658,48 @@ void chapter_5_update(Game *game, float dt) {
         } break;
         case CHAPTER_5_SCENE_STAIRCASE: {
             //chapter_5_update_train(game, dt);
+            Vector2 camera = { level->camera.position.x, level->camera.position.z };
+            level->staircase_podium_current = -1;
+            level->bartender.talk_popup = false;
+
+            if (game->current == 0) {
+                for (int i = 0; i < StaticArraySize(level->staircase_podiums); i++) {
+                    Chapter_5_Podium *podium = &level->staircase_podiums[i];
+                    Vector2 podium_pos = *(Vector2*)&podium->position;
+
+                    if (!podium->read && Vector2Distance(camera, podium_pos) < 2) {
+                        level->staircase_podium_current = i;
+
+                        if (is_action_pressed()) {
+                            game->current = podium->text;
+                            podium->read = true;
+                        }
+
+                        break;
+                    }
+                }
+
+                Vector2 bartender = {level->bartender.position.x, level->bartender.position.z};
+                level->bartender.talk_popup = (Vector2Distance(camera, bartender) < 4);
+
+                if (level->bartender.talk_popup && is_action_pressed()) {
+                    if (camera.y > 50) {
+                        if (level->bartender.talked_behind) {
+                            game->current = &game->text[17];
+                        } else {
+                            game->current = &game->text[16];
+                        }
+                        level->bartender.talked_behind = true;
+                    } else {
+                        if (level->bartender.talked_front) {
+                            game->current = &game->text[18];
+                        } else {
+                            game->current = &game->text[10];
+                        }
+                        level->bartender.talked_front = true;
+                    }
+                }
+            }
             chapter_5_update_player_staircase(game, dt);
         } break;
         case CHAPTER_5_SCENE_DINNER_PARTY: {
@@ -2661,7 +2809,7 @@ void chapter_5_draw(Game *game) {
 
                     DrawModel(level->scenes[0], {}, 1, WHITE);
 
-                    DrawModelEx(level->clerk.body, level->clerk.position, {0,1,0}, level->clerk.body_rotation, {1,1,1}, WHITE);
+                    DrawModelEx(level->models.body, level->clerk.position, {0,1,0}, level->clerk.body_rotation, {1,1,1}, WHITE);
 
                     Model *model = &level->models.pyramid_head;
                     Vector3 scale = { 0.85f, 0.85f, 0.85f };
@@ -2709,12 +2857,32 @@ void chapter_5_draw(Game *game) {
             DrawModel(level->scenes[1], {}, 1, WHITE);
             //chapter_5_draw_train(level, &level->train);
 
+            Vector2 player_p = { level->camera.position.x, level->camera.position.z };
+            Vector2 bartender_p = { level->bartender.position.x, level->bartender.position.z  };
+            float head_angle = atan2f(bartender_p.y - player_p.y, bartender_p.x - player_p.x);
+
+            DrawModelEx(level->models.body,
+                        level->bartender.position,
+                        {0, 1, 0},
+                        180,
+                        {1,1,1},
+                        WHITE);
+            DrawModelEx(level->models.pyramid_head,
+                        Vector3Add(level->bartender.position, {0,1.56f,0}),
+                        {0, 1, 0},
+                        180 - RAD2DEG * head_angle + 90,
+                        {1,1,1},
+                        WHITE);
+
             EndShaderMode();
 
             EndMode3D();
 
-            if (level->staircase_door_popup)
-                draw_popup("OPEN DOOR", BLACK);
+            if (level->staircase_podium_current != -1)
+                draw_popup("READ ME\nREAD ME\nREAD ME\nREAD ME", RED, Top);
+
+            if (level->bartender.talk_popup)
+                draw_popup("DON'T TALK TO ME\nDON'T TALK TO ME\nDON'T TALK TO ME\n", RED, Top);
         } break;
         case CHAPTER_5_SCENE_DINNER_PARTY: {
             if (level->black_state) break;

@@ -1,15 +1,16 @@
 TODO : Today
 
-
 - STAIRCASE:
+  x Add podium dialogue
+  - Add train
+  x Add bartender
   x Add podiums to the lighted parts
   - Fix up the windows to actually have a cool effect
     when you look through them: you don't see reality.
     You see things that are not there, like monsters, etc.
   x pick a better ceiling texture
-  - Add walls going up to the staircase
+  x Add walls going up to the staircase
   x Add bar stools
-  - Add bartender, dialogue
   x Add couches, tables, chairs.
   - Fade to red when going up the stairs
 
@@ -39,7 +40,7 @@ TODO : Today
 TODO : Later
 
 - We need to have a really short 2 minute intro
-  (3d) which shows the overarching God themes as well
+ (3d) which shows the overarching God themes as well
   as the theme of meaninglessness.
     - running away from an invisible monster
     - "didn't you see it?!!" -> no i didn't see anything.

@@ -848,8 +848,7 @@ void chapter_1_entity_draw(Entity *e, Game *game) {
     switch (e->type) {
         case ENTITY_PLAYER: {
             if (e->chap_1_player.is_hurt) {
-                int time_loc = GetShaderLocation(level->flashing_shader,
-                                                 "time");
+                int time_loc = GetShaderLocation(level->flashing_shader, "time");
                 float time = GetTime();
                 SetShaderValue(level->flashing_shader, time_loc,
                                &time, SHADER_UNIFORM_FLOAT);
