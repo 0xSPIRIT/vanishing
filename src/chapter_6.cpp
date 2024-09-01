@@ -235,8 +235,8 @@ void chapter_6_entity_update(Entity *entity, Game *game, float dt) {
             if (IsKeyDown(KEY_P))
                 speed *= 10;
 
-            int move_x = input_movement_x_axis_int();//key_right() - key_left();
-            int move_y = input_movement_y_axis_int();//key_down()  - key_up();
+            int move_x = input_movement_x_axis_int(dt);//key_right() - key_left();
+            int move_y = input_movement_y_axis_int(dt);//key_down()  - key_up();
 
             Vector2 velocity = { speed * dt * move_x, speed * dt * move_y };
 

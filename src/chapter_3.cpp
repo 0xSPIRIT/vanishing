@@ -1226,8 +1226,8 @@ void chapter_3_entity_update(Entity *entity, Game *game, float dt) {
         case ENTITY_PLAYER: {
             // player tick player update player
 
-            int dir_x = input_movement_x_axis_int();//key_right() - key_left();
-            int dir_y = input_movement_y_axis_int();//key_down()  - key_up();
+            int dir_x = input_movement_x_axis_int(dt);//key_right() - key_left();
+            int dir_y = input_movement_y_axis_int(dt);//key_down()  - key_up();
 
             float player_speed = 60;
 

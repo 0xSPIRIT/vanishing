@@ -2054,8 +2054,8 @@ void chapter_5_draw_train(Level_Chapter_5 *level, Chapter_5_Train *train) {
 }
 
 void chapter_5_update_camera(Camera3D *camera, float speed, float dt) {
-    float dir_x = input_movement_x_axis();//key_right() - key_left();
-    float dir_y = input_movement_y_axis();//key_down()  - key_up();
+    float dir_x = input_movement_x_axis(dt);//key_right() - key_left();
+    float dir_y = input_movement_y_axis(dt);//key_down()  - key_up();
 
     if (IsKeyDown(KEY_LEFT_SHIFT) ||
         (IsGamepadAvailable(0) && IsGamepadButtonDown(0, GAMEPAD_BUTTON_RIGHT_TRIGGER_2))) speed = 7;
@@ -2067,8 +2067,8 @@ void chapter_5_update_camera(Camera3D *camera, float speed, float dt) {
     camera->target = saved;
 }
 
-void chapter_5_update_camera_look(Camera3D *camera) {
-    Vector2 look = input_movement_look();
+void chapter_5_update_camera_look(Camera3D *camera, float dt) {
+    Vector2 look = input_movement_look(dt);
     CameraYaw(camera,   -look.x, false);
     CameraPitch(camera, -look.y, true, false, false);
 }
@@ -2251,7 +2251,7 @@ void chapter_5_update_player_train_station(Game *game, float dt) {
 
 
     if (can_move) {
-        chapter_5_update_camera_look(&level->camera);
+        chapter_5_update_camera_look(&level->camera, dt);
     }
 
 }
@@ -2296,7 +2296,7 @@ void chapter_5_update_player_staircase(Game *game, float dt) {
     }
 
     if (can_move)
-        chapter_5_update_camera_look(&level->camera);
+        chapter_5_update_camera_look(&level->camera, dt);
 }
 
 void gallery_check_quotes(Game *game, float dt) {
@@ -2378,7 +2378,7 @@ void chapter_5_update_player_desert(Game *game, float dt) {
         else
             apply_3d_velocity(&level->camera, level->camera_height, level->scenes[4], velocity, false);
 
-        chapter_5_update_camera_look(&level->camera);
+        chapter_5_update_camera_look(&level->camera, dt);
     }
 
     /*
@@ -2475,7 +2475,7 @@ void chapter_5_update_player_dinner_party(Game *game, float dt) {
     apply_3d_velocity(&level->camera, level->camera_height, *scene, velocity, true);
 
     if (look)
-        chapter_5_update_camera_look(&level->camera);
+        chapter_5_update_camera_look(&level->camera, dt);
 
     level->talk_popup = false;
     

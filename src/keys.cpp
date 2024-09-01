@@ -67,25 +67,25 @@ bool key_up() {
     return false;
 }
 
-float input_movement_x_axis() {
+float input_movement_x_axis(float dt) {
     float result;
 
     result = key_right() - key_left();
-    result += GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X);
+    result += 60 * dt * GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X);
 
     return result;
 }
 
-float input_movement_y_axis() {
+float input_movement_y_axis(float dt) {
     float result;
 
     result = key_down() - key_up();
-    result += GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y);
+    result += 60 * dt * GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y);
 
     return result;
 }
 
-Vector2 input_movement_look() {
+Vector2 input_movement_look(float dt) {
     Vector2 result = get_mouse_delta();
 
     const float mouse_sensitivity = 0.005f;
@@ -96,35 +96,35 @@ Vector2 input_movement_look() {
     if (IsGamepadAvailable(0)) {
         const float gamepad_sensitivity = 0.05f;
 
-        result.x += gamepad_sensitivity * GetGamepadAxisMovement(0, GAMEPAD_AXIS_RIGHT_X);
-        result.y += gamepad_sensitivity * GetGamepadAxisMovement(0, GAMEPAD_AXIS_RIGHT_Y);
+        result.x += gamepad_sensitivity * 60 * dt * GetGamepadAxisMovement(0, GAMEPAD_AXIS_RIGHT_X);
+        result.y += gamepad_sensitivity * 60 * dt * GetGamepadAxisMovement(0, GAMEPAD_AXIS_RIGHT_Y);
     }
 
     return result;
 }
 
-float gamepad_movement_angle() {
-    float x = input_movement_x_axis();
-    float y = -input_movement_y_axis();
+float gamepad_movement_angle(float dt) {
+    float x = input_movement_x_axis(dt);
+    float y = -input_movement_y_axis(dt);
 
     float angle = atan2f(y, x);
 
     return angle;
 }
 
-float gamepad_movement_magnitude() {
-    float x = input_movement_x_axis();
-    float y = input_movement_y_axis();
+float gamepad_movement_magnitude(float dt) {
+    float x = input_movement_x_axis(dt);
+    float y = input_movement_y_axis(dt);
 
     float result = sqrtf(x*x + y*y);
 
     return result;
 }
 
-int input_movement_x_axis_int() {
-    float angle = gamepad_movement_angle();
+int input_movement_x_axis_int(float dt) {
+    float angle = gamepad_movement_angle(dt);
 
-    if (gamepad_movement_magnitude() < 0.05)
+    if (gamepad_movement_magnitude(dt) < 0.05)
         return 0;
 
     if (angle > -3*PI/8 && angle < 3*PI/8)
@@ -137,10 +137,10 @@ int input_movement_x_axis_int() {
     return 0;
 }
 
-int input_movement_y_axis_int() {
-    float angle = gamepad_movement_angle();
+int input_movement_y_axis_int(float dt) {
+    float angle = gamepad_movement_angle(dt);
 
-    if (gamepad_movement_magnitude() < 0.05)
+    if (gamepad_movement_magnitude(dt) < 0.05)
         return 0;
 
     if (angle > PI/8 && angle < 7*PI/8)

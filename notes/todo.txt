@@ -2,15 +2,15 @@ TODO : Today
 
 
 - STAIRCASE:
-  - pick a better ceiling texture
-  - Add podiums to the lighted parts
+  x Add podiums to the lighted parts
   - Fix up the windows to actually have a cool effect
     when you look through them: you don't see reality.
     You see things that are not there, like monsters, etc.
+  x pick a better ceiling texture
   - Add walls going up to the staircase
-  - Add bar stools
+  x Add bar stools
   - Add bartender, dialogue
-  - Add couches, tables, chairs.
+  x Add couches, tables, chairs.
   - Fade to red when going up the stairs
 
 

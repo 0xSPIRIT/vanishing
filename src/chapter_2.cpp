@@ -918,8 +918,8 @@ void chapter_2_entity_update(Entity *e, Game *game, float dt) {
 
     switch (e->type) {
         case ENTITY_PLAYER: {
-            int dir_x = input_movement_x_axis_int();//key_right() - key_left();
-            int dir_y = input_movement_y_axis_int();//key_down()  - key_up();
+            int dir_x = input_movement_x_axis_int(dt);//key_right() - key_left();
+            int dir_y = input_movement_y_axis_int(dt);//key_down()  - key_up();
 
             if (level->current_area == CHAPTER_2_AREA_BATHROOM) {
                 e->chap_2_player.speed_hope = 0;
