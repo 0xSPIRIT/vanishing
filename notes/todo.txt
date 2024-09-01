@@ -1,13 +1,26 @@
 TODO : Today
 
-- "I'm sick of Chasing" - double entendre
-x Rename penny to hope
+
+- STAIRCASE:
+  - pick a better ceiling texture
+  - Add podiums to the lighted parts
+  - Fix up the windows to actually have a cool effect
+    when you look through them: you don't see reality.
+    You see things that are not there, like monsters, etc.
+  - Add walls going up to the staircase
+  - Add bar stools
+  - Add bartender, dialogue
+  - Add couches, tables, chairs.
+  - Fade to red when going up the stairs
+
+
+- "I'm sick of chasing" - double entendre
 
 - Chapter 5 stairacse redo: hotel.
 
 - Podiums in hotel staircase scene:
   - Are you ready for the party tomorrow night?
-    Tomorrow you're going to have to meet them and talk to them
+    Tomorrow you're going to have to meet them and talk to them.
     Are you ready for the party tomorrow night?
     How are you going to enter the room?
     What are you going to say?

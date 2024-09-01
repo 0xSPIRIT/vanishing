@@ -1705,7 +1705,7 @@ void chapter_5_init(Game *game) {
                    30,
                    nullptr);
 
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_DINNER_PARTY);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_STAIRCASE);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {
@@ -2801,7 +2801,7 @@ void chapter_5_draw(Game *game) {
             EndMode3D();
 
             if (level->talk_to_hope_popup) {
-                draw_popup("Talk to hope", GOLD, Top);
+                draw_popup("Talk to Hope", GOLD, Top);
             }
         } break;
     }
