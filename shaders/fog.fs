@@ -11,6 +11,8 @@ uniform sampler2D texture0;
 uniform vec4 colDiffuse;
 uniform vec3 viewPos;
 
+uniform float fog_factor;
+
 // Output fragment color
 out vec4 finalColor;
 
@@ -37,8 +39,17 @@ void main() {
     float dist = length(viewPos.xz - fragPosition.xz);
     vec4 fogColor = vec4(1,1,1,1);
 
-    dist = clamp(dist/34, 0, 1);
+
+    // fog_factor = 1.0/28.0
+    // lower value of fog_factor gives more visibility.
+
+    dist = clamp(dist * fog_factor, 0, 1);
+
+    // hack
+    float alpha = 1;
+    if (texelColor.a == 0)
+        alpha = 0;
 
     //finalColor = vec4(color.rgb, color.a * (1-dist));
-    finalColor = vec4(mix(color.rgb, fogColor.rgb, dist), color.a);
+    finalColor = vec4(mix(color.rgb, fogColor.rgb, dist), alpha);
 }

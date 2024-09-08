@@ -260,6 +260,68 @@ Color lerp_color(Color a, Color b, double t) {
     return result;
 }
 
+// hue        - angle in degrees
+// saturation - 0.0 to 1.0
+// value      - 0.0 to 1.0
+Color hsv(float hue, float saturation, float value) {
+    double      hh, p, q, t, ff;
+    long        i;
+    Color       out;
+
+    if(saturation <= 0.0) {       // < is bogus, just shuts up warnings
+        out.r = value * 255;
+        out.g = value * 255;
+        out.b = value * 255;
+        return out;
+    }
+
+    hh = hue;
+    if(hh >= 360.0) hh = 0.0;
+    hh /= 60.0;
+    i = (long)hh;
+    ff = hh - i;
+    p = value * (1.0 - saturation);
+    q = value * (1.0 - (saturation * ff));
+    t = value * (1.0 - (saturation * (1.0 - ff)));
+
+    switch(i) {
+        case 0:
+            out.r = 255 * value;
+            out.g = 255 * t;
+            out.b = 255 * p;
+            break;
+        case 1:
+            out.r = 255 * q;
+            out.g = 255 * value;
+            out.b = 255 * p;
+            break;
+        case 2:
+            out.r = 255 * p;
+            out.g = 255 * value;
+            out.b = 255 * t;
+            break;
+
+        case 3:
+            out.r = 255 * p;
+            out.g = 255 * q;
+            out.b = 255 * value;
+            break;
+        case 4:
+            out.r = 255 * t;
+            out.g = 255 * p;
+            out.b = 255 * value;
+            break;
+        case 5:
+        default:
+            out.r = 255 * value;
+            out.g = 255 * p;
+            out.b = 255 * q;
+            break;
+    }
+
+    return out;     
+}
+
 Vector2 get_mouse_delta(void) {
     if (toggled_fullscreen_past_second)
         return {0, 0};
@@ -285,6 +347,20 @@ float rand_range(float start, float end) {
 
 int rand_int(int min, int max) {
     return min + rand() % (max - min + 1);
+}
+
+Color random_color(int seed) {
+    Color result;
+
+    srand(seed);
+
+    float hue = rand_range(0, 360);
+    float saturation = 0.25;
+    float value = 1;
+
+    result = hsv(hue, saturation, value);
+
+    return result;
 }
 
 bool colors_equal(Color a, Color b) {

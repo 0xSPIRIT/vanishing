@@ -1646,7 +1646,7 @@ void chapter_5_scene_init(Game *game) {
                            &game->text[1]);
             chapter_5_text(&game->text[1],
                            "Chase",
-                           "Hello?",
+                           "... Hello?",
                            speed,
                            &game->text[2]);
             chapter_5_text(&game->text[2],
@@ -1665,7 +1665,7 @@ void chapter_5_scene_init(Game *game) {
                            speed,
                            &game->text[5]);
             chapter_5_text(&game->text[5],
-                           "      ",
+                           "Chase",
                            "Did you escape the prison?",
                            speed,
                            &game->text[6]);
@@ -1701,7 +1701,7 @@ void chapter_5_scene_init(Game *game) {
                            &game->text[12]);
             chapter_5_text(&game->text[12],
                            "      ",
-                           "I'll call you back if I do escape.\rPromise.",
+                           "I'll call you back if I do escape.\rI Promise.",
                            speed,
                            &game->text[13]);
             chapter_5_text(&game->text[13],

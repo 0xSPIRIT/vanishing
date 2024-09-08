@@ -563,6 +563,9 @@ Text_List *text_list_update_and_draw(Text_List *list, void *user_data, float dt)
 
                 DrawRectangleRec({pos.x, pos.y, size.x, size.y}, BLACK);
 
+                pos.x = (int)pos.x;
+                pos.y = (int)pos.y;
+
                 DrawTextEx(*list->font, choice->text, pos, (float)list->font->baseSize, list->font_spacing, color);
                 pos.y += size.y;
             }

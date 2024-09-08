@@ -822,7 +822,7 @@ void chapter_3_init(Game *game) {
                          &game->text[43]);
     atari_text_list_init(&game->text[43],
                          "Chase",
-                         "There were these things\non the ground, like little\ncapsules with liquid inside.",
+                         "There were these things\non the ground, like huge\ncapsules with liquid inside.",
                          speed,
                          &game->text[44]);
     atari_text_list_init(&game->text[44],

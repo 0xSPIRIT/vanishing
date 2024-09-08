@@ -26,39 +26,36 @@ Type = "TabbedView"
 [[MainDockingFrame.DockedWidgets.Tabs]]
 Active = true
 TabLabel = "chapter_epilogue.cpp"
-TabWidth = 160.6667
+TabWidth = 150.6667
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\chapter_epilogue.cpp"
-CursorPos = 7137
-VertPos = 4531.0
+CursorPos = 7295
+VertPos = 4519.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "main.cpp"
-TabWidth = 91.33334
+TabWidth = 81.33334
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\main.cpp"
 CursorPos = 4305
-VertPos = 3864.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "game.cpp"
-TabWidth = 94.66666
+TabWidth = 84.66666
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\game.cpp"
 CursorPos = 21797
-VertPos = 3933.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "rcamera.h"
-TabWidth = 96.0
+TabWidth = 86.0
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.40.33807\\include\\rcamera.h"
 CursorPos = 11370
-VertPos = 6440.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "chapter_5.cpp"
@@ -67,7 +64,6 @@ TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\chapter_5.cpp"
 CursorPos = 98274
-VertPos = 62468.0
 
 [[MainDockingFrame.DockedWidgets]]
 RequestedWidth = 813.0
@@ -96,7 +92,7 @@ TabWidth = 85.33334
 TabIsPinned = false
 Type = "WatchPanel"
 Columns = [{Width = 250.0}, {Width = 362.0}, {Width = 250.0}]
-Items = ["door", ""]
+Items = ["level.doors[0]", "level.doors[0].timer_model.materials[1]", ""]
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 TabLabel = "Auto"
