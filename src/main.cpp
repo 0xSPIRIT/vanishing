@@ -21,14 +21,6 @@
 #include <math.h>
 #include <time.h>
 
-/*
-#define GL_ALPHA_TEST 0x0BC0
-
-extern "C" {
-    void glEnable(unsigned int cap);
-}
-*/
-
 #include <iostream>
 
 #define GLSL_VERSION 330
@@ -63,7 +55,7 @@ enum Game_Mode {
 };
 Game_Mode game_mode = GAME_MODE_INVALID;
 
-int chapter = 5;
+int chapter = 7;
 
 Font global_font, atari_font, comic_sans, italics_font, bold_font, bold_2_font, mono_font, bold_font_big;
 
@@ -157,8 +149,6 @@ MainFunction() {
 
     InitWindow(default_width, default_height, "Video Game");
     SetTargetFPS(60);
-
-    //glEnable(GL_ALPHA_TEST);
 
     if (fullscreen)
         toggle_fullscreen();

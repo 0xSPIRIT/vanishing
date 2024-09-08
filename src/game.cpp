@@ -641,10 +641,41 @@ void atari_mid_text_list_init(Text_List *list, char *line,
     text_list_init(list, 0, line, next);
 }
 
+void model_set_bilinear(Model *model) {
+    for (int i = 0; i < model->materialCount; i++) {
+        Material material = model->materials[i];
+
+        // Loop through each texture type in the material (Diffuse, Specular, etc.)
+        const int MAX_MATERIAL_MAPS = 12;
+        for (int j = 0; j < MAX_MATERIAL_MAPS; j++) {
+            Texture2D texture = material.maps[j].texture;
+
+            if (texture.id > 0) {
+                SetTextureFilter(texture, TEXTURE_FILTER_BILINEAR);
+            }
+        }
+    }
+
+}
+
 void model_set_shader(Model *model, Shader shader) {
     for (int i = 0; i < model->materialCount; i++) {
         model->materials[i].shader = shader;
     }
+}
+
+void update_camera_3d(Camera3D *camera, float speed, float dt) {
+    float dir_x = input_movement_x_axis(dt);//key_right() - key_left();
+    float dir_y = input_movement_y_axis(dt);//key_down()  - key_up();
+
+    if (IsKeyDown(KEY_LEFT_SHIFT) ||
+        (IsGamepadAvailable(0) && IsGamepadButtonDown(0, GAMEPAD_BUTTON_RIGHT_TRIGGER_2))) speed=15;//speed = 7;
+    if (IsKeyDown(KEY_LEFT_ALT)) speed = 0.5f;
+
+    Vector3 saved = camera->target;
+    CameraMoveForward(camera, -dir_y * speed * dt, true);
+    CameraMoveRight(camera, dir_x * speed * dt, true);
+    camera->target = saved;
 }
 
 #include "chapter_1.cpp"
@@ -653,6 +684,7 @@ void model_set_shader(Model *model, Shader shader) {
 #include "chapter_4.cpp"
 #include "chapter_5.cpp"
 #include "chapter_6.cpp"
+#include "chapter_epilogue.cpp"
 
 void game_atari_init(Game *game) {
     assert(game->level == nullptr); // So we can make sure we had called deinit before
@@ -697,6 +729,10 @@ void game_atari_init(Game *game) {
         case 6: {
             game->level = arena_push(&game->level_arena, sizeof(Level_Chapter_6));
             chapter_6_init(game);
+        } break;
+        case 7: {
+            game->level = arena_push(&game->level_arena, sizeof(Level_Chapter_Epilogue));
+            chapter_epilogue_init(game);
         } break;
     }
 }
@@ -749,6 +785,7 @@ void game_atari_run(Game *game) {
         case 4: chapter_4_update(game, dt); break;
         case 5: chapter_5_update(game, dt); break;
         case 6: chapter_6_update(game, dt); break;
+        case 7: chapter_epilogue_update(game, dt); break;
     }
 
     BeginDrawing();
@@ -770,6 +807,7 @@ void game_atari_run(Game *game) {
             case 4: chapter_4_draw(game, dt); break;
             case 5: chapter_5_draw(game); break;
             case 6: chapter_6_draw(game); break;
+            case 7: chapter_epilogue_draw(game); break;
         }
 
         atari_update_and_draw_textbox(game, dt);

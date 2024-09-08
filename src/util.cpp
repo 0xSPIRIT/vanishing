@@ -1,4 +1,5 @@
 #define StaticArraySize(array) (sizeof(array)/sizeof(array[0]))
+
 #define Radians(degrees) (PI * degrees / 180.0)
 #define Degrees(radians) (180.0 * radians / PI)
 
@@ -173,6 +174,10 @@ void print_rectangle(Rectangle rect) {
     printf("{%f, %f, %f, %f}", rect.x, rect.y, rect.width, rect.height);
 }
 
+void print_vec3(Vector3 vec) {
+    printf("%f, %f, %f\n", vec.x, vec.y, vec.z);
+}
+
 Rectangle integer_rectangle(Rectangle rect) {
     Rectangle result;
 
@@ -184,6 +189,13 @@ Rectangle integer_rectangle(Rectangle rect) {
     return result;
 }
 
+void seconds_to_minutes_and_seconds(float time, char *output) {
+    int minutes = (int)(time / 60);
+    int seconds = time - minutes * 60;
+
+    sprintf(output, "%d:%02d", minutes, seconds);
+}
+
 Texture2D load_texture(const char *filename) {
     Texture2D result;
 
@@ -192,23 +204,6 @@ Texture2D load_texture(const char *filename) {
     assert(IsTextureReady(result));
 
     return result;
-}
-
-void set_model_bilinear(Model *model) {
-    for (int i = 0; i < model->materialCount; i++) {
-        Material material = model->materials[i];
-
-        // Loop through each texture type in the material (Diffuse, Specular, etc.)
-        const int MAX_MATERIAL_MAPS = 12;
-        for (int j = 0; j < MAX_MATERIAL_MAPS; j++) {
-            Texture2D texture = material.maps[j].texture;
-
-            if (texture.id > 0) {
-                SetTextureFilter(texture, TEXTURE_FILTER_BILINEAR);
-            }
-        }
-    }
-
 }
 
 int sign(float a) {

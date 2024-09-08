@@ -145,7 +145,7 @@ Chapter_3_Job_Minigame chapter_3_make_job_minigame(Arena *level_arena,
     result.draw_background = true;
 
     result.document_count = document_count;
-    result.current_document = (int)document_count - 1;//0;
+    result.current_document = 0;//(int)document_count - 1;//0;
 
     for (int i = 0; i < document_count; i++) {
         Document *document = &result.document_list[i];

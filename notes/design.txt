@@ -311,7 +311,7 @@ them, a message appears:
   When you get to the other side, the same thing happens, but
   with different opportunities.
     "This one is named learning a new skill. (READ SUCCESS)"
-    "This one is named taking an internship. (READ SUCCESS)"
+    "This one is named taking that internship. (READ SUCCESS)"
     "This one is named meeting new people. (READ SUCCESS)"
 
   Even though you get the option yes or no, you continue to ignore them.
@@ -319,8 +319,9 @@ them, a message appears:
   to have them in theory. You move on through this jail, and onto the
   next segment.
 
-  There aren't any orbs. You just wait for the jail to open.
-  "This is the final door to the Other Side."
+  The orbs are now grey, marked as unimportant.
+  You just wait for the jail to open.
+  "This is the final door to the other side."
 
   "Congratulations, you have wasted your time."
 

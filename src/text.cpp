@@ -4,7 +4,7 @@
 #define STRING_SIZE    1024
 #define TEXT_LIST_SIZE 32
 #define TEXT_LINE_MAX  32
-#define CHOICE_MAX     4
+#define CHOICE_MAX     12
 #define SCROLL_SPEED   30
 
 #define const_string(str) { str, sizeof(str)-1 }

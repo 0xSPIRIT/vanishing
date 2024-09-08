@@ -48,18 +48,18 @@ void chapter_6_text(bool scroll, bool chase, Text_List *list, char *line,
     list->font_spacing = 1;
     list->scale        = 0.125;
     list->scroll_speed = 15;
-    //list->alpha_speed  = 0.5;
 
     if (chase)
-        list->color        = WHITE;
+        list->color = WHITE;
     else
-        list->color        = RED;
+        list->color = RED;
 
-    list->center_text  = true;
+    list->center_text = true;
     if (scroll)
         list->scroll_type = LetterByLetter;
     else
-        list->scroll_type  = EntireLine;
+        list->scroll_type = EntireLine;
+
     list->render_type  = Bare;
     list->location     = Top;
     list->take_keyboard_focus = true;

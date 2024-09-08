@@ -1,7 +1,7 @@
 FileVersion = 1
 LastConfig = "Debug"
 LastPlatform = "Win64"
-RecentFilesList = ["c:\\dev\\vanishing\\src\\chapter_5.cpp", "c:\\dev\\vanishing\\src\\chapter_6.cpp", "c:\\dev\\vanishing\\src\\game.cpp", "c:\\dev\\vanishing\\src\\main.cpp", "c:\\dev\\vanishing\\src\\intro.cpp", "c:\\dev\\vanishing\\src\\chapter_3.cpp", "c:\\dev\\vanishing\\src\\util.cpp", "c:\\dev\\vanishing\\chapter_5.cpp", "c:\\dev\\vanishing\\game.cpp", "c:\\dev\\vanishing\\main.cpp", "c:\\dev\\vanishing\\util.cpp"]
+RecentFilesList = ["c:\\dev\\vanishing\\src\\chapter_epilogue.cpp", "c:\\dev\\vanishing\\src\\main.cpp", "c:\\dev\\vanishing\\src\\chapter_5.cpp", "c:\\dev\\vanishing\\src\\game.cpp", "c:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.40.33807\\include\\rcamera.h", "c:\\dev\\vanishing\\chapter_5.cpp", "c:\\dev\\vanishing\\game.cpp", "c:\\dev\\vanishing\\main.cpp", "c:\\dev\\vanishing\\util.cpp"]
 
 [MainWindow]
 X = 362
@@ -25,61 +25,49 @@ Type = "TabbedView"
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 Active = true
+TabLabel = "chapter_epilogue.cpp"
+TabWidth = 160.6667
+TabIsPinned = false
+Type = "SourceViewPanel"
+FilePath = "c:\\dev\\vanishing\\src\\chapter_epilogue.cpp"
+CursorPos = 7137
+VertPos = 4531.0
+
+[[MainDockingFrame.DockedWidgets.Tabs]]
+TabLabel = "main.cpp"
+TabWidth = 91.33334
+TabIsPinned = false
+Type = "SourceViewPanel"
+FilePath = "c:\\dev\\vanishing\\src\\main.cpp"
+CursorPos = 4305
+VertPos = 3864.0
+
+[[MainDockingFrame.DockedWidgets.Tabs]]
+TabLabel = "game.cpp"
+TabWidth = 94.66666
+TabIsPinned = false
+Type = "SourceViewPanel"
+FilePath = "c:\\dev\\vanishing\\src\\game.cpp"
+CursorPos = 21797
+VertPos = 3933.0
+
+[[MainDockingFrame.DockedWidgets.Tabs]]
+TabLabel = "rcamera.h"
+TabWidth = 96.0
+TabIsPinned = false
+Type = "SourceViewPanel"
+FilePath = "c:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.40.33807\\include\\rcamera.h"
+CursorPos = 11370
+VertPos = 6440.0
+
+[[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "chapter_5.cpp"
 TabWidth = 108.0
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\chapter_5.cpp"
-CursorPos = 78608
-VertPos = 46322.0
-
-[[MainDockingFrame.DockedWidgets.Tabs]]
-TabLabel = "main.cpp"
-TabWidth = 81.33334
-TabIsPinned = false
-Type = "SourceViewPanel"
-FilePath = "c:\\dev\\vanishing\\src\\main.cpp"
-CursorPos = 4967
-
-[[MainDockingFrame.DockedWidgets.Tabs]]
-TabLabel = "chapter_6.cpp"
-TabWidth = 108.0
-TabIsPinned = false
-Type = "SourceViewPanel"
-FilePath = "c:\\dev\\vanishing\\src\\chapter_6.cpp"
-CursorPos = 7437
-
-[[MainDockingFrame.DockedWidgets.Tabs]]
-TabLabel = "chapter_3.cpp"
-TabWidth = 108.0
-TabIsPinned = false
-Type = "SourceViewPanel"
-FilePath = "c:\\dev\\vanishing\\src\\chapter_3.cpp"
-CursorPos = 37448
-
-[[MainDockingFrame.DockedWidgets.Tabs]]
-TabLabel = "intro.cpp"
-TabWidth = 80.0
-TabIsPinned = false
-Type = "SourceViewPanel"
-FilePath = "c:\\dev\\vanishing\\src\\intro.cpp"
-CursorPos = 2200
-
-[[MainDockingFrame.DockedWidgets.Tabs]]
-TabLabel = "game.cpp"
-TabWidth = 84.66666
-TabIsPinned = false
-Type = "SourceViewPanel"
-FilePath = "c:\\dev\\vanishing\\src\\game.cpp"
-CursorPos = 839
-
-[[MainDockingFrame.DockedWidgets.Tabs]]
-TabLabel = "util.cpp"
-TabWidth = 71.33334
-TabIsPinned = false
-Type = "SourceViewPanel"
-FilePath = "c:\\dev\\vanishing\\src\\util.cpp"
-CursorPos = 4802
+CursorPos = 98274
+VertPos = 62468.0
 
 [[MainDockingFrame.DockedWidgets]]
 RequestedWidth = 813.0
@@ -108,7 +96,7 @@ TabWidth = 85.33334
 TabIsPinned = false
 Type = "WatchPanel"
 Columns = [{Width = 250.0}, {Width = 362.0}, {Width = 250.0}]
-Items = ["dt", "dir_x", "dir_y", ""]
+Items = ["door", ""]
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 TabLabel = "Auto"

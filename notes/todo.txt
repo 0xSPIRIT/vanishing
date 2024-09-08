@@ -1,26 +1,26 @@
 TODO : Today
 
-- STAIRCASE:
-  x Add podium dialogue
-  - Add train
-  x Add bartender
-  x Add podiums to the lighted parts
-  - Fix up the windows to actually have a cool effect
-    when you look through them: you don't see reality.
-    You see things that are not there, like monsters, etc.
-  x pick a better ceiling texture
-  x Add walls going up to the staircase
-  x Add bar stools
-  x Add couches, tables, chairs.
-  - Fade to red when going up the stairs
+V1 squad
+  - Jaydn
+  - Saleem
+  - Rais
+  - Daniel
+  - Aliyah
+  - Gyasi
 
+- Add more choice dialogue elements about your own
+  psychology. They need not be branching, even.
+
+- Fix up the windows to actually have a cool effect
+  when you look through them: you don't see reality.
+  You see things that are not there, like monsters, etc.
+  Draw another scene using the same camera position and
+  somehow draw it in the same spot?
 
 - "I'm sick of chasing" - double entendre
 
-- Chapter 5 stairacse redo: hotel.
-
-- Podiums in hotel staircase scene:
-  - Are you ready for the party tomorrow night?
+x Podiums in hotel staircase scene:
+  x Are you ready for the party tomorrow night?
     Tomorrow you're going to have to meet them and talk to them.
     Are you ready for the party tomorrow night?
     How are you going to enter the room?
