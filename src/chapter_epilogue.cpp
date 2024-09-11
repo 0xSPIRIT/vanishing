@@ -3,12 +3,15 @@
 
 enum Epilogue_State {
     EPILOGUE_STATE_FIRST,
-    EPILOGUE_STATE_SECOND
+    EPILOGUE_STATE_SECOND,
+    EPILOGUE_STATE_THIRD,
+    EPILOGUE_STATE_FOURTH
 };
 
 struct Epilogue_Node {
     Vector3 position;
     Text_List *text;
+    float time_up; // the time that it's been up
     bool moving_up, moving_down;
 };
 
@@ -18,6 +21,8 @@ struct Epilogue_Door {
 
 struct Level_Chapter_Epilogue {
     Epilogue_State state;
+    bool           transitioned;
+    bool           black_overlay; // for the fourth scene
 
     float          camera_height;
     Camera3D       camera;
@@ -41,7 +46,7 @@ struct Level_Chapter_Epilogue {
     float          node_timer, node_timer_max;
 
     RenderTexture  timer_texture, flipped_timer_texture;
-    Texture        pink_dot;
+    Texture        pink_dot, orange_dot;
 
     bool           door_popup;
     bool           door_strike_popup;
@@ -49,6 +54,14 @@ struct Level_Chapter_Epilogue {
     bool           is_transitioning;
     float          transition_timer; // 0.0 to 1.0
 };
+
+void epilogue_start_transition(void *game_ptr) {
+    Game *game = (Game *)game_ptr;
+    Level_Chapter_Epilogue *level = (Level_Chapter_Epilogue*)game->level;
+    level->is_transitioning = true;
+
+    level->black_overlay = true;
+}
 
 void chapter_epilogue_init(Game *game) {
     Level_Chapter_Epilogue *level = (Level_Chapter_Epilogue*)game->level;
@@ -82,10 +95,12 @@ void chapter_epilogue_init(Game *game) {
     level->timer_model = LoadModel(RES_DIR "models/clock.glb");
 
     level->pink_dot    = LoadTexture(RES_DIR "models/pink_dot.png");
+    level->orange_dot  = LoadTexture(RES_DIR "models/orange_dot.png");
     SetTextureFilter(level->pink_dot, TEXTURE_FILTER_BILINEAR);
+    SetTextureFilter(level->orange_dot, TEXTURE_FILTER_BILINEAR);
 
-    level->node_timer_max = 10;
-    level->node_timer = 5;
+    level->node_timer_max = 3;
+    level->node_timer = 3;
 
     level->door_timer = 1;
 
@@ -138,7 +153,7 @@ void chapter_epilogue_init(Game *game) {
                          &game->text[11]);
     atari_text_list_init(&game->text[13],
                          0,
-                         "This one is named composing music again.\n(READ SUCCESS)",
+                         "This one is named composing more music.\n(READ SUCCESS)",
                          speed,
                          &game->text[14]);
     atari_text_list_init(&game->text[40],
@@ -151,6 +166,11 @@ void chapter_epilogue_init(Game *game) {
                          "This one calls itself meeting new people.\n(READ SUCCESS)",
                          speed,
                          &game->text[44]);
+    atari_text_list_init(&game->text[46],
+                         0,
+                         "This one is called going to Eleanor's party.\n(READ SUCCESS)",
+                         speed,
+                         &game->text[47]);
 
     auto node_text = [&](int index, int yes_index) {
         String choices[] = {const_string("Yes"), const_string("No")};
@@ -176,6 +196,7 @@ void chapter_epilogue_init(Game *game) {
     // second part
     node_text(41, 42);
     node_text(44, 45);
+    node_text(47, 48);
 
     {
         String choices[] = {
@@ -255,14 +276,19 @@ void chapter_epilogue_init(Game *game) {
                          "Chase, Chase, Chase.\r*sigh*\rHow many times are we gonna have to do \nthis?\rYou know the drill.",
                          speed,
                          &game->text[19]);
+    atari_text_list_init(&game->text[48],
+                         0,
+                         "You aren't a party-going person, Chase.\rYou just don't have that personality-\rI'm sure you'd end up alone in the corner\nanyways.",
+                         speed,
+                         &game->text[19]);
 
 
-    int red_text[] = { 2, 6, 9, 12, 15, 42, 45 };
+    int red_text[] = { 2, 6, 9, 12, 15, 42, 45, 48 };
 
     for (int i = 0; i < StaticArraySize(red_text); i++) {
         int text_index = red_text[i];
         for (int j = 0; j < game->text[text_index].text_count; j++) {
-            game->text[text_index].text[j].color = GOLD;
+            game->text[text_index].text[j].color = {128,0,0,255};
         }
     }
 
@@ -347,6 +373,49 @@ void chapter_epilogue_init(Game *game) {
                          speed,
                          nullptr);
 
+    atari_text_list_init(&game->text[60],
+                         0,
+                         "We need to focus on getting out of here.\rLet's stay focused.",
+                         speed,
+                         nullptr);
+
+    atari_text_list_init(&game->text[61],
+                         0,
+                         "This is the final door to the other side.",
+                         speed,
+                         &game->text[62]);
+
+    {
+        String choices[] = {
+            const_string("Yes"),
+            const_string("No")
+        };
+
+        Text_List *next[2] = { 0, &game->text[63] };
+        void (*function_pointers[2])(void*) = {epilogue_start_transition, 0};
+
+        atari_choice_text_list_init(&game->text[62],
+                                    0,
+                                    "Are you ready?",
+                                    choices,
+                                    next,
+                                    function_pointers,
+                                    2);
+    }
+
+    atari_text_list_init(&game->text[63],
+                         0,
+                         "Too bad.",
+                         speed,
+                         nullptr);
+    game->text[63].callbacks[0] = epilogue_start_transition;
+
+    atari_text_list_init(&game->text[64],
+                         0,
+                         "Congratulations!\r...\r...\rYou have wasted your time.\rGoodbye, I guess!",
+                         speed,
+                         nullptr);
+
     level->num_nodes = 5;
     Epilogue_Node *nodes = level->nodes;
     memset(nodes, 0, sizeof(Epilogue_Node) * level->num_nodes);
@@ -366,26 +435,128 @@ void chapter_epilogue_init(Game *game) {
     nodes[4].text = &game->text[13];
 }
 
+void epilogue_handle_transition(Game *game, float dt) {
+    Level_Chapter_Epilogue *level = (Level_Chapter_Epilogue*)game->level;
+
+    if (level->is_transitioning) {
+        level->transition_timer += 0.5f * dt;
+
+        if (!level->transitioned && level->transition_timer >= 0.5f) {
+            // transition to next part
+            level->transitioned = true;
+
+            level->camera.position = {0, level->camera_height, 2};
+            level->camera.target   = {0, level->camera_height, 4};
+
+            memset(level->nodes, 0, sizeof(level->nodes));
+            level->num_nodes = 0;
+            level->next_node_to_appear = 0;
+            level->node_popup = false;
+            level->current_node = 0;
+            level->door_timer = 2;
+            level->door_y     = 0;
+            level->node_timer = 3;
+
+            level->door_popup = false;
+            level->door_strike_popup = false;
+
+            Epilogue_Node *nodes = level->nodes;
+            memset(nodes, 0, sizeof(Epilogue_Node) * level->num_nodes);
+
+            if (level->state == EPILOGUE_STATE_FIRST) {
+                level->state = EPILOGUE_STATE_SECOND;
+
+                level->fog_factor = level->fog_factor_to = 1.0f/20.0f;
+
+                level->scene.materials[1].maps[MATERIAL_MAP_DIFFUSE].texture = level->pink_dot;
+
+                float y = -5;
+
+                level->num_nodes = 5;
+
+                nodes[0].position = { -9, y, -10 };
+                nodes[1].position = {  9, y,  10 };
+                nodes[2].position = { -19, y, -5 };
+                nodes[3].position = { 6, y,  19 };
+                nodes[4].position = { 0, y, -7 };
+
+                nodes[0].text = &game->text[40];
+                nodes[1].text = &game->text[43];
+                nodes[3].text = &game->text[46];
+            } else if (level->state == EPILOGUE_STATE_SECOND) {
+                level->state = EPILOGUE_STATE_THIRD;
+
+                level->scene.materials[1].maps[MATERIAL_MAP_DIFFUSE].texture = level->orange_dot;
+                level->fog_factor = level->fog_factor_to = 0;
+
+                level->num_nodes = 5;
+
+                float y = -5;
+
+                nodes[0].position = { -9, y, -10 };
+                nodes[1].position = {  9, y,  10 };
+                nodes[2].position = { -19, y, -5 };
+                nodes[3].position = { 6, y,  19 };
+                nodes[4].position = { 0, y, -7 };
+
+                for (int i = 0; i < level->num_nodes; i++)
+                    nodes[i].text = &game->text[60];
+            } else if (level->state == EPILOGUE_STATE_THIRD) {
+                level->state = EPILOGUE_STATE_FOURTH;
+                game->current = &game->text[64];
+            }
+        }
+
+        if (level->transition_timer > 1) {
+            level->transition_timer = 0;
+            level->is_transitioning = false;
+            level->transitioned = false;
+
+            if (level->state == EPILOGUE_STATE_SECOND)
+                game->current = &game->text[20];
+        }
+    }
+}
+
 void chapter_epilogue_update(Game *game, float dt) {
     Level_Chapter_Epilogue *level = (Level_Chapter_Epilogue*)game->level;
 
-    level->node_timer -= dt;
-    if (level->node_timer < 0) {
-        Epilogue_Node *node = level->nodes + level->next_node_to_appear;
+    if (level->black_overlay) {
+        epilogue_handle_transition(game, dt);
+        return;
+    }
 
-        if (!node->moving_up && !node->moving_down) {
-            node->moving_up = true;
-            level->node_timer = level->node_timer_max;
+    if (level->num_nodes > 0) {
+        level->node_timer -= dt;
+        if (level->node_timer < 0) {
+            Epilogue_Node *node = level->nodes + level->next_node_to_appear;
 
-            level->next_node_to_appear++;
-            if (level->next_node_to_appear >= level->num_nodes) {
-                level->next_node_to_appear = 0;
+            if (!node->moving_up && !node->moving_down) {
+                node->moving_up = true;
+                level->node_timer = level->node_timer_max;
+
+                level->next_node_to_appear++;
+                if (level->next_node_to_appear >= level->num_nodes) {
+                    level->next_node_to_appear = 0;
+                }
             }
         }
     }
 
     for (int i = 0; i < level->num_nodes; i++) {
         Epilogue_Node *node = level->nodes + i;
+
+        if (level->state == EPILOGUE_STATE_THIRD) {
+            if (node->position.y == 0) {
+                node->time_up += dt;
+            } else {
+                node->time_up = 0;
+            }
+
+            if (level->current_node != node && node->time_up > 10) {
+                node->moving_down = true;
+            }
+        }
 
         if (node->moving_up) {
             node->position.y += 2 * dt;
@@ -468,7 +639,7 @@ void chapter_epilogue_update(Game *game, float dt) {
     level->door_popup = false;
     level->door_strike_popup = false;
 
-    {
+    if (game->current == nullptr) {
         Vector2 cam_pos = {level->camera.position.x, level->camera.position.z};
 
         for (int i = 0; i < level->num_doors; i++) {
@@ -482,10 +653,14 @@ void chapter_epilogue_update(Game *game, float dt) {
 
 
                 if (is_action_pressed()) {
-                    if (level->door_popup) {
-                        level->is_transitioning = true;
+                    if (level->state == EPILOGUE_STATE_THIRD) {
+                        game->current = &game->text[61];
                     } else {
-                        // TODO: Door strike sound
+                        if (level->door_popup) {
+                            level->is_transitioning = true;
+                        } else {
+                            // TODO: Door strike sound
+                        }
                     }
                 }
                 break;
@@ -500,57 +675,7 @@ void chapter_epilogue_update(Game *game, float dt) {
         level->door_timer = 0;
     }
 
-    if (level->is_transitioning) {
-        level->transition_timer += 0.5f * dt;
-
-        if (level->transition_timer >= 0.5f && level->state == EPILOGUE_STATE_FIRST) {
-            // transition to next part
-
-            level->state = EPILOGUE_STATE_SECOND;
-            level->camera.position = {0, level->camera_height, 2};
-            level->camera.target   = {0, level->camera_height, 4};
-
-            memset(level->nodes, 0, sizeof(level->nodes));
-            level->num_nodes = 0;
-            level->next_node_to_appear = 0;
-            level->node_popup = false;
-            level->current_node = 0;
-            level->door_timer = 180;
-            level->door_y     = 0;
-            level->node_timer = 10;
-
-            level->fog_factor = level->fog_factor_to = 1.0f/20.0f;
-
-            level->scene.materials[1].maps[MATERIAL_MAP_DIFFUSE].texture = level->pink_dot;
-
-            level->door_popup = false;
-            level->door_strike_popup = false;
-
-            float y = -5;
-
-            Epilogue_Node *nodes = level->nodes;
-            memset(nodes, 0, sizeof(Epilogue_Node) * level->num_nodes);
-
-            level->num_nodes = 5;
-
-            nodes[0].position = { -9, y, -10 };
-            nodes[1].position = {  9, y,  10 };
-            nodes[2].position = { -19, y, -5 };
-            nodes[3].position = { 6, y,  19 };
-            nodes[4].position = { 0, y, -7 };
-
-            nodes[0].text = &game->text[40];
-            nodes[1].text = &game->text[43];
-
-        }
-
-        if (level->transition_timer > 1) {
-            level->transition_timer = 0;
-            level->is_transitioning = false;
-
-            game->current = &game->text[20];
-        }
-    }
+    epilogue_handle_transition(game, dt);
 
     if (game->current == &game->text[29]) {
         level->fog_factor_to = 0;
@@ -577,6 +702,11 @@ void chapter_epilogue_update(Game *game, float dt) {
 void chapter_epilogue_draw(Game *game) {
     Level_Chapter_Epilogue *level = (Level_Chapter_Epilogue*)game->level;
 
+    if (level->state == EPILOGUE_STATE_FOURTH && level->black_overlay) {
+        ClearBackground(BLACK);
+        return;
+    }
+
     SetShaderValue(level->shader, GetShaderLocation(level->shader, "viewPos"), &level->camera.position, SHADER_UNIFORM_VEC3);
     SetShaderValue(level->shader, GetShaderLocation(level->shader, "fog_factor"), &level->fog_factor, SHADER_UNIFORM_FLOAT);
 
@@ -597,13 +727,20 @@ void chapter_epilogue_draw(Game *game) {
 
     draw_bars(1);
 
-    if (level->state == EPILOGUE_STATE_SECOND) {
+    if (level->state == EPILOGUE_STATE_SECOND || level->state == EPILOGUE_STATE_THIRD) {
         draw_bars(0.05f);
+    }
+
+    if (level->state == EPILOGUE_STATE_THIRD) {
+        draw_bars(0.05f * 0.05f);
     }
 
     for (int i = 0; i < level->num_nodes; i++) {
         Epilogue_Node *node = level->nodes + i;
         Color color = WHITE;
+
+        if (level->state == EPILOGUE_STATE_THIRD)
+            color = BLACK;
 
         DrawModel(level->node, node->position, 2, color);
     }

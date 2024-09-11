@@ -529,7 +529,7 @@ Text_List *text_list_update_and_draw(Text_List *list, void *user_data, float dt)
                 list->finished = true;
                 result = list->next[list->choice_index];
 
-                // Execute the function pointer hook.
+                // Execute the function pointer hook if we have one.
                 void (*hook)(void*) = list->callbacks[list->choice_index];
                 if (hook) {
                     hook(user_data);

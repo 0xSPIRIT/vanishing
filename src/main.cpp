@@ -148,7 +148,7 @@ MainFunction() {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
 
     InitWindow(default_width, default_height, "Video Game");
-    SetTargetFPS(60);
+    //SetTargetFPS(60);
 
     if (fullscreen)
         toggle_fullscreen();
