@@ -35,6 +35,9 @@ void game_intro_init(Game_Intro *game) {
         case 7: {
             game->message = "\"EPILOGUE\"";
         } break;
+        case 8: {
+            game->message = "Created by spritwolf\n\nThanks for playing.";
+        } break;
     }
 }
 
@@ -74,10 +77,17 @@ void game_intro_run(Game_Intro *game) {
                spacing,
                {255,255,255,alpha});
 
-    bool debug = true;
+    bool debug = false;
+
+#ifdef DEBUG
+    debug = true;
+#endif
 
     if (x >= 2 || (debug && is_action_pressed())) {
-        set_game_mode(GAME_MODE_ATARI);
+        if (chapter == 8)
+            exit(0);
+        else
+            set_game_mode(GAME_MODE_ATARI);
     }
 
     EndTextureMode();

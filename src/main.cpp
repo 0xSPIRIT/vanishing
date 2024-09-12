@@ -30,6 +30,7 @@
   #define NDEBUG
 #else
   #define MainFunction int main
+  #define DEBUG
 #endif
 
 #define DIM_ATARI_WIDTH  192
@@ -148,7 +149,6 @@ MainFunction() {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
 
     InitWindow(default_width, default_height, "Video Game");
-    //SetTargetFPS(60);
 
     if (fullscreen)
         toggle_fullscreen();
