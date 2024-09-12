@@ -616,7 +616,7 @@ void epilogue_handle_transition(Game *game, float dt) {
     Level_Chapter_Epilogue *level = (Level_Chapter_Epilogue*)game->level;
 
     if (level->is_transitioning) {
-        level->transition_timer += 0.5f * dt;
+        level->transition_timer += 0.25f * dt;
 
         if (!level->transitioned && level->transition_timer >= 0.5f) {
             // transition to next part
@@ -696,6 +696,8 @@ void epilogue_handle_transition(Game *game, float dt) {
 
                 level->camera.position = {1.74f, 1.67f, 2.10f};
                 level->camera.target   = {0.23f, 1.19f, 0.88f};
+            } else {
+                level->state = EPILOGUE_STATE_ENDING;
             }
         }
 
@@ -840,15 +842,17 @@ void chapter_epilogue_update(Game *game, float dt) {
     }
 
     level->node_popup = false;
-    if (game->current == nullptr) {
+    if (game->current == nullptr && level->transition_timer == 0) {
         if (level->current_node) {
-            level->current_node->text = 0;
-            level->current_node->moving_down = true;
-            level->current_node->position.y -= 0.01f;
             level->current_node = nullptr;
 
             if (level->state == EPILOGUE_STATE_FOURTH) {
                 add_event(game, epilogue_start_final_conversation, 5);
+                level->is_transitioning = true;
+            } else {
+                level->current_node->text = 0;
+                level->current_node->moving_down = true;
+                level->current_node->position.y -= 0.01f;
             }
         }
 
