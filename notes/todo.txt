@@ -8,6 +8,9 @@ V1 squad
   - Aliyah
   - Gyasi
 
+- Change "it calls itself" to "Enscribed on the
+  bottom is"
+
 - Add more choice dialogue elements about your own
   psychology. They need not be branching, even.
 

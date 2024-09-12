@@ -166,7 +166,7 @@ MainFunction() {
 
     //DisableCursor();
 
-    set_game_mode(GAME_MODE_ATARI);
+    set_game_mode(GAME_MODE_INTRO);
 
     while (!WindowShouldClose()) {
         fullscreen_timer -= GetFrameTime();

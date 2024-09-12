@@ -495,7 +495,7 @@ void chapter_2_init(Game *game) {
     // Eleanor
     atari_text_list_init(&game->text[45],
                          "Eleanor",
-                         "Hi, Chase!\rI knew you'd come.",
+                         "I knew you'd come.",
                          speed,
                          &game->text[46]);
     atari_text_list_init(&game->text[46],
@@ -747,7 +747,7 @@ void chapter_2_init(Game *game) {
                          &game->text[89]);
     atari_text_list_init(&game->text[89],
                          "Eleanor",
-                         "You clearly like her.\rThis isn't primary school.",
+                         "This isn't primary school bro.",
                          speed,
                          nullptr);
 

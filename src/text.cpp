@@ -529,6 +529,10 @@ Text_List *text_list_update_and_draw(Text_List *list, void *user_data, float dt)
                 list->finished = true;
                 result = list->next[list->choice_index];
 
+                if (list == result) {
+                    reset_text_list(list);
+                }
+
                 // Execute the function pointer hook if we have one.
                 void (*hook)(void*) = list->callbacks[list->choice_index];
                 if (hook) {

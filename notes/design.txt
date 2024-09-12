@@ -1,5 +1,4 @@
 Chapters
-  0. Prologue / Epilogue        2 min
   1. Dysania                    7 mins (x)
   2. Dinner Party               5 mins (x)
   3. Repetitions                9 mins (x)
@@ -8,7 +7,7 @@ Chapters
   6. Patience and Blasphemy     3 mins (x)
   7. Epilogue / Prologue       10 mins
 
-  = 45 minutes
+  ~ 45 minutes
 
 If you play the game forwards, you get the "good" narrative
 whereas if you play it backwards, you get the "bad" story,
