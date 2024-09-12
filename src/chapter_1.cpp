@@ -213,17 +213,17 @@ void chapter_1_init(Game *game) {
 
     atari_text_list_init(&game->text[7],
                          0,
-                         "This one calls itself\n83D3960AA4B1 (READ ERROR).",
+                         "On the bottom is inscribed:\n83D3960AA4B1 (READ ERROR).",
                          speed,
                          &game->text[10]);
     atari_text_list_init(&game->text[8],
                          "Chase",
-                         "This one calls itself\nC0291BA16324 (READ ERROR).",
+                         "On the bottom is inscribed\nC0291BA16324 (READ ERROR).",
                          speed,
                          &game->text[10]);
     atari_text_list_init(&game->text[9],
                          0,
-                         "This one calls itself\nDC6F8203351 (READ ERROR).",
+                         "On the bottom is inscribed\nDC6F8203351 (READ ERROR).",
                          speed,
                          &game->text[10]);
 

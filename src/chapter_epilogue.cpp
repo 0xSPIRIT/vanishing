@@ -143,42 +143,42 @@ void chapter_epilogue_init(Game *game) {
 
     atari_text_list_init(&game->text[0],
                          0,
-                         "This one calls itself hanging out with friends.\n(READ SUCCESS)",
+                         "On the bottom is inscribed:\r\"hanging out with friends.\"\n(READ SUCCESS)",
                          speed,
                          &game->text[1]);
     atari_text_list_init(&game->text[4],
                          0,
-                         "This one calls itself learning an instrument.\n(READ SUCCESS)",
+                         "On the bottom is inscribed:\r\"learning an instrument.\"\n(READ SUCCESS)",
                          speed,
                          &game->text[5]);
     atari_text_list_init(&game->text[7],
                          0,
-                         "This one is named taking an evening walk.\n(READ SUCCESS)",
+                         "On the bottom is inscribed:\r\"taking an evening walk.\"\n(READ SUCCESS)",
                          speed,
                          &game->text[8]);
     atari_text_list_init(&game->text[10],
                          0,
-                         "This one is named watching a movie with\nyour friends. (READ SUCCESS)",
+                         "On the bottom is inscribed:\r\"watching a movie with your friends.\"\n(READ SUCCESS)",
                          speed,
                          &game->text[11]);
     atari_text_list_init(&game->text[13],
                          0,
-                         "This one is named composing more music.\n(READ SUCCESS)",
+                         "On the bottom is inscribed:\r\"composing more music.\"\n(READ SUCCESS)",
                          speed,
                          &game->text[14]);
     atari_text_list_init(&game->text[40],
                          0,
-                         "This one calls itself learning how to knit.\n(READ SUCCESS)",
+                         "On the bottom is inscribed:\r\"learning how to knit.\"\n(READ SUCCESS)",
                          speed,
                          &game->text[41]);
     atari_text_list_init(&game->text[43],
                          0,
-                         "This one calls itself meeting new people.\n(READ SUCCESS)",
+                         "On the bottom is inscribed:\r\"meeting new people.\"\n(READ SUCCESS)",
                          speed,
                          &game->text[44]);
     atari_text_list_init(&game->text[46],
                          0,
-                         "This one is called going to Eleanor's party.\n(READ SUCCESS)",
+                         "On the bottom is inscribed:\r\"going to Eleanor's party.\"\n(READ SUCCESS)",
                          speed,
                          &game->text[47]);
 
@@ -189,7 +189,7 @@ void chapter_epilogue_init(Game *game) {
 
         atari_choice_text_list_init(&game->text[index],
                                     0,
-                                    "Will you drink the water from the capsule?",
+                                    "Drink the liquid?",
                                     choices,
                                     next,
                                     function_pointers,
@@ -243,7 +243,7 @@ void chapter_epilogue_init(Game *game) {
 
         atari_choice_text_list_init(&game->text[19],
                                     0,
-                                    "Drink the water?",
+                                    "Drink the liquid?",
                                     choices,
                                     next,
                                     function_pointers,

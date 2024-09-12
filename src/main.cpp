@@ -141,8 +141,8 @@ void set_game_mode(Game_Mode mode) {
 }
 
 MainFunction() {
-    srand(time(0));
     set_global_system_timer_frequency();
+    srand(time(0));
 
     SetTraceLogLevel(LOG_WARNING);
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);

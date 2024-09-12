@@ -11,6 +11,13 @@ V1 squad
 - Change "it calls itself" to "Enscribed on the
   bottom is"
 
+I did a run through of the game. One thing that it's
+missing is coherency. I need to add more glue to
+bind everything together. The god stuff and the Penny
+stuff is really not meshing together well, and I
+don't really have a reason as to how they're even
+connected in the first place.
+
 - Add more choice dialogue elements about your own
   psychology. They need not be branching, even.
 
