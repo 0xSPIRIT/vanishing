@@ -42,6 +42,7 @@ struct Level_Chapter_Epilogue {
     Epilogue_Door  doors[EPILOGUE_DOOR_MAX];
     int            num_doors;
     float          door_timer;
+    bool           pause_door_timer;
     float          door_y;
 
     float          node_timer, node_timer_max;
@@ -66,7 +67,6 @@ void epilogue_start_transition(void *game_ptr) {
 
 void epilogue_start_final_conversation(Game *game) {
     game->current = &game->text[70];
-    game->textbox_alpha = 255;
 }
 
 void epilogue_goto_credits(void *game_ptr) {
@@ -157,42 +157,42 @@ void chapter_epilogue_init(Game *game) {
 
     atari_text_list_init(&game->text[0],
                          0,
-                         "On the bottom is inscribed:\r\"Hanging out with friends.\" (READ SUCCESS)",
+                         "On the bottom is inscribed:\r[Hanging out with friends] (READ SUCCESS)",
                          speed,
                          &game->text[1]);
     atari_text_list_init(&game->text[4],
                          0,
-                         "On the bottom is inscribed:\r\"Learning an instrument.\" (READ SUCCESS)",
+                         "On the bottom is inscribed:\r[Learning an instrument] (READ SUCCESS)",
                          speed,
                          &game->text[5]);
     atari_text_list_init(&game->text[7],
                          0,
-                         "On the bottom is inscribed:\r\"Taking an evening walk.\" (READ SUCCESS)",
+                         "On the bottom is inscribed:\r[Taking an evening walk] (READ SUCCESS)",
                          speed,
                          &game->text[8]);
     atari_text_list_init(&game->text[10],
                          0,
-                         "On the bottom is inscribed:\r\"Watching a movie with your friends.\" (READ\nSUCCESS)",
+                         "On the bottom is inscribed:\r[Watching a movie with your friends] (READ\nSUCCESS)",
                          speed,
                          &game->text[11]);
     atari_text_list_init(&game->text[13],
                          0,
-                         "On the bottom is inscribed:\r\"Composing more music.\" (READ SUCCESS)",
+                         "On the bottom is inscribed:\r[Composing more music] (READ SUCCESS)",
                          speed,
                          &game->text[14]);
     atari_text_list_init(&game->text[40],
                          0,
-                         "On the bottom is inscribed:\r\"Learning how to knit.\" (READ SUCCESS)",
+                         "On the bottom is inscribed:\r[Learning how to knit] (READ SUCCESS)",
                          speed,
                          &game->text[41]);
     atari_text_list_init(&game->text[43],
                          0,
-                         "On the bottom is inscribed:\r\"Meeting new people.\" (READ SUCCESS)",
+                         "On the bottom is inscribed:\r[Meeting new people] (READ SUCCESS)",
                          speed,
                          &game->text[44]);
     atari_text_list_init(&game->text[46],
                          0,
-                         "On the bottom is inscribed:\r\"Going to Eleanor's party.\" (READ SUCCESS)",
+                         "On the bottom is inscribed:\r[Going to Eleanor's party] (READ SUCCESS)",
                          speed,
                          &game->text[47]);
 
@@ -248,7 +248,7 @@ void chapter_epilogue_init(Game *game) {
             const_string("Probably not a good idea, no"),
             const_string("Not now, I'll do it when I get out"),
             const_string("Ugh no"),
-            const_string("Noooooo it's sooooo much effort"),
+            const_string("Nooo it's sooooo much effort"),
             const_string("It's meaningless anyways"),
             const_string("I'm just trying to get by. No.")
         };
@@ -388,7 +388,7 @@ void chapter_epilogue_init(Game *game) {
                          &game->text[34]);
     atari_text_list_init(&game->text[34],
                          "Chase",
-                         "What wh-",
+                         "Wait wh-",
                          speed,
                          &game->text[35]);
     atari_text_list_init(&game->text[35],
@@ -487,7 +487,7 @@ void chapter_epilogue_init(Game *game) {
     speed = 30;
 
     atari_text_list_init(&game->text[70],
-                         "Hope",
+                         "Penny",
                          "Oh, electronic music?\rThat's lame.",
                          speed,
                          &game->text[71]);
@@ -497,7 +497,7 @@ void chapter_epilogue_init(Game *game) {
                          speed,
                          &game->text[72]);
     atari_text_list_init(&game->text[72],
-                         "Hope",
+                         "Penny",
                          "...\r...\rWho them?",
                          speed,
                          &game->text[73]);
@@ -507,7 +507,7 @@ void chapter_epilogue_init(Game *game) {
                          speed,
                          &game->text[74]);
     atari_text_list_init(&game->text[74],
-                         "Hope",
+                         "Penny",
                          "Like what?",
                          speed,
                          &game->text[75]);
@@ -517,7 +517,7 @@ void chapter_epilogue_init(Game *game) {
                          speed,
                          &game->text[76]);
     atari_text_list_init(&game->text[76],
-                         "Hope",
+                         "Penny",
                          "Oh, nice.\rI like Debussy.\rSatie too.",
                          speed,
                          &game->text[77]);
@@ -527,7 +527,7 @@ void chapter_epilogue_init(Game *game) {
                          speed,
                          &game->text[78]);
     atari_text_list_init(&game->text[78],
-                         "Hope",
+                         "Penny",
                          "So, how does it work?\rDo you record yourself playing, or do you\njust program in the notes?",
                          speed,
                          &game->text[79]);
@@ -537,7 +537,7 @@ void chapter_epilogue_init(Game *game) {
                          speed,
                          &game->text[80]);
     atari_text_list_init(&game->text[80],
-                         "Hope",
+                         "Penny",
                          "I do as well- I have this shitty mic that\nI use for my acoustic guitar.\rI layer everything up, then mix and master\neverything myself.",
                          speed,
                          &game->text[81]);
@@ -547,8 +547,8 @@ void chapter_epilogue_init(Game *game) {
                          speed,
                          &game->text[82]);
     atari_text_list_init(&game->text[82],
-                         "Hope",
-                         "Hahah, so true.",
+                         "Penny",
+                         "Hahah, so true.\r...\r.....\r......",
                          speed,
                          &game->text[83]);
     atari_text_list_init(&game->text[83],
@@ -557,7 +557,7 @@ void chapter_epilogue_init(Game *game) {
                          speed,
                          &game->text[84]);
     atari_text_list_init(&game->text[84],
-                         "Hope",
+                         "Penny",
                          "...\r...\r...",
                          speed,
                          &game->text[85]);
@@ -567,7 +567,7 @@ void chapter_epilogue_init(Game *game) {
                          speed,
                          &game->text[86]);
     atari_text_list_init(&game->text[86],
-                         "Hope",
+                         "Penny",
                          "Hey.",
                          speed,
                          &game->text[87]);
@@ -577,7 +577,7 @@ void chapter_epilogue_init(Game *game) {
                          speed,
                          &game->text[88]);
     atari_text_list_init(&game->text[88],
-                         "Hope",
+                         "Penny",
                          "Maybe we could work on a song together.",
                          speed,
                          &game->text[89]);
@@ -630,7 +630,6 @@ void epilogue_handle_transition(Game *game, float dt) {
             level->next_node_to_appear = 0;
             level->node_popup = false;
             level->current_node = 0;
-            level->door_timer = 2;
             level->door_y     = 0;
             level->node_timer = 8;
 
@@ -640,12 +639,14 @@ void epilogue_handle_transition(Game *game, float dt) {
             Epilogue_Node *nodes = level->nodes;
             memset(nodes, 0, sizeof(Epilogue_Node) * level->num_nodes);
 
-            level->door_timer = 120;
+            level->door_timer = 180;
 
             if (level->state == EPILOGUE_STATE_FIRST) {
                 level->state = EPILOGUE_STATE_SECOND;
 
                 level->fog_factor = level->fog_factor_to = 1.0f/20.0f;
+
+                level->pause_door_timer = true;
 
                 level->scene.materials[1].maps[MATERIAL_MAP_DIFFUSE].texture = level->pink_dot;
 
@@ -683,11 +684,15 @@ void epilogue_handle_transition(Game *game, float dt) {
             } else if (level->state == EPILOGUE_STATE_THIRD) {
                 level->state = EPILOGUE_STATE_FOURTH;
 
+                epilogue_text_change_color = true;
+
+                game->textbox_alpha = 255;
+
                 add_event(game, epilogue_start_congratulations_text, 5);
 
                 level->num_nodes = 1;
 
-                float y = -9;
+                float y = -15;
 
                 nodes[0].position = { -1, y, 0 };
                 nodes[0].text = &game->text[65];
@@ -844,8 +849,6 @@ void chapter_epilogue_update(Game *game, float dt) {
     level->node_popup = false;
     if (game->current == nullptr && level->transition_timer == 0) {
         if (level->current_node) {
-            level->current_node = nullptr;
-
             if (level->state == EPILOGUE_STATE_FOURTH) {
                 add_event(game, epilogue_start_final_conversation, 5);
                 level->is_transitioning = true;
@@ -854,6 +857,8 @@ void chapter_epilogue_update(Game *game, float dt) {
                 level->current_node->moving_down = true;
                 level->current_node->position.y -= 0.01f;
             }
+
+            level->current_node = nullptr;
         }
 
         Vector2 cam_pos = {level->camera.position.x, level->camera.position.z};
@@ -906,7 +911,9 @@ void chapter_epilogue_update(Game *game, float dt) {
         }
     }
 
-    level->door_timer -= dt;
+    if (!level->pause_door_timer) {
+        level->door_timer -= dt;
+    }
 
     if (level->door_timer <= 0) {
         level->door_y -= dt;
@@ -917,6 +924,7 @@ void chapter_epilogue_update(Game *game, float dt) {
 
     if (game->current == &game->text[29]) {
         level->fog_factor_to = 0;
+        level->pause_door_timer = false;
     }
 
     if (level->fog_factor != level->fog_factor_to) {
@@ -1059,7 +1067,7 @@ void chapter_epilogue_draw(Game *game) {
         if (level->state == EPILOGUE_STATE_FOURTH)
             c = WHITE;
 
-        draw_popup("Inspect Node", c, Top);
+        draw_popup("Inspect Capsule", c, Top);
     }
 
     if (level->door_strike_popup) {

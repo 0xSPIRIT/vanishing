@@ -5,7 +5,7 @@ enum Chapter_2_Area {
     CHAPTER_2_AREA_BATHROOM,
 };
 
-enum Chapter_2_Hope_State {
+enum Chapter_2_Penny_State {
     CHAPTER_2_HOPE_STATE_INVALID,
     CHAPTER_2_HOPE_STATE_WALKING, // camera follows hope
     CHAPTER_2_HOPE_STATE_STOP_FIRST,
@@ -20,7 +20,7 @@ struct Level_Chapter_2 {
     Entity *player; // quick access to the player
     Entity *hope;
 
-    Chapter_2_Hope_State hope_state;
+    Chapter_2_Penny_State hope_state;
 
     float final_dialogue_alarm;
 
@@ -64,7 +64,7 @@ void chapter_2_window_text(bool scroll, Text_List *list, char *line,
     list->scale        = 0.125;
     list->scroll_speed = 10;
     //list->alpha_speed  = 0.5;
-    list->color        = RED;
+    list->color        = WHITE;
     list->center_text  = true;
     if (scroll)
         list->scroll_type = LetterByLetter;
@@ -238,8 +238,8 @@ void chapter_2_init(Game *game) {
     textures[5]  = load_texture(RES_DIR "art/dinner_table.png");
     textures[6]  = load_texture(RES_DIR "art/real_girl.png");
     textures[7]  = load_texture(RES_DIR "art/penny.png");
-    textures[8]  = load_texture(RES_DIR "art/fullscreen_1.png");
-    textures[9]  = load_texture(RES_DIR "art/fullscreen_2.png");
+    //textures[8]  = load_texture(RES_DIR "art/fullscreen_1.png");
+    //textures[9]  = load_texture(RES_DIR "art/fullscreen_2.png");
     textures[10] = load_texture(RES_DIR "art/bathroom.png");
     textures[11] = load_texture(RES_DIR "art/open_window.png");
 
@@ -545,44 +545,6 @@ void chapter_2_init(Game *game) {
                                     2);
     }
 
-    /*
-    // Paulie
-    atari_text_list_init(&game->text[53],
-                         "Chase",
-                         "Hey, Paulie.\rWhat's up?",
-                         speed,
-                         &game->text[54]);
-    atari_text_list_init(&game->text[54],
-                         "Paulie",
-                         "Oh, nothing much, y'know.\rOne thing that I was\nthinking-",
-                         speed,
-                         &game->text[55]);
-    atari_text_list_init(&game->text[55],
-                         "Paulie",
-                         "8F332D706FC109EDF66B5AB\n"
-                         "38ACCB5115B69EE1C01F9DE\n"
-                         "E30C8139AC3549D19F89915?",
-                         speed,
-                         &game->text[56]);
-    atari_text_list_init(&game->text[56],
-                         "Paulie",
-                         "6A5699D8DD0364583D77BB3\n"
-                         "19AFF46309FBD517B9E4043\n"
-                         "A6B57EFA95761A63C654AE!",
-                         speed,
-                         &game->text[57]);
-    atari_text_list_init(&game->text[57],
-                         "Paulie",
-                         "Are you even listening\nto a word I'm saying?",
-                         speed,
-                         &game->text[58]);
-    atari_text_list_init(&game->text[58],
-                         "Chase",
-                         "Huh?\rOh, sorry.",
-                         speed,
-                         nullptr);
-                         */
-
     atari_text_list_init(&game->text[59],
                          "Chase",
                          "So, how's your artwork\ncoming along?",
@@ -605,7 +567,7 @@ void chapter_2_init(Game *game) {
                          &game->text[63]);
     atari_text_list_init(&game->text[63],
                          "Eleanor",
-                         "I basically had to make the\nlogos and flyers\nadvertising the thing.",
+                         "I basically had to make\nthe logos and flyers\nadvertising the thing.",
                          speed,
                          &game->text[64]);
     atari_text_list_init(&game->text[64],
@@ -620,7 +582,7 @@ void chapter_2_init(Game *game) {
                          &game->text[66]);
     atari_text_list_init(&game->text[66],
                          "Eleanor",
-                         "Damn, nice...\rAnyways, continue.",
+                         "Damn, nice...\rMoving up in the\nworld.",
                          speed,
                          &game->text[67]);
     atari_text_list_init(&game->text[67],
@@ -676,7 +638,7 @@ void chapter_2_init(Game *game) {
                          &game->text[77]);
     atari_text_list_init(&game->text[77],
                          "Eleanor",
-                         "Not really.\rI got paid the beaucoup\nbucks, so...",
+                         "Not really.\rI got paid beaucoup bucks,\nso...",
                          speed,
                          &game->text[78]);
     atari_text_list_init(&game->text[78],
@@ -718,7 +680,7 @@ void chapter_2_init(Game *game) {
                          &game->text[84]);
     atari_text_list_init(&game->text[84],
                          "Eleanor",
-                         "Isn't that Hope over\nthere?",
+                         "Isn't that Penny over\nthere?",
                          speed,
                          &game->text[85]);
     atari_text_list_init(&game->text[85],
@@ -747,7 +709,7 @@ void chapter_2_init(Game *game) {
                          &game->text[89]);
     atari_text_list_init(&game->text[89],
                          "Eleanor",
-                         "This isn't primary school bro.",
+                         "This isn't primary school\nbro.",
                          speed,
                          nullptr);
 
@@ -755,7 +717,7 @@ void chapter_2_init(Game *game) {
 
     atari_text_list_init(&game->text[90],
                          0,
-                         "\"Hi Hope!\", Chase said.",
+                         "\"Hi Penny!\", Chase said.",
                          speed,
                          &game->text[91]);
     atari_text_list_init(&game->text[91],
@@ -775,7 +737,7 @@ void chapter_2_init(Game *game) {
                          &game->text[94]);
     atari_text_list_init(&game->text[94],
                          0,
-                         "But maybe she said,\n\"Would you like to\nhave a seat with me?\"",
+                         "But maybe she said,\n\"Would you like to have\na seat with me?\"",
                          speed,
                          &game->text[95]);
     atari_text_list_init(&game->text[95],
@@ -799,32 +761,43 @@ void chapter_2_init(Game *game) {
                          speed,
                          nullptr);
 
+    // this is basically saying
+    // how he looks into the void (himself), trying to find some
+    // answers. he wants to find meaning but he doesn't find it.
+    // god (himself) whispered back to him some random shit through the
+    // darkness, but he can't understand right now because he's
+    // not in the right frame of mind.
+    //
+    // her is meaning
+    // her is penny
+    // her is god
+
     chapter_2_window_text(false,
                           &game->text[100],
-                          "He prayed for courage,\rbut found only echoes.",
+                          "He gazed into the dark,\nhoping to find her.\rBut only found Apathy.",
                           &game->text[101]);
     chapter_2_window_text(false,
                           &game->text[101],
-                          "He prayed for purpose,\rbut found only echoes.",
+                          "His prayers left unanswered.\rHis will weakened.\rHis actions meaningless.",
                           &game->text[102]);
     chapter_2_window_text(false,
                           &game->text[102],
-                          "He thought,\r\"I must be cured from this!\",\rHe asked,\r\"When will you reveal\nyourself to me?\"",
+                          "He thought,\r\"I must be cured from this!\"\rHe again prayed,\r\"When will you free\nme from this?\"",
                           &game->text[103]);
-    chapter_2_window_text(true,
+    chapter_2_window_text(false,
                           &game->text[103],
-                          "But the Lord whispered\nto him:\r"
-                          "78c4f1a6506db3ff\n"
-                          "ab7d9d2ccbd8866d\n"
-                          "34f2616ed69da985\n"
-                          "982b1ca85d0e6eb8\n"
-                          "43e122f4ba89f1e1\n"
-                          "ec9626b38e01dcac\n"
-                          "6041947ab7793747",
+                          "But she whispered to him\nthrough the darkness:\r"
+                          "78C4F1A6506DB3FF\n"
+                          "AB7D9D2CCBD8866D\n"
+                          "34F2616ED69DA985\n"
+                          "982B1CA85D0E6EB8\n"
+                          "43E122F4BA89F1E1\n"
+                          "EC9626B38E01DCAC\n"
+                          "6041947AB7793747",
                           &game->text[104]);
     chapter_2_window_text(false,
                           &game->text[104],
-                          "But he couldn't understand.\rBecause it was not meant\nto be understood.",
+                          "But he couldn't understand,\rbecause it was not meant\nto be understood.",
                           nullptr);
 
     game->text[104].callbacks[0] = chapter_2_end_fade;
@@ -934,7 +907,7 @@ void chapter_2_entity_update(Entity *e, Game *game, float dt) {
                             game->current = &game->text[59];
                         } break;
                         case 2: {
-                            // Begin the part with Hope
+                            // Begin the part with Penny
                             game->current = &game->text[80];
                             player->chap_2_player.sitting_state = 3;
                         } break;
@@ -953,7 +926,9 @@ void chapter_2_entity_update(Entity *e, Game *game, float dt) {
                 player_speed = Clamp(distance * 0.25, 5, 60);
             }
 
+#ifdef DEBUG
             if (IsKeyDown(KEY_P)) player_speed *= 3;
+#endif
 
             if (keyboard_focus(game) != NO_KEYBOARD_FOCUS)
                 dir_x = dir_y = 0;

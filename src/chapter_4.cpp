@@ -1,3 +1,6 @@
+#define GOD_COLOR {48,0,0,255}
+#define GOD_COLOR_BACKDROP {72,0,0,255}
+
 enum Chapter_4_State {
     CHAPTER_4_STATE_ATARI,
     CHAPTER_4_STATE_BED_1,
@@ -67,6 +70,11 @@ void chapter_4_window_text(bool scroll, Text_List *list, char *line,
     //list->alpha_speed  = 0.5;
     list->color        = color;
     list->center_text  = true;
+
+    if (colors_equal(color, GOD_COLOR)) {
+        list->backdrop_color = GOD_COLOR_BACKDROP;
+        list->background = true;
+    }
 
     if (scroll)
         list->scroll_type = LetterByLetter;
@@ -158,10 +166,10 @@ void chapter_4_init(Game *game) {
     Cutscene *cutscene = &level->bed_cutscene;
 
     Cutscene_Frame bed_cutscene[] = {
-        { 4, 4.0 },
-        { 5, 4.5 },
+        { 4, 3.0 },
+        { 5, 3.5 },
         { 6, 1.0 },
-        { 7, 5.0 },
+        { 7, 2.0 },
     };
 
     cutscene->frame_count = StaticArraySize(bed_cutscene);
@@ -198,12 +206,12 @@ void chapter_4_init(Game *game) {
     chapter_4_window_text(true,
                           &game->text[2],
                           "I HEAR THEE, MY SON.",
-                          RED,
+                          GOD_COLOR,
                           &game->text[3]);
     chapter_4_window_text(true,
                           &game->text[3],
                           "WHAT DOST THOU DESIRE?",
-                          RED,
+                          GOD_COLOR,
                           nullptr);
 
     level->text_handler.alarms[1]    = 2;
@@ -221,17 +229,17 @@ void chapter_4_init(Game *game) {
     chapter_4_window_text(true,
                           &game->text[5],
                           "GOOD.",
-                          RED,
+                          GOD_COLOR,
                           &game->text[6]);
     chapter_4_window_text(true,
                           &game->text[6],
                           "TO GRANT YOUR PRAYER,\nYOU MUST COMPLETE A TASK FOR ME.",
-                          RED,
+                          GOD_COLOR,
                           &game->text[7]);
     chapter_4_window_text(true,
                           &game->text[7],
                           "SHOW ME THAT YOUR FAITH IS PURE.",
-                          RED,
+                          GOD_COLOR,
                           nullptr);
 
     level->text_handler.alarms[3]    = 2;
@@ -251,7 +259,7 @@ void chapter_4_init(Game *game) {
     game->text[9].scale        = 0.125;
     game->text[9].alpha_speed  = 0.125;
     game->text[9].scroll_speed = 120;
-    game->text[9].color        = RED;
+    game->text[9].color        = GOD_COLOR;
     game->text[9].center_text  = true;
     game->text[9].scroll_type  = LetterByLetter;
     game->text[9].render_type  = Bare;
@@ -288,7 +296,7 @@ void chapter_4_init(Game *game) {
     chapter_4_window_text(true,
                           &game->text[10],
                           "DO YOU UNDERSTAND?",
-                          RED,
+                          GOD_COLOR,
                           &game->text[11]);
 
     chapter_4_window_text(true,
@@ -300,7 +308,7 @@ void chapter_4_init(Game *game) {
     chapter_4_window_text(true,
                           &game->text[12],
                           "DO YOU UNDERSTAND?",
-                          RED,
+                          GOD_COLOR,
                           nullptr);
 
     level->text_handler.alarms[6]    = 4;
@@ -443,7 +451,7 @@ void chapter_4_update(Game *game, float dt) {
             }
             */
  
-            if (game->current && !is_text_list_at_end(game->current) && colors_equal(game->current->color, RED)) {
+            if (game->current && !is_text_list_at_end(game->current) && colors_equal(game->current->color, GOD_COLOR)) {
                 level->camera.fovy -= 1.25 * dt;
             }
 
@@ -465,7 +473,7 @@ void chapter_4_draw(Game *game, float dt) {
 
     switch (level->state) {
         case CHAPTER_4_STATE_ATARI: {
-            ClearBackground(BLACK);
+            ClearBackground(GOD_COLOR);
 
             DrawTexture(atari_assets.textures[0], 0, 0, WHITE);
 
@@ -495,11 +503,13 @@ void chapter_4_draw(Game *game, float dt) {
             }
         } break;
         case CHAPTER_4_STATE_BED_1: {
-            ClearBackground(BLACK);
+            ClearBackground(GOD_COLOR);
 
-                chapter_4_3d_init(game);
             draw_cutscene(&level->bed_cutscene, dt);
+
+                //chapter_4_3d_init(game);
             if (!level->bed_cutscene.active) {
+                chapter_4_3d_init(game);
             }
         } break;
         case CHAPTER_4_STATE_3D: {

@@ -434,7 +434,7 @@ void chapter_3_job_init(Game *game, int which_document_list) {
     switch (which_document_list) {
         case 0: {
             documents[count++] =
-                "Introduction\n----------------\n\nUse UP and DOWN to scroll.\n\nThese are excerpts from documents throughout our company. Your job is to read the document thoroughly and click on any errors to correct them before they are sent-- we mustn't look unprefesional!";
+                "Introduction\n----------------\n\nUse UP and DOWN to scroll.\n\nThese are excerpts from documents throughout our company. Your job is to read the document thoroughly and click on any errors to correct them before they are sent to the next editor-- we mustn't look unprefesional!";
             documents[count++] =
                 "Memo\n-------\n\nDear Team,\n  This is a frendly reminder about our upcoming employee dinner party scheduled for June 20th.\n  Due to the influx of new employees, it'll be a great place to get setled into the company culture!\n  Please ensure you RSVP by June 10th to help with planing the catering arrangements.\n\nBest Regards,\nJane Smith\n(HR Manager)";
             documents[count++] =
@@ -473,11 +473,16 @@ void chapter_3_job_init(Game *game, int which_document_list) {
             documents[count++] =
                 "Email\n-------\n\nDear Tech Solutions Team,\n  Unfortunately, despite your team's efforts, our data management system still has many of the same issues, rendering our employees extremely inefficient.\n  I request that you return and complete the job that you were paid for.\n\nRegards,\nMichael (Project Manager)";
             documents[count++] =
-                "Memo\n-------\n\nDear Team,\n  Over the past three and a half years, we have made great progress as a company under my leadership.\n  Today, we have thestrongest foothold on our market in Earth.\n  I know none of this could have been done without you, my trusted employees. It has been an honour to serve as your CEO, but I believe it is in the best interest of thecompany for me to stand down, and focus on the remainder of my position, until August 22nd.\n  Just remember, there's nothing this company can't do!\n\nLove,\nJohn Briden (CEO)";
+                "Memo\n-------\n\nDear Team,\n  Kindly note that the mandatory anonymous employee experience survey is due by July 1st.\n  Please be brutally honest, we'd love the feedback!\n\nRegards,\nMichael (Project Manager)";
+            documents[count++] =
+                "Memo\n-------\n\nDear Team,\n  Over the past three and a half years, we have made great progress as a company under my leadership.\n  Today, we have a foothold on our market in Earth.\n  I know none of this could have been done without you, my trusted employees. It has been an honour to serve as your CEO, but I believe it is in the best interest of thecompany for me to stand down, and focus on the remainder of my position, until August 22nd.\n  Just remember, there's nothing this company can't do!\n\nLove,\nJohn Briden (CEO)";
             documents[count++] =
                 "Email\n-------\n\nDear Peggy,\n  I received your email, and I'm delighted to hear that you're excited about a collaboration between our two branches. I'm free for lunch on Saturday June 8th, so we can discuss a proposal. Is that fine with your schedule?\n\nRegards,\nHunter (Business Development Manager, Nebraska)";
             documents[count++] = 
-                "\"This work was strictly voluntary, but any animal who absented himself from it would have his rations reduced by half.\" [1]";
+                "The joy of life: the true passion that burns in your soul is one which can never be put out.";
+                //"\"This work was strictly voluntary, but any animal who absented himself from it would have his rations reduced by half.\" [1]";
+
+            // A joy of life: a true passion that burns in your soul is one that can never be put out.
 
             level->minigame = chapter_3_make_job_minigame(&game->level_arena, documents, count);
 
@@ -491,13 +496,44 @@ void chapter_3_job_init(Game *game, int which_document_list) {
             document_register_error_first_occurence(d1, "request", "demand");
 
             Document *d2 = &level->minigame.document_list[2];
-            document_register_error_first_occurence(d2, "great", "some");
-            document_register_error_first_occurence(d2, "thestrongest", "a");
-            document_register_error_first_occurence(d2, "Earth", "Nebraska");
-            document_register_error_first_occurence(d2, "trusted", "underpaid");
-            document_register_error_first_occurence(d2, "honour", "experience");
-            document_register_error_first_occurence(d2, "thecompany", "myself");
-            document_register_error_first_occurence(d2, "nothing", "much");
+            //document_register_error_first_occurence(d2, "Kindly", "Please");
+            document_register_error_first_occurence(d2, "note", "forget");
+            //document_register_error_first_occurence(d2, "that", "remember");
+            document_register_error_first_occurence(d2, "anonymous", "pointless");
+            document_register_error_first_occurence(d2, "Please", "Don't");
+            document_register_error_first_occurence(d2, "love", "hate");
+
+            Document *d3 = &level->minigame.document_list[3];
+            document_register_error_first_occurence(d3, "great", "some");
+            //document_register_error_first_occurence(d3, "thestrongest", "a");
+            document_register_error_first_occurence(d3, "Earth", "Nebraska");
+            document_register_error_first_occurence(d3, "trusted", "underpaid");
+            document_register_error_first_occurence(d3, "honour", "experience");
+            document_register_error_first_occurence(d3, "thecompany", "myself");
+            document_register_error_first_occurence(d3, "nothing", "much");
+            document_register_error_first_occurence(d3, "Love,", "Bye,");
+
+            Document *d5 = &level->minigame.document_list[5];
+            document_register_error_first_occurence(d5, "The", "\"This");
+            document_register_error_first_occurence(d5, "joy", "work");
+            document_register_error_first_occurence(d5, "of", "was");
+            document_register_error_first_occurence(d5, "life:", "strictly");
+            document_register_error_first_occurence(d5, "the", "voluntary,");
+            document_register_error_first_occurence(d5, "true", "but");
+            document_register_error_first_occurence(d5, "passion", "any");
+            document_register_error_first_occurence(d5, "that", "animal");
+            document_register_error_first_occurence(d5, "burns", "who");
+            document_register_error_first_occurence(d5, "in", "absented");
+            document_register_error_first_occurence(d5, "your", "himself");
+            document_register_error_first_occurence(d5, "soul", "from");
+            document_register_error_first_occurence(d5, "is", "it");
+            document_register_error_first_occurence(d5, "one", "would");
+            document_register_error_first_occurence(d5, "which", "have");
+            document_register_error_first_occurence(d5, "can", "his");
+            document_register_error_first_occurence(d5, "never", "rations");
+            document_register_error_first_occurence(d5, "be", "reduced");
+            document_register_error_first_occurence(d5, "put", "by");
+            document_register_error_first_occurence(d5, "out.", "half.\" [1]");
         } break;
         case 2: {
             documents[count++] =
@@ -547,7 +583,8 @@ void chapter_3_job_init(Game *game, int which_document_list) {
             documents[count++] =
                 "He thought of them as inferior to himself, placing himself on a throne above all.\n\nBut truthfully, he envied them!";
             documents[count++] =
-                "\"It doesn't make sense; they had to have made a deal with the devil himself!\"";
+                "Oh, they created their own meaning, found some special place in our universe for themselves.";
+                //"\"It doesn't make sense; they had to have made a deal with the devil himself!\"";
             documents[count++] =
                 "Chase drove home that afternoon, shook.\n\nThe mere weeks of working at that place was enough to sicken him.";
 
@@ -555,6 +592,24 @@ void chapter_3_job_init(Game *game, int which_document_list) {
             level->minigame.draw_background = false;
             level->minigame.window_alpha = 64;
             level->minigame.font_color = WHITE;
+
+            Document *d5 = &level->minigame.document_list[5];
+            document_register_error_first_occurence(d5, "Oh,", "\"It");
+            document_register_error_first_occurence(d5, "they", "doesn't");
+            document_register_error_first_occurence(d5, "created", "make");
+            document_register_error_first_occurence(d5, "their", "sense;");
+            document_register_error_first_occurence(d5, "own", "they");
+            document_register_error_first_occurence(d5, "meaning,", "had");
+            document_register_error_first_occurence(d5, "found", "to");
+            document_register_error_first_occurence(d5, "some", "have");
+            document_register_error_first_occurence(d5, "special", "made");
+            document_register_error_first_occurence(d5, "place", "a");
+            document_register_error_first_occurence(d5, "in", "deal");
+            document_register_error_first_occurence(d5, "our", "with");
+            document_register_error_first_occurence(d5, "universe", "the");
+            document_register_error_first_occurence(d5, "for", "devil");
+            document_register_error_first_occurence(d5, "themselves.", "himself!\"");
+
         } break;
     }
 }
@@ -772,12 +827,12 @@ void chapter_3_init(Game *game) {
                          &game->text[33]);
     atari_text_list_init(&game->text[33],
                          "Girl",
-                         "John is such an ass,\nisn't he?",
+                         "John is such an ass,\nisn't he?\nI heard he's cheating with Jackie.",
                          speed,
                          &game->text[34]);
     atari_text_list_init(&game->text[34],
                          "Some Guy",
-                         "Let's go out for drinks later.",
+                         "Let's go out for drinks later.\nthere's a match going on",
                          speed,
                          &game->text[35]);
     atari_text_list_init(&game->text[35],
@@ -1185,10 +1240,12 @@ set_word_up:
             click_next();
         }
     }
-
+    
+#ifdef DEBUG
     if (IsKeyPressed(KEY_PAGE_DOWN)) {
         click_next();
     }
+#endif
 
     DrawRectangleRec(minigame->finish_button, color);
     DrawRectangleRec(finish_button_progress, GREEN);
@@ -1231,8 +1288,10 @@ void chapter_3_entity_update(Entity *entity, Game *game, float dt) {
 
             float player_speed = 60;
 
+#ifdef DEBUG
             if (IsKeyDown(KEY_P))
                 player_speed *= 5;
+#endif
 
             if (level->state == CHAPTER_3_STATE_HOME ||
                 level->state == CHAPTER_3_STATE_HOME_INSIDE)
@@ -1266,7 +1325,7 @@ void chapter_3_entity_update(Entity *entity, Game *game, float dt) {
 
                 level->end_steps += Vector2Distance(entity->pos, before_pos);
 
-                if (level->end_steps >= 500) {
+                if (level->end_steps >= 500 && !level->black_screen) {
                     add_event(game, chapter_3_goto_window_text, 3);
                     level->black_screen = true;
                 }

@@ -634,7 +634,8 @@ void atari_mid_text_list_init(Text_List *list, char *line,
     list->scale        = 0.125;
     list->scroll_speed = 15;
     list->alpha_speed  = 0.5;
-    list->color        = RED;
+    list->color        = BLACK;
+    list->backdrop_color={163, 116, 80, 255};
     list->center_text  = true;
     list->scroll_type  = EntireLine;
     list->render_type  = Bare;
@@ -672,7 +673,7 @@ void update_camera_3d(Camera3D *camera, float speed, float dt) {
     float dir_y = input_movement_y_axis(dt);//key_down()  - key_up();
 
     if (IsKeyDown(KEY_LEFT_SHIFT) ||
-        (IsGamepadAvailable(0) && IsGamepadButtonDown(0, GAMEPAD_BUTTON_RIGHT_TRIGGER_2))) speed=15;//speed = 7;
+        (IsGamepadAvailable(0) && IsGamepadButtonDown(0, GAMEPAD_BUTTON_RIGHT_TRIGGER_2))) speed = 7;
     if (IsKeyDown(KEY_LEFT_ALT)) speed = 0.5f;
 
     Vector3 saved = camera->target;

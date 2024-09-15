@@ -1,7 +1,7 @@
 FileVersion = 1
 LastConfig = "Debug"
 LastPlatform = "Win64"
-RecentFilesList = ["c:\\dev\\vanishing\\src\\main.cpp", "c:\\dev\\vanishing\\src\\intro.cpp", "c:\\dev\\vanishing\\src\\game.cpp", "c:\\dev\\vanishing\\src\\text.cpp", "c:\\dev\\vanishing\\src\\chapter_epilogue.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strlen.asm", "c:\\dev\\vanishing\\src\\chapter_5.cpp", "c:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.40.33807\\include\\rcamera.h", "c:\\dev\\vanishing\\chapter_5.cpp", "c:\\dev\\vanishing\\game.cpp", "c:\\dev\\vanishing\\main.cpp", "c:\\dev\\vanishing\\util.cpp"]
+RecentFilesList = ["c:\\dev\\vanishing\\src\\chapter_3.cpp", "c:\\dev\\vanishing\\src\\game.cpp", "c:\\dev\\vanishing\\src\\util.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strlen.asm", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\abort.cpp", "c:\\dev\\vanishing\\src\\main.cpp", "c:\\dev\\vanishing\\src\\intro.cpp", "c:\\dev\\vanishing\\src\\text.cpp", "c:\\dev\\vanishing\\src\\chapter_epilogue.cpp", "c:\\dev\\vanishing\\src\\chapter_5.cpp", "c:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.40.33807\\include\\rcamera.h", "c:\\dev\\vanishing\\chapter_5.cpp", "c:\\dev\\vanishing\\game.cpp", "c:\\dev\\vanishing\\main.cpp", "c:\\dev\\vanishing\\util.cpp"]
 
 [MainWindow]
 X = 362
@@ -24,8 +24,41 @@ DefaultDocumentsTabbedView = true
 Type = "TabbedView"
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
+TabLabel = "strlen.asm"
+TabWidth = 96.66666
+TabIsPinned = false
+Type = "SourceViewPanel"
+FilePath = "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strlen.asm"
+
+[[MainDockingFrame.DockedWidgets.Tabs]]
+Active = true
+TabLabel = "chapter_3.cpp"
+TabWidth = 118.0
+TabIsPinned = false
+Type = "SourceViewPanel"
+FilePath = "c:\\dev\\vanishing\\src\\chapter_3.cpp"
+CursorPos = 26058
+VertPos = 13570.0
+
+[[MainDockingFrame.DockedWidgets.Tabs]]
+TabLabel = "util.cpp"
+TabWidth = 81.33334
+TabIsPinned = false
+Type = "SourceViewPanel"
+FilePath = "c:\\dev\\vanishing\\src\\util.cpp"
+CursorPos = 8949
+VertPos = 8924.0
+
+[[MainDockingFrame.DockedWidgets.Tabs]]
+TabLabel = "abort.cpp"
+TabWidth = 93.33334
+TabIsPinned = false
+Type = "SourceViewPanel"
+FilePath = "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\abort.cpp"
+
+[[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "intro.cpp"
-TabWidth = 90.0
+TabWidth = 80.0
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\intro.cpp"
@@ -38,8 +71,7 @@ TabWidth = 74.0
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\text.cpp"
-CursorPos = 15253
-VertPos = 13455.0
+CursorPos = 18558
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "chapter_epilogue.cpp"
@@ -50,7 +82,6 @@ FilePath = "c:\\dev\\vanishing\\src\\chapter_epilogue.cpp"
 CursorPos = 22359
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
-Active = true
 TabLabel = "main.cpp"
 TabWidth = 81.33334
 TabIsPinned = false
@@ -65,8 +96,8 @@ TabWidth = 84.66666
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\game.cpp"
-CursorPos = 9748
-VertPos = 9139.05
+CursorPos = 4494
+VertPos = 3910.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "rcamera.h"
@@ -82,7 +113,7 @@ TabWidth = 108.0
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\chapter_5.cpp"
-CursorPos = 98274
+CursorPos = 73412
 
 [[MainDockingFrame.DockedWidgets]]
 RequestedWidth = 813.0
@@ -111,7 +142,7 @@ TabWidth = 85.33334
 TabIsPinned = false
 Type = "WatchPanel"
 Columns = [{Width = 250.0}, {Width = 362.0}, {Width = 250.0}]
-Items = ["game", ""]
+Items = ["d5", ""]
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 TabLabel = "Auto"
@@ -160,12 +191,7 @@ Type = "BreakpointPanel"
 [[Breakpoints]]
 File = "c:\\dev\\vanishing\\src\\game.cpp"
 Line = 208
-Column = 6
-
-[[Breakpoints]]
-File = "c:\\dev\\vanishing\\src\\game.cpp"
-Line = 402
-Column = 6
+Column = 4
 
 [[BookmarkFolders]]
 Title = ""

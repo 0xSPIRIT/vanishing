@@ -29,7 +29,8 @@ struct Text {
 
     Font *font = &global_font;
     int font_spacing;
-    Color color, bg_color;
+    Color color, bg_color, backdrop_color;
+    bool  background;
 
     float scale;
 
@@ -73,6 +74,8 @@ struct Text_List {
     Location location       = Location::Bottom;
     Color color             = RAYWHITE;
     Color bg_color          = BLACK;
+    Color backdrop_color    = {0, 0, 0, 0};
+    bool  background;
     float alpha_speed       = 1;
     bool center_text;
     float scale = 1;
@@ -242,15 +245,27 @@ bool text_update_and_draw(Text *text, Vector2 offset, float dt) {
             pos.x = render_width/2.f - size.x/2.f;
         }
 
+        if (text->backdrop_color.a > 0) {
+            if (text->background)
+                DrawRectangle(pos.x, pos.y, size.x+1, size.y+1, BLACK);
+
+            Color backdrop = text->backdrop_color;
+            backdrop.a *= text->alpha;
+
+            DrawTextEx(*text->font, line.text, {1+(float)((int)pos.x), 1+(float)((int)pos.y)}, (float)text->font->baseSize, text->font_spacing, backdrop);
+        }
+
         DrawTextEx(*text->font, line.text, {(float)((int)pos.x), (float)((int)pos.y)}, (float)text->font->baseSize, text->font_spacing, color);
         pos.y += line_height;
     }
 
+#ifdef DEBUG
     if (IsKeyDown(KEY_M)) {
         text_set_to_end(text);
         text->finished = true;
         return true;
     }
+#endif
 
     if (text->not_first_frame && !text->finished && is_action_pressed()) {
         if (is_text_at_end(text)) {
@@ -303,14 +318,16 @@ void text_list_init(Text_List *list, char *speaker, char *text_string,
 
             Text text = {};
 
-            text.scale         = list->scale;
-            text.font          = list->font;
-            text.font_spacing  = list->font_spacing;
-            text.center_text   = list->center_text;
-            text.color         = list->color;
-            text.bg_color      = list->bg_color;
-            text.scroll_speed  = list->scroll_speed;
-            text.alpha_speed   = list->alpha_speed;
+            text.scale          = list->scale;
+            text.font           = list->font;
+            text.font_spacing   = list->font_spacing;
+            text.center_text    = list->center_text;
+            text.color          = list->color;
+            text.bg_color       = list->bg_color;
+            text.backdrop_color = list->backdrop_color;
+            text.scroll_speed   = list->scroll_speed;
+            text.alpha_speed    = list->alpha_speed;
+            text.background     = list->background;
 
             Vector2 pos = { list->padding, list->padding + cum };
 
@@ -558,19 +575,56 @@ Text_List *text_list_update_and_draw(Text_List *list, void *user_data, float dt)
 
             for (int i = 0; i < list->choice_count; i++) {
                 Color color = list->color;
-                if (i == list->choice_index) color = GREEN;
+                Color bg = BLACK;
+                Color arrow_color = BLACK;
+
+                float xoff = 0;
+
+                // HORRIBLE Hack because i'm so lazy and I don't
+                // want to structure things properly.
+
+                if (chapter == 7 && !epilogue_text_change_color) {
+                    color = BLACK;
+                    bg = {200,200,200,255};
+                }
+
+                if (epilogue_text_change_color) {
+                    arrow_color = WHITE;
+                }
+
+                if (i == list->choice_index) {
+                    xoff = 10;
+
+                    // choice draw arrow
+
+                    float size = 8;
+                    float pad = 4;
+
+                    //Vector2 v1 = { pad, pos.y - size};
+                    //Vector2 v2 = { pad + v1.x, v1.y + size};
+                    //Vector2 v3 = { pad + v1.x + size , v1.y };
+
+                    Vector2 v1 = { pad, pos.y + size/4 };
+                    Vector2 v2 = { pad + size, pos.y + size/2 + size/4 };
+                    Vector2 v3 = { pad, pos.y + size + size/4 };
+
+                    DrawTriangle(int_vec2(v1), int_vec2(v3), int_vec2(v2), arrow_color);
+                }
 
                 String *choice = &list->choices[i];
                 Vector2 size = MeasureTextEx(*list->font, choice->text,
                                              (float)list->font->baseSize,
                                              list->font_spacing);
 
-                DrawRectangleRec({pos.x, pos.y, size.x, size.y}, BLACK);
+                //DrawRectangleRec({pos.x, pos.y, size.x, size.y}, BLACK);
 
                 pos.x = (int)pos.x;
                 pos.y = (int)pos.y;
 
-                DrawTextEx(*list->font, choice->text, pos, (float)list->font->baseSize, list->font_spacing, color);
+                DrawTextEx(*list->font, choice->text, Vector2Add(pos, {xoff+1,1}), (float)list->font->baseSize, list->font_spacing, bg);
+                DrawTextEx(*list->font, choice->text, Vector2Add(pos, {xoff+2,2}), (float)list->font->baseSize, list->font_spacing, bg);
+
+                DrawTextEx(*list->font, choice->text, Vector2Add(pos, {xoff,0}), (float)list->font->baseSize, list->font_spacing, color);
                 pos.y += size.y;
             }
         }

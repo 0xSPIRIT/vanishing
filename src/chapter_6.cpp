@@ -49,10 +49,12 @@ void chapter_6_text(bool scroll, bool chase, Text_List *list, char *line,
     list->scale        = 0.125;
     list->scroll_speed = 15;
 
-    if (chase)
+    if (chase) {
         list->color = WHITE;
-    else
-        list->color = RED;
+    } else {
+        list->color = GOD_COLOR;
+        list->backdrop_color = GOD_COLOR_BACKDROP;
+    }
 
     list->center_text = true;
     if (scroll)
@@ -232,8 +234,10 @@ void chapter_6_entity_update(Entity *entity, Game *game, float dt) {
             float speed = (float)(entity->pos.y - 60) / (float)render_height;
             speed *= 60;
 
+#ifdef DEBUG
             if (IsKeyDown(KEY_P))
                 speed *= 10;
+#endif
 
             int move_x = input_movement_x_axis_int(dt);//key_right() - key_left();
             int move_y = input_movement_y_axis_int(dt);//key_down()  - key_up();
@@ -358,7 +362,9 @@ void chapter_6_update(Game *game, float dt) {
                             level->god_scroll = 0;
                     }
                 } else {
+#ifdef DEBUG
                     level->god_scroll = render_height;
+#endif
                 }
             }
 

@@ -464,6 +464,7 @@ void chapter_5_podium_text_red(Text_List *list, bool italics, char *line, Text_L
     list->center_text = true;
 
     list->color = RED;
+    //list->backdrop_color = GOD_COLOR_BACKDROP;
     list->bg_color = BLACK;
 
     text_list_init(list, 0, line, next);
@@ -679,6 +680,7 @@ void chapter_5_scene_init(Game *game) {
             game->textbox_alpha = 220;
 
             level->camera.position   = { train_distance, level->camera_height, 0 };
+            //level->camera.position   = BlenderPosition3D(12.43f, -55.95f, level->camera_height);
             level->camera.target     = { 0.00f, level->camera_height, 2.00f };
             level->camera.up         = { 0, 1, 0 };
             level->camera.fovy       = FOV_DEFAULT;
@@ -696,6 +698,11 @@ void chapter_5_scene_init(Game *game) {
             train->closed       = true;
             train->moving       = true;
             train->player_in    = true;
+            /*
+            train->closed       = false;
+            train->moving       = false;
+            train->player_in    = false;
+            */
             train->able_to_close = false;
             train->speed = 0;
 
@@ -952,18 +959,18 @@ void chapter_5_scene_init(Game *game) {
                            nullptr);
 
             chapter_5_text(&game->text[46],
-                           "Hope",
+                           "Penny",
                            "Hi, Chase.",
                            30,
                            &game->text[47]);
             chapter_5_text(&game->text[47],
                            "Chase",
-                           "...\rOh gosh, hi Hope.\rI didn't realize you were gonna be here.",
+                           "...\rOh gosh, hi Penny.\rI didn't realize you were gonna be here.",
                            30,
                            &game->text[48]);
             chapter_5_text(&game->text[48],
-                           "Hope",
-                           "We're not that close yet.\rCreep.",
+                           "Penny",
+                           "Um, we're not that close.\rCall me Penelope, creep.",
                            30,
                            nullptr);
 
@@ -1117,17 +1124,17 @@ void chapter_5_scene_init(Game *game) {
                            nullptr);
 
             chapter_5_text(&game->text[84],
-                           "Hope",
+                           "Penny",
                            "Hi, Chase.",
                            30,
                            &game->text[85]);
             chapter_5_text(&game->text[85],
                            "Chase",
-                           "Oh, hi Hope!",
+                           "Oh, hi Penny!",
                            30,
                            &game->text[86]);
             chapter_5_text(&game->text[86],
-                           "Hope",
+                           "Penny",
                            "It's good to see you!",
                            30,
                            &game->text[87]);
@@ -1137,7 +1144,7 @@ void chapter_5_scene_init(Game *game) {
                            30,
                            &game->text[88]);
             chapter_5_text(&game->text[88],
-                           "Hope",
+                           "Penny",
                            "Yep.\rWell, I'll talk to you later.",
                            30,
                            nullptr);
@@ -1327,17 +1334,21 @@ void chapter_5_scene_init(Game *game) {
 
             chapter_5_podium_text(&game->text[1],
                                   true,
-                                  "Again, I found myself in the boiling void.\rI was THIRSTY.",
+                                  "Again, I found myself in the boiling void.\rI was THIRSTY.\rBut how could I?\rDidn't I escape this place the night before?",
                                   nullptr);
 
             chapter_5_podium_text(&game->text[2],
                                   true,
-                                  "After an eternity of unbearable pain,\nI came upon a strange house.\rI opened the door.",
+                                  "No.\r... Of course I hadn't.\rHow silly of me to have thought that.",
+                                  &game->text[101]);
+            chapter_5_podium_text(&game->text[101],
+                                  true,
+                                  "Days passed.\rAfter an eternity of unbearable pain,\nI came upon a cottage.\rI opened the door.",
                                   nullptr);
 
             chapter_5_podium_text(&game->text[3],
                                   false,
-                                  "A wave of chill soothed his aching body,\nhalf-dead from the outside.\rThere was a stock of crisp, ice-cold water.\rSweet, sweet relief.",
+                                  "A wave of chill soothed his body,\nhalf-dead from the outside.\rOn the floor was a stock of crisp, ice-cold water.\rSweet, sweet relief.",
                                   nullptr);
             game->text[3].text[2].font = &italics_font;
 
@@ -1387,7 +1398,7 @@ void chapter_5_scene_init(Game *game) {
             chapter_5_podium_text(&game->text[12],
                                   true,
                                   "Blisters became the bottoms of my feet.\r"
-                                  "And yet, something compels me to brave this\nhellscape.\rAnd it fascinates me.",
+                                  "And yet, something compelled me to endure this.\r... I was confused, or fascinated.",
                                   nullptr);
 
             for (int i = 45; i <= 49; i++) {
@@ -1701,7 +1712,7 @@ void chapter_5_scene_init(Game *game) {
                            &game->text[12]);
             chapter_5_text(&game->text[12],
                            "      ",
-                           "I'll call you back if I do escape.\rI Promise.",
+                           "I'll call you back if I do escape.\rI promise.",
                            speed,
                            &game->text[13]);
             chapter_5_text(&game->text[13],
@@ -1718,7 +1729,7 @@ void chapter_5_scene_init(Game *game) {
             game->text[14].callbacks[0] = chapter_5_end_text_begin_delayed;
 
             chapter_5_text(&game->text[30],
-                           "Hope",
+                           "Penny",
                            "So, what do you think?",
                            speed,
                            &game->text[31]);
@@ -1728,7 +1739,7 @@ void chapter_5_scene_init(Game *game) {
                            speed,
                            &game->text[32]);
             chapter_5_text(&game->text[32],
-                           "Hope",
+                           "Penny",
                            "Have you found what you're looking for?\rMeaning in your suffering?",
                            speed,
                            &game->text[33]);
@@ -1738,7 +1749,7 @@ void chapter_5_scene_init(Game *game) {
                            speed,
                            &game->text[34]);
             chapter_5_text(&game->text[34],
-                           "Hope",
+                           "Penny",
                            "Me too.\rWhat, do you think you're the only one who\nhasn't?",
                            speed,
                            &game->text[35]);
@@ -1748,7 +1759,7 @@ void chapter_5_scene_init(Game *game) {
                            speed,
                            &game->text[36]);
             chapter_5_text(&game->text[36],
-                           "Hope",
+                           "Penny",
                            "No, of course not.\rSome people have it easier than others,\rbut that is how it is.",
                            speed,
                            &game->text[37]);
@@ -1758,7 +1769,7 @@ void chapter_5_scene_init(Game *game) {
                            speed,
                            &game->text[38]);
             chapter_5_text(&game->text[38],
-                           "Hope",
+                           "Penny",
                            "You're trying too hard to find a solution,\nChase.\rHave you always been like this?",
                            speed,
                            &game->text[39]);
@@ -1768,7 +1779,7 @@ void chapter_5_scene_init(Game *game) {
                            speed,
                            &game->text[40]);
             chapter_5_text(&game->text[40],
-                           "Hope",
+                           "Penny",
                            "Not always?",
                            speed,
                            &game->text[41]);
@@ -1936,7 +1947,7 @@ void chapter_5_update_train(Game *game, float dt) {
 
     Chapter_5_Train *train = &level->train;
 
-#if 1
+#ifdef DEBUG
     if (IsKeyPressed(KEY_K)) {
         train->position.x = 0;
         train->closed = true;
@@ -2555,10 +2566,12 @@ void gallery_check_quotes(Game *game, float dt) {
     } else if (game->current == 0) {
         level->camera.fovy = FOV_DEFAULT;
 
+        /*
         if (IsKeyDown(KEY_F))
             level->camera.fovy = FOV_DEFAULT/2;
         else
             level->camera.fovy = FOV_DEFAULT;
+            */
     }
 }
 
@@ -2607,7 +2620,7 @@ void chapter_5_update_player_dinner_party(Game *game, float dt) {
 
     if (!level->good) {
         if (level->sitting_timer >= 12) {
-            float debug_speed_slider = 10;
+            float debug_speed_slider = 1;
 
             level->camera.target = lerp_vector3(level->camera.target,
                                                 Vector3Add(get_chair_position(level->hope), {0,1.65f,0}),
@@ -2771,7 +2784,7 @@ void chapter_5_update(Game *game, float dt) {
                     Chapter_5_Podium *podium = &level->staircase_podiums[i];
                     Vector2 podium_pos = *(Vector2*)&podium->position;
 
-                    if (!podium->read && Vector2Distance(camera, podium_pos) < 2) {
+                    if (!podium->read && Vector2Distance(camera, podium_pos) < 2 && level->camera.position.y == level->camera_height) {
                         level->staircase_podium_current = i;
 
                         if (is_action_pressed()) {
@@ -3073,7 +3086,7 @@ void chapter_5_draw(Game *game) {
             EndMode3D();
 
             if (level->talk_to_hope_popup) {
-                draw_popup("Talk to Hope", GOLD, Top);
+                draw_popup("Talk to Penny", GOLD, Top);
             }
         } break;
     }

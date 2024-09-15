@@ -8,8 +8,11 @@ V1 squad
   - Aliyah
   - Gyasi
 
-- Change "it calls itself" to "Enscribed on the
-  bottom is"
+Things to remove
+ - Shift speed is too much
+ - Skip text in chapter 4
+ - change chapter 1 to 5 seconds
+ - remove P
 
 I did a run through of the game. One thing that it's
 missing is coherency. I need to add more glue to
@@ -28,17 +31,6 @@ connected in the first place.
   somehow draw it in the same spot?
 
 - "I'm sick of chasing" - double entendre
-
-x Podiums in hotel staircase scene:
-  x Are you ready for the party tomorrow night?
-    Tomorrow you're going to have to meet them and talk to them.
-    Are you ready for the party tomorrow night?
-    How are you going to enter the room?
-    What are you going to say?
-    Make sure to smile.
-    What will they say in return..?
-    They might hate you.
-    Come, let me show you what could happen.
 
 - In the white parts, use intro font: Ex pluribus unum veritas
 

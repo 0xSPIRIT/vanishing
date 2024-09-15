@@ -170,6 +170,13 @@ float go_to(float a, float b, float speed) {
     return result;
 }
 
+inline Vector2 int_vec2(Vector2 in) {
+    in.x = (int)in.x;
+    in.y = (int)in.y;
+
+    return in;
+}
+
 void print_rectangle(Rectangle rect) {
     printf("{%f, %f, %f, %f}", rect.x, rect.y, rect.width, rect.height);
 }
@@ -396,10 +403,12 @@ Find_Word_Result find_word(const char *string, const char *word) {
     int string_length = (int)strlen(string);
     for (int i = 0; i < string_length; i++) {
         if (string_compare(string + i, word)) {
-            result.start_index = i;
-            result.end_index = i + (int)strlen(word) - 1;
+            if (i == 0 || (i > 0 && isspace(string[i-1]))) {
+                result.start_index = i;
+                result.end_index = i + (int)strlen(word) - 1;
 
-            return result;
+                return result;
+            }
         }
     }
 

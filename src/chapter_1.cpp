@@ -1,6 +1,6 @@
 #define DESERT_COLOR { 214, 194, 105, 255 }
 #define FOREST_COLOR { 50, 168, 82, 255 }
-#define CACTUS_COUNT 4
+#define CACTUS_COUNT 8
 
 enum Level_Chapter_1_State {
     LEVEL_CHAPTER_1_STATE_BEFORE_PHONE = 0,
@@ -21,8 +21,8 @@ enum Direction {
     DIRECTION_RIGHT
 };
 
-int chapter_1_god_text_y[] = { 38, 5, 55, 16 };
-int chapter_1_god_text_y_end[] = { 120, 153, 103, 146};
+int chapter_1_god_text_y[] = { 55, 16 };
+int chapter_1_god_text_y_end[] = { 103, 146};
 
 struct Level_Chapter_1 {
     Color background_color;
@@ -42,6 +42,7 @@ struct Level_Chapter_1 {
 
     Direction last_movements[4];
 
+    bool before_first_text;
     int god_index;
     bool intro;
     float god_scroll;
@@ -51,6 +52,21 @@ struct Level_Chapter_1 {
 void chapter_1_end(void *game_ptr) {
     Game *game = (Game *)game_ptr;
     add_event(game, atari_queue_deinit_and_goto_intro, 2);
+}
+
+void chapter_1_first_text(Game *game) {
+    Level_Chapter_1 *level = (Level_Chapter_1*)game->level;
+
+    game->current = &game->text[0];
+    level->before_first_text = false;
+}
+
+void chapter_1_end_intro(Game *game) {
+    Level_Chapter_1 *level = (Level_Chapter_1*)game->level;
+
+    level->intro = false;
+    level->before_first_text = true;
+    add_event(game, chapter_1_first_text, 2);
 }
 
 void chapter_1_start_phone_call(Game *game) {
@@ -114,8 +130,8 @@ void chapter_1_activate_node(void *ptr_game) {
             player->alarm[0] = 2; // seconds
 
             Entity *footstep = chapter_1_make_entity(ENTITY_BLOOD,
-                                           player->pos.x,
-                                           player->pos.y + entity_texture_height(player) - 3);
+                                                     player->pos.x,
+                                                     player->pos.y + entity_texture_height(player) - 3);
             array_add(&game->entities, footstep);
 
             int state = player->chap_1_player.walking_state;
@@ -168,8 +184,6 @@ void chapter_1_init(Game *game) {
 
     textures[17] = load_texture(RES_DIR "art/intro1.png");
     textures[18] = load_texture(RES_DIR "art/intro2.png");
-    textures[19] = load_texture(RES_DIR "art/intro3.png");
-    textures[20] = load_texture(RES_DIR "art/intro4.png");
 
     textures[21] = load_texture(RES_DIR "art/window_1.png");
 
@@ -182,7 +196,6 @@ void chapter_1_init(Game *game) {
     Entity *player = chapter_1_make_entity(ENTITY_PLAYER, render_width/2 - 4, render_height/2 - 8);
 
     array_add(&game->entities, player);
-
 
     float speed = 15;
 
@@ -217,13 +230,13 @@ void chapter_1_init(Game *game) {
                          speed,
                          &game->text[10]);
     atari_text_list_init(&game->text[8],
-                         "Chase",
-                         "On the bottom is inscribed\nC0291BA16324 (READ ERROR).",
+                         0,
+                         "On the bottom is inscribed:\nC0291BA16324 (READ ERROR).",
                          speed,
                          &game->text[10]);
     atari_text_list_init(&game->text[9],
                          0,
-                         "On the bottom is inscribed\nDC6F8203351 (READ ERROR).",
+                         "On the bottom is inscribed:\nDC6F8203351 (READ ERROR).",
                          speed,
                          &game->text[10]);
 
@@ -306,42 +319,52 @@ void chapter_1_init(Game *game) {
                          nullptr);
 
     speed = 10;
+
     /*
-       atari_text_list_init(&game->text[23],
-       "Chase",
-       "Please... God... help...",
-       speed,
-       nullptr);
-     */
+    atari_mid_text_list_init(&game->text[24],
+                             "I do not know what\nI see,\rbecause there is\nnothing visible.",
+                             &game->text[25]);
+    atari_mid_text_list_init(&game->text[25],
+                             "I do not know how to\nname you,\rbecause I don't know\nwhat you are.",
+                             &game->text[26]);
+    atari_mid_text_list_init(&game->text[26],
+                             "Should anyone tell me\nyou are named by\nthis or that name,\rI know it must not\nbe,",
+                             &game->text[27]);
+    atari_mid_text_list_init(&game->text[27],
+                             "For the veil beyond\nwhich you are succeeds\nthe boundary of names\nitself.",
+                             &game->text[28]);
+    atari_mid_text_list_init(&game->text[28],
+                             "This veil stands firm,\rmade of diamond bars.\rInsurmountable.",
+                             &game->text[29]);
+    atari_mid_text_list_init(&game->text[29],
+                             "I try to peek through\nthe gaps.\rTo quench my thirst.",
+                             &game->text[30]);
+    atari_mid_text_list_init(&game->text[30],
+                             "I see the others\rsmiling.\n\rAre you even there?",
+                             0);
+                             */
 
     atari_mid_text_list_init(&game->text[24],
-                             "When will you reveal\nyourself to me?",
+                             "the insurmountable veil\nstands firm, made of\ndiamond bars.",
                              &game->text[25]);
-
     atari_mid_text_list_init(&game->text[25],
-                             "I do not know what\nI see,\rbecause there is\nnothing visible.",
+                             "i try to peek through\nthe gaps to find her.\rto quench my thirst.",
                              &game->text[26]);
-
     atari_mid_text_list_init(&game->text[26],
-                             "I do not know how to\nname you,\rbecause I don't know\nwhat you are.",
+                             "i don't know what i see,\rbecause there is\nnothing visible.",
                              &game->text[27]);
-
     atari_mid_text_list_init(&game->text[27],
-                             "You have no form\rbecause your nature is\nboundless.",
+                             "i don't know how to\nname you, because I\ndon't know what\nyou are.",
                              &game->text[28]);
-
     atari_mid_text_list_init(&game->text[28],
-                             "I saw you up until that\nnight, staring at the\nstars.",
+                             "should anyone tell me\nyou are named by\nthis name or that name,\ri know it must not\nbe.",
                              &game->text[29]);
-
     atari_mid_text_list_init(&game->text[29],
-                             "But, if you are here,",
+                             "because the veil beyond\nwhich you are suceeds\nthe boundary of names\nitself.",
                              &game->text[30]);
-
     atari_mid_text_list_init(&game->text[30],
-                             "Please help me.",
+                             "but if you do exist,\r\n... please help me.",
                              nullptr);
-
 
     atari_mid_text_list_init(&game->text[31],
                              "He tried getting out\nof bed.",
@@ -406,12 +429,12 @@ void chapter_1_init(Game *game) {
                          &game->text[45]);
     atari_text_list_init(&game->text[45],
                          "Eleanor",
-                         "Hope.",
+                         "Penny.",
                          speed,
                          &game->text[46]);
     atari_text_list_init(&game->text[46],
                          "Chase",
-                         "Hope?\rJason's Hope?",
+                         "Penny?\rJason's Penny?",
                          speed,
                          &game->text[47]);
     atari_text_list_init(&game->text[47],
@@ -436,7 +459,7 @@ void chapter_1_init(Game *game) {
                          &game->text[51]);
     atari_text_list_init(&game->text[51],
                          "Chase",
-                         "It's JASON's Hope.",
+                         "It's JASON's Penny.",
                          speed,
                          &game->text[52]);
     atari_text_list_init(&game->text[52],
@@ -446,7 +469,7 @@ void chapter_1_init(Game *game) {
                          &game->text[53]);
     atari_text_list_init(&game->text[53],
                          "Eleanor",
-                         "That doesn't matter,\rtrust me.",
+                         "They break up every\n2 days anyways.\rIt doesn't matter, trust me.",
                          speed,
                          &game->text[54]);
     atari_text_list_init(&game->text[54],
@@ -615,8 +638,10 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
 
             player->base_collider = {0, 3*texture_height/4, texture_width, texture_height/4};
 
+#ifdef DEBUG
             if (IsKeyDown(KEY_P))
                 player_speed *= 10;
+#endif
 
             Vector2 velocity = { dir_x * player_speed * dt, dir_y * player_speed * dt };
 
@@ -882,11 +907,11 @@ void chapter_1_entity_draw(Entity *e, Game *game) {
 void chapter_1_update(Game *game, float dt) {
     Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
 
-    if (level->state == LEVEL_CHAPTER_1_PHONE_CALL) {
+    if (level->state == LEVEL_CHAPTER_1_PHONE_CALL || (level->intro && level->god_index == -1) || level->before_first_text) {
         return;
     }
 
-    if (level->intro) {
+    if (level->intro && level->god_index != -1) {
         level->god_scroll += 8 * dt;
 
         if (level->god_scroll > chapter_1_god_text_y_end[level->god_index])
@@ -895,13 +920,15 @@ void chapter_1_update(Game *game, float dt) {
         if (is_action_pressed()) {
             if (level->god_scroll == render_height) {
                 level->god_index++;
-                if (level->god_index > 3) {
-                    level->intro = false;
-                    game->current = &game->text[0];
+                if (level->god_index > 1) {
+                    level->god_index = -1;
+                    add_event(game, chapter_1_end_intro, 4);
                 }
                 level->god_scroll = chapter_1_god_text_y[level->god_index];
             } else {
+#ifdef DEBUG
                 level->god_scroll = render_height;
+#endif
             }
         }
         return;
@@ -959,8 +986,24 @@ void chapter_1_draw(Game *game) {
     if (level->state == LEVEL_CHAPTER_1_PHONE_CALL) return;
 
     if (level->intro) {
+        if (level->god_index == -1) {
+            ClearBackground(BLACK);
+            return;
+        }
+
         DrawTexture(atari_assets.textures[17 + level->god_index], 0, 0, WHITE);
         DrawRectangle(0, level->god_scroll, render_width, render_height, BLACK);
+
+        if (level->god_scroll == render_height) {
+            float size = 5;
+            float pad = size*2;
+
+            Vector2 v1 = { render_width - size - pad, render_height - size * 2 - pad/2};
+            Vector2 v2 = { v1.x + size/2.f, v1.y + size};
+            Vector2 v3 = { v1.x + size , v1.y };
+
+            DrawTriangle(v1, v2, v3, WHITE);
+        }
         return;
     }
 
