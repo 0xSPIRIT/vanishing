@@ -1,4 +1,4 @@
-#define MAX_DOCUMENTS 16
+#define MAX_DOCUMENTS   16
 #define MAX_CORRECTIONS 256
 
 enum Chapter_3_State {
@@ -123,12 +123,17 @@ void document_register_error(Document *doc, int start_index,
     doc->error_count++;
 }
 
-void document_register_error_first_occurence(Document *doc, char *word, char *correction) {
-    Find_Word_Result result = find_word(doc->string, word);
+// n starts at 1.
+void document_register_error_nth_occurrence(Document *doc, int n, char *word, char *correction) {
+    Find_Word_Result result = find_word(doc->string, word, n);
 
     if (result.start_index != -1 && result.end_index != -1) {
         document_register_error(doc, result.start_index, result.end_index, correction);
     }
+}
+
+void document_register_error_first_occurrence(Document *doc, char *word, char *correction) {
+    document_register_error_nth_occurrence(doc, 1, word, correction);
 }
 
 Chapter_3_Job_Minigame chapter_3_make_job_minigame(Arena *level_arena,
@@ -198,7 +203,7 @@ Chapter_3_Job_Minigame chapter_3_make_job_minigame(Arena *level_arena,
         int string_length = (int)strlen(document->string);
 
         for (int i = 0; i < string_length; i++) {
-            if (i+1 >= string_length-1 || (isspace(document->string[i+1]) && !isspace(document->string[i]))) {
+            if (i >= string_length-1 || (isspace(document->string[i+1]) && !isspace(document->string[i]))) {
                 word.end_index = i;
 
                 document_register_word(document, word.start_index, word.end_index);
@@ -440,31 +445,31 @@ void chapter_3_job_init(Game *game, int which_document_list) {
             documents[count++] =
                 "Email\n-------\n\nDear Tech Solutions Team,\n  We're experiencing a persistant issue with our data management system and is causing noticable reductions in employees' eficiences and qualities of life.\n  We are reaching out to you in hopes of finding a solution that can retsore functionality to our operation. Your expertise and guidance in this matter would be invaluable to us.\n\nRegards,\nMichael (Project Manager)";
             documents[count++] =
-                "Memo\n-------\n\nNotice for all employees:\n  Please be adviesd that the copier machien is not wokring. We brought a replacemnet and it is arriving next Monday.";
+                "Memo\n-------\n\nNotice for all employees:\n  Please be adviesd that the copier machien is not wokring. We bought a replacemnet and it is arriving next Monday.";
             documents[count++] =
-                "Email\n-------\n\nDear Peggy,\n  Hopefully this isn't picked up by the system. We met a few weeks ago at the business meeting in Sydney; we had dinner that evening. I'm following up on potential collaboration opportunities between our branches that may be beneficial to us both.\n  If there are any barriers or concerns, please let me know.\n\nWarm regards,\nHunter (Business Development Manager, Nebraska)";
+                "Email\n-------\n\nDear Peggy,\n  We met a few weeks ago at the business meeting in Sydney; we had dinner that evening. I'm following up on potential collaboration opportunities between our branches that may be beneficial to us both.\n  If there are any barriers or concerns, please let me know.\n\nWarm regards,\nHunter (Business Development Manager, Nebraska)";
 
             level->minigame = chapter_3_make_job_minigame(&game->level_arena, documents, count);
 
             Document *d0 = &level->minigame.document_list[0];
-            document_register_error_first_occurence(d0, "unprefesional", "unprofessional");
+            document_register_error_first_occurrence(d0, "unprefesional!", "unprofessional.");
 
             Document *d1 = &level->minigame.document_list[1];
-            document_register_error_first_occurence(d1, "frendly", "friendly");
-            document_register_error_first_occurence(d1, "setled",  "settled");
-            document_register_error_first_occurence(d1, "planing", "planning");
+            document_register_error_first_occurrence(d1, "frendly", "friendly");
+            document_register_error_first_occurrence(d1, "setled",  "settled");
+            document_register_error_first_occurrence(d1, "planing", "planning");
 
             Document *d2 = &level->minigame.document_list[2];
-            document_register_error_first_occurence(d2, "persistant", "persistent");
-            document_register_error_first_occurence(d2, "noticable",  "noticeable");
-            document_register_error_first_occurence(d2, "eficiences", "efficiencies");
-            document_register_error_first_occurence(d2, "retsore",    "restore");
+            document_register_error_first_occurrence(d2, "persistant", "persistent");
+            document_register_error_first_occurrence(d2, "noticable",  "noticeable");
+            document_register_error_first_occurrence(d2, "eficiences", "efficiencies");
+            document_register_error_first_occurrence(d2, "retsore",    "restore");
 
             Document *d3 = &level->minigame.document_list[3];
-            document_register_error_first_occurence(d3, "adviesd", "advised");
-            document_register_error_first_occurence(d3, "machien", "machine");
-            document_register_error_first_occurence(d3, "wokring", "working");
-            document_register_error_first_occurence(d3, "replacemnet", "replacement");
+            document_register_error_first_occurrence(d3, "adviesd", "advised");
+            document_register_error_first_occurrence(d3, "machien", "machine");
+            document_register_error_first_occurrence(d3, "wokring.", "working.");
+            document_register_error_first_occurrence(d3, "replacemnet", "replacement");
 
         } break;
         case 1: {
@@ -487,89 +492,89 @@ void chapter_3_job_init(Game *game, int which_document_list) {
             level->minigame = chapter_3_make_job_minigame(&game->level_arena, documents, count);
 
             Document *d0 = &level->minigame.document_list[0];
-            document_register_error_first_occurence(d0, "cofee", "coffee");
-            document_register_error_first_occurence(d0, "wokring", "working");
-            document_register_error_first_occurence(d0, "cuboard", "cupboard");
-            document_register_error_first_occurence(d0, "whod", "who'd");
+            document_register_error_first_occurrence(d0, "cofee", "coffee");
+            document_register_error_first_occurrence(d0, "wokring.", "working.");
+            document_register_error_first_occurrence(d0, "cuboard", "cupboard");
+            document_register_error_first_occurrence(d0, "whod", "who'd");
 
             Document *d1 = &level->minigame.document_list[1];
-            document_register_error_first_occurence(d1, "request", "demand");
+            document_register_error_first_occurrence(d1, "request", "demand");
 
             Document *d2 = &level->minigame.document_list[2];
-            //document_register_error_first_occurence(d2, "Kindly", "Please");
-            document_register_error_first_occurence(d2, "note", "forget");
-            //document_register_error_first_occurence(d2, "that", "remember");
-            document_register_error_first_occurence(d2, "anonymous", "pointless");
-            document_register_error_first_occurence(d2, "Please", "Don't");
-            document_register_error_first_occurence(d2, "love", "hate");
+            //document_register_error_first_occurrence(d2, "Kindly", "Please");
+            document_register_error_first_occurrence(d2, "note", "forget");
+            //document_register_error_first_occurrence(d2, "that", "remember");
+            document_register_error_first_occurrence(d2, "anonymous", "pointless");
+            document_register_error_first_occurrence(d2, "Please", "Don't");
+            document_register_error_first_occurrence(d2, "love", "hate");
 
             Document *d3 = &level->minigame.document_list[3];
-            document_register_error_first_occurence(d3, "great", "some");
-            //document_register_error_first_occurence(d3, "thestrongest", "a");
-            document_register_error_first_occurence(d3, "Earth", "Nebraska");
-            document_register_error_first_occurence(d3, "trusted", "underpaid");
-            document_register_error_first_occurence(d3, "honour", "experience");
-            document_register_error_first_occurence(d3, "thecompany", "myself");
-            document_register_error_first_occurence(d3, "nothing", "much");
-            document_register_error_first_occurence(d3, "Love,", "Bye,");
+            document_register_error_first_occurrence(d3, "great", "some");
+            //document_register_error_first_occurrence(d3, "thestrongest", "a");
+            document_register_error_first_occurrence(d3, "Earth.", "Nebraska.");
+            document_register_error_first_occurrence(d3, "trusted", "underpaid");
+            document_register_error_first_occurrence(d3, "honour", "experience");
+            document_register_error_first_occurrence(d3, "thecompany", "myself");
+            document_register_error_first_occurrence(d3, "nothing", "much");
+            document_register_error_first_occurrence(d3, "Love,", "Bye,");
 
             Document *d5 = &level->minigame.document_list[5];
-            document_register_error_first_occurence(d5, "The", "\"This");
-            document_register_error_first_occurence(d5, "joy", "work");
-            document_register_error_first_occurence(d5, "of", "was");
-            document_register_error_first_occurence(d5, "life:", "strictly");
-            document_register_error_first_occurence(d5, "the", "voluntary,");
-            document_register_error_first_occurence(d5, "true", "but");
-            document_register_error_first_occurence(d5, "passion", "any");
-            document_register_error_first_occurence(d5, "that", "animal");
-            document_register_error_first_occurence(d5, "burns", "who");
-            document_register_error_first_occurence(d5, "in", "absented");
-            document_register_error_first_occurence(d5, "your", "himself");
-            document_register_error_first_occurence(d5, "soul", "from");
-            document_register_error_first_occurence(d5, "is", "it");
-            document_register_error_first_occurence(d5, "one", "would");
-            document_register_error_first_occurence(d5, "which", "have");
-            document_register_error_first_occurence(d5, "can", "his");
-            document_register_error_first_occurence(d5, "never", "rations");
-            document_register_error_first_occurence(d5, "be", "reduced");
-            document_register_error_first_occurence(d5, "put", "by");
-            document_register_error_first_occurence(d5, "out.", "half.\" [1]");
+            document_register_error_first_occurrence(d5, "The", "\"This");
+            document_register_error_first_occurrence(d5, "joy", "work");
+            document_register_error_first_occurrence(d5, "of", "was");
+            document_register_error_first_occurrence(d5, "life:", "strictly");
+            document_register_error_first_occurrence(d5, "the", "voluntary,");
+            document_register_error_first_occurrence(d5, "true", "but");
+            document_register_error_first_occurrence(d5, "passion", "any");
+            document_register_error_first_occurrence(d5, "that", "animal");
+            document_register_error_first_occurrence(d5, "burns", "who");
+            document_register_error_first_occurrence(d5, "in", "absented");
+            document_register_error_first_occurrence(d5, "your", "himself");
+            document_register_error_first_occurrence(d5, "soul", "from");
+            document_register_error_first_occurrence(d5, "is", "it");
+            document_register_error_first_occurrence(d5, "one", "would");
+            document_register_error_first_occurrence(d5, "which", "have");
+            document_register_error_first_occurrence(d5, "can", "his");
+            document_register_error_first_occurrence(d5, "never", "rations");
+            document_register_error_first_occurrence(d5, "be", "reduced");
+            document_register_error_first_occurrence(d5, "put", "by");
+            document_register_error_first_occurrence(d5, "out.", "half.\" [1]");
         } break;
         case 2: {
             documents[count++] =
                 "Email\n-------\n\nDear Team,\n  I hope everyone enojyed the dinner party on Thursday! It seemed to have a great atmosphere, and good for the new employes to familiarize themselfs with the company culture.\n\nBest Regards,\nJane Smith\n(HR Manager)";
             documents[count++] =
-                "Email\n-------\n\nPeggy,\n  The dinner was great. I suppose we don't need a reason to email on this thing anymore since we have each other's numbers, but something compelled me to.\n  Anyways, have a nice night, and I hope we see each other again :)\n\nRegards,\nHunter";
+                "Email\n-------\n\nPeggy,\n  The dinner was great. I suppose we don't need a reason to email on this thing anymore, but something compelled me to.\n  Anyways, have a nice night, and I hope we see each other again :)\n\nRegards,\nHunter";
             documents[count++] =
                 "Dear Team, It's assumed that you all are aware of the new policy on bathrooms...";
 
             level->minigame = chapter_3_make_job_minigame(&game->level_arena, documents, count);
 
             Document *d0 = &level->minigame.document_list[0];
-            document_register_error_first_occurence(d0, "enojyed", "enjoyed");
-            document_register_error_first_occurence(d0, "employes", "employees");
-            document_register_error_first_occurence(d0, "themselfs", "themselves");
+            document_register_error_first_occurrence(d0, "enojyed", "enjoyed");
+            document_register_error_first_occurrence(d0, "employes", "employees");
+            document_register_error_first_occurrence(d0, "themselfs", "themselves");
 
             Document *d1 = &level->minigame.document_list[1];
-            document_register_error_first_occurence(d1, "great.", "amazing.");
-            document_register_error_first_occurence(d1, "Regards,", "Love,");
+            document_register_error_first_occurrence(d1, "great.", "amazing.");
+            document_register_error_first_occurrence(d1, "Regards,", "Love,");
 
             Document *d2 = &level->minigame.document_list[2];
-            document_register_error_first_occurence(d2, "Dear", "\"One");
-            document_register_error_first_occurence(d2, "Team,", "does");
-            document_register_error_first_occurence(d2, "It's", "not");
-            document_register_error_first_occurence(d2, "assumed", "discover");
-            document_register_error_first_occurence(d2, "that", "the");
-            document_register_error_first_occurence(d2, "you", "absurd");
-            document_register_error_first_occurence(d2, "all", "without");
-            document_register_error_first_occurence(d2, "are", "being");
-            document_register_error_first_occurence(d2, "aware", "tempted");
-            document_register_error_first_occurence(d2, "of", "to");
-            document_register_error_first_occurence(d2, "the", "write");
-            document_register_error_first_occurence(d2, "new", "a");
-            document_register_error_first_occurence(d2, "policy", "manual");
-            document_register_error_first_occurence(d2, "on", "of");
-            document_register_error_first_occurence(d2, "bathrooms...", "happiness.\" [2]");
+            document_register_error_first_occurrence(d2, "Dear", "\"One");
+            document_register_error_first_occurrence(d2, "Team,", "does");
+            document_register_error_first_occurrence(d2, "It's", "not");
+            document_register_error_first_occurrence(d2, "assumed", "discover");
+            document_register_error_first_occurrence(d2, "that", "the");
+            document_register_error_first_occurrence(d2, "you", "absurd");
+            document_register_error_first_occurrence(d2, "all", "without");
+            document_register_error_first_occurrence(d2, "are", "being");
+            document_register_error_first_occurrence(d2, "aware", "tempted");
+            document_register_error_first_occurrence(d2, "of", "to");
+            document_register_error_first_occurrence(d2, "the", "write");
+            document_register_error_first_occurrence(d2, "new", "a");
+            document_register_error_first_occurrence(d2, "policy", "manual");
+            document_register_error_first_occurrence(d2, "on", "of");
+            document_register_error_first_occurrence(d2, "bathrooms...", "happiness.\" [2]");
         } break;
         case 3: {
             documents[count++] =
@@ -581,7 +586,8 @@ void chapter_3_job_init(Game *game, int which_document_list) {
             documents[count++] =
                 "\"How can they find meaning in something so meaningless?\"";
             documents[count++] =
-                "He thought of them as inferior to himself, placing himself on a throne above all.\n\nBut truthfully, he envied them!";
+                "He thought of them as inferior to himself, placing himself on a throne so high the gap was insurmountable; a veil of diamond.";
+               //He thought of them as superior to himself. They had something so pure, he could only stare in confusion, impossible to have himself.
             documents[count++] =
                 "Oh, they created their own meaning, found some special place in our universe for themselves.";
                 //"\"It doesn't make sense; they had to have made a deal with the devil himself!\"";
@@ -593,22 +599,41 @@ void chapter_3_job_init(Game *game, int which_document_list) {
             level->minigame.window_alpha = 64;
             level->minigame.font_color = WHITE;
 
+            Document *d4 = &level->minigame.document_list[4];
+            document_register_error_nth_occurrence(d4, 1, "inferior",        "superior");
+            document_register_error_nth_occurrence(d4, 1, "himself,",        "himself.");
+            document_register_error_nth_occurrence(d4, 1, "placing",         "They");
+            document_register_error_nth_occurrence(d4, 1, "himself",         "had");
+            document_register_error_nth_occurrence(d4, 1, "on",              "something");
+            document_register_error_nth_occurrence(d4, 1, "a",               "so");
+            document_register_error_nth_occurrence(d4, 1, "throne",          "pure,");
+            document_register_error_nth_occurrence(d4, 1, "so",              "he");
+            document_register_error_nth_occurrence(d4, 1, "high",            "could");
+            document_register_error_nth_occurrence(d4, 1, "the",             "only");
+            document_register_error_nth_occurrence(d4, 1, "gap",             "stare");
+            document_register_error_nth_occurrence(d4, 1, "was",             "in");
+            document_register_error_nth_occurrence(d4, 1, "insurmountable;", "confusion,");
+            document_register_error_nth_occurrence(d4, 2, "a",               "impossible");
+            document_register_error_nth_occurrence(d4, 1, "veil",            "to");
+            document_register_error_nth_occurrence(d4, 2, "of",              "have");
+            document_register_error_nth_occurrence(d4, 1, "diamond.",        "himself.");
+
             Document *d5 = &level->minigame.document_list[5];
-            document_register_error_first_occurence(d5, "Oh,", "\"It");
-            document_register_error_first_occurence(d5, "they", "doesn't");
-            document_register_error_first_occurence(d5, "created", "make");
-            document_register_error_first_occurence(d5, "their", "sense;");
-            document_register_error_first_occurence(d5, "own", "they");
-            document_register_error_first_occurence(d5, "meaning,", "had");
-            document_register_error_first_occurence(d5, "found", "to");
-            document_register_error_first_occurence(d5, "some", "have");
-            document_register_error_first_occurence(d5, "special", "made");
-            document_register_error_first_occurence(d5, "place", "a");
-            document_register_error_first_occurence(d5, "in", "deal");
-            document_register_error_first_occurence(d5, "our", "with");
-            document_register_error_first_occurence(d5, "universe", "the");
-            document_register_error_first_occurence(d5, "for", "devil");
-            document_register_error_first_occurence(d5, "themselves.", "himself!\"");
+            document_register_error_first_occurrence(d5, "Oh,", "\"It");
+            document_register_error_first_occurrence(d5, "they", "doesn't");
+            document_register_error_first_occurrence(d5, "created", "make");
+            document_register_error_first_occurrence(d5, "their", "sense;");
+            document_register_error_first_occurrence(d5, "own", "they");
+            document_register_error_first_occurrence(d5, "meaning,", "had");
+            document_register_error_first_occurrence(d5, "found", "to");
+            document_register_error_first_occurrence(d5, "some", "have");
+            document_register_error_first_occurrence(d5, "special", "made");
+            document_register_error_first_occurrence(d5, "place", "a");
+            document_register_error_first_occurrence(d5, "in", "deal");
+            document_register_error_first_occurrence(d5, "our", "with");
+            document_register_error_first_occurrence(d5, "universe", "the");
+            document_register_error_first_occurrence(d5, "for", "devil");
+            document_register_error_first_occurrence(d5, "themselves.", "himself!\"");
 
         } break;
     }
@@ -1054,7 +1079,33 @@ void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,
 
     Word *word_on  = 0;
 
+    auto set_word_up = [&]() {
+        size_t length = word_on->end_index - word_on->start_index + 1;
+
+        char word_before[128] = {};
+        strncpy(word_before, current_line.text, word_on->start_index - line_start_index);
+        char word[128] = {};
+        strncpy(word, current_line.text + word_on->start_index - line_start_index, length);
+
+        Vector2 before_size = MeasureTextEx(*font,
+                                            word_before,
+                                            font->baseSize,
+                                            minigame->font_spacing);
+        Vector2 word_size   = MeasureTextEx(*font,
+                                            word,
+                                            font->baseSize,
+                                            minigame->font_spacing);
+
+        word_on->rect.x      = pos.x + before_size.x + 1; 
+        word_on->rect.y      = pos.y;
+        word_on->rect.width  = word_size.x;
+        word_on->rect.height = word_size.y;
+
+        word_on = 0;
+    };
+
     size_t string_length = strlen(document->string);
+
     for (size_t i = 0; i < string_length; i++) {
         char c = document->string[i];
 
@@ -1069,34 +1120,12 @@ void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,
                 if (word->start_index == i) {
                     word_on = word;
                     if (word->start_index == word->end_index)
-                        goto set_word_up;
+                        set_word_up();
                 }
             }
         } else {
             if (i == word_on->end_index) {
-set_word_up:
-                size_t length = word_on->end_index - word_on->start_index + 1;
-
-                char word_before[128] = {};
-                strncpy(word_before, current_line.text, word_on->start_index - line_start_index);
-                char word[128] = {};
-                strncpy(word, current_line.text + word_on->start_index - line_start_index, length);
-
-                Vector2 before_size = MeasureTextEx(*font,
-                                                    word_before,
-                                                    font->baseSize,
-                                                    minigame->font_spacing);
-                Vector2 word_size   = MeasureTextEx(*font,
-                                                    word,
-                                                    font->baseSize,
-                                                    minigame->font_spacing);
-
-                word_on->rect.x      = pos.x + before_size.x + 1; 
-                word_on->rect.y      = pos.y;
-                word_on->rect.width  = word_size.x;
-                word_on->rect.height = word_size.y;
-
-                word_on = 0;
+                set_word_up();
             }
         }
 

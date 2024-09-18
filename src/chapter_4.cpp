@@ -1,4 +1,4 @@
-#define GOD_COLOR {48,0,0,255}
+#define GOD_COLOR {58,0,0,255}
 #define GOD_COLOR_BACKDROP {72,0,0,255}
 
 enum Chapter_4_State {
@@ -70,6 +70,7 @@ void chapter_4_window_text(bool scroll, Text_List *list, char *line,
     //list->alpha_speed  = 0.5;
     list->color        = color;
     list->center_text  = true;
+    list->disallow_skipping = true;
 
     if (colors_equal(color, GOD_COLOR)) {
         list->backdrop_color = GOD_COLOR_BACKDROP;

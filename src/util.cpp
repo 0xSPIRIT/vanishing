@@ -394,20 +394,31 @@ struct Find_Word_Result {
     int end_index;
 };
 
-Find_Word_Result find_word(const char *string, const char *word) {
+// finds the n'th occurrence. starts at 1.
+Find_Word_Result find_word(const char *string, const char *word, int n) {
     Find_Word_Result result = {};
 
     result.start_index = -1;
     result.end_index = -1;
 
-    int string_length = (int)strlen(string);
-    for (int i = 0; i < string_length; i++) {
-        if (string_compare(string + i, word)) {
-            if (i == 0 || (i > 0 && isspace(string[i-1]))) {
-                result.start_index = i;
-                result.end_index = i + (int)strlen(word) - 1;
+    size_t word_len = strlen(word);
 
-                return result;
+    int current = 0;
+
+    int string_length = (int)strlen(string);
+    for (int i = 0; i <= string_length - word_len; i++) {
+        if (string_compare(string + i, word)) {
+            if (i == 0 || (i > 0 && isspace(string[i-1])) &&
+                (isspace(string[i+word_len]) || i+word_len == string_length))
+            {
+                current++;
+
+                if (n == current) {
+                    result.start_index = i;
+                    result.end_index = i + (int)strlen(word) - 1;
+
+                    return result;
+                }
             }
         }
     }

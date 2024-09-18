@@ -23,6 +23,7 @@ struct Text {
     Scroll_Type scroll_type;
 
     bool center_text;
+    bool disallow_skipping;
 
     Vector2 position;
     float padding;
@@ -65,6 +66,7 @@ struct Text_List {
 
     bool first_frame = true;
     bool take_keyboard_focus = true;
+    bool disallow_skipping = false;
 
     // Render Info
     Font *font = &global_font;
@@ -273,7 +275,8 @@ bool text_update_and_draw(Text *text, Vector2 offset, float dt) {
             return true;
         }
 
-        text_set_to_end(text);
+        if (!text->disallow_skipping)
+            text_set_to_end(text);
     }
 
     text->not_first_frame = true;
@@ -328,6 +331,7 @@ void text_list_init(Text_List *list, char *speaker, char *text_string,
             text.scroll_speed   = list->scroll_speed;
             text.alpha_speed    = list->alpha_speed;
             text.background     = list->background;
+            text.disallow_skipping = list->disallow_skipping;
 
             Vector2 pos = { list->padding, list->padding + cum };
 

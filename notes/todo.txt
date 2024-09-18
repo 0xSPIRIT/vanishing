@@ -9,10 +9,11 @@ V1 squad
   - Gyasi
 
 Things to remove
- - Shift speed is too much
+ x Shift speed is too much
  - Skip text in chapter 4
  - change chapter 1 to 5 seconds
- - remove P
+ x remove P
+ - Add controller support to chapter 3
 
 I did a run through of the game. One thing that it's
 missing is coherency. I need to add more glue to
