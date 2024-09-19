@@ -329,11 +329,36 @@ Color hsv(float hue, float saturation, float value) {
     return out;     
 }
 
+Vector2 get_mouse() {
+    Vector2 result   = GetMousePosition();
+    Rectangle screen = get_screen_rectangle();
+
+    float scale_x = screen.width  / (float)render_width;
+    float scale_y = screen.height / (float)render_height;
+
+    result.x -= screen.x;
+    result.y -= screen.y;
+    result.x /= scale_x;
+    result.y /= scale_y;
+
+    return result;
+}
+
 Vector2 get_mouse_delta(void) {
     if (toggled_fullscreen_past_second)
         return {0, 0};
 
-    return GetMouseDelta();
+    Rectangle screen = get_screen_rectangle();
+
+    float scale_x = screen.width  / (float)render_width;
+    float scale_y = screen.height / (float)render_height;
+
+    Vector2 result = GetMouseDelta();
+
+    result.x /= scale_x;
+    result.y /= scale_y;
+
+    return result;
 }
 
 bool rand_bool(double prob_true) {

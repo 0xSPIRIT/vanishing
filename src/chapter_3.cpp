@@ -18,6 +18,11 @@ enum Chapter_3_Lunch_Text {
     CHAPTER_3_LUNCH_TEXT_3,
 };
 
+struct Virtual_Mouse {
+    Vector2 pos;
+    int texture;
+};
+
 struct Word {
     int   start_index;
     int   end_index;
@@ -43,6 +48,7 @@ struct Chapter_3_Job_Minigame {
     uint8_t window_alpha;
 
     float line_height;
+    int   line_count;
 
     Color font_color;
     Color window_bg_color;
@@ -79,6 +85,8 @@ struct Level_Chapter_3 {
     Chapter_3_Job_Minigame minigame;
     Chapter_3_Phone phone;
     Camera2D camera;
+
+    Virtual_Mouse virtual_mouse;
 
     Chapter_3_Lunch_Text current_lunch_text;
 
@@ -322,6 +330,8 @@ void chapter_3_goto_job_minigame(void *game_ptr) {
     Game *game = (Game *)game_ptr;
     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
     level->minigame.active = true;
+    DisableCursor();
+    level->virtual_mouse.pos = { render_width/2.f, render_height/2.f };
 }
 
 void chapter_3_goto_window_text(Game *game) {
@@ -329,7 +339,9 @@ void chapter_3_goto_window_text(Game *game) {
 
     level->state = CHAPTER_3_STATE_WINDOW;
     chapter_3_job_init(game, 3);
-    level->minigame.active = true;
+
+    chapter_3_goto_job_minigame(game);
+    //level->minigame.active = true;
 
     level->black_screen = false;
 }
@@ -373,6 +385,7 @@ void chapter_3_goto_lunch_room(Game *game, Chapter_3_Lunch_Text lunch_text) {
 
     level->state = CHAPTER_3_STATE_LUNCH;
     level->minigame.active = false;
+    EnableCursor();
 
     for (int i = 0; i < game->entities.length; i++) {
         Entity *e = game->entities.data[i];
@@ -439,7 +452,7 @@ void chapter_3_job_init(Game *game, int which_document_list) {
     switch (which_document_list) {
         case 0: {
             documents[count++] =
-                "Introduction\n----------------\n\nUse UP and DOWN to scroll.\n\nThese are excerpts from documents throughout our company. Your job is to read the document thoroughly and click on any errors to correct them before they are sent to the next editor-- we mustn't look unprefesional!";
+                "Introduction\n----------------\n\nUse UP and DOWN or SCROLL WHEEL to scroll.\n\nThese are excerpts from documents throughout our company. Your job is to read the document thoroughly and click on any errors to correct them before they are sent to the next editor-- we mustn't look unprefesional!";
             documents[count++] =
                 "Memo\n-------\n\nDear Team,\n  This is a frendly reminder about our upcoming employee dinner party scheduled for June 20th.\n  Due to the influx of new employees, it'll be a great place to get setled into the company culture!\n  Please ensure you RSVP by June 10th to help with planing the catering arrangements.\n\nBest Regards,\nJane Smith\n(HR Manager)";
             documents[count++] =
@@ -470,7 +483,6 @@ void chapter_3_job_init(Game *game, int which_document_list) {
             document_register_error_first_occurrence(d3, "machien", "machine");
             document_register_error_first_occurrence(d3, "wokring.", "working.");
             document_register_error_first_occurrence(d3, "replacemnet", "replacement");
-
         } break;
         case 1: {
             documents[count++] =
@@ -484,12 +496,13 @@ void chapter_3_job_init(Game *game, int which_document_list) {
             documents[count++] =
                 "Email\n-------\n\nDear Peggy,\n  I received your email, and I'm delighted to hear that you're excited about a collaboration between our two branches. I'm free for lunch on Saturday June 8th, so we can discuss a proposal. Is that fine with your schedule?\n\nRegards,\nHunter (Business Development Manager, Nebraska)";
             documents[count++] = 
-                "The joy of life: the true passion that burns in your soul is one which can never be put out.";
-                //"\"This work was strictly voluntary, but any animal who absented himself from it would have his rations reduced by half.\" [1]";
+                "\"Don't throw away your suffering. Touch your suffering. Face it directly, and your joy will become deeper. You know that suffering and joy are both impermanent.\"";
+                // But remember, "This work was strictly voluntary, but any animal who absented himself from it would have his rations reduced by half." (George Orwell, Animal Farm)
 
             // A joy of life: a true passion that burns in your soul is one that can never be put out.
 
             level->minigame = chapter_3_make_job_minigame(&game->level_arena, documents, count);
+            level->minigame.current_document = 5;
 
             Document *d0 = &level->minigame.document_list[0];
             document_register_error_first_occurrence(d0, "cofee", "coffee");
@@ -510,7 +523,6 @@ void chapter_3_job_init(Game *game, int which_document_list) {
 
             Document *d3 = &level->minigame.document_list[3];
             document_register_error_first_occurrence(d3, "great", "some");
-            //document_register_error_first_occurrence(d3, "thestrongest", "a");
             document_register_error_first_occurrence(d3, "Earth.", "Nebraska.");
             document_register_error_first_occurrence(d3, "trusted", "underpaid");
             document_register_error_first_occurrence(d3, "honour", "experience");
@@ -519,26 +531,34 @@ void chapter_3_job_init(Game *game, int which_document_list) {
             document_register_error_first_occurrence(d3, "Love,", "Bye,");
 
             Document *d5 = &level->minigame.document_list[5];
-            document_register_error_first_occurrence(d5, "The", "\"This");
-            document_register_error_first_occurrence(d5, "joy", "work");
-            document_register_error_first_occurrence(d5, "of", "was");
-            document_register_error_first_occurrence(d5, "life:", "strictly");
-            document_register_error_first_occurrence(d5, "the", "voluntary,");
-            document_register_error_first_occurrence(d5, "true", "but");
-            document_register_error_first_occurrence(d5, "passion", "any");
-            document_register_error_first_occurrence(d5, "that", "animal");
-            document_register_error_first_occurrence(d5, "burns", "who");
-            document_register_error_first_occurrence(d5, "in", "absented");
-            document_register_error_first_occurrence(d5, "your", "himself");
-            document_register_error_first_occurrence(d5, "soul", "from");
-            document_register_error_first_occurrence(d5, "is", "it");
-            document_register_error_first_occurrence(d5, "one", "would");
-            document_register_error_first_occurrence(d5, "which", "have");
-            document_register_error_first_occurrence(d5, "can", "his");
-            document_register_error_first_occurrence(d5, "never", "rations");
-            document_register_error_first_occurrence(d5, "be", "reduced");
-            document_register_error_first_occurrence(d5, "put", "by");
-            document_register_error_first_occurrence(d5, "out.", "half.\" [1]");
+            document_register_error_nth_occurrence(d5, 1, "\"Don't",    "But");
+            document_register_error_nth_occurrence(d5, 1, "throw",      "remember,");
+            document_register_error_nth_occurrence(d5, 1, "away",       "\"This");
+            document_register_error_nth_occurrence(d5, 1, "your",       "work");
+            document_register_error_nth_occurrence(d5, 1, "suffering.", "was,");
+
+            document_register_error_nth_occurrence(d5, 1, "Touch",      "strictly");
+            document_register_error_nth_occurrence(d5, 2, "your",       "voluntary,");
+            document_register_error_nth_occurrence(d5, 2, "suffering.", "but");
+
+            document_register_error_nth_occurrence(d5, 1, "Face",       "any");
+            document_register_error_nth_occurrence(d5, 1, "it",         "animal");
+            document_register_error_nth_occurrence(d5, 1, "directly,",  "who");
+            document_register_error_nth_occurrence(d5, 1, "and",        "absented");
+            document_register_error_nth_occurrence(d5, 3, "your",    "himself");
+            document_register_error_nth_occurrence(d5, 1, "joy",        "from");
+            document_register_error_nth_occurrence(d5, 1, "will",       "it");
+            document_register_error_nth_occurrence(d5, 1, "become",     "would");
+            document_register_error_nth_occurrence(d5, 1, "deeper.",    "have");
+            document_register_error_nth_occurrence(d5, 1, "You",        "his");
+            document_register_error_nth_occurrence(d5, 1, "know",       "rations");
+            document_register_error_nth_occurrence(d5, 1, "that",       "reduced");
+            document_register_error_nth_occurrence(d5, 1, "suffering",  "by");
+            document_register_error_nth_occurrence(d5, 2, "and",        "half.\"");
+            document_register_error_nth_occurrence(d5, 2, "joy",        "(George");
+            document_register_error_nth_occurrence(d5, 1, "are",        "Orwell,");
+            document_register_error_nth_occurrence(d5, 1, "both",       "Animal");
+            document_register_error_nth_occurrence(d5, 1, "impermanent.\"", "Farm)");
         } break;
         case 2: {
             documents[count++] =
@@ -667,6 +687,7 @@ void chapter_3_init(Game *game) {
     textures[19] = load_texture(RES_DIR "art/apartment2.png");
     textures[20] = load_texture(RES_DIR "art/smartphone.png");
     textures[21] = load_texture(RES_DIR "art/arrow_white.png");
+    textures[22] = load_texture(RES_DIR "art/cursor.png");
     //textures[22] = load_texture("art/arrow_black.png");
 
     level->camera.zoom = 1;
@@ -988,8 +1009,12 @@ void chapter_3_init(Game *game) {
 
     chapter_3_init_outside(game);
 
-    chapter_3_job_init(game, 0);
-    //level->minigame.active = true;
+    level->virtual_mouse.texture = 22;
+
+    chapter_3_job_init(game, 1);
+
+    chapter_3_goto_job_minigame(game);
+//chapter_3_goto_window_text(game);
 
     //chapter_3_goto_lunch_room(game, CHAPTER_3_LUNCH_TEXT_3);
     //level->minigame.active = true;
@@ -1015,6 +1040,13 @@ void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,
     minigame->scroll_y += scroll_speed_px * wheel.y;
 
     minigame->scroll_y = min(minigame->scroll_y, 0);
+
+    int bottom_pad = 3*minigame->line_height;
+    int cap = -minigame->line_count * minigame->line_height + minigame->window_inner.height - bottom_pad;
+
+    cap = min(cap, 0);
+
+    if (minigame->scroll_y < cap) minigame->scroll_y = cap;
     
     // Draw
     Font *font = minigame->font;
@@ -1073,7 +1105,11 @@ void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,
         current_line = {};
 
         pos.y += size.y;
+
+        minigame->line_count++;
     };
+
+    minigame->line_count = 0;
 
     Document *document = &minigame->document_list[minigame->current_document];
 
@@ -1083,9 +1119,17 @@ void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,
         size_t length = word_on->end_index - word_on->start_index + 1;
 
         char word_before[128] = {};
-        strncpy(word_before, current_line.text, word_on->start_index - line_start_index);
+        if (word_on->start_index >= line_start_index)
+            strncpy(word_before, current_line.text, word_on->start_index - line_start_index);
+        else
+            __debugbreak();
+
         char word[128] = {};
-        strncpy(word, current_line.text + word_on->start_index - line_start_index, length);
+
+        if (word_on->start_index >= line_start_index)
+            strncpy(word, current_line.text + word_on->start_index - line_start_index, length);
+        else
+            __debugbreak();
 
         Vector2 before_size = MeasureTextEx(*font,
                                             word_before,
@@ -1160,7 +1204,11 @@ void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,
         add_line();
     }
 
-    Vector2 mouse = get_mouse();
+    Vector2 mouse;
+    {
+        Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
+        mouse = level->virtual_mouse.pos;
+    }
 
     Rectangle visible_finish_button_rect = {
         minigame->window_inner.x + minigame->finish_button.x,
@@ -1300,6 +1348,10 @@ void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,
                    {0, 0},
                    0,
                    WHITE);
+
+    Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
+    Texture *t = &atari_assets.textures[level->virtual_mouse.texture];
+    DrawTextureV(*t, int_vec2(level->virtual_mouse.pos), WHITE);
 }
 
 // tick
@@ -1394,7 +1446,8 @@ void chapter_3_entity_update(Entity *entity, Game *game, float dt) {
             bool can_scroll = true;
             if (level->state == CHAPTER_3_STATE_LUNCH && level->current_lunch_text == CHAPTER_3_LUNCH_TEXT_2 && scrolled_dir != DIRECTION_INVALID) {
                 chapter_3_job_init(game, 2);
-                level->minigame.active = true;
+                //level->minigame.active = true;
+                chapter_3_goto_job_minigame(game);
                 level->state = CHAPTER_3_STATE_OFFICE;
             } else if (level->state == CHAPTER_3_STATE_LUNCH && level->current_lunch_text == CHAPTER_3_LUNCH_TEXT_3 && scrolled_dir != DIRECTION_INVALID) {
                 // Remove the tables and re-add them with slight random variation,
@@ -1451,7 +1504,7 @@ void chapter_3_entity_update(Entity *entity, Game *game, float dt) {
                     add_cubicle(&game->entities, rand_bool(0.1), 140+rand_range(-3,3), 90+rand_range(-3,3));
                 }
 
-                if (level->screens_scrolled >= 15) {
+                if (level->screens_scrolled >= 14) {
                     int which = rand()%4;
 
                     int current = 0;
@@ -1616,6 +1669,33 @@ void chapter_3_deinit(Game *game) {
 void chapter_3_update(Game *game, float dt) {
     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
 
+    {
+        level->virtual_mouse.pos = Vector2Add(level->virtual_mouse.pos, get_mouse_delta());
+
+        const float sensitivity = 4;
+
+        float cont_x = sensitivity * 60 * dt * GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X);
+        float cont_y = sensitivity * 60 * dt * GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y);
+
+        Vector2 look = input_movement_cont_look_axis(dt);
+
+        level->minigame.scroll_y -= sensitivity * look.y;
+
+        float len = sqrtf(cont_x * cont_x + cont_y * cont_y);
+        if (len > sensitivity) {
+            cont_x = sensitivity * cont_x / len;
+            cont_y = sensitivity * cont_y / len;
+        }
+
+        Virtual_Mouse *mouse = &level->virtual_mouse;
+
+        mouse->pos.x += cont_x;
+        mouse->pos.y += cont_y;
+
+        mouse->pos.x = Clamp(mouse->pos.x, 0, render_width-1);
+        mouse->pos.y = Clamp(mouse->pos.y, 0, render_height-1);
+    }
+
     if (level->state == CHAPTER_3_STATE_LUNCH) {
         if (level->current_lunch_text == CHAPTER_3_LUNCH_TEXT_1 && game->current) {
             if (!game->current->next[0]) {
@@ -1624,7 +1704,8 @@ void chapter_3_update(Game *game, float dt) {
                     game->current = 0;
 
                     chapter_3_job_init(game, (int)level->current_lunch_text);
-                    level->minigame.active = true;
+                    chapter_3_goto_job_minigame(game);
+                    //level->minigame.active = true;
                 }
             }
         }

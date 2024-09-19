@@ -1,5 +1,14 @@
 TODO : Today
 
+ - add controls
+ - Fix the issue with chapter 3.
+
+ - For some reason, on line 1123,
+   word_on->start_index < line_start_index,
+   so you're getting a huge u64 as the
+   parameter to the strncpy due to
+   overflow.
+
 V1 squad
   - Jaydn
   - Saleem
@@ -8,19 +17,9 @@ V1 squad
   - Aliyah
   - Gyasi
 
-Things to remove
- x Shift speed is too much
- - Skip text in chapter 4
- - change chapter 1 to 5 seconds
- x remove P
- - Add controller support to chapter 3
-
 I did a run through of the game. One thing that it's
 missing is coherency. I need to add more glue to
-bind everything together. The god stuff and the Penny
-stuff is really not meshing together well, and I
-don't really have a reason as to how they're even
-connected in the first place.
+bind everything together.
 
 - Add more choice dialogue elements about your own
   psychology. They need not be branching, even.

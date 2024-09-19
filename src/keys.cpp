@@ -85,10 +85,19 @@ float input_movement_y_axis(float dt) {
     return result;
 }
 
+Vector2 input_movement_cont_look_axis(float dt) {
+    Vector2 result;
+
+    result.x = 60 * dt * GetGamepadAxisMovement(0, GAMEPAD_AXIS_RIGHT_X);
+    result.y = 60 * dt * GetGamepadAxisMovement(0, GAMEPAD_AXIS_RIGHT_Y);
+
+    return result;
+}
+
 Vector2 input_movement_look(float dt) {
     Vector2 result = get_mouse_delta();
 
-    const float mouse_sensitivity = 0.005f;
+    const float mouse_sensitivity = 0.01f;
 
     result.x *= mouse_sensitivity;
     result.y *= mouse_sensitivity;
@@ -96,8 +105,10 @@ Vector2 input_movement_look(float dt) {
     if (IsGamepadAvailable(0)) {
         const float gamepad_sensitivity = 0.05f;
 
-        result.x += gamepad_sensitivity * 60 * dt * GetGamepadAxisMovement(0, GAMEPAD_AXIS_RIGHT_X);
-        result.y += gamepad_sensitivity * 60 * dt * GetGamepadAxisMovement(0, GAMEPAD_AXIS_RIGHT_Y);
+        Vector2 v = input_movement_cont_look_axis(dt);
+
+        result.x += gamepad_sensitivity * v.x;
+        result.y += gamepad_sensitivity * v.y;
     }
 
     return result;

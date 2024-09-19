@@ -56,7 +56,7 @@ enum Game_Mode {
 };
 Game_Mode game_mode = GAME_MODE_INVALID;
 
-int chapter = 3;
+int chapter = 1;
 bool epilogue_text_change_color = false; // please god forgive me
 
 Font global_font, atari_font, comic_sans, italics_font, bold_font, bold_2_font, mono_font, bold_font_big;
@@ -88,21 +88,6 @@ Rectangle get_screen_rectangle() {
     result.y = GetRenderHeight() / 2 - screen_height / 2;
     result.width  = screen_width;
     result.height = screen_height;
-
-    return result;
-}
-
-Vector2 get_mouse() {
-    Vector2 result   = GetMousePosition();
-    Rectangle screen = get_screen_rectangle();
-
-    float scale_x = screen.width  / (float)render_width;
-    float scale_y = screen.height / (float)render_height;
-
-    result.x -= screen.x;
-    result.y -= screen.y;
-    result.x /= scale_x;
-    result.y /= scale_y;
 
     return result;
 }

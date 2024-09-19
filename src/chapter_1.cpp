@@ -29,6 +29,10 @@ struct Level_Chapter_1 {
 
     Shader flashing_shader;
 
+    float prayer_fader, prayer_fader_to;
+
+    Entity *player, *prayer_mat;
+
     float timer;
     int crawling_text_state;
     int screens_scrolled;
@@ -73,6 +77,26 @@ void chapter_1_start_phone_call(Game *game) {
     game->current = &game->text[35];
 }
 
+void chapter_1_prayer_text(Game *game) {
+    game->current = &game->text[61];
+}
+
+void chapter_1_start_prayer(void *game_ptr) {
+    Game *game = (Game *)game_ptr;
+    Level_Chapter_1 *level = (Level_Chapter_1*)game->level;
+
+    level->prayer_fader_to = 1;
+
+    add_event(game, chapter_1_prayer_text, 15);
+}
+
+void chapter_1_end_prayer(void *game_ptr) {
+    Game *game = (Game *)game_ptr;
+    Level_Chapter_1 *level = (Level_Chapter_1*)game->level;
+
+    level->prayer_fader_to = 0;
+}
+
 Entity *chapter_1_make_entity(Entity_Type type, float x, float y) {
     Entity *result = allocate_entity();
 
@@ -91,9 +115,11 @@ Entity *chapter_1_make_entity(Entity_Type type, float x, float y) {
         } break;
         case ENTITY_FOOTSTEPS: {
             result->texture_id = 4 + rand() % 3;
+            result->draw_layer = DRAW_LAYER_LOW;
         } break;
         case ENTITY_BLOOD: {
             result->texture_id = 7 + rand() % 3;
+            result->draw_layer = DRAW_LAYER_LOW;
         } break;
         case ENTITY_NODE: {
             result->chap_1_node.active = true;
@@ -104,6 +130,10 @@ Entity *chapter_1_make_entity(Entity_Type type, float x, float y) {
         } break;
         case ENTITY_WINDOW: {
             result->texture_id = 21;
+        } break;
+        case ENTITY_PRAYER_MAT: {
+            result->texture_id = 22;
+            result->draw_layer = DRAW_LAYER_LOW;
         } break;
     }
 
@@ -186,6 +216,8 @@ void chapter_1_init(Game *game) {
     textures[18] = load_texture(RES_DIR "art/intro2.png");
 
     textures[21] = load_texture(RES_DIR "art/window_1.png");
+    textures[22] = load_texture(RES_DIR "art/prayer_mat.png");
+    textures[23] = load_texture(RES_DIR "art/player_white.png");
 
     level->background_color = DESERT_COLOR;
 
@@ -193,9 +225,9 @@ void chapter_1_init(Game *game) {
 
     game->entities = make_array<Entity*>(2);
 
-    Entity *player = chapter_1_make_entity(ENTITY_PLAYER, render_width/2 - 4, render_height/2 - 8);
+    level->player = chapter_1_make_entity(ENTITY_PLAYER, render_width/2 - 4, render_height/2 - 8);
 
-    array_add(&game->entities, player);
+    array_add(&game->entities, level->player);
 
     float speed = 15;
 
@@ -240,17 +272,19 @@ void chapter_1_init(Game *game) {
                          speed,
                          &game->text[10]);
 
-    String choices[] = {const_string("Yes"), const_string("No")};
-    Text_List *next[] = { 0, 0 };
-    void (*function_pointers[])(void*) = { chapter_1_activate_node, nullptr };
+    {
+        String choices[] = {const_string("Yes"), const_string("No")};
+        Text_List *next[] = { 0, 0 };
+        void (*function_pointers[])(void*) = { chapter_1_activate_node, nullptr };
 
-    atari_choice_text_list_init(&game->text[10],
-                                0,
-                                "Drink the liquid?",
-                                choices,
-                                next,
-                                function_pointers,
-                                2);
+        atari_choice_text_list_init(&game->text[10],
+                                    0,
+                                    "Drink the liquid?",
+                                    choices,
+                                    next,
+                                    function_pointers,
+                                    2);
+    }
 
     atari_text_list_init(&game->text[11],
                          "Chase",
@@ -434,7 +468,7 @@ void chapter_1_init(Game *game) {
                          &game->text[46]);
     atari_text_list_init(&game->text[46],
                          "Chase",
-                         "Penny?\rJason's Penny?",
+                         "Penny?\rUh, Jason's Penny?",
                          speed,
                          &game->text[47]);
     atari_text_list_init(&game->text[47],
@@ -444,7 +478,7 @@ void chapter_1_init(Game *game) {
                          &game->text[48]);
     atari_text_list_init(&game->text[48],
                          "Chase",
-                         "Oh damn.\rWhat type of music?",
+                         "Oh really?\rWhat type of music?",
                          speed,
                          &game->text[49]);
     atari_text_list_init(&game->text[49],
@@ -469,7 +503,7 @@ void chapter_1_init(Game *game) {
                          &game->text[53]);
     atari_text_list_init(&game->text[53],
                          "Eleanor",
-                         "They break up every\n2 days anyways.\rIt doesn't matter, trust me.",
+                         "They broke up. They do\nthat like every 5 days.\rIt doesn't matter, trust me.",
                          speed,
                          &game->text[54]);
     atari_text_list_init(&game->text[54],
@@ -500,8 +534,43 @@ void chapter_1_init(Game *game) {
 
     game->text[58].callbacks[0] = chapter_1_end;
 
+    {
+        String choices[] = {const_string("Yes"), const_string("No")};
+        Text_List *next[] = { 0, 0 };
+        void (*function_pointers[])(void*) = {
+            chapter_1_start_prayer,
+            nullptr
+        };
+
+        atari_choice_text_list_init(&game->text[60],
+                                    0,
+                                    "Pray to God?",
+                                    choices,
+                                    next,
+                                    function_pointers,
+                                    2);
+    }
+
+    atari_text_list_init(&game->text[61],
+                         "Chase",
+                         "...\r...\r...",
+                         speed,
+                         &game->text[62]);
+    atari_text_list_init(&game->text[62],
+                         "Chase",
+                         "I don't hear anyone.",
+                         speed,
+                         nullptr);
+    game->text[62].callbacks[0] = chapter_1_end_prayer;
+
     Entity *e = chapter_1_make_entity(ENTITY_WINDOW, render_width/2 - 16, render_height/5);
     array_add(&game->entities, e);
+
+    /*
+    level->prayer_mat = chapter_1_make_entity(ENTITY_PRAYER_MAT, render_width/2 - 16, 3*render_height/5);
+    array_add(&game->entities, level->prayer_mat);
+    */
+    level->prayer_mat = 0;
 }
 
 void chapter_1_deinit(Game *game) {
@@ -539,12 +608,12 @@ void add_cactuses_randomly(Array<Entity*> *entities, size_t cactus_count) {
 
 void chapter_1_entity_update(Entity *e, Game *game, float dt) {
     Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
-    Entity *player = entities_get_player(&game->entities);
+    Entity *player = level->player;//entities_get_player(&game->entities);
+
+    bool within_region = is_player_close_to_entity(player, e, 8);
 
     switch (e->type) {
         case ENTITY_PHONE: {
-            bool within_region = is_player_close_to_entity(player, e, 8);
-
             if (keyboard_focus(game) == NO_KEYBOARD_FOCUS && within_region) {
                 if (is_action_pressed()) {
                     if (e->chap_1_phone.called) {
@@ -557,9 +626,14 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                 }
             }
         } break;
+        case ENTITY_PRAYER_MAT: {
+            if (keyboard_focus(game) == NO_KEYBOARD_FOCUS && within_region) {
+                if (is_action_pressed() && level->prayer_fader == 0) {
+                    game->current = &game->text[60];
+                }
+            }
+        } break;
         case ENTITY_NODE: {
-            bool within_region = is_player_close_to_entity(player, e, 8);
-
             if (e->chap_1_node.active && keyboard_focus(game) == NO_KEYBOARD_FOCUS && within_region) {
                 if (is_action_pressed()) {
                     switch (e->chap_1_node.type) {
@@ -578,6 +652,8 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
         } break;
         case ENTITY_PLAYER: {
             if (keyboard_focus(game) != NO_KEYBOARD_FOCUS) break;
+            if (level->prayer_fader > 0) break;
+
             if (!e->chap_1_player.huffing_and_puffing &&
                 level->state == LEVEL_CHAPTER_1_STATE_APARTMENT &&
                 e->alarm[1] == 0)
@@ -695,8 +771,8 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                     }
 
                     Entity *footstep = chapter_1_make_entity(type,
-                                                   e->pos.x,
-                                                   e->pos.y + entity_texture_height(e) - 3);
+                                                             e->pos.x,
+                                                             e->pos.y + entity_texture_height(e) - 3);
                     array_add(&game->entities, footstep);
                 }
             }
@@ -770,8 +846,7 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                         int index = 0;
 
                         for (int i = 0; i < 4; i++) {
-                            if (directions[i] == DIRECTION_INVALID)
-                            {
+                            if (directions[i] == DIRECTION_INVALID) {
                                 index = i;
                                 directions[i] = dir;
                                 break;
@@ -798,7 +873,7 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                         if (type == ENTITY_CACTUS || type == ENTITY_ROCK ||
                             type == ENTITY_FOOTSTEPS || type == ENTITY_BLOOD ||
                             type == ENTITY_NODE || type == ENTITY_PHONE ||
-                            type == ENTITY_WINDOW)
+                            type == ENTITY_WINDOW || type == ENTITY_PRAYER_MAT)
                         {
                             free_entity(entity);
                             array_remove(&game->entities, i--);
@@ -808,10 +883,14 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                     Node_Type node_type = NODE_INVALID;
 
                     bool make_phone = false;
+                    bool make_prayer_mat = false;
 
                     switch (level->screens_scrolled) {
                         case 4: {
                             node_type = NODE_FIRST;
+                        } break;
+                        case 9: {
+                            make_prayer_mat = true;
                         } break;
                         case 8: {
                             node_type = NODE_SECOND;
@@ -820,6 +899,11 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                             make_phone = true;
                             level->state = LEVEL_CHAPTER_1_STATE_PHONE_EXISTS;
                         } break;
+                    }
+
+                    if (make_prayer_mat) {
+                        level->prayer_mat = chapter_1_make_entity(ENTITY_PRAYER_MAT, render_width/2 - 6, render_height/2 - 11);
+                        array_add(&game->entities, level->prayer_mat);
                     }
 
                     if (level->screens_scrolled_while_crawling >= 2 &&
@@ -888,6 +972,10 @@ void chapter_1_entity_draw(Entity *e, Game *game) {
                 BeginShaderMode(level->flashing_shader);
             }
 
+            if (level->prayer_fader > 0) {
+                texture = &atari_assets.textures[23];
+            }
+
             if (texture) {
                 DrawTexture(*texture, x, y, WHITE);
             }
@@ -922,7 +1010,12 @@ void chapter_1_update(Game *game, float dt) {
                 level->god_index++;
                 if (level->god_index > 1) {
                     level->god_index = -1;
-                    add_event(game, chapter_1_end_intro, 4);
+
+                    float duration = 4;
+#ifdef DEBUG
+                    duration = 1;
+#endif
+                    add_event(game, chapter_1_end_intro, duration);
                 }
                 level->god_scroll = chapter_1_god_text_y[level->god_index];
             } else {
@@ -976,6 +1069,22 @@ void chapter_1_update(Game *game, float dt) {
     if (level->state == LEVEL_CHAPTER_1_STATE_FOREST) {
         level->background_color = FOREST_COLOR;
     }
+
+    float diff = level->prayer_fader_to - level->prayer_fader;
+
+    if (diff != 0) {
+        int dir = sign(diff);
+        const float speed = 0.25f * dt;
+        level->prayer_fader += dir * speed;
+
+        if (dir == 1) {
+            if (level->prayer_fader > level->prayer_fader_to)
+                level->prayer_fader = level->prayer_fader_to;
+        } else {
+            if (level->prayer_fader < level->prayer_fader_to)
+                level->prayer_fader = level->prayer_fader_to;
+        }
+    }
 }
 
 void chapter_1_draw(Game *game) {
@@ -1021,13 +1130,24 @@ void chapter_1_draw(Game *game) {
         } break;
     }
 
-    sort_entities(&game->entities);
+    if (level->prayer_fader > 0) {
+        Color c = {};
+        c.a = level->prayer_fader * 255;
 
-    size_t entity_count = game->entities.length;
+        DrawRectangle(0, 0, render_width, render_height, c);
 
-    // Draw the entities
-    for (int i = 0; i < entity_count; i++) {
-        Entity *e = game->entities.data[i];
-        chapter_1_entity_draw(e, game);
+        if (level->prayer_mat)
+            chapter_1_entity_draw(level->prayer_mat, game);
+        chapter_1_entity_draw(level->player, game);
+    } else {
+        sort_entities(&game->entities);
+
+        size_t entity_count = game->entities.length;
+
+        // Draw the entities
+        for (int i = 0; i < entity_count; i++) {
+            Entity *e = game->entities.data[i];
+            chapter_1_entity_draw(e, game);
+        }
     }
 }

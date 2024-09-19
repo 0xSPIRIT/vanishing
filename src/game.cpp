@@ -34,6 +34,7 @@ enum Entity_Type {
     ENTITY_PHONE,
     ENTITY_WALL,
     ENTITY_WINDOW,
+    ENTITY_PRAYER_MAT,
 
     ENTITY_CHAP_2_DOOR,
     ENTITY_CHAP_2_TABLE,
@@ -70,7 +71,12 @@ enum Entity_Type {
     ENTITY_CHAP_4_WINDOW,
 };
 
-// All Atari chapters use the same Entity struct, because
+enum Draw_Layer {
+    DRAW_LAYER_NORMAL = 0,
+    DRAW_LAYER_LOW, // below everything
+};
+
+// All 2d chapters use the same Entity struct, because
 // there's an Array<Entity*> in the main Game struct.
 //
 // You can include specialized variables by adding a new
@@ -86,6 +92,7 @@ struct Entity {
     float       alarm[10];       // General purpose alarms
     int         dialogue_state;
     bool        has_dialogue;
+    Draw_Layer  draw_layer;
 
     union {
         // Chapter 1 entities
@@ -330,7 +337,8 @@ bool is_entity_collidable(Entity *e) {
         return e->chap_2_door.active;
     }
 
-    if (e->type == ENTITY_FOOTSTEPS || e->type == ENTITY_BLOOD || e->type == ENTITY_CHAP_4_WINDOW)
+    if (e->type == ENTITY_FOOTSTEPS || e->type == ENTITY_BLOOD || e->type == ENTITY_CHAP_4_WINDOW ||
+        e->type == ENTITY_PRAYER_MAT)
         return false;
 
     return true;
@@ -470,41 +478,62 @@ void sort_entities(Array<Entity*> *entities) {
     // Sort the entity array based on the bottom of the texture
     size_t entity_count = entities->length;
 
-    // Selection sort
-    for (int i = 0; i < entity_count; i++) {
-        int lowest_index = i;
+    // do the DRAW_LAYER_LOW first
+    int low_layer_count = 0;
 
-        for (int j = lowest_index+1; j < entity_count; j++) {
-            Entity *current_lowest = entities->data[lowest_index];
-            Entity *b = entities->data[j];
+    for (size_t i = 0; i < entity_count; i++) {
+        if (entities->data[i]->draw_layer == DRAW_LAYER_LOW) {
+            Entity *temp = entities->data[low_layer_count];
 
-            Texture2D *current_lowest_texture = entity_get_texture(current_lowest);
-            Texture2D *b_texture              = entity_get_texture(b);
+            entities->data[low_layer_count] = entities->data[i];
+            entities->data[i] = temp;
 
-            int b_height = 0;
-            if (b_texture)
-                b_height = b_texture->height;
-            else
-                b_height = b->base_collider.height;
-
-            int current_lowest_height = 0;
-            if (current_lowest_texture)
-                current_lowest_height = current_lowest_texture->height;
-            else
-                current_lowest_height = current_lowest->base_collider.height;
-
-            int b_bottom_y              = b->pos.y + b_height;
-            int current_lowest_bottom_y = current_lowest->pos.y + current_lowest_height;
-
-            if (b_bottom_y < current_lowest_bottom_y)
-                lowest_index = j;
+            low_layer_count++;
         }
-
-        // Swap i and lowest_index
-        Entity *temp = entities->data[lowest_index];
-        entities->data[lowest_index] = entities->data[i];
-        entities->data[i] = temp;
     }
+
+    auto selection_sort = [&](size_t start, size_t end) {
+        // Selection sort
+        for (size_t i = start; i <= end; i++) {
+            size_t lowest_index = i;
+
+            for (size_t j = lowest_index+1; j <= end; j++) {
+                Entity *current_lowest = entities->data[lowest_index];
+                Entity *b = entities->data[j];
+
+                Texture2D *current_lowest_texture = entity_get_texture(current_lowest);
+                Texture2D *b_texture              = entity_get_texture(b);
+
+                int b_height = 0;
+                if (b_texture)
+                    b_height = b_texture->height;
+                else
+                    b_height = b->base_collider.height;
+
+                int current_lowest_height = 0;
+                if (current_lowest_texture)
+                    current_lowest_height = current_lowest_texture->height;
+                else
+                    current_lowest_height = current_lowest->base_collider.height;
+
+                int b_bottom_y              = b->pos.y + b_height;
+                int current_lowest_bottom_y = current_lowest->pos.y + current_lowest_height;
+
+                if (b_bottom_y < current_lowest_bottom_y)
+                    lowest_index = j;
+            }
+
+            // Swap i and lowest_index
+            Entity *temp = entities->data[lowest_index];
+            entities->data[lowest_index] = entities->data[i];
+            entities->data[i] = temp;
+        }
+    };
+
+    if (low_layer_count > 0)
+        selection_sort(0, low_layer_count-1);
+
+    selection_sort(low_layer_count, entity_count-1);
 }
 
 void default_entity_draw(Entity *e) {
