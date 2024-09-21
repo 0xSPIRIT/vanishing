@@ -57,7 +57,7 @@ enum Entity_Type {
     ENTITY_CHAP_2_RANDOM_GIRL,
     ENTITY_CHAP_2_BOUNCER,
     ENTITY_CHAP_2_BARTENDER,
-    ENTITY_CHAP_2_HOPE,
+    ENTITY_CHAP_2_PENNY,
 
     ENTITY_CHAP_3_CUBICLE_TOP,
     ENTITY_CHAP_3_CUBICLE_VERTICAL,
@@ -103,7 +103,7 @@ struct Entity {
         // Chapter 2 entities
         Chapter_2_Player  chap_2_player;
         Chapter_2_Door    chap_2_door;
-        Chapter_2_Hope    chap_2_hope;
+        Chapter_2_Penny   chap_2_penny;
 
         // Chapter 3 entities
         Chapter_3_Cubicle chap_3_cubicle;
@@ -891,6 +891,39 @@ void game_atari_run(Game *game) {
                    {0, 0},
                    0,
                    WHITE);
+
+    //
+
+            //ClearBackground(WHITE);
+
+            DrawRectangle(10, 10, 210, 30, MAROON);
+            DrawText(TextFormat("%zu particles in one vertex buffer", MAX_PARTICLES), 20, 20, 10, RAYWHITE);
+            
+            rlDrawRenderBatchActive();      // Draw iternal buffers data (previous draw calls)
+
+            // Switch to plain OpenGL
+            //------------------------------------------------------------------------------
+    int currentTimeLoc = GetShaderLocation(shader_, "currentTime");
+    int colorLoc = GetShaderLocation(shader_, "color");
+            glUseProgram(shader_.id);
+            
+                glUniform1f(currentTimeLoc, GetTime());
+
+                Vector4 color = ColorNormalize({ 255, 0, 0, 128 });
+                glUniform4fv(colorLoc, 1, (float *)&color);
+
+                // Get the current modelview and projection matrix so the particle system is displayed and transformed
+                Matrix modelViewProjection = MatrixMultiply(rlGetMatrixModelview(), rlGetMatrixProjection());
+                
+                glUniformMatrix4fv(shader_.locs[SHADER_LOC_MATRIX_MVP], 1, false, MatrixToFloat(modelViewProjection));
+
+                glBindVertexArray(vao);
+                    glDrawArrays(GL_POINTS, 0, MAX_PARTICLES);
+                glBindVertexArray(0);
+                
+            glUseProgram(0);
+            //------------------------------------------------------------------------------
+    //
 
     EndDrawing();
 

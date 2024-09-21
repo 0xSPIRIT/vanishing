@@ -1,4 +1,3 @@
-#define GUY_HEIGHT 1.8f
 #define QUOTE_COUNT 7
 
 enum {
@@ -527,6 +526,8 @@ void chapter_5_scene_init(Game *game) {
         case CHAPTER_5_SCENE_TRAIN_STATION: {
             level->camera_height = 1.67f;
 
+            level->scenes[0] = LoadModel(RES_DIR "models/train_station2.glb");
+
             level->state = CHAPTER_5_STATE_INTRO;//CHAPTER_5_STATE_TRAIN_STATION_1;
             level->black_screen_timer = -1;
 
@@ -673,6 +674,8 @@ void chapter_5_scene_init(Game *game) {
         case CHAPTER_5_SCENE_STAIRCASE: {
             level->camera_height = 1.67f;
 
+            level->scenes[1] = LoadModel(RES_DIR "models/staircase.glb");
+
             level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/dinner.fs");
 
             float train_distance = -511;
@@ -683,8 +686,8 @@ void chapter_5_scene_init(Game *game) {
 
             level->camera.position   = { train_distance, level->camera_height, 0 };
             if (debug_skip_train) {
-                //level->camera.position   = BlenderPosition3D(12.43f, -55.95f, level->camera_height);
-                level->camera.position   = {};
+                level->camera.position   = BlenderPosition3D(12.43f, -55.95f, level->camera_height);
+                //level->camera.position   = {};
             }
 
             level->camera.target     = { 0.00f, level->camera_height, 2.00f };
@@ -849,6 +852,9 @@ void chapter_5_scene_init(Game *game) {
         } break;
         case CHAPTER_5_SCENE_DINNER_PARTY: {
             level->camera_height = 1.9f;
+
+            level->scenes[2] = LoadModel(RES_DIR "models/dinner_party.glb");
+            level->scenes[3] = LoadModel(RES_DIR "models/dinner_party_good.glb");
 
             game->textbox_alpha = 220;
 
@@ -1316,7 +1322,10 @@ void chapter_5_scene_init(Game *game) {
             }
         } break;
         case CHAPTER_5_SCENE_DESERT: {
-            level->camera_height = GUY_HEIGHT;
+            level->camera_height = 1.8f;
+
+            level->scenes[4]           = LoadModel(RES_DIR "models/chap_5_cottage.glb");
+
 
             level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/cottage.fs");
 
@@ -1451,7 +1460,9 @@ void chapter_5_scene_init(Game *game) {
             add_podium(&game->text[10], {-39, -27}, -68);
         } break;
         case CHAPTER_5_SCENE_GALLERY: {
-            level->camera_height = GUY_HEIGHT;
+            level->camera_height = 1.8f;
+
+            level->scenes[5] = LoadModel(RES_DIR "models/artgallery.glb");
 
             level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/cottage.fs");
             model_set_shader(&level->scenes[5], level->shader);
@@ -1644,7 +1655,9 @@ void chapter_5_scene_init(Game *game) {
             quote->fov      = FOV_DEFAULT/4;
         } break;
         case CHAPTER_5_SCENE_SEASIDE: {
-            level->camera_height = GUY_HEIGHT;
+            level->camera_height = 1.8f;
+
+            level->scenes[6] = LoadModel(RES_DIR "models/balcony.glb");
 
             level->camera.position   = { 0, level->camera_height, 0 };
             level->camera.target     = { -2, level->camera_height, 0 };
@@ -1857,17 +1870,7 @@ void chapter_5_init(Game *game) {
 
     atari_assets.textures[0]   = load_texture(RES_DIR "art/ticket_pov.png");
 
-    level->scenes[0]           = LoadModel(RES_DIR "models/train_station2.glb");
-    level->scenes[1]           = LoadModel(RES_DIR "models/staircase.glb");
-    level->scenes[2]           = LoadModel(RES_DIR "models/dinner_party.glb");
-    level->scenes[3]           = LoadModel(RES_DIR "models/dinner_party_good.glb");
-    level->scenes[4]           = LoadModel(RES_DIR "models/chap_5_cottage.glb");
-    level->scenes[5]           = LoadModel(RES_DIR "models/artgallery.glb");
-    level->scenes[6]           = LoadModel(RES_DIR "models/balcony.glb");
-
-    level->camera_height = GUY_HEIGHT;
-
-    assert(IsModelReady(level->scenes[5]));
+    level->camera_height = 1.8f;
 
     level->models.train         = LoadModel(RES_DIR "models/train.glb");
     level->models.train_flipped = LoadModel(RES_DIR "models/train_flipped.glb");
@@ -1883,7 +1886,7 @@ void chapter_5_init(Game *game) {
     level->models.podium        = LoadModel(RES_DIR "models/podium.glb");
 
     level->good = true;
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_TRAIN_STATION);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_STAIRCASE);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {
@@ -2981,6 +2984,7 @@ void chapter_5_draw(Game *game) {
             BeginMode3D(level->camera);
 
             BeginShaderMode(level->shader);
+            //glEnable(GL_STENCIL_TEST);
             DrawModel(level->scenes[1], {}, 1, WHITE);
             chapter_5_draw_train(level, &level->train);
 
@@ -3000,6 +3004,16 @@ void chapter_5_draw(Game *game) {
                         180 - RAD2DEG * head_angle + 90,
                         {1,1,1},
                         WHITE);
+
+            {
+                Vector3 test_pos = level->camera.position;
+                test_pos = Vector3Add(test_pos, Vector3Normalize(Vector3Subtract(level->camera.target, level->camera.position)));
+
+                DrawModel(level->models.pyramid_head,
+                          test_pos,
+                          1,
+                          WHITE);
+            }
 
             EndShaderMode();
 

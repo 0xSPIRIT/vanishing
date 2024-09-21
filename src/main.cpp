@@ -6,6 +6,10 @@
 #define RL_CULL_DISTANCE_FAR  1000
 
 #include <raylib.h>
+
+#define GLSL_VERSION 330
+#include <glad/glad.h>
+
 #include <rlgl.h>
 #include <raymath.h>
 #define RLIGHTS_IMPLEMENTATION
@@ -22,8 +26,6 @@
 #include <time.h>
 
 #include <iostream>
-
-#define GLSL_VERSION 330
 
 #ifdef RELEASE
   #define MainFunction int WinMain
@@ -43,6 +45,18 @@
 
 #define FOV_DEFAULT 65
 
+#define MAX_PARTICLES       1000
+
+// Particle type
+typedef struct Particle {
+    float x;
+    float y;
+    float period;
+} Particle;
+
+GLuint vao, vbo;
+Shader shader_;
+
 const int default_width  = 192*6;
 const int default_height = 144*6;
 
@@ -56,7 +70,7 @@ enum Game_Mode {
 };
 Game_Mode game_mode = GAME_MODE_INVALID;
 
-int chapter = 2;
+int chapter = 5;
 bool epilogue_text_change_color = false; // please god forgive me
 
 Font global_font, atari_font, comic_sans, italics_font, bold_font, bold_2_font, mono_font, bold_font_big;
@@ -136,6 +150,42 @@ MainFunction() {
 
     InitWindow(default_width, default_height, "Video Game");
 
+    gladLoadGL();
+
+    shader_ = LoadShader(RES_DIR "shaders/point_particle.vs", RES_DIR "shaders/point_particle.fs");
+
+    // Initialize the vertex buffer for the particles and assign each particle random values
+    Particle particles[MAX_PARTICLES] = { 0 };
+
+    for (int i = 0; i < MAX_PARTICLES; i++)
+    {
+        particles[i].x = (float)GetRandomValue(20, render_width - 20);
+        particles[i].y = (float)GetRandomValue(50, render_height - 20);
+        
+        // Give each particle a slightly different period. But don't spread it to much. 
+        // This way the particles line up every so often and you get a glimps of what is going on.
+        particles[i].period = (float)GetRandomValue(10, 30)/10.0f;
+    }
+
+    // Create a plain OpenGL vertex buffer with the data and an vertex array object 
+    // that feeds the data from the buffer into the vertexPosition shader attribute.
+    vao = 0;
+    vbo = 0;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+        glGenBuffers(1, &vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES*sizeof(Particle), particles, GL_STATIC_DRAW);
+        // Note: LoadShader() automatically fetches the attribute index of "vertexPosition" and saves it in shader.locs[SHADER_LOC_VERTEX_POSITION]
+        glVertexAttribPointer(shader_.locs[SHADER_LOC_VERTEX_POSITION], 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
+    // Allows the vertex shader to set the point size of each particle individually
+    #ifndef GRAPHICS_API_OPENGL_ES2
+    glEnable(GL_PROGRAM_POINT_SIZE);
+    #endif
     if (fullscreen)
         toggle_fullscreen();
 

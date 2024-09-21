@@ -1,7 +1,7 @@
 FileVersion = 1
 LastConfig = "Debug"
 LastPlatform = "Win64"
-RecentFilesList = ["c:\\dev\\vanishing\\src\\main.cpp", "c:\\dev\\vanishing\\src\\game.cpp", "c:\\dev\\vanishing\\src\\chapter_3.cpp", "c:\\dev\\vanishing\\src\\util.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\abort.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strncpy.asm", "c:\\dev\\vanishing\\src\\intro.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\assert.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strlen.asm", "c:\\dev\\vanishing\\src\\text.cpp", "c:\\dev\\vanishing\\src\\chapter_epilogue.cpp", "c:\\dev\\vanishing\\src\\chapter_5.cpp", "c:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.40.33807\\include\\rcamera.h", "c:\\dev\\vanishing\\chapter_5.cpp", "c:\\dev\\vanishing\\game.cpp", "c:\\dev\\vanishing\\main.cpp", "c:\\dev\\vanishing\\util.cpp"]
+RecentFilesList = ["Disassembly", "c:\\dev\\vanishing\\src\\chapter_2.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\abort.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strncpy.asm", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\assert.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strlen.asm", "c:\\dev\\vanishing\\chapter_5.cpp", "c:\\dev\\vanishing\\game.cpp", "c:\\dev\\vanishing\\main.cpp", "c:\\dev\\vanishing\\util.cpp"]
 
 [MainWindow]
 X = 362
@@ -24,81 +24,20 @@ DefaultDocumentsTabbedView = true
 Type = "TabbedView"
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
-TabLabel = "util.cpp"
-TabWidth = 70.625
-TabIsPinned = false
-Type = "SourceViewPanel"
-FilePath = "c:\\dev\\vanishing\\src\\util.cpp"
-CursorPos = 10046
-VertPos = 10416.0
-
-[[MainDockingFrame.DockedWidgets.Tabs]]
-TabLabel = "chapter_3.cpp"
-TabWidth = 106.25
-TabIsPinned = false
-Type = "SourceViewPanel"
-FilePath = "c:\\dev\\vanishing\\src\\chapter_3.cpp"
-CursorPos = 70664
-VertPos = 41760.0
-
-[[MainDockingFrame.DockedWidgets.Tabs]]
-TabLabel = "intro.cpp"
-TabWidth = 79.375
-TabIsPinned = false
-Type = "SourceViewPanel"
-FilePath = "c:\\dev\\vanishing\\src\\intro.cpp"
-CursorPos = 361
-
-[[MainDockingFrame.DockedWidgets.Tabs]]
-TabLabel = "text.cpp"
-TabWidth = 73.75
-TabIsPinned = false
-Type = "SourceViewPanel"
-FilePath = "c:\\dev\\vanishing\\src\\text.cpp"
-CursorPos = 6946
-
-[[MainDockingFrame.DockedWidgets.Tabs]]
-TabLabel = "chapter_epilogue.cpp"
-TabWidth = 147.5
-TabIsPinned = false
-Type = "SourceViewPanel"
-FilePath = "c:\\dev\\vanishing\\src\\chapter_epilogue.cpp"
-CursorPos = 22359
-
-[[MainDockingFrame.DockedWidgets.Tabs]]
 Active = true
-TabLabel = "main.cpp"
-TabWidth = 80.0
+TabLabel = "Disassembly"
+TabWidth = 106.875
 TabIsPinned = false
-Type = "SourceViewPanel"
-FilePath = "c:\\dev\\vanishing\\src\\main.cpp"
-CursorPos = 1070
-VertPos = 3144.0
+Type = "DisassemblyPanel"
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
-TabLabel = "game.cpp"
-TabWidth = 83.75
-TabIsPinned = false
-Type = "SourceViewPanel"
-FilePath = "c:\\dev\\vanishing\\src\\game.cpp"
-CursorPos = 6232
-VertPos = 5832.0
-
-[[MainDockingFrame.DockedWidgets.Tabs]]
-TabLabel = "rcamera.h"
-TabWidth = 83.125
-TabIsPinned = false
-Type = "SourceViewPanel"
-FilePath = "c:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.40.33807\\include\\rcamera.h"
-CursorPos = 11370
-
-[[MainDockingFrame.DockedWidgets.Tabs]]
-TabLabel = "chapter_5.cpp"
+TabLabel = "chapter_2.cpp"
 TabWidth = 106.25
 TabIsPinned = false
 Type = "SourceViewPanel"
-FilePath = "c:\\dev\\vanishing\\src\\chapter_5.cpp"
-CursorPos = 85457
+FilePath = "c:\\dev\\vanishing\\src\\chapter_2.cpp"
+CursorPos = 29000
+VertPos = 27350.49
 
 [[MainDockingFrame.DockedWidgets]]
 RequestedWidth = 732.0
@@ -127,7 +66,7 @@ TabWidth = 84.375
 TabIsPinned = false
 Type = "WatchPanel"
 Columns = [{Width = 211.0}, {Width = 972.0001}, {Width = 211.0}]
-Items = ["low_layer_count", "entities", "start", "end", "comic_sans", ""]
+Items = ["level.player.pos", ""]
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 TabLabel = "Auto"
