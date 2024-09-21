@@ -31,6 +31,8 @@ struct Level_Chapter_2 {
 
     int width, height;
 
+    RenderTexture2D window_target;
+
     Camera2D camera;
 };
 
@@ -226,8 +228,27 @@ void chapter_2_end_fade(void *game_ptr) {
     atari_queue_deinit_and_goto_intro(game);
 }
 
+void chapter_2_setup_walls(Game *game) {
+    Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
+
+    for (int i = 0; i < game->entities.length; i++) {
+        Entity *e = game->entities.data[i];
+
+        if (e->type != ENTITY_PLAYER) {
+            free_entity(e);
+            array_remove(&game->entities, i--);
+        }
+    }
+    level->hope = 0;
+
+    add_wall(&game->entities, {0, 0, 39, 160});
+    add_wall(&game->entities, {0, 0, 192, 61});
+}
+
 void chapter_2_init(Game *game) {
     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
+
+    level->window_target = LoadRenderTexture(90, 17);
 
     Texture2D *textures = atari_assets.textures;
     textures[0]  = load_texture(RES_DIR "art/player.png");
@@ -242,6 +263,9 @@ void chapter_2_init(Game *game) {
     //textures[9]  = load_texture(RES_DIR "art/fullscreen_2.png");
     textures[10] = load_texture(RES_DIR "art/bathroom.png");
     textures[11] = load_texture(RES_DIR "art/open_window.png");
+    textures[12] = load_texture(RES_DIR "art/djinn1.png");
+    textures[13] = load_texture(RES_DIR "art/djinn2.png");
+    textures[14] = load_texture(RES_DIR "art/djinn3.png");
 
     game->entities = make_array<Entity*>(20);
 
@@ -774,7 +798,7 @@ void chapter_2_init(Game *game) {
 
     chapter_2_window_text(false,
                           &game->text[100],
-                          "He gazed into the dark,\nhoping to find her.\rBut only found Apathy.",
+                          "He gazed into the dark,\nhoping to find her.\rBut only found apathy.",
                           &game->text[101]);
     chapter_2_window_text(false,
                           &game->text[101],
@@ -874,6 +898,9 @@ void chapter_2_init(Game *game) {
     add_wall(&game->entities, { 576, 160-3, 192*3, 8});
 
     add_door(&game->entities, { 569, 78, 7, 25 });
+    
+    level->current_area = CHAPTER_2_AREA_BATHROOM;
+    chapter_2_setup_walls(game);
 }
 
 void chapter_2_deinit(Game *game) {
@@ -1141,10 +1168,7 @@ void chapter_2_update(Game *game, float dt) {
             };
 
             Rectangle mirror_area = {
-                53,
-                32,
-                105,
-                40
+                60, 62, 92, 17
             };
 
             Entity *p = level->player;
@@ -1181,18 +1205,7 @@ void chapter_2_update(Game *game, float dt) {
             level->player->pos.y = fmod(level->player->pos.y, render_height);
 
             if (hope) {
-                for (int i = 0; i < game->entities.length; i++) {
-                    Entity *e = game->entities.data[i];
-
-                    if (e->type != ENTITY_PLAYER) {
-                        free_entity(e);
-                        array_remove(&game->entities, i--);
-                    }
-                }
-                level->hope = 0;
-
-                add_wall(&game->entities, {0, 0, 39, 160});
-                add_wall(&game->entities, {0, 0, 192, 37});
+                chapter_2_setup_walls(game);
             }
         }
     }
@@ -1248,6 +1261,98 @@ void chapter_2_draw(Game *game) {
         }
 
         EndMode2D();
+
+        // Draw mirror
+
+        if (level->current_area == CHAPTER_2_AREA_BATHROOM) {
+            BeginTextureMode(level->window_target);
+            ClearBackground({});
+
+            float mirror_start_x = 60;
+            float mirror_start_y = 0;
+            int mirror_bottom_y = 39;
+
+            int player_x = level->player->pos.x;
+            int player_y = level->player->pos.y - mirror_bottom_y;
+
+            player_y *= -1;
+
+            player_y += 17;
+
+            player_x -= mirror_start_x;
+            player_y -= mirror_start_y;
+
+
+            static float djinn_follow_x = player_x;
+            static float djinn_follow_y = player_y;
+
+            djinn_follow_x = Lerp(djinn_follow_x, player_x, 0.025f);
+            djinn_follow_y = Lerp(djinn_follow_y, player_y, 0.025f);
+
+            static float speed_timer = 0;
+
+            float speed = 0.25f;
+            float time = GetTime() * speed;
+
+            Texture *djinns = atari_assets.textures + 12;
+
+            static int num_djinns = 1;
+            const int total_djinns = 10;
+            static float djinn_time = 0;
+
+            djinn_time += GetFrameTime();
+
+            if (djinn_time >= 3) {
+                if (num_djinns < total_djinns) {
+                    num_djinns++;
+                }
+                djinn_time = 0;
+            }
+
+            for (int i = 0; i < num_djinns; i++) {
+                Color c;
+
+                c.r = 255;
+                c.g = 255;
+                c.b = 255;
+                c.a = 255;
+                //c.a = 127 + 127 * sin(time*2.3 + i*3);
+
+                int idx = i%2 == 0 ? 0 : 1;
+
+                if (i < num_djinns/2) {
+                    c.r = c.g = c.b = ((int)(5.1*i+1*GetTime())) % 2 == 0 ? 0 : 255;
+                    c.a = 255;
+                }
+
+                if (rand()%100 == 0) {
+                    idx = 2;
+                }
+
+                Texture *djinn = djinns+idx;
+                DrawTexture(*djinn,
+                            djinn_follow_x + atari_assets.textures[0].width/2 - djinn->width/2 + sin(time + i*5) * (20 + i*2),
+                            djinn_follow_y - djinn->height - 4 + sin(time*2.3 + i*3) * (11 + 0.5 * i),
+                            c);
+            }
+
+            DrawTexture(atari_assets.textures[0],
+                        player_x, player_y,
+                        WHITE);
+
+            EndTextureMode();
+            BeginTextureMode(game->atari_render_target);
+
+            float target_w = level->window_target.texture.width;
+            float target_h = level->window_target.texture.height;
+
+            DrawTexturePro(level->window_target.texture,
+                           {0, 0, target_w, -target_h},
+                           {mirror_start_x, mirror_start_y, target_w, target_h},
+                           {0, 0},
+                           0,
+                           WHITE);
+        }
 
         if (game->current == 0) {
             if (level->window_popup) {

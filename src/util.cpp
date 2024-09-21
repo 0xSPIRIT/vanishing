@@ -150,6 +150,14 @@ void array_print(Array<T> array, const char *t_format_specifier) {
 
 // Misc
 
+float get_frame_time_clamped() {
+    float dt = GetFrameTime();
+#ifdef DEBUG
+    dt = 1.f/60.f;
+#endif
+    return dt;
+}
+
 float go_to(float a, float b, float speed) {
     float dir;
 

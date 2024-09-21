@@ -545,7 +545,7 @@ void chapter_5_scene_init(Game *game) {
 
             level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/cottage.fs");
 //
-            model_set_bilinear(&level->scenes[0]);
+            //model_set_bilinear(&level->scenes[0]);
 
             model_set_shader(&level->scenes[0],         level->shader);
             model_set_shader(&level->models.train,      level->shader);
@@ -675,12 +675,18 @@ void chapter_5_scene_init(Game *game) {
 
             level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/dinner.fs");
 
-            float train_distance = -510;
+            float train_distance = -511;
+
+            const bool debug_skip_train = true;
 
             game->textbox_alpha = 220;
 
             level->camera.position   = { train_distance, level->camera_height, 0 };
-            //level->camera.position   = BlenderPosition3D(12.43f, -55.95f, level->camera_height);
+            if (debug_skip_train) {
+                //level->camera.position   = BlenderPosition3D(12.43f, -55.95f, level->camera_height);
+                level->camera.position   = {};
+            }
+
             level->camera.target     = { 0.00f, level->camera_height, 2.00f };
             level->camera.up         = { 0, 1, 0 };
             level->camera.fovy       = FOV_DEFAULT;
@@ -698,11 +704,13 @@ void chapter_5_scene_init(Game *game) {
             train->closed       = true;
             train->moving       = true;
             train->player_in    = true;
-            /*
-            train->closed       = false;
-            train->moving       = false;
-            train->player_in    = false;
-            */
+
+            if (debug_skip_train) {
+                train->closed       = false;
+                train->moving       = false;
+                train->player_in    = false;
+            }
+
             train->able_to_close = false;
             train->speed = 0;
 
@@ -844,7 +852,7 @@ void chapter_5_scene_init(Game *game) {
 
             game->textbox_alpha = 220;
 
-            level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/dinner.fs");
+            level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/good_dinner.fs");
             model_set_shader(&level->scenes[2], level->shader);
             model_set_shader(&level->scenes[3], level->shader);
 
@@ -1312,8 +1320,8 @@ void chapter_5_scene_init(Game *game) {
 
             level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/cottage.fs");
 
-            Model *scene_model = &level->scenes[4];
-            model_set_bilinear(scene_model);
+            //Model *scene_model = &level->scenes[4];
+            //model_set_bilinear(scene_model);
 
             model_set_shader(&level->scenes[4], level->shader);
 
@@ -1580,8 +1588,8 @@ void chapter_5_scene_init(Game *game) {
             }
 
             // Set all the textures to bilinear.
-            Model *scene_model = &level->scenes[5];
-            model_set_bilinear(scene_model);
+            //Model *scene_model = &level->scenes[5];
+            //model_set_bilinear(scene_model);
 
             level->camera.position   = { 0, level->camera_height, 0 };
             level->camera.target     = { 0, level->camera_height, -2 };
@@ -1874,6 +1882,7 @@ void chapter_5_init(Game *game) {
     level->models.real_head     = LoadModel(RES_DIR "models/real_head.glb");
     level->models.podium        = LoadModel(RES_DIR "models/podium.glb");
 
+    level->good = true;
     chapter_5_goto_scene(game, CHAPTER_5_SCENE_TRAIN_STATION);
 }
 
@@ -2114,7 +2123,9 @@ void chapter_5_draw_table(Game *game, Chapter_5_Table *table) {
         if (chair->state == CHAIR_HAS_HOPE || level->good) {
             head_model = real_head_model;
             head_color = color;
-            head_size = 1;
+
+            if (!level->good)
+                head_size = 0.8f;
         }
 
         Vector3 chair_position = get_chair_position(chair);
@@ -2164,7 +2175,14 @@ void chapter_5_draw_table(Game *game, Chapter_5_Table *table) {
         DrawModelEx(*chair_model,  chair_pos, {0,1,0}, RAD2DEG * -angle, {1,1,1}, WHITE);
         if (chair->state != CHAIR_EMPTY) {
             DrawModelEx(*person_model, chair_pos, {0,1,0}, RAD2DEG * -angle, {1,1,1}, color);
-            DrawModelEx(*head_model, Vector3Add(chair_pos, {0,1.4f,0}), {0,1,0}, 90 + RAD2DEG * -chair->look_angle, {head_size,head_size,head_size}, head_color);
+
+            Vector3 head_pos = Vector3Add(chair_pos, {0,1.4f,0});
+
+            if (!level->good && head_model == real_head_model) {
+                head_pos.z -= 0.05f;
+            }
+
+            DrawModelEx(*head_model, head_pos, {0,1,0}, 90 + RAD2DEG * -chair->look_angle, {head_size,head_size,head_size}, head_color);
         }
     }
 }
@@ -2244,12 +2262,6 @@ void chapter_5_draw_train(Level_Chapter_5 *level, Chapter_5_Train *train) {
                      MatrixMultiply(x_inverse, translate));
         }
     }
-}
-
-void chapter_5_update_camera_look(Camera3D *camera, float dt) {
-    Vector2 look = input_movement_look(dt);
-    CameraYaw(camera,   -look.x, false);
-    CameraPitch(camera, -look.y, true, false, false);
 }
 
 bool is_mesh_collider(Model *model, int mesh_index) {
@@ -2394,7 +2406,7 @@ void chapter_5_update_player_train_station(Game *game, float dt) {
     bool can_move = keyboard_focus(game) == 0 && !level->clerk.do_180_head;
 
     if (can_move) {
-        update_camera_3d(&level->camera, PLAYER_SPEED_3D, dt);
+        update_camera_3d(&level->camera, PLAYER_SPEED_3D, true, dt);
     }
 
     Vector3 *camera = &level->camera.position;
@@ -2440,7 +2452,7 @@ void chapter_5_update_player_train_station(Game *game, float dt) {
     }
 
     if (can_move) {
-        chapter_5_update_camera_look(&level->camera, dt);
+        update_camera_look(&level->camera, dt);
     }
 
 }
@@ -2453,7 +2465,7 @@ void chapter_5_update_player_staircase(Game *game, float dt) {
     bool can_move = keyboard_focus(game) == 0;
 
     if (can_move)
-        update_camera_3d(&level->camera, PLAYER_SPEED_3D, dt);
+        update_camera_3d(&level->camera, PLAYER_SPEED_3D, true, dt);
 
     Chapter_5_Train *train = &level->train;
     Vector3 *camera = &level->camera.position;
@@ -2510,7 +2522,7 @@ void chapter_5_update_player_staircase(Game *game, float dt) {
     }
 
     if (can_move)
-        chapter_5_update_camera_look(&level->camera, dt);
+        update_camera_look(&level->camera, dt);
 }
 
 void gallery_check_quotes(Game *game, float dt) {
@@ -2582,7 +2594,7 @@ void chapter_5_update_player_desert(Game *game, float dt) {
 
     if (level->current_quote == 0) {
         Vector3 stored_camera_pos = level->camera.position;
-        update_camera_3d(&level->camera, 4, dt);
+        update_camera_3d(&level->camera, 4, true, dt);
 
         Vector3 velocity = Vector3Subtract(level->camera.position, stored_camera_pos);
         level->camera.position = stored_camera_pos;
@@ -2594,7 +2606,7 @@ void chapter_5_update_player_desert(Game *game, float dt) {
         else
             apply_3d_velocity(&level->camera, level->camera_height, level->scenes[4], velocity, false);
 
-        chapter_5_update_camera_look(&level->camera, dt);
+        update_camera_look(&level->camera, dt);
     }
 
     /*
@@ -2676,7 +2688,7 @@ void chapter_5_update_player_dinner_party(Game *game, float dt) {
     bool can_move = (game->current == 0);
 
     if (can_move && !level->sitting_at_table) {
-        update_camera_3d(&level->camera, PLAYER_SPEED_3D, dt);
+        update_camera_3d(&level->camera, PLAYER_SPEED_3D, false, dt);
     }
 
     Vector3 velocity = Vector3Subtract(level->camera.position, stored_camera_pos);
@@ -2692,7 +2704,7 @@ void chapter_5_update_player_dinner_party(Game *game, float dt) {
     apply_3d_velocity(&level->camera, level->camera_height, *scene, velocity, true);
 
     if (look)
-        chapter_5_update_camera_look(&level->camera, dt);
+        update_camera_look(&level->camera, dt);
 
     level->talk_popup = false;
     
@@ -3005,7 +3017,7 @@ void chapter_5_draw(Game *game) {
             if (level->black_state) break;
 
             if (level->good) {
-                ClearBackground(WHITE);
+                ClearBackground({32,32,32,255});
             }
 
             BeginMode3D(level->camera);

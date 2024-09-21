@@ -1,21 +1,22 @@
 TODO : Today
 
- - add controls
- - Fix the issue with chapter 3.
+x Chapter 2: triangle guy in mirror
 
- - For some reason, on line 1123,
-   word_on->start_index < line_start_index,
-   so you're getting a huge u64 as the
-   parameter to the strncpy due to
-   overflow.
+- In staircase, add a mirror version of yourself
+  through the blue windows. Make it draw to a
+  separate scene and then you just project that
+  onto the window with a blue transparency.
+   - Also, add a few triangle headed guys
+     with shadowy bodies following you around.
 
 V1 squad
   - Jaydn
   - Saleem
   - Rais
   - Daniel
-  - Aliyah
+  - Varun
   - Gyasi
+  - Saurav
 
 I did a run through of the game. One thing that it's
 missing is coherency. I need to add more glue to

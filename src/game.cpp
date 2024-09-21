@@ -569,6 +569,20 @@ void draw_popup(const char *text, Color color, Location location) {
     pos.x = (int)pos.x;
     pos.y = (int)pos.y;
 
+    int darken = 60;
+    Color dark = color;
+    dark.r = (uint8_t) max(0, (int)color.r - darken);
+    dark.g = (uint8_t) max(0, (int)color.g - darken);
+    dark.b = (uint8_t) max(0, (int)color.b - darken);
+
+    pos.x++;
+    pos.y++;
+
+    DrawTextEx(atari_font, text, pos, atari_font.baseSize, 1, dark);
+
+    pos.x--;
+    pos.y--;
+
     DrawTextEx(atari_font, text, pos, atari_font.baseSize, 1, color);
 }
 
@@ -697,13 +711,21 @@ void model_set_shader(Model *model, Shader shader) {
     }
 }
 
-void update_camera_3d(Camera3D *camera, float speed, float dt) {
+void update_camera_look(Camera3D *camera, float dt) {
+    Vector2 look = input_movement_look(dt);
+    CameraYaw(camera,   -look.x, false);
+    CameraPitch(camera, -look.y, true, false, false);
+}
+
+void update_camera_3d(Camera3D *camera, float speed, bool allow_run, float dt) {
     float dir_x = input_movement_x_axis(dt);//key_right() - key_left();
     float dir_y = input_movement_y_axis(dt);//key_down()  - key_up();
 
-    if (IsKeyDown(KEY_LEFT_SHIFT) ||
-        (IsGamepadAvailable(0) && IsGamepadButtonDown(0, GAMEPAD_BUTTON_RIGHT_TRIGGER_2))) speed = 7;
-    if (IsKeyDown(KEY_LEFT_ALT)) speed = 0.5f;
+    if (allow_run) {
+        if (IsKeyDown(KEY_LEFT_SHIFT) ||
+            (IsGamepadAvailable(0) && IsGamepadButtonDown(0, GAMEPAD_BUTTON_RIGHT_TRIGGER_2))) speed = 7;
+        if (IsKeyDown(KEY_LEFT_ALT)) speed = 0.5f;
+    }
 
     Vector3 saved = camera->target;
     CameraMoveForward(camera, -dir_y * speed * dt, true);
@@ -798,7 +820,7 @@ void atari_deinit(Game *game) {
 }
 
 void game_atari_run(Game *game) {
-    float dt = GetFrameTime();
+    float dt = get_frame_time_clamped();
 
     if (dt < 1.0f/144.0f) dt = 1.0f/144.0f;
     if (dt > 1.0f/30.0f)  dt = 1.0f/30.0f;

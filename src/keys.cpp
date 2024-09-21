@@ -103,7 +103,7 @@ Vector2 input_movement_look(float dt) {
     result.y *= mouse_sensitivity;
 
     if (IsGamepadAvailable(0)) {
-        const float gamepad_sensitivity = 0.05f;
+        const float gamepad_sensitivity = 0.04f;
 
         Vector2 v = input_movement_cont_look_axis(dt);
 

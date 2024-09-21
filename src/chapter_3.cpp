@@ -1921,7 +1921,7 @@ void chapter_3_draw(Game *game, float dt) {
                 DrawRectangleRec(phone_screen, phone->c1);
                 DrawRectangleRec(phone_screen_down, phone->c2);
 
-                if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S)) {
+                if (key_down_pressed()) {
                     phone->scroll_y_to = phone_screen.height;
                 }
 

@@ -843,7 +843,7 @@ void chapter_epilogue_update(Game *game, float dt) {
 
         level->camera.target = Vector3Add(level->camera.target, Vector3Subtract(*cam, saved_cam));
 
-        chapter_5_update_camera_look(&level->camera, dt);
+        update_camera_look(&level->camera, dt);
     }
 
     level->node_popup = false;
