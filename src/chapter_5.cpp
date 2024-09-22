@@ -203,7 +203,7 @@ void chapter_5_end_text_begin(Game *game) {
 void chapter_5_end_text_begin_delayed(void *game_ptr) {
     Game *game = (Game *)game_ptr;
 
-    add_event(game, chapter_5_end_text_begin, 2);
+    add_event(game, chapter_5_end_text_begin, 4);
 }
 
 void chapter_5_end(void *game_ptr) {
@@ -216,7 +216,7 @@ void chapter_5_2_second_hang_goto_text(Game *game) {
 
 void chapter_5_2_second_hang_end_text(void *game_ptr) {
     Game *game = (Game *)game_ptr;
-    add_event(game, chapter_5_2_second_hang_goto_text, 2);
+    add_event(game, chapter_5_2_second_hang_goto_text, 4);
 }
 
 void chapter_5_begin_phone_call(Game *game) {
@@ -229,7 +229,7 @@ void end_chapter_5_after_stop(void *game_ptr) {
 
     level->seaside_ending = true;
 
-    add_event(game, chapter_5_begin_phone_call, 2);
+    add_event(game, chapter_5_begin_phone_call, 5);
 }
 
 void chapter_5_exit_gallery(void *game_ptr) {
@@ -289,7 +289,7 @@ void chapter_5_sit_at_table(void *game_ptr) {
     Vector3 *camera = &level->camera.position;
 
     camera->x = -33.5f;
-    camera->y = 1.0f;
+    camera->y = level->camera_height = 1.65f;
     camera->z = 2.19f;
 
     Vector3 *target = &level->camera.target;
@@ -381,8 +381,8 @@ void chapter_5_train_station_init_positions(Game *game, bool refresh) {
     level->camera.fovy       = 50;
 
     if (!refresh) {
-        level->camera.position   = { 50, level->camera_height, 0 };
-        level->camera.target     = { 0, level->camera_height, 0 };
+        level->camera.position   = { 50, level->camera_height- 1.2585f, 0 };
+        level->camera.target     = { 0, level->camera_height- 1.2585f, 0 };
         level->camera.up         = { 0, 1, 0 };
         level->camera.projection = CAMERA_PERSPECTIVE;
     }
@@ -414,7 +414,7 @@ void chapter_5_text(Text_List *list, char *speaker, char *line, float scroll_spe
     list->scale = 0.125;
     list->scroll_speed = scroll_speed;
 
-    list->color = {255, 199, 199, 255};
+    list->color = WHITE;
     list->bg_color = BLACK;
 
     list->render_type = DrawTextbox;
@@ -678,9 +678,9 @@ void chapter_5_scene_init(Game *game) {
 
             level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/dinner.fs");
 
-            float train_distance = -511;
+            float train_distance = -508;
 
-            const bool debug_skip_train = true;
+            const bool debug_skip_train = false;
 
             game->textbox_alpha = 220;
 
@@ -1017,8 +1017,10 @@ void chapter_5_scene_init(Game *game) {
                 Text_List *next[] = { nullptr, nullptr };
                 void (*hooks[2])(void*) = { chapter_5_sit_at_table, nullptr };
 
-                game->text[53].color = SKYBLUE;
+                game->text[53].color = WHITE;
                 game->text[53].bg_color = BLACK;
+                game->text[53].render_type = DrawTextbox;
+                game->text[53].location = Bottom;
 
                 atari_choice_text_list_init(&game->text[53],
                                             "Eleanor",
@@ -1190,9 +1192,10 @@ void chapter_5_scene_init(Game *game) {
                 Text_List *next[] = { nullptr, nullptr };
                 void (*hooks[2])(void*) = { chapter_5_sit_at_table, nullptr };
 
-
-                game->text[93].color = SKYBLUE;
+                game->text[93].color = WHITE;
                 game->text[93].bg_color = BLACK;
+                game->text[93].render_type = DrawTextbox;
+                game->text[93].location = Bottom;
 
                 atari_choice_text_list_init(&game->text[93],
                                             "Eleanor",
@@ -1360,7 +1363,7 @@ void chapter_5_scene_init(Game *game) {
                                   &game->text[101]);
             chapter_5_podium_text(&game->text[101],
                                   true,
-                                  "Days passed.\rAfter an eternity of unbearable pain,\nI came upon a cottage.\rI opened the door.",
+                                  "Days passed.\rAfter an eternity of unbearable pain,\nI came upon a small cottage.\rI opened the door.",
                                   nullptr);
 
             chapter_5_podium_text(&game->text[3],
@@ -1396,7 +1399,7 @@ void chapter_5_scene_init(Game *game) {
 
             chapter_5_podium_text(&game->text[8],
                                   false,
-                                  "No matter what the answer was,\nit would mean cosmic horror.\rIt would mean that God had surely\nforsaken him.",
+                                  "No matter what the answer was,\nit would mean cosmic horror.\rIt would mean that God had surely\nforsaken him, if she even existed.",
                                   nullptr);
 
             chapter_5_podium_text(&game->text[9],
@@ -1885,8 +1888,7 @@ void chapter_5_init(Game *game) {
     level->models.real_head     = LoadModel(RES_DIR "models/real_head.glb");
     level->models.podium        = LoadModel(RES_DIR "models/podium.glb");
 
-    level->good = true;
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_STAIRCASE);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_TRAIN_STATION);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {
@@ -2691,7 +2693,7 @@ void chapter_5_update_player_dinner_party(Game *game, float dt) {
     bool can_move = (game->current == 0);
 
     if (can_move && !level->sitting_at_table) {
-        update_camera_3d(&level->camera, PLAYER_SPEED_3D, false, dt);
+        update_camera_3d(&level->camera, PLAYER_SPEED_3D, true, dt);
     }
 
     Vector3 velocity = Vector3Subtract(level->camera.position, stored_camera_pos);
@@ -2917,6 +2919,32 @@ void chapter_5_update(Game *game, float dt) {
     }
 }
 
+void staircase_draw_scene(Level_Chapter_5 *level) {
+    Model *scene = level->scenes + 1;
+
+    BeginShaderMode(level->shader);
+
+    for (int i = 0; i < scene->meshCount; i++) {
+        Color color = scene->materials[scene->meshMaterial[i]].maps[MATERIAL_MAP_DIFFUSE].color;
+
+        if (color.r == 255 && color.g == 0 && color.b == 255) {
+            continue;
+        }
+
+        DrawMesh(scene->meshes[i], scene->materials[scene->meshMaterial[i]], scene->transform);
+    }
+
+    for (int i = scene->meshCount-1; i >= 0; i--) {
+        Color color = scene->materials[scene->meshMaterial[i]].maps[MATERIAL_MAP_DIFFUSE].color;
+
+        if (color.r == 255 && color.g == 0 && color.b == 255) {
+            DrawMesh(scene->meshes[i], scene->materials[scene->meshMaterial[i]], scene->transform);
+        }
+    }
+
+    EndShaderMode();
+}
+
 void chapter_5_draw(Game *game) {
     Level_Chapter_5 *level = (Level_Chapter_5 *)game->level;
 
@@ -2932,7 +2960,7 @@ void chapter_5_draw(Game *game) {
                         break;
                     }
 
-                    game->textbox_alpha = 180;
+                    game->textbox_alpha = 220;
 
                     BeginMode3D(level->camera);
                     BeginShaderMode(level->shader);
@@ -2984,8 +3012,10 @@ void chapter_5_draw(Game *game) {
             BeginMode3D(level->camera);
 
             BeginShaderMode(level->shader);
-            //glEnable(GL_STENCIL_TEST);
-            DrawModel(level->scenes[1], {}, 1, WHITE);
+
+            staircase_draw_scene(level);
+            //DrawModel(level->scenes[1], {}, 1, WHITE);
+
             chapter_5_draw_train(level, &level->train);
 
             Vector2 player_p = { level->camera.position.x, level->camera.position.z };
@@ -3005,7 +3035,7 @@ void chapter_5_draw(Game *game) {
                         {1,1,1},
                         WHITE);
 
-            {
+            if (0){
                 Vector3 test_pos = level->camera.position;
                 test_pos = Vector3Add(test_pos, Vector3Normalize(Vector3Subtract(level->camera.target, level->camera.position)));
 

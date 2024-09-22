@@ -94,6 +94,7 @@ Entity *chapter_2_make_entity(Entity_Type type, float x, float y) {
         } break;
         case ENTITY_CHAP_2_RANDOM_GUY: {
             result->texture_id = 2;
+            result->has_dialogue = true;
         } break;
         case ENTITY_CHAP_2_PENNY: {
             result->texture_id = 7;
@@ -105,6 +106,7 @@ Entity *chapter_2_make_entity(Entity_Type type, float x, float y) {
         } break;
         case ENTITY_CHAP_2_RANDOM_GIRL: case ENTITY_CHAP_2_JESSICA: {
             result->texture_id = 4;
+            result->has_dialogue = true;
         } break;
         case ENTITY_CHAP_2_ERICA: case ENTITY_CHAP_2_AMELIA:
         case ENTITY_CHAP_2_LUNA:
@@ -833,6 +835,12 @@ void chapter_2_init(Game *game) {
                          speed,
                          nullptr);
 
+    atari_text_list_init(&game->text[110],
+                         0,
+                         "...",
+                         20,
+                         nullptr);
+
     Entity *jake    = chapter_2_make_entity(ENTITY_CHAP_2_JAKE,    638,  30);
     Entity *erica   = chapter_2_make_entity(ENTITY_CHAP_2_ERICA,   618,  14);
     Entity *mike    = chapter_2_make_entity(ENTITY_CHAP_2_MIKE,    705,  90);
@@ -909,8 +917,9 @@ void chapter_2_entity_update(Entity *e, Game *game, float dt) {
 
     Entity *player = level->player;
 
+    bool dlg = can_open_dialogue(game, e, player);
     bool open_dialogue = is_action_pressed() &&
-                         can_open_dialogue(game, e, player) &&
+                         dlg && 
                          level->penny_state != CHAPTER_2_PENNY_STATE_DONE;
 
     switch (e->type) {
@@ -1113,6 +1122,11 @@ void chapter_2_entity_update(Entity *e, Game *game, float dt) {
                         e->chap_2_penny.final_text = true;
                     }
                 } break;
+            }
+        } break;
+        default: {
+            if (open_dialogue) {
+                game->current = &game->text[110]; // "..."
             }
         } break;
     }

@@ -571,17 +571,20 @@ void draw_popup(const char *text, Color color, Location location) {
 
     int darken = 60;
     Color dark = color;
-    dark.r = (uint8_t) max(0, (int)color.r - darken);
-    dark.g = (uint8_t) max(0, (int)color.g - darken);
-    dark.b = (uint8_t) max(0, (int)color.b - darken);
 
-    pos.x++;
-    pos.y++;
+    if (dark.r > 0 && dark.g > 0 && dark.b > 0) {
+        dark.r = (uint8_t) max(0, (int)color.r - darken);
+        dark.g = (uint8_t) max(0, (int)color.g - darken);
+        dark.b = (uint8_t) max(0, (int)color.b - darken);
 
-    DrawTextEx(atari_font, text, pos, atari_font.baseSize, 1, dark);
+        pos.x++;
+        pos.y++;
 
-    pos.x--;
-    pos.y--;
+        DrawTextEx(atari_font, text, pos, atari_font.baseSize, 1, dark);
+
+        pos.x--;
+        pos.y--;
+    }
 
     DrawTextEx(atari_font, text, pos, atari_font.baseSize, 1, color);
 }
@@ -891,39 +894,6 @@ void game_atari_run(Game *game) {
                    {0, 0},
                    0,
                    WHITE);
-
-    //
-
-            //ClearBackground(WHITE);
-
-            DrawRectangle(10, 10, 210, 30, MAROON);
-            DrawText(TextFormat("%zu particles in one vertex buffer", MAX_PARTICLES), 20, 20, 10, RAYWHITE);
-            
-            rlDrawRenderBatchActive();      // Draw iternal buffers data (previous draw calls)
-
-            // Switch to plain OpenGL
-            //------------------------------------------------------------------------------
-    int currentTimeLoc = GetShaderLocation(shader_, "currentTime");
-    int colorLoc = GetShaderLocation(shader_, "color");
-            glUseProgram(shader_.id);
-            
-                glUniform1f(currentTimeLoc, GetTime());
-
-                Vector4 color = ColorNormalize({ 255, 0, 0, 128 });
-                glUniform4fv(colorLoc, 1, (float *)&color);
-
-                // Get the current modelview and projection matrix so the particle system is displayed and transformed
-                Matrix modelViewProjection = MatrixMultiply(rlGetMatrixModelview(), rlGetMatrixProjection());
-                
-                glUniformMatrix4fv(shader_.locs[SHADER_LOC_MATRIX_MVP], 1, false, MatrixToFloat(modelViewProjection));
-
-                glBindVertexArray(vao);
-                    glDrawArrays(GL_POINTS, 0, MAX_PARTICLES);
-                glBindVertexArray(0);
-                
-            glUseProgram(0);
-            //------------------------------------------------------------------------------
-    //
 
     EndDrawing();
 

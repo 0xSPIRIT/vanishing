@@ -94,6 +94,38 @@ Vector2 input_movement_cont_look_axis(float dt) {
     return result;
 }
 
+Vector2 get_mouse() {
+    Vector2 result   = GetMousePosition();
+    Rectangle screen = get_screen_rectangle();
+
+    float scale_x = screen.width  / (float)render_width;
+    float scale_y = screen.height / (float)render_height;
+
+    result.x -= screen.x;
+    result.y -= screen.y;
+    result.x /= scale_x;
+    result.y /= scale_y;
+
+    return result;
+}
+
+Vector2 get_mouse_delta(void) {
+    if (toggled_fullscreen_past_second)
+        return {0, 0};
+
+    Rectangle screen = get_screen_rectangle();
+
+    float scale_x = screen.width  / (float)render_width;
+    float scale_y = screen.height / (float)render_height;
+
+    Vector2 result = GetMouseDelta();
+
+    result.x /= scale_x;
+    result.y /= scale_y;
+
+    return result;
+}
+
 Vector2 input_movement_look(float dt) {
     Vector2 result = get_mouse_delta();
 

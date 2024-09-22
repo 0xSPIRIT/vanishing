@@ -452,7 +452,7 @@ void chapter_3_job_init(Game *game, int which_document_list) {
     switch (which_document_list) {
         case 0: {
             documents[count++] =
-                "Introduction\n----------------\n\nUse UP and DOWN or SCROLL WHEEL to scroll.\n\nThese are excerpts from documents throughout our company. Your job is to read the document thoroughly and click on any errors to correct them before they are sent to the next editor-- we mustn't look unprefesional!";
+                "Introduction\n----------------\n\nOn your keyboard use UP and DOWN or SCROLL WHEEL to scroll, or on your controller use RIGHT STICK to scroll.\n\nThese are excerpts from documents throughout our company. Your job is to read the document thoroughly and click on any errors to correct them before they are sent to the next editor in our document assurance unit-- we mustn't look unprefesional!";
             documents[count++] =
                 "Memo\n-------\n\nDear Team,\n  This is a frendly reminder about our upcoming employee dinner party scheduled for June 20th.\n  Due to the influx of new employees, it'll be a great place to get setled into the company culture!\n  Please ensure you RSVP by June 10th to help with planing the catering arrangements.\n\nBest Regards,\nJane Smith\n(HR Manager)";
             documents[count++] =
@@ -502,7 +502,6 @@ void chapter_3_job_init(Game *game, int which_document_list) {
             // A joy of life: a true passion that burns in your soul is one that can never be put out.
 
             level->minigame = chapter_3_make_job_minigame(&game->level_arena, documents, count);
-            level->minigame.current_document = 5;
 
             Document *d0 = &level->minigame.document_list[0];
             document_register_error_first_occurrence(d0, "cofee", "coffee");
@@ -895,7 +894,14 @@ void chapter_3_init(Game *game) {
                          "Girl",
                          "My commute to work is\nso longgggg!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
                          speed,
+                         &game->text[58]);
+    // here
+    atari_text_list_init(&game->text[58],
+                         "Sherane",
+                         "It's so hot outside!!!!!!!!!!\r!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\r!!!!!!!!!!!!!!!!!!!!!!!!!",
+                         speed,
                          &game->text[38]);
+
     atari_text_list_init(&game->text[38],
                          "Chase",
                          "...",
@@ -1011,9 +1017,9 @@ void chapter_3_init(Game *game) {
 
     level->virtual_mouse.texture = 22;
 
-    chapter_3_job_init(game, 1);
+    chapter_3_job_init(game, 0);
 
-    chapter_3_goto_job_minigame(game);
+    //chapter_3_goto_job_minigame(game);
 //chapter_3_goto_window_text(game);
 
     //chapter_3_goto_lunch_room(game, CHAPTER_3_LUNCH_TEXT_3);

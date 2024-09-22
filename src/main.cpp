@@ -45,18 +45,6 @@
 
 #define FOV_DEFAULT 65
 
-#define MAX_PARTICLES       1000
-
-// Particle type
-typedef struct Particle {
-    float x;
-    float y;
-    float period;
-} Particle;
-
-GLuint vao, vbo;
-Shader shader_;
-
 const int default_width  = 192*6;
 const int default_height = 144*6;
 
@@ -96,6 +84,15 @@ Rectangle get_screen_rectangle() {
     if (screen_height > GetRenderHeight()) {
         screen_height = GetRenderHeight();
         screen_width = (int)(screen_height * desired_aspect_ratio);
+    }
+
+    // When alt-tabbing in fullscreen this becomes 0.
+    // If we don't do this we get a division by 0 somewhere
+    // and the camera position and target turns into a bunch
+    // of nans.
+    if (screen_width == 0 || screen_height == 0) {
+        screen_width = default_width;
+        screen_height = default_height;
     }
 
     result.x = GetRenderWidth()  / 2 - screen_width  / 2;
@@ -148,44 +145,16 @@ MainFunction() {
     SetTraceLogLevel(LOG_WARNING);
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
 
+    // TODO: Make this work with monitor refresh rate.
+    // I think vsync does that automatically but then I
+    // get really uneven frame times, so character movement
+    // seems really jerky.
+    SetTargetFPS(60);
+
     InitWindow(default_width, default_height, "Video Game");
 
     gladLoadGL();
 
-    shader_ = LoadShader(RES_DIR "shaders/point_particle.vs", RES_DIR "shaders/point_particle.fs");
-
-    // Initialize the vertex buffer for the particles and assign each particle random values
-    Particle particles[MAX_PARTICLES] = { 0 };
-
-    for (int i = 0; i < MAX_PARTICLES; i++)
-    {
-        particles[i].x = (float)GetRandomValue(20, render_width - 20);
-        particles[i].y = (float)GetRandomValue(50, render_height - 20);
-        
-        // Give each particle a slightly different period. But don't spread it to much. 
-        // This way the particles line up every so often and you get a glimps of what is going on.
-        particles[i].period = (float)GetRandomValue(10, 30)/10.0f;
-    }
-
-    // Create a plain OpenGL vertex buffer with the data and an vertex array object 
-    // that feeds the data from the buffer into the vertexPosition shader attribute.
-    vao = 0;
-    vbo = 0;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-        glGenBuffers(1, &vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES*sizeof(Particle), particles, GL_STATIC_DRAW);
-        // Note: LoadShader() automatically fetches the attribute index of "vertexPosition" and saves it in shader.locs[SHADER_LOC_VERTEX_POSITION]
-        glVertexAttribPointer(shader_.locs[SHADER_LOC_VERTEX_POSITION], 3, GL_FLOAT, GL_FALSE, 0, 0);
-        glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-
-    // Allows the vertex shader to set the point size of each particle individually
-    #ifndef GRAPHICS_API_OPENGL_ES2
-    glEnable(GL_PROGRAM_POINT_SIZE);
-    #endif
     if (fullscreen)
         toggle_fullscreen();
 

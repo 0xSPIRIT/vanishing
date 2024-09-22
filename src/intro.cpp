@@ -48,7 +48,11 @@ void game_intro_run(Game_Intro *game) {
 
     BeginTextureMode(game->render_target);
 
-    ClearBackground(BLACK);
+    if (chapter == 7) {
+        ClearBackground({255,0,0,255});
+    } else {
+        ClearBackground(BLACK);
+    }
 
     int spacing = 2;
 

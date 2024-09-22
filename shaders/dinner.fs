@@ -28,15 +28,9 @@ void main() {
     }
 
     // Windows (special case)
-    /*
-    if (colDiffuse == vec4(1,0,1,1)) {
-        discard;
-    }
-    */
+    vec4 window_color = vec4(0.0, 0.0, 0.7, 0.2);
 
-    vec4 window_color = vec4(0.0, 0.0, 0.7, 0.5);
-
-    if (colDiffuse.r == 0 && colDiffuse.g == 0 && colDiffuse.b == 1) {
+    if (colDiffuse.r == 1 && colDiffuse.g == 0 && colDiffuse.b == 1) {
         finalColor = window_color;
     } else {
         finalColor = texelColor * fragColor * colDiffuse;

@@ -152,9 +152,16 @@ void array_print(Array<T> array, const char *t_format_specifier) {
 
 float get_frame_time_clamped() {
     float dt = GetFrameTime();
-#ifdef DEBUG
-    dt = 1.f/60.f;
-#endif
+
+    // Round FPS to the nearest 10; 30, 40, 50, 60, 70...
+    float fps = 1.f / dt;
+    fps /= 10;
+
+    fps = 10 * round(fps);
+
+    // Then set dt to that exact value. (16.6666... ms for instance)
+    dt = 1.f / fps;
+
     return dt;
 }
 
@@ -335,38 +342,6 @@ Color hsv(float hue, float saturation, float value) {
     }
 
     return out;     
-}
-
-Vector2 get_mouse() {
-    Vector2 result   = GetMousePosition();
-    Rectangle screen = get_screen_rectangle();
-
-    float scale_x = screen.width  / (float)render_width;
-    float scale_y = screen.height / (float)render_height;
-
-    result.x -= screen.x;
-    result.y -= screen.y;
-    result.x /= scale_x;
-    result.y /= scale_y;
-
-    return result;
-}
-
-Vector2 get_mouse_delta(void) {
-    if (toggled_fullscreen_past_second)
-        return {0, 0};
-
-    Rectangle screen = get_screen_rectangle();
-
-    float scale_x = screen.width  / (float)render_width;
-    float scale_y = screen.height / (float)render_height;
-
-    Vector2 result = GetMouseDelta();
-
-    result.x /= scale_x;
-    result.y /= scale_y;
-
-    return result;
 }
 
 bool rand_bool(double prob_true) {

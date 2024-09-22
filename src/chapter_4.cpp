@@ -192,12 +192,12 @@ void chapter_4_init(Game *game) {
 
     chapter_4_window_text(true,
                           &game->text[0],
-                          "Is that you?",
+                          "is that you?",
                           WHITE,
                           &game->text[1]);
     chapter_4_window_text(true,
                           &game->text[1],
-                          "Have you come for me?",
+                          "have you come for me?",
                           WHITE,
                           nullptr);
 
@@ -220,7 +220,7 @@ void chapter_4_init(Game *game) {
 
     chapter_4_window_text(true,
                           &game->text[4],
-                          "Meaning and fulfillment.",
+                          "meaning and fulfillment.",
                           WHITE,
                           nullptr);
 
@@ -248,7 +248,7 @@ void chapter_4_init(Game *game) {
 
     chapter_4_window_text(true,
                           &game->text[8],
-                          "I will do anything you ask, Lord.",
+                          "i will do anything you ask, Lord.",
                           WHITE,
                           nullptr);
 
@@ -259,10 +259,11 @@ void chapter_4_init(Game *game) {
     game->text[9].font_spacing = 4;
     game->text[9].scale        = 0.125;
     game->text[9].alpha_speed  = 0.125;
-    game->text[9].scroll_speed = 120;
+    //game->text[9].scroll_speed = 120;
     game->text[9].color        = GOD_COLOR;
     game->text[9].center_text  = true;
-    game->text[9].scroll_type  = LetterByLetter;
+    game->text[9].scroll_type  = EntireLine;
+    game->text[9].backdrop_color = GOD_COLOR_BACKDROP;
     game->text[9].render_type  = Bare;
     game->text[9].location     = Top;
     game->text[9].take_keyboard_focus = true;
@@ -302,7 +303,7 @@ void chapter_4_init(Game *game) {
 
     chapter_4_window_text(true,
                           &game->text[11],
-                          "I...",
+                          "i...",
                           WHITE,
                           &game->text[12]);
 
@@ -317,7 +318,7 @@ void chapter_4_init(Game *game) {
 
     chapter_4_window_text(true,
                           &game->text[13],
-                          "Yes.",
+                          "yes.",
                           WHITE,
                           nullptr);
 
@@ -494,12 +495,12 @@ void chapter_4_draw(Game *game, float dt) {
             if (level->bed_popup) {
                 if (level->window->chap_4_window.closed) {
                     draw_popup("Go to bed.");
+
+                    if (is_action_pressed()) {
+                        level->state = CHAPTER_4_STATE_BED_1;
+                    }
                 } else {
                     draw_popup("Ensure the windows\nare closed.");
-                }
-
-                if (is_action_pressed()) {
-                    level->state = CHAPTER_4_STATE_BED_1;
                 }
             }
         } break;

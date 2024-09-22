@@ -16,6 +16,8 @@ struct Level_Chapter_6 {
     float god_scroll;
 
     int godtext;
+
+    bool end;
 };
 
 float chapter_6_red_fade_alpha(float time) {
@@ -373,7 +375,11 @@ void chapter_6_update(Game *game, float dt) {
 
                 if (level->red_fade_time > 1) {
                     level->red_fade_time = 1;
-                    atari_queue_deinit_and_goto_intro(game);
+
+                    if (!level->end) {
+                        level->end = true;
+                        add_event(game, atari_queue_deinit_and_goto_intro, 10);
+                    }
                 }
             }
         } break;

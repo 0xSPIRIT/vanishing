@@ -297,7 +297,7 @@ void chapter_epilogue_init(Game *game) {
                          &game->text[19]);
     atari_text_list_init(&game->text[45],
                          0,
-                         "Chase, Chase, Chase.\r*sigh*\rHow many times are we gonna have to do \nthis?\rYou know the drill.",
+                         "Chase, Chase, Chase.\r*sigh*\rWhy do you think they would want to\nhang out with YOU?",
                          speed,
                          &game->text[19]);
     atari_text_list_init(&game->text[48],
@@ -724,6 +724,17 @@ void chapter_epilogue_update_ending(Game *game, float dt) {
 void chapter_epilogue_update(Game *game, float dt) {
     Level_Chapter_Epilogue *level = (Level_Chapter_Epilogue*)game->level;
 
+    if (IsKeyPressed(KEY_F5)) {
+        printf("{%.2ff, %.2ff, %.2ff} {%.2ff, %.2ff, %.2ff}\n",
+               level->camera.position.x,
+               level->camera.position.y,
+               level->camera.position.z,
+               level->camera.target.x,
+               level->camera.target.y,
+               level->camera.target.z);
+        printf("%f, %f\n", get_mouse().x, get_mouse().y);
+    }
+
     if (level->state == EPILOGUE_STATE_ENDING) {
         chapter_epilogue_update_ending(game, dt);
         return;
@@ -833,7 +844,7 @@ void chapter_epilogue_update(Game *game, float dt) {
         cam->x = Clamp(cam->x, -28, 28);
         cam->z = Clamp(cam->z, -28, 28);
 
-        if (level->state == EPILOGUE_STATE_SECOND) {
+        if (level->state >= EPILOGUE_STATE_SECOND && level->state <= EPILOGUE_STATE_THIRD) {
             float dist = 28 * 0.05f;
 
             if (cam->x < dist && cam->x > -dist && cam->z < dist && cam->z > -dist) {
