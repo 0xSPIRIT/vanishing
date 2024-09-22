@@ -1,27 +1,5 @@
 TODO : Before Playtest
 
-x Clamp deltatime to nearest FPS.
-  Change dt to 1/dt = fps, then clamp fps to nearest 10 (30,40,50,60,70,etc)
-  then let dt = 1/that
-x Add ... text to every character that doesn't have dialogue.
-x Fix cursor disappearing when alt tabbing. This happens in
-  document review and in the 3d segments.
-x Add one more "boring, every day" thing before Chase's story
-  begins. Something that regular people talk about.
-x Camera height at train station is wrong, it's too high
-  so you drop down after one frame.
-x Because of the load time the train stops early
-  in staircase.
-x Fix the dialogue box in dinner party 3d
-x "it would mean that god had forsaken him, if he even existed."
-x Add more of a delay before the phone call with future you
-  after penny talk chap 5. also why is it pink?? whiten it up
-x And more of a delay to "perhaps he didn't understand what he
-  had found."
-x Epilogue intro: red background
-x Clamp epilogue 3 center jail, you can go through it rn.
-x Fixed chapter 4 god text
-
 Future TODO
 
 - Add dialogue to the characters in dinner party after

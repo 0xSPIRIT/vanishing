@@ -898,7 +898,7 @@ void chapter_3_init(Game *game) {
     // here
     atari_text_list_init(&game->text[58],
                          "Sherane",
-                         "It's so hot outside!!!!!!!!!!\r!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\r!!!!!!!!!!!!!!!!!!!!!!!!!",
+                         "It's so hot outside!!!!!!!!!!!!!!!!!!!\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
                          speed,
                          &game->text[38]);
 
@@ -1008,6 +1008,7 @@ void chapter_3_init(Game *game) {
     }
     game->text[53].location = Top;
     game->text[55].location = Top;
+    game->text[58].location = Top;
 
     level->player = chapter_3_make_entity(ENTITY_PLAYER, 66, 96);
 
@@ -1412,7 +1413,7 @@ void chapter_3_entity_update(Entity *entity, Game *game, float dt) {
 
                 level->end_steps += Vector2Distance(entity->pos, before_pos);
 
-                if (level->end_steps >= 500 && !level->black_screen) {
+                if (level->end_steps >= 1000 && !level->black_screen) {
                     add_event(game, chapter_3_goto_window_text, 3);
                     level->black_screen = true;
                 }
