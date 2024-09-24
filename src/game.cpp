@@ -131,6 +131,8 @@ struct Game {
     RenderTexture2D render_target_3d;
     RenderTexture2D textbox_target;
 
+    Post_Processing post_processing;
+
     Arena level_arena;
     Arena frame_arena; // 32k scratch space
     Array<Entity*> entities;
@@ -744,7 +746,7 @@ void update_camera_3d(Camera3D *camera, float speed, bool allow_run, float dt) {
 #include "chapter_6.cpp"
 #include "chapter_epilogue.cpp"
 
-void game_atari_init(Game *game) {
+void game_init(Game *game) {
     assert(game->level == nullptr); // So we can make sure we had called deinit before
 
     render_width  = DIM_ATARI_WIDTH;
@@ -753,6 +755,8 @@ void game_atari_init(Game *game) {
     game->atari_render_target = LoadRenderTexture(render_width, render_height);
     game->render_target_3d = LoadRenderTexture(DIM_3D_WIDTH, DIM_3D_HEIGHT);
     game->textbox_target = LoadRenderTexture(render_width, render_height);
+
+    post_process_init(&game->post_processing);
 
     if (!game->level_arena.buffer) {
         game->level_arena = make_arena(Megabytes(16));
@@ -849,18 +853,25 @@ void game_atari_run(Game *game) {
     BeginDrawing();
     ClearBackground(BLACK);
     {
+        RenderTexture2D *target = 0;
+
         switch (game->render_state) {
             case RENDER_STATE_ATARI: {
-                BeginTextureMode(game->atari_render_target);
+                target = &game->atari_render_target;
             } break;
             case RENDER_STATE_3D: {
-                BeginTextureMode(game->render_target_3d);
+                target = &game->render_target_3d;
+            } break;
+            default: {
+                assert(false);
             } break;
         }
 
+        BeginTextureMode(*target);
+
         switch (chapter) {
             case 1: chapter_1_draw(game); break;
-            case 2: chapter_2_draw(game); break;
+            case 2: chapter_2_draw(game, target); break;
             case 3: chapter_3_draw(game, dt); break;
             case 4: chapter_4_draw(game, dt); break;
             case 5: chapter_5_draw(game); break;
@@ -873,27 +884,24 @@ void game_atari_run(Game *game) {
         EndTextureMode();
     }
 
-    Rectangle destination = get_screen_rectangle();
-
     Texture2D *texture = 0;
     switch (game->render_state) {
         case RENDER_STATE_ATARI: {
             texture = &game->atari_render_target.texture;
+            game->post_processing.type = POST_PROCESSING_VHS;
         } break;
         case RENDER_STATE_3D: {
             texture = &game->render_target_3d.texture;
+            game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
         } break;
         default: {
             assert(false);
         } break;
     }
 
-    DrawTexturePro(texture[0],
-                   {0, 0, (float)render_width, -(float)render_height},
-                   destination,
-                   {0, 0},
-                   0,
-                   WHITE);
+    // Apply post processing shader, then draw it to the screen, or
+    // just pass it through if game->post_procesing.type == POST_PROCESSING_PASSTHROUGH
+    post_process(&game->post_processing, texture);
 
     EndDrawing();
 

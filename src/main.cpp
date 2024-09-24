@@ -45,8 +45,8 @@
 
 #define FOV_DEFAULT 65
 
-const int default_width  = 192*6;
-const int default_height = 144*6;
+const int default_width  = 192*5;
+const int default_height = 144*5;
 
 int render_width = default_width;
 int render_height = default_height;
@@ -108,6 +108,8 @@ Rectangle get_screen_rectangle() {
 #include "keys.cpp"
 #include "text.cpp"
 
+#include "post_processing.cpp"
+
 // The chapter_n.cpp files are included in game.cpp.
 #include "chapter_1.h"
 #include "chapter_2.h"
@@ -134,11 +136,19 @@ void set_game_mode(Game_Mode mode) {
 
     switch (mode) {
         case GAME_MODE_INTRO: game_intro_init(&game_intro); break;
-        case GAME_MODE_ATARI: game_atari_init(&game_atari); break;
+        case GAME_MODE_ATARI: game_init(&game_atari); break;
     }
 }
 
 MainFunction() {
+    if (__argc == 2) {
+        int chapter_start = atoi(__argv[1]);
+        if (chapter_start < 1 || chapter_start > 7)
+            exit(1);
+
+        chapter = chapter_start;
+    }
+
     set_global_system_timer_frequency();
     srand(time(0));
 
@@ -160,18 +170,18 @@ MainFunction() {
 
     SetExitKey(0);
 
-    atari_font    = LoadFont(RES_DIR "art/romulus.png");
-    global_font   = LoadFontEx(RES_DIR "art/frabk.ttf", 32, 0, 0);
-    comic_sans    = LoadFontEx(RES_DIR "art/comic.ttf", 16, 0, 0);
+    atari_font    = LoadFont  (RES_DIR "art/romulus.png");
+    global_font   = LoadFontEx(RES_DIR "art/frabk.ttf",    32, 0, 0);
+    comic_sans    = LoadFontEx(RES_DIR "art/comic.ttf",    16, 0, 0);
     italics_font  = LoadFontEx(RES_DIR "art/cambriaz.ttf", 16, 0, 0);
     bold_font     = LoadFontEx(RES_DIR "art/cambriab.ttf", 16, 0, 0);
     bold_font_big = LoadFontEx(RES_DIR "art/cambriab.ttf", 32, 0, 0);
-    bold_2_font   = LoadFontEx(RES_DIR "art/BOOKOSB.TTF", 32, 0, 0);
-    mono_font     = LoadFontEx(RES_DIR "art/cour.ttf", 8, 0, 0);
+    bold_2_font   = LoadFontEx(RES_DIR "art/BOOKOSB.TTF",  32, 0, 0);
+    mono_font     = LoadFontEx(RES_DIR "art/cour.ttf",      8, 0, 0);
 
     //DisableCursor();
 
-    set_game_mode(GAME_MODE_INTRO);
+    set_game_mode(GAME_MODE_ATARI);
 
     while (!WindowShouldClose()) {
         fullscreen_timer -= GetFrameTime();
@@ -198,7 +208,7 @@ MainFunction() {
             MinimizeWindow();
         }
 
-        if ((IsKeyPressed(KEY_F4) && IsKeyDown(KEY_LEFT_ALT)) || IsKeyPressed(KEY_ESCAPE)) {
+        if ((IsKeyPressed(KEY_F4) && IsKeyDown(KEY_LEFT_ALT))) {
             exit(0);
         }
 

@@ -1101,7 +1101,7 @@ void chapter_1_draw(Game *game) {
         }
 
         DrawTexture(atari_assets.textures[17 + level->god_index], 0, 0, WHITE);
-        DrawRectangle(0, level->god_scroll, render_width, render_height, BLACK);
+        DrawRectangle(0, level->god_scroll, render_width, render_height, {12,12,12,255});
 
         if (level->god_scroll == render_height) {
             float size = 5;

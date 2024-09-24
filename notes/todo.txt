@@ -1,4 +1,14 @@
-TODO : Before Playtest
+TODO 
+
+- Create proper artwork for the apartment
+  - And fix up the pixel locations for chapter 1, and 4.
+- Create the driving segment in chapter 3
+- You live in an apartment not a house
+- Create the rest of the apartment in chapter 3, you walk
+  through it. (put keys down)
+- In chapter 4 add a part beforehand where you're microwaving
+  food or something.
+- Put collision geometry in the paintings and the tree in chapter 5.
 
 Future TODO
 
@@ -23,7 +33,7 @@ missing is coherency. I need to add more glue to
 bind everything together.
 
 - Add more choice dialogue elements about your own
-  psychology. They need not be branching, even.
+  psychology. Add branching elements as well.
 
 - Fix up the windows to actually have a cool effect
   when you look through them: you don't see reality.
@@ -37,44 +47,13 @@ bind everything together.
 
 - You can get stuck in the paintings
 
-- Make sure all the God text is Black at first with white
-  outline, not red.
-
-TODO : Later
-
-- We need to have a really short 2 minute intro
- (3d) which shows the overarching God themes as well
-  as the theme of meaninglessness.
-    - running away from an invisible monster
-    - "didn't you see it?!!" -> no i didn't see anything.
-
 Later
-x In chapter 5, add parts in each of the three parts where you have to look
-  at an object at a certain perspective to go progress, taking advantage of
-  the 3D.
 - Chapter 4:
   Really distorted, pitched-down text to speech voice for chase
   rather than text scroll sound.
-x Somehow include a window in the first chapter somewhere?
 - chapter 2: add white vhs thing right before teleporting to bathroom with hope
-x Make sure that nothing overlaps in the first chapter
-  when you move screens. Especially make sure that it
-  can't spawn inside the player.
-x For the devil text in one of the chapters you can
-  use the Document Review instead of regular textboxes.
-- Intro: Make it the same setting as the epilogue-- the jail.
-         Introduce the feeling of meaninglessness and depression
-         that Chase has.
-         Introduce the mysterious monster which hooks people
-         and also introduces the themes that will be covered.
-
-x At the end of chapter 1, make it so that the player is kept
-  at the middle of the screen so it looks like he's getting out
-  of bed when the switch occurs.
 - Add a white vhs overlay that slowly increases in intensity over time
   for suspense.
-- Change the render target that footsteps and blood are rendered
-  to so that the player isn't rendered below them.
 
 ------
 
@@ -85,6 +64,7 @@ on the game.
 
 https://www.reddit.com/r/opengl/comments/cfx7e4/what_is_the_best_way_to_achive_crt_looks_using/
 https://www.youtube.com/watch?v=Z30cKoFvha4
+https://www.shadertoy.com/view/Ms3XWH
 
 Add some sort of intensity uniform that can affect how bad the
 VHS quality drops. Also, I like when it has the artifact of

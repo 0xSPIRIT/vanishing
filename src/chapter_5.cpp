@@ -544,7 +544,7 @@ void chapter_5_scene_init(Game *game) {
             train->able_to_close = true;
             train->speed         = 0;
 
-            level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/cottage.fs");
+            level->shader = LoadShader(0, RES_DIR "shaders/cottage.fs");
 //
             //model_set_bilinear(&level->scenes[0]);
 
@@ -676,7 +676,7 @@ void chapter_5_scene_init(Game *game) {
 
             level->scenes[1] = LoadModel(RES_DIR "models/staircase.glb");
 
-            level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/dinner.fs");
+            level->shader = LoadShader(0, RES_DIR "shaders/dinner.fs");
 
             float train_distance = -508;
 
@@ -858,7 +858,7 @@ void chapter_5_scene_init(Game *game) {
 
             game->textbox_alpha = 220;
 
-            level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/good_dinner.fs");
+            level->shader = LoadShader(0, RES_DIR "shaders/good_dinner.fs");
             model_set_shader(&level->scenes[2], level->shader);
             model_set_shader(&level->scenes[3], level->shader);
 
@@ -1330,7 +1330,7 @@ void chapter_5_scene_init(Game *game) {
             level->scenes[4]           = LoadModel(RES_DIR "models/chap_5_cottage.glb");
 
 
-            level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/cottage.fs");
+            level->shader = LoadShader(0, RES_DIR "shaders/cottage.fs");
 
             //Model *scene_model = &level->scenes[4];
             //model_set_bilinear(scene_model);
@@ -1467,7 +1467,7 @@ void chapter_5_scene_init(Game *game) {
 
             level->scenes[5] = LoadModel(RES_DIR "models/artgallery.glb");
 
-            level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/cottage.fs");
+            level->shader = LoadShader(0, RES_DIR "shaders/cottage.fs");
             model_set_shader(&level->scenes[5], level->shader);
 
             memset(game->text, 0, sizeof(game->text));
@@ -1888,7 +1888,7 @@ void chapter_5_init(Game *game) {
     level->models.real_head     = LoadModel(RES_DIR "models/real_head.glb");
     level->models.podium        = LoadModel(RES_DIR "models/podium.glb");
 
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_TRAIN_STATION);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_GALLERY);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {

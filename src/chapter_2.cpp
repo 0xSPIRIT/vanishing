@@ -1060,6 +1060,7 @@ void chapter_2_entity_update(Entity *e, Game *game, float dt) {
 
             if (dialogue && player->chap_2_player.speed_penny == 1) {
                 level->current_area = CHAPTER_2_AREA_BATHROOM;
+                level->player->pos.x = fmod(level->player->pos.x, render_width);
                 break;
             }
 
@@ -1216,8 +1217,13 @@ void chapter_2_update(Game *game, float dt) {
 
             Entity *penny = entities_find_from_type(&game->entities, ENTITY_CHAP_2_PENNY);
 
-            level->player->pos.x = fmod(level->player->pos.x, render_width);
-            level->player->pos.y = fmod(level->player->pos.y, render_height);
+            int player_w = entity_texture_width(level->player);
+            int player_h = entity_texture_height(level->player);
+
+            if (level->player->pos.x > render_width - player_w)
+                level->player->pos.x = render_width - player_w;
+            if (level->player->pos.y > render_height - player_h)
+                level->player->pos.y = render_height - player_h;
 
             if (penny) {
                 chapter_2_setup_bathroom_walls(game);
@@ -1241,7 +1247,7 @@ void chapter_2_update(Game *game, float dt) {
     }
 }
 
-void chapter_2_draw(Game *game) {
+void chapter_2_draw(Game *game, RenderTexture2D *target) {
     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
 
     ClearBackground(BLACK);
@@ -1357,7 +1363,7 @@ void chapter_2_draw(Game *game) {
                         WHITE);
 
             EndTextureMode();
-            BeginTextureMode(game->atari_render_target);
+            BeginTextureMode(*target);
 
             float target_w = level->window_target.texture.width;
             float target_h = level->window_target.texture.height;
