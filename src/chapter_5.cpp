@@ -1036,6 +1036,7 @@ void chapter_5_scene_init(Game *game) {
                 game->text[53].color = WHITE;
                 game->text[53].bg_color = BLACK;
                 game->text[53].render_type = DrawTextbox;
+                game->text[53].arrow_color = WHITE;
                 game->text[53].location = Bottom;
 
                 atari_choice_text_list_init(&game->text[53],
@@ -1904,7 +1905,7 @@ void chapter_5_init(Game *game) {
     level->models.real_head     = LoadModel(RES_DIR "models/real_head.glb");
     level->models.podium        = LoadModel(RES_DIR "models/podium.glb");
 
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_STAIRCASE);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_TRAIN_STATION);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {

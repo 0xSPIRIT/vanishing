@@ -201,6 +201,10 @@ void chapter_epilogue_init(Game *game) {
         Text_List *next[] = { &game->text[yes_index], 0 };
         void (*function_pointers[])(void*) = { nullptr, nullptr };
 
+        game->text[index].arrow_color  = BLACK;
+        game->text[index].choice_color = BLACK;
+        game->text[index].choice_backdrop_color = {185,185,185,255};
+
         atari_choice_text_list_init(&game->text[index],
                                     0,
                                     "Drink the liquid?",
@@ -234,6 +238,10 @@ void chapter_epilogue_init(Game *game) {
         Text_List *next[6] = {};
         void (*function_pointers[6])(void*) = {};
 
+        game->text[3].arrow_color = BLACK;
+        game->text[3].choice_color = BLACK;
+        game->text[3].choice_backdrop_color = {185,185,185,255};
+
         atari_choice_text_list_init(&game->text[3],
                                     0,
                                     "Will you drink the damn water?",
@@ -254,6 +262,10 @@ void chapter_epilogue_init(Game *game) {
         };
         Text_List *next[6] = {};
         void (*function_pointers[6])(void*) = {};
+
+        game->text[19].arrow_color = BLACK;
+        game->text[19].choice_color = BLACK;
+        game->text[19].choice_backdrop_color = {185,185,185,255};
 
         atari_choice_text_list_init(&game->text[19],
                                     0,
@@ -418,6 +430,10 @@ void chapter_epilogue_init(Game *game) {
         Text_List *next[2] = { 0, &game->text[63] };
         void (*function_pointers[2])(void*) = {epilogue_start_transition, 0};
 
+        game->text[62].arrow_color = BLACK;
+        game->text[62].choice_color = BLACK;
+        game->text[62].choice_backdrop_color = {185,185,185,255};
+
         atari_choice_text_list_init(&game->text[62],
                                     0,
                                     "Are you ready?",
@@ -450,6 +466,10 @@ void chapter_epilogue_init(Game *game) {
         Text_List *next[2] = { 0, &game->text[66] };
         void (*function_pointers[2])(void*) = {0, 0};
 
+        game->text[65].arrow_color = WHITE;
+        game->text[65].choice_color = WHITE;
+        game->text[65].choice_backdrop_color = {60,60,60,255};
+
         atari_choice_text_list_init(&game->text[65],
                                     0,
                                     "Take a sip?",
@@ -468,6 +488,10 @@ void chapter_epilogue_init(Game *game) {
 
         Text_List *next[3] = { 0, 0, &game->text[67] };
         void (*function_pointers[3])(void*) = {};
+
+        game->text[67].arrow_color = WHITE;
+        game->text[67].choice_color = WHITE;
+        game->text[67].choice_backdrop_color = {60,60,60,255};
 
         atari_choice_text_list_init(&game->text[67],
                                     0,
@@ -684,7 +708,7 @@ void epilogue_handle_transition(Game *game, float dt) {
             } else if (level->state == EPILOGUE_STATE_THIRD) {
                 level->state = EPILOGUE_STATE_FOURTH;
 
-                epilogue_text_change_color = true;
+                //epilogue_text_change_color = true;
 
                 game->textbox_alpha = 255;
 

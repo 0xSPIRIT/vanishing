@@ -97,10 +97,12 @@ void post_process(Post_Processing *post, Texture2D *game_texture) {
         case POST_PROCESSING_VHS: { current_shader = &post->vhs.shader; } break;
     }
 
-    if (IsKeyPressed(KEY_K)) {
+#ifdef DEBUG
+    if (current_shader && IsKeyPressed(KEY_K)) {
         UnloadShader(*current_shader);
         post_process_init(post);
     }
+#endif
 
     if (post->target.texture.width != GetRenderWidth() ||
         post->target.texture.height != GetRenderHeight())

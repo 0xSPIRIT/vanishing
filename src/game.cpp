@@ -602,28 +602,19 @@ void draw_popup(const char *text) {
 void atari_update_and_draw_textbox(Game *game, float dt) {
     BeginTextureMode(game->textbox_target);
 
-    ClearBackground({0, 0, 0, 0});
-
-    if (game->current)
-        game->current = text_list_update_and_draw(game->current, game, dt);
-
-    EndTextureMode();
-
+    RenderTexture2D *output = 0;
     switch (game->render_state) {
         case RENDER_STATE_ATARI: {
-            BeginTextureMode(game->atari_render_target);
+            output = &game->atari_render_target;
         } break;
         case RENDER_STATE_3D: {
-            BeginTextureMode(game->render_target_3d);
+            output = &game->render_target_3d;
         } break;
     }
 
-    DrawTexturePro(game->textbox_target.texture,
-                   {0, 0, (float)render_width, -(float)render_height},
-                   {0, 0, (float)render_width, (float)render_height},
-                   {0, 0},
-                   0,
-                   {255, 255, 255, (uint8_t)game->textbox_alpha});
+    if (game->current)
+        game->current = text_list_update_and_draw(output, &game->textbox_target, game->current, game, (uint8_t)game->textbox_alpha, dt);
+
 }
 
 void atari_text_list_init(Text_List *list, char *speaker,

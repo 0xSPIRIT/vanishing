@@ -76,7 +76,10 @@ struct Text_List {
     Location location       = Location::Bottom;
     Color color             = RAYWHITE;
     Color bg_color          = BLACK;
+    Color choice_color      = WHITE;
+    Color choice_backdrop_color = BLACK;
     Color backdrop_color    = {0, 0, 0, 0};
+    Color arrow_color       = BLACK;
     bool  background;
     float alpha_speed       = 1;
     bool center_text;
@@ -430,7 +433,11 @@ bool is_text_list_at_end(Text_List *list) {
     return result;
 }
 
-Text_List *text_list_update_and_draw(Text_List *list, void *user_data, float dt) {
+Text_List *text_list_update_and_draw(RenderTexture2D *output_target, RenderTexture2D *textbox_target, Text_List *list, void *user_data, uint8_t alpha, float dt) {
+    BeginTextureMode(*textbox_target);
+
+    ClearBackground({});
+
     Text_List *result = list;
 
     Vector2 offset = text_list_offset(list);
@@ -514,7 +521,19 @@ Text_List *text_list_update_and_draw(Text_List *list, void *user_data, float dt)
 
         DrawRectangleRounded(rectangle, 0.125, 4, c);
     }
-        
+
+    EndTextureMode();
+
+    if (output_target)
+        BeginTextureMode(*output_target);
+
+    DrawTexturePro(textbox_target->texture,
+                   {0, 0, (float)render_width, -(float)render_height},
+                   {0, 0, (float)render_width, (float)render_height},
+                   {0, 0},
+                   0,
+                   {255, 255, 255, alpha});
+
     for (int i = 0; i <= list->text_index; i++) {
         Text *text = &list->text[i];
 
@@ -578,23 +597,11 @@ Text_List *text_list_update_and_draw(Text_List *list, void *user_data, float dt)
             pos = Vector2Add(pos, offset);
 
             for (int i = 0; i < list->choice_count; i++) {
-                Color color = list->color;
-                Color bg = BLACK;
-                Color arrow_color = BLACK;
+                Color color = list->choice_color;
+                Color bg = list->choice_backdrop_color;
+                Color arrow_color = list->arrow_color;
 
                 float xoff = 0;
-
-                // HORRIBLE Hack because i'm so lazy and I don't
-                // want to structure things properly.
-
-                if (chapter == 7 && !epilogue_text_change_color) {
-                    color = BLACK;
-                    bg = {200,200,200,255};
-                }
-
-                if (epilogue_text_change_color) {
-                    arrow_color = WHITE;
-                }
 
                 if (i == list->choice_index) {
                     xoff = 10;
@@ -680,6 +687,6 @@ Text_List *text_list_update_and_draw(Text_List *list, void *user_data, float dt)
     return result;
 }
 
-Text_List *text_list_update_and_draw(Text_List *list, float dt) {
-    return text_list_update_and_draw(list, 0, dt);
+Text_List *text_list_update_and_draw(RenderTexture2D *output_target, RenderTexture2D *textbox_target, Text_List *list, uint8_t alpha, float dt) {
+    return text_list_update_and_draw(output_target, textbox_target, list, 0, alpha, dt);
 }

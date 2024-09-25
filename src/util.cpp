@@ -192,6 +192,10 @@ inline Vector2 int_vec2(Vector2 in) {
     return in;
 }
 
+bool compare_colors(Color a, Color b) {
+    return (a.r == b.r && a.g == b.g && a.b && b.b);
+}
+
 void print_rectangle(Rectangle rect) {
     printf("{%f, %f, %f, %f}", rect.x, rect.y, rect.width, rect.height);
 }
