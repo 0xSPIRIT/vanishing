@@ -3,6 +3,13 @@ enum Post_Process_Shader_Type {
     POST_PROCESSING_VHS
 };
 
+enum Vhs_Intensity {
+    VHS_INTENSITY_LOW,
+    VHS_INTENSITY_MEDIUM,
+    VHS_INTENSITY_MEDIUM_HIGH,
+    VHS_INTENSITY_HIGH
+};
+
 struct Post_Processing_Vhs {
     Shader shader;
 
@@ -26,36 +33,54 @@ struct Post_Processing {
 
 void post_process_init(Post_Processing *post) {
     post->vhs.shader = LoadShader(0, RES_DIR "shaders/vhs.fs");
-    post->vhs.u_time = GetShaderLocation(post->vhs.shader, "time");
-    post->vhs.u_scan_intensity = GetShaderLocation(post->vhs.shader, "scan_intensity");
-    post->vhs.u_noise_intensity = GetShaderLocation(post->vhs.shader, "noise_intensity");
+
+    post->vhs.u_time                 = GetShaderLocation(post->vhs.shader, "time");
+    post->vhs.u_scan_intensity       = GetShaderLocation(post->vhs.shader, "scan_intensity");
+    post->vhs.u_noise_intensity      = GetShaderLocation(post->vhs.shader, "noise_intensity");
     post->vhs.u_abberation_intensity = GetShaderLocation(post->vhs.shader, "abberation_intensity");
 
     post->vhs.scan_intensity = 1;
     post->vhs.noise_intensity = 1;
     post->vhs.abberation_intensity = 1;
 
-    post->type = POST_PROCESSING_VHS;
+    post->type = POST_PROCESSING_PASSTHROUGH;
+}
+
+void post_process_vhs_set_intensity(Post_Processing_Vhs *vhs, Vhs_Intensity intensity) {
+    switch (intensity) {
+        case VHS_INTENSITY_LOW: {
+            vhs->scan_intensity = 0.7f;
+            vhs->noise_intensity = 0.3f;
+            vhs->abberation_intensity = 0.7f;
+        } break;
+        case VHS_INTENSITY_MEDIUM: {
+            vhs->scan_intensity = 1;
+            vhs->noise_intensity = 0.9f;
+            vhs->abberation_intensity = 1;
+        } break;
+        case VHS_INTENSITY_MEDIUM_HIGH: {
+            vhs->scan_intensity = 2;
+            vhs->noise_intensity = 1.3f;
+            vhs->abberation_intensity = 1.1f;
+        } break;
+        case VHS_INTENSITY_HIGH: {
+            vhs->scan_intensity = 3;
+            vhs->noise_intensity = 3;
+            vhs->abberation_intensity = 2;
+        } break;
+    }
 }
 
 void post_process_vhs_uniforms(Post_Processing_Vhs *vhs) {
-    if (IsKeyDown(KEY_KP_ADD)) {
-        vhs->scan_intensity = 1;
-        vhs->noise_intensity = 1;
-        vhs->abberation_intensity = 1;
+    /*
+    for (int i = 0; i < 4; i++) {
+        if (IsKeyPressed(KEY_ONE + i)) {
+            post_process_vhs_set_intensity(vhs, (Vhs_Intensity)i);
+        }
     }
+    */
 
-    if (IsKeyDown(KEY_KP_SUBTRACT)) {
-        vhs->scan_intensity = 0.5;
-        vhs->noise_intensity = 0.5;
-        vhs->abberation_intensity = 0.5;
-    }
-
-    if (IsKeyPressed(KEY_KP_ENTER)) {
-        vhs->scan_intensity = 4;
-        vhs->noise_intensity = 4;
-        vhs->abberation_intensity = 1.3f;
-    }
+    // we can modulate these values over time
 
     float curtime = GetTime();
     SetShaderValue(vhs->shader, vhs->u_time, &curtime, SHADER_UNIFORM_FLOAT);
@@ -93,6 +118,8 @@ void post_process(Post_Processing *post, Texture2D *game_texture) {
             UnloadRenderTexture(post->game_target);
 
         post->game_target = LoadRenderTexture(render_width, render_height);
+
+        printf("resized to %d, %d\n", render_width, render_height);
     }
 
     if (post->type == POST_PROCESSING_PASSTHROUGH) {
@@ -105,8 +132,6 @@ void post_process(Post_Processing *post, Texture2D *game_texture) {
                        0,
                        WHITE);
     } else {
-        Rectangle destination = get_screen_rectangle();
-
         const bool apply_shader_to_internal_resolution = true;
 
         switch (post->type) {
@@ -143,6 +168,8 @@ void post_process(Post_Processing *post, Texture2D *game_texture) {
 
         ClearBackground(BLACK);
 
+        Rectangle destination = get_screen_rectangle();
+
         DrawTexturePro(post->game_target.texture,
                        {0, 0, (float)render_width, -(float)render_height},
                        destination,
@@ -155,6 +182,7 @@ void post_process(Post_Processing *post, Texture2D *game_texture) {
 
         EndTextureMode();
 
+        // Draw the game to the screen.
         DrawTexturePro(post->target.texture,
                        {0, 0, (float)GetRenderWidth(), (float)-GetRenderHeight()}, // destination.x and y == 0
                        {0, 0, (float)GetRenderWidth(), (float)GetRenderHeight()},

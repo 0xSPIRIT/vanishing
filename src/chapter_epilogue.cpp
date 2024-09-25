@@ -109,7 +109,7 @@ void chapter_epilogue_init(Game *game) {
     level->camera.fovy       = FOV_DEFAULT;
     level->camera.projection = CAMERA_PERSPECTIVE;
 
-    level->shader      = LoadShader(0, RES_DIR "shaders/fog.fs");
+    level->shader      = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/fog.fs");
     level->scene       = LoadModel(RES_DIR "models/epilogue.glb");
     level->bars        = LoadModel(RES_DIR "models/epilogue_bars.glb");
     level->node        = LoadModel(RES_DIR "models/node.glb");
@@ -827,8 +827,10 @@ void chapter_epilogue_update(Game *game, float dt) {
         float dir_x = input_movement_x_axis(dt);//key_right() - key_left();
         float dir_y = input_movement_y_axis(dt);//key_down()  - key_up();
 
+#ifdef DEBUG
         if (IsKeyDown(KEY_LEFT_SHIFT) ||
             (IsGamepadAvailable(0) && IsGamepadButtonDown(0, GAMEPAD_BUTTON_RIGHT_TRIGGER_2))) speed=15;//speed = 7;
+#endif
         if (IsKeyDown(KEY_LEFT_ALT)) speed = 0.5f;
 
         Vector3 *cam = &level->camera.position;

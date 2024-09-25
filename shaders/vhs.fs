@@ -26,17 +26,17 @@ void main() {
 
     // increase amplitude to top and bottom
 
-    float t_off = time * 20 + scan_intensity;
+    float t = 900 + mod(time, 10);
+
+    float t_off = t * 20 * scan_intensity;
 
     // sine wave to entire scene
     tex_coord.x += sine_amplitude * sin(t_off + tex_coord.y * sine_frequency);
 
-    if (scan_intensity >= 1) {
-        float scanline_frequency = 4 + (scan_intensity-1) * 0.01;
-        float scanline_amplitude = 0.0005 + (scan_intensity-1) * 0.001;
-        float scanline_speed = 2 + (scan_intensity-1) * 0.1;
-        tex_coord.x += scanline_amplitude * tan(time * scanline_speed + scanline_frequency * tex_coord.y);
-    }
+    float scanline_frequency = 4 * scan_intensity;
+    float scanline_amplitude = 0.0005 * scan_intensity;
+    float scanline_speed = 2 * scan_intensity * sqrt(scan_intensity);
+    tex_coord.x += scanline_amplitude * tan(t * scanline_speed + scanline_frequency * tex_coord.y);
 
     if (abberation_intensity > 0) {
         float redOffset   =  0.009;
@@ -53,13 +53,43 @@ void main() {
         finalColor = texture(texture0, tex_coord);
     }
 
-    float x = mod(fragTexCoord.x * 0.005 + time/2, 100);
-    float y = mod(fragTexCoord.y * 0.006 + time*2, 100);
+    float x = mod(fragTexCoord.x * 0.005 + t/2, 100);
+    float y = mod(fragTexCoord.y * 0.006 + t*2, 100);
 
     float amp = 0.2 * noise_intensity;
 
+    float x_r = x;
+    float y_r = y;
+
+    float x_g = y;
+    float y_g = x;
+
+    float x_b = x;
+    float y_b = y;
+
+    if (noise_intensity < 0.5) {
+        x_r *= 2;
+        y_r *= 3;
+        x_g *= 4;
+        y_g *= 5;
+        x_b *= 6;
+        y_b *= 7;
+    } else if (noise_intensity > 2) {
+        x = mod(fragTexCoord.x * 0.005 + t/2, 100);
+        y = mod(fragTexCoord.y * 0.009 + t*2, 100);
+
+        x_r = x;
+        y_r = y;
+
+        x_g = y;
+        y_g = x;
+
+        x_b = x;
+        y_b = y;
+    }
+
     // noise
-    finalColor.r += -amp/2.0 + amp * rand(vec2(x, y));
-    finalColor.g += -amp/2.0 + amp * rand(vec2(y, x));
-    finalColor.b += -amp/2.0 + amp * rand(vec2(x, y));
+    finalColor.r += -amp/2.0 + amp * rand(vec2(x_r, y_r));
+    finalColor.g += -amp/2.0 + amp * rand(vec2(x_g, y_g));
+    finalColor.b += -amp/2.0 + amp * rand(vec2(x_b, y_b));
 }

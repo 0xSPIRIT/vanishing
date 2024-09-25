@@ -67,7 +67,7 @@ struct Chapter_5_Quote {
 enum Chair_State {
     CHAIR_HAS_MALE,
     CHAIR_HAS_FEMALE,
-    CHAIR_HAS_HOPE,
+    CHAIR_HAS_PENNY,
     CHAIR_EMPTY
 };
 
@@ -129,12 +129,13 @@ struct Level_Chapter_5 {
         Chapter_5_Table  tables[64];
         int              num_tables;
 
-        Chapter_5_Chair *hope;
+        Chapter_5_Chair *penny;
         bool             sitting_at_table;
         bool             rotating_heads;
         float            sitting_timer;
         float            whiteness_overlay;
         bool             black_state;
+        bool             black_state_text;
 
         bool             talk_popup;
         bool             finished_dinner_party;
@@ -166,8 +167,8 @@ struct Level_Chapter_5 {
 
     // Seaside
     struct {
-        bool talk_to_hope_popup;
-        bool talked_to_hope;
+        bool talk_to_penny_popup;
+        bool talked_to_penny;
         bool seaside_ending; // a little hang time before cutting to the next chapter.
     };
 
@@ -316,7 +317,7 @@ void chapter_5_dinner_goto_good_part(Game *game) {
 
     level->good = true;
     level->sitting_at_table = false;
-    level->hope = nullptr;
+    level->penny = nullptr;
     level->rotating_heads = false;
     level->sitting_timer = 0;
     level->whiteness_overlay = 0;
@@ -330,12 +331,27 @@ void chapter_5_dinner_goto_good_part(Game *game) {
     chapter_5_goto_scene(game, CHAPTER_5_SCENE_DINNER_PARTY);
 }
 
+void chapter_5_dinner_black_text_off(Game *game) {
+    Level_Chapter_5 *level = (Level_Chapter_5 *)game->level;
+
+    level->black_state_text = false;
+}
+
+void chapter_5_dinner_black_text_on(Game *game) {
+    Level_Chapter_5 *level = (Level_Chapter_5 *)game->level;
+
+    level->black_state_text = true;
+
+    add_event(game, chapter_5_dinner_black_text_off, 6);
+}
+
 void chapter_5_dinner_goto_black(Game *game) {
     Level_Chapter_5 *level = (Level_Chapter_5 *)game->level;
 
     level->black_state = true;
 
-    add_event(game, chapter_5_dinner_goto_good_part, 0.5f);
+    add_event(game, chapter_5_dinner_goto_good_part, 10);
+    add_event(game, chapter_5_dinner_black_text_on, 4);
 }
 
 void chapter_5_finish_dinner_party(Game *game) {
@@ -1295,9 +1311,9 @@ void chapter_5_scene_init(Game *game) {
             level->tables[3].chairs[1].state = CHAIR_HAS_MALE;
             level->tables[3].chairs[3].state = CHAIR_HAS_MALE;
 
-            // hope
-            level->tables[5].chairs[1].state = CHAIR_HAS_HOPE;
-            level->hope = &level->tables[5].chairs[1];
+            // penny
+            level->tables[5].chairs[1].state = CHAIR_HAS_PENNY;
+            level->penny = &level->tables[5].chairs[1];
 
             if (level->good) {
                 level->tables[0].text_index = 75;
@@ -1706,7 +1722,7 @@ void chapter_5_scene_init(Game *game) {
                            &game->text[6]);
             chapter_5_text(&game->text[6],
                            "      ",
-                           "Yes! I did,\rwould you like to know\nhow I did it?",
+                           "Yes! I did,\rwould you like to know how I did it?",
                            speed,
                            &game->text[7]);
             chapter_5_text(&game->text[7],
@@ -1731,7 +1747,7 @@ void chapter_5_scene_init(Game *game) {
                            &game->text[11]);
             chapter_5_text(&game->text[11],
                            "      ",
-                           "It turns out I'm still in the prison,\rthere was just a bigger one around\nthe previous one.",
+                           "It turns out I'm still in the prison,\rthere was just a bigger one around the\nprevious one.",
                            speed,
                            &game->text[12]);
             chapter_5_text(&game->text[12],
@@ -1888,7 +1904,7 @@ void chapter_5_init(Game *game) {
     level->models.real_head     = LoadModel(RES_DIR "models/real_head.glb");
     level->models.podium        = LoadModel(RES_DIR "models/podium.glb");
 
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_GALLERY);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_STAIRCASE);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {
@@ -2125,7 +2141,10 @@ void chapter_5_draw_table(Game *game, Chapter_5_Table *table) {
         Color head_color = WHITE;
         float head_size = 0.85f;
 
-        if (chair->state == CHAIR_HAS_HOPE || level->good) {
+        if (chair->state == CHAIR_HAS_PENNY || level->good) {
+            if (chair->state == CHAIR_HAS_PENNY)
+                color = {255, 166, 252, 255}; // 
+
             head_model = real_head_model;
             head_color = color;
 
@@ -2142,7 +2161,7 @@ void chapter_5_draw_table(Game *game, Chapter_5_Table *table) {
 
         float desired_head_angle;
 
-        if (!level->good && chair->state != CHAIR_HAS_HOPE) {
+        if (!level->good && chair->state != CHAIR_HAS_PENNY) {
             if (chair->looking_at == nullptr) {
                 desired_head_angle = atan2f(level->camera.position.z - z, level->camera.position.x - x);
             } else {
@@ -2639,8 +2658,12 @@ void chapter_5_update_player_dinner_party(Game *game, float dt) {
         if (level->sitting_timer >= 12) {
             float debug_speed_slider = 1;
 
+#ifdef DEBUG
+            debug_speed_slider = 10;
+#endif
+
             level->camera.target = lerp_vector3(level->camera.target,
-                                                Vector3Add(get_chair_position(level->hope), {0,1.65f,0}),
+                                                Vector3Add(get_chair_position(level->penny), {0,1.65f,0}),
                                                 0.005f);
 
             level->camera.fovy  -= debug_speed_slider * 1.5f * dt;
@@ -2897,16 +2920,16 @@ void chapter_5_update(Game *game, float dt) {
             chapter_5_update_player_desert(game, dt);
 
             Vector2 cam = { level->camera.position.x, level->camera.position.z };
-            Vector2 hope = { -16.47f, -18.84f };
+            Vector2 penny = { -16.47f, -18.84f };
 
-            level->talk_to_hope_popup = game->current == 0 && (Vector2Distance(cam, hope) < 2) && !level->talked_to_hope;
+            level->talk_to_penny_popup = game->current == 0 && (Vector2Distance(cam, penny) < 2) && !level->talked_to_penny;
 
-            if (level->talk_to_hope_popup && is_action_pressed()) {
-                level->talked_to_hope = true;
+            if (level->talk_to_penny_popup && is_action_pressed()) {
+                level->talked_to_penny = true;
                 game->current = &game->text[30];
             }
 
-            if (level->talked_to_hope) {
+            if (level->talked_to_penny) {
                 if (level->camera.position.z < -22) {
                     end_chapter_5_after_stop(game);
                 }
@@ -3058,7 +3081,25 @@ void chapter_5_draw(Game *game) {
             DrawRectangle(0, 0, render_width, render_height, {255, 0, 0, (uint8_t)(level->staircase_fade * 255)});
         } break;
         case CHAPTER_5_SCENE_DINNER_PARTY: {
-            if (level->black_state) break;
+            if (level->black_state) {
+                if (level->black_state_text) {
+                    const char *message = "Ex pluribus unum veritas";
+                    Font *font = &bold_font;
+                    int spacing = 1;
+
+                    Vector2 size = MeasureTextEx(*font,
+                                                 message,
+                                                 font->baseSize,
+                                                 spacing);
+                    DrawTextEx(*font, 
+                               message,
+                               {render_width/2-size.x/2,render_height/2-size.y/2},
+                               font->baseSize,
+                               spacing,
+                               WHITE);
+                }
+                break;
+            }
 
             if (level->good) {
                 ClearBackground({32,32,32,255});
@@ -3141,7 +3182,7 @@ void chapter_5_draw(Game *game) {
             DrawModel(level->scenes[6], {}, 1, WHITE);
             EndMode3D();
 
-            if (level->talk_to_hope_popup) {
+            if (level->talk_to_penny_popup) {
                 draw_popup("Talk to Penny", GOLD, Top);
             }
         } break;

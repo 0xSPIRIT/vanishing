@@ -1,5 +1,10 @@
 TODO 
 
+- I mean, the textboxes shouldn't make the text itself transparent
+  along with textbox_alpha. Just make the text render to a separate
+  texture at 255 alpha.
+x Fix the epilogue having a white filter over it at the start
+  for some reason.
 - Create proper artwork for the apartment
   - And fix up the pixel locations for chapter 1, and 4.
 - Create the driving segment in chapter 3
@@ -9,22 +14,18 @@ TODO
 - In chapter 4 add a part beforehand where you're microwaving
   food or something.
 - Put collision geometry in the paintings and the tree in chapter 5.
-
-Future TODO
-
+x VHS shader: increase intensity in certain parts.
+  Don't include it in chapter 3 until the devil scene.
+x In the white parts, use intro font: Ex pluribus unum veritas
 - Add dialogue to the characters in dinner party after
   you talk to eleanor and you're walking up to penny.
-- Don't lerp the djinns, make them step forward in increments
-- I mean, the textboxes shouldn't make the text itself transparent
-  along with textbox_alpha. Just make the text render to a separate
-  texture at 255 alpha.
 
 V1 squad
   - Jaydn
   - Saleem
   - Rais
-  - Daniel
-  - Varun
+  x Daniel
+  x Varun
   - Gyasi
   - Saurav
 
@@ -42,8 +43,6 @@ bind everything together.
   somehow draw it in the same spot?
 
 - "I'm sick of chasing" - double entendre
-
-- In the white parts, use intro font: Ex pluribus unum veritas
 
 - You can get stuck in the paintings
 

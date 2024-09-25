@@ -1252,7 +1252,7 @@ void chapter_2_draw(Game *game, RenderTexture2D *target) {
 
     ClearBackground(BLACK);
 
-    game->textbox_alpha = 200;
+    game->textbox_alpha = 220;
 
     if (level->show_window) {
         Texture2D *texture = 0;

@@ -71,6 +71,8 @@ void chapter_1_end_intro(Game *game) {
     level->intro = false;
     level->before_first_text = true;
     add_event(game, chapter_1_first_text, 2);
+
+    post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_LOW);
 }
 
 void chapter_1_start_phone_call(Game *game) {
@@ -152,6 +154,7 @@ void chapter_1_activate_node(void *ptr_game) {
 
     for (size_t i = 0; i < game->entities.length; i++) {
         Entity *e = game->entities.data[i];
+
         if (e->type == ENTITY_NODE) {
             e->chap_1_node.active = false;
             e->texture_id = 11;
@@ -170,6 +173,11 @@ void chapter_1_activate_node(void *ptr_game) {
 
             if (player->chap_1_player.walking_state == PLAYER_WALKING_STATE_CRAWLING)
                 player->pos.y += 8;
+
+            if (e->chap_1_node.type == NODE_SECOND)
+                post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_MEDIUM);
+            else if (e->chap_1_node.type == NODE_THIRD)
+                post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_MEDIUM_HIGH);
 
             break;
         }
@@ -191,6 +199,9 @@ void chapter_1_init(Game *game) {
 
     level->intro = true;
     level->god_scroll = chapter_1_god_text_y[0];
+
+    game->post_processing.type = POST_PROCESSING_VHS;
+    post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_MEDIUM);
 
     Texture2D *textures = atari_assets.textures;
 
@@ -727,6 +738,7 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                 if (e->pos.y < 2*render_height/3) {
                     level->state = LEVEL_CHAPTER_1_STATE_APARTMENT;
                     e->chap_1_player.walking_state = PLAYER_WALKING_STATE_SLOWED_1;
+                    game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
 
                     e->alarm[1] = 3;
 
@@ -911,6 +923,8 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                     {
                         level->state = LEVEL_CHAPTER_1_STATE_FOREST;
                         e->pos.x = render_width/2 - entity_texture_width(e) / 2;
+
+                        post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_LOW);
                     }
 
                     if (level->state == LEVEL_CHAPTER_1_STATE_SUCCESSFUL_DIRECTIONS) {
@@ -1119,7 +1133,7 @@ void chapter_1_draw(Game *game) {
     if (level->final_text)
         game->textbox_alpha = 255;
     else 
-        game->textbox_alpha = 200;
+        game->textbox_alpha = 220;
 
     switch (level->state) {
         case LEVEL_CHAPTER_1_STATE_FOREST: {

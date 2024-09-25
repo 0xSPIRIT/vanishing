@@ -120,6 +120,9 @@ void chapter_6_init(Game *game) {
 
     game->render_state = RENDER_STATE_ATARI;
 
+    game->post_processing.type = POST_PROCESSING_VHS;
+    post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_MEDIUM);
+
     Texture *textures = atari_assets.textures;
     textures[0]  = load_texture(RES_DIR "art/player.png");
     textures[1]  = load_texture(RES_DIR "art/cactus_1.png");
@@ -163,7 +166,7 @@ void chapter_6_init(Game *game) {
     chapter_6_text(true,
                    false,
                    &game->text[4],
-                   "I AM THE ALL-POWERFUL!\rI CAN GRANT YOU\nWHATEVER AND WHOMEVER\nYOU PLEASE.",
+                   "I AM THE ALL-POWERFUL!\rI CAN GRANT YOU\nWHATEVER AND WHOMEVER\nYOU PLEASE!",
                    &game->text[5]);
     chapter_6_text(true,
                    true,
@@ -271,6 +274,8 @@ void chapter_6_entity_update(Entity *entity, Game *game, float dt) {
                 entity->texture_id = 0;
                 level->player->pos.y = 60;
 
+                post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_MEDIUM_HIGH);
+
                 add_event(game, chapter_6_goto_home, 2);
             }
         } break;
@@ -358,6 +363,9 @@ void chapter_6_update(Game *game, float dt) {
                 if (level->god_scroll == render_height) {
                     if (level->godtext < 2) {
                         level->godtext++;
+
+                        post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_HIGH);
+
                         if (level->godtext == 1)
                             level->god_scroll = 36;
                         else
@@ -372,6 +380,11 @@ void chapter_6_update(Game *game, float dt) {
 
             if (level->godtext == 2) {
                 level->red_fade_time += 0.05f * dt;
+
+                if (level->red_fade_time > 0.5f)
+                    game->post_processing.vhs.noise_intensity -= 0.25f * dt;
+                if (game->post_processing.vhs.noise_intensity < 0)
+                    game->post_processing.vhs.noise_intensity = 0;
 
                 if (level->red_fade_time > 1) {
                     level->red_fade_time = 1;

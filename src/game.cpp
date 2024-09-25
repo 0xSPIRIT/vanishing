@@ -888,11 +888,9 @@ void game_atari_run(Game *game) {
     switch (game->render_state) {
         case RENDER_STATE_ATARI: {
             texture = &game->atari_render_target.texture;
-            game->post_processing.type = POST_PROCESSING_VHS;
         } break;
         case RENDER_STATE_3D: {
             texture = &game->render_target_3d.texture;
-            game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
         } break;
         default: {
             assert(false);

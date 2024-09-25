@@ -58,7 +58,7 @@ enum Game_Mode {
 };
 Game_Mode game_mode = GAME_MODE_INVALID;
 
-int chapter = 1;
+int chapter = 6;
 bool epilogue_text_change_color = false; // please god forgive me
 
 Font global_font, atari_font, comic_sans, italics_font, bold_font, bold_2_font, mono_font, bold_font_big;

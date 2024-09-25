@@ -1021,13 +1021,10 @@ void chapter_3_init(Game *game) {
     chapter_3_job_init(game, 0);
 
     //chapter_3_goto_job_minigame(game);
-//chapter_3_goto_window_text(game);
+    //chapter_3_goto_window_text(game);
 
     //chapter_3_goto_lunch_room(game, CHAPTER_3_LUNCH_TEXT_3);
     //level->minigame.active = true;
-
-    //level->state = CHAPTER_3_STATE_LUNCH;
-    //level->current_lunch_text = CHAPTER_3_LUNCH_TEXT_3;
 }
 
 void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,
@@ -1758,6 +1755,13 @@ void chapter_3_draw(Game *game, float dt) {
 
     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
     Chapter_3_Job_Minigame *minigame = &level->minigame;
+
+    if (level->lunch_devil_effect) {
+        game->post_processing.type = POST_PROCESSING_VHS;
+        post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_MEDIUM_HIGH);
+    } else {
+        game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
+    }
 
     switch (level->state) {
         case CHAPTER_3_STATE_OFFICE: {
