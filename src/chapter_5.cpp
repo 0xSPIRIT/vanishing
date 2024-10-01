@@ -197,6 +197,11 @@ struct Level_Chapter_5 {
 
 void chapter_5_goto_scene(Game *game, Chapter_5_Scene scene);
 
+void chapter_5_goto_gallery(Game *game) {
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_GALLERY);
+    start_fade(game, FADE_IN, nullptr);
+}
+
 void chapter_5_end_text_begin(Game *game) {
     game->current = &game->text[50];
 }
@@ -284,6 +289,8 @@ void chapter_5_start_sitting_text_good(Game *game) {
 void chapter_5_sit_at_table(void *game_ptr) {
     Game *game = (Game *)game_ptr;
     Level_Chapter_5 *level = (Level_Chapter_5 *)game->level;
+
+    game->include_text_in_target = true;
 
     level->sitting_at_table = true;
 
@@ -1038,6 +1045,8 @@ void chapter_5_scene_init(Game *game) {
                 game->text[53].render_type = DrawTextbox;
                 game->text[53].arrow_color = WHITE;
                 game->text[53].location = Bottom;
+                game->text[53].choice_backdrop_color = BLACK;
+                game->text[53].choice_color = WHITE;
 
                 atari_choice_text_list_init(&game->text[53],
                                             "Eleanor",
@@ -1212,7 +1221,10 @@ void chapter_5_scene_init(Game *game) {
                 game->text[93].color = WHITE;
                 game->text[93].bg_color = BLACK;
                 game->text[93].render_type = DrawTextbox;
+                game->text[93].arrow_color = WHITE;
                 game->text[93].location = Bottom;
+                game->text[93].choice_backdrop_color = BLACK;
+                game->text[93].choice_color = WHITE;
 
                 atari_choice_text_list_init(&game->text[93],
                                             "Eleanor",
@@ -1604,8 +1616,11 @@ void chapter_5_scene_init(Game *game) {
 
                 game->text[100].color = WHITE;
                 game->text[100].bg_color = BLACK;
+                game->text[100].choice_backdrop_color = BLACK;
+                game->text[100].choice_color = WHITE;
                 game->text[100].location = Bottom;
                 game->text[100].render_type = DrawTextbox;
+                game->text[100].arrow_color = WHITE;
 
                 atari_choice_text_list_init(&game->text[100],
                                             nullptr,
@@ -1905,7 +1920,7 @@ void chapter_5_init(Game *game) {
     level->models.real_head     = LoadModel(RES_DIR "models/real_head.glb");
     level->models.podium        = LoadModel(RES_DIR "models/podium.glb");
 
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_TRAIN_STATION);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_STAIRCASE);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {
@@ -2616,6 +2631,7 @@ void chapter_5_update_player_desert(Game *game, float dt) {
     Level_Chapter_5 *level = (Level_Chapter_5 *)game->level;
 
     if (game->current) return;
+    if (game->fader.direction != FADE_INVALID) return;
 
     if (level->current_quote == 0) {
         Vector3 stored_camera_pos = level->camera.position;
@@ -2679,6 +2695,7 @@ void chapter_5_update_player_dinner_party(Game *game, float dt) {
                 level->sitting_timer = -1;
                 game->textbox_alpha = 255;
                 game->current = &game->text[70];
+                game->include_text_in_target = false;
 
                 level->rotating_heads = true;
 
@@ -2898,8 +2915,8 @@ void chapter_5_update(Game *game, float dt) {
             }
 
             level->desert_door_popup = (Vector2Distance({5.915f, -15.37f}, player) < 3);
-            if (level->desert_door_popup && is_action_pressed()) {
-                chapter_5_goto_scene(game, CHAPTER_5_SCENE_GALLERY);
+            if (level->desert_door_popup && is_action_pressed() && game->fader.direction == FADE_INVALID) {
+                start_fade(game, FADE_OUT, chapter_5_goto_gallery);
             }
         } break;
         case CHAPTER_5_SCENE_GALLERY: {

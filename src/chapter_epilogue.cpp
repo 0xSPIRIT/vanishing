@@ -116,9 +116,9 @@ void chapter_epilogue_init(Game *game) {
     level->door        = LoadModel(RES_DIR "models/epilogue_door.glb");
     level->timer_model = LoadModel(RES_DIR "models/clock.glb");
 
-    level->pink_dot      = LoadTexture(RES_DIR "models/pink_dot.png");
-    level->orange_dot    = LoadTexture(RES_DIR "models/orange_dot.png");
-    level->black_texture = LoadTexture(RES_DIR "models/black.png");
+    level->pink_dot      = LoadTexture(RES_DIR "art/pink_dot.png");
+    level->orange_dot    = LoadTexture(RES_DIR "art/orange_dot.png");
+    level->black_texture = LoadTexture(RES_DIR "art/black.png");
 
     SetTextureFilter(level->pink_dot, TEXTURE_FILTER_BILINEAR);
     SetTextureFilter(level->orange_dot, TEXTURE_FILTER_BILINEAR);
@@ -663,7 +663,7 @@ void epilogue_handle_transition(Game *game, float dt) {
             Epilogue_Node *nodes = level->nodes;
             memset(nodes, 0, sizeof(Epilogue_Node) * level->num_nodes);
 
-            level->door_timer = 180;
+            level->door_timer = 120;
 
             if (level->state == EPILOGUE_STATE_FIRST) {
                 level->state = EPILOGUE_STATE_SECOND;

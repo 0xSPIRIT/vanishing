@@ -138,13 +138,10 @@ void chapter_4_3d_init(Game *game) {
     float data[4] = { 0.2f, 0.2f, 0.2f, 1 };
     SetShaderValue(level->shader, ambientLoc, data, SHADER_UNIFORM_VEC4);
 
-    /*
-    float fogDensity = 0.22f;
-    int fogDensityLoc = GetShaderLocation(level->shader, "fogDensity");
-    SetShaderValue(level->shader, fogDensityLoc, &fogDensity, SHADER_UNIFORM_FLOAT);
-    */
-
     CreateLight(LIGHT_POINT, { 0, 2, 0 }, Vector3Zero(), ORANGE, level->shader);
+
+    game->post_processing.type = POST_PROCESSING_VHS;
+    post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_MEDIUM);
 }
 
 void chapter_4_init(Game *game) {

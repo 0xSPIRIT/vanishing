@@ -433,7 +433,7 @@ bool is_text_list_at_end(Text_List *list) {
     return result;
 }
 
-Text_List *text_list_update_and_draw(RenderTexture2D *output_target, RenderTexture2D *textbox_target, Text_List *list, void *user_data, uint8_t alpha, float dt) {
+Text_List *text_list_update_and_draw(RenderTexture2D *output_target, RenderTexture2D *textbox_target, Text_List *list, void *user_data, uint8_t alpha, bool include_text_in_target, float dt) {
     BeginTextureMode(*textbox_target);
 
     ClearBackground({});
@@ -522,17 +522,23 @@ Text_List *text_list_update_and_draw(RenderTexture2D *output_target, RenderTextu
         DrawRectangleRounded(rectangle, 0.125, 4, c);
     }
 
-    EndTextureMode();
+    auto finish_target = [&]() {
+        EndTextureMode();
 
-    if (output_target)
-        BeginTextureMode(*output_target);
+        if (output_target)
+            BeginTextureMode(*output_target);
 
-    DrawTexturePro(textbox_target->texture,
-                   {0, 0, (float)render_width, -(float)render_height},
-                   {0, 0, (float)render_width, (float)render_height},
-                   {0, 0},
-                   0,
-                   {255, 255, 255, alpha});
+        DrawTexturePro(textbox_target->texture,
+                       {0, 0, (float)render_width, -(float)render_height},
+                       {0, 0, (float)render_width, (float)render_height},
+                       {0, 0},
+                       0,
+                       {255, 255, 255, alpha});
+    };
+
+    if (!include_text_in_target) {
+        finish_target();
+    }
 
     for (int i = 0; i <= list->text_index; i++) {
         Text *text = &list->text[i];
@@ -549,6 +555,10 @@ Text_List *text_list_update_and_draw(RenderTexture2D *output_target, RenderTextu
                 }
             }
         }
+    }
+
+    if (include_text_in_target) {
+        finish_target();
     }
 
     if (list->choice && list->text_index == list->text_count-1) {
@@ -685,8 +695,4 @@ Text_List *text_list_update_and_draw(RenderTexture2D *output_target, RenderTextu
     }
 
     return result;
-}
-
-Text_List *text_list_update_and_draw(RenderTexture2D *output_target, RenderTexture2D *textbox_target, Text_List *list, uint8_t alpha, float dt) {
-    return text_list_update_and_draw(output_target, textbox_target, list, 0, alpha, dt);
 }

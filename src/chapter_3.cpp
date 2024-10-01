@@ -80,10 +80,24 @@ struct Chapter_3_Phone {
     float black_timer;
 };
 
+struct Chapter_3_Car {
+    int texture;
+    bool has_control;
+    bool driving_off;
+
+    Vector2 position;
+
+    Color color;
+};
+
 struct Level_Chapter_3 {
-    Chapter_3_State state;
+    Chapter_3_State        state;
     Chapter_3_Job_Minigame minigame;
-    Chapter_3_Phone phone;
+    Chapter_3_Phone        phone;
+    Chapter_3_Car          car, other_car;
+
+    int home_background;
+
     Camera2D camera;
 
     Virtual_Mouse virtual_mouse;
@@ -100,7 +114,7 @@ struct Level_Chapter_3 {
     bool black_screen;
 
     //bool window_popup;
-    bool open_door_popup;
+    bool read_sign_popup;
     bool bed_popup;
 
     Entity *player;
@@ -109,6 +123,50 @@ struct Level_Chapter_3 {
 };
 
 void chapter_3_job_init(Game *game, int which_document_list);
+Entity *chapter_3_make_entity(Entity_Type type, float x, float y);
+
+void chapter_3_set_apartment_end_text(Game *game) {
+    game->current = game->text + 73;
+}
+
+void chapter_3_goto_home_inside(Game *game) {
+    Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
+
+    level->state = CHAPTER_3_STATE_HOME_INSIDE;
+
+    level->player = chapter_3_make_entity(ENTITY_PLAYER, 50, 50);
+
+    array_add(&game->entities, level->player);
+    level->player->pos = { 90, 100 };
+
+    Rectangle bed = { 80, 8, 29, 44 };
+    add_wall(&game->entities, bed);
+
+    game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
+
+    start_fade(game, FADE_IN, 120, nullptr);
+}
+
+void chapter_3_fade_out_outside_home(Game *game) {
+    start_fade(game, FADE_OUT, chapter_3_goto_home_inside);
+}
+
+void chapter_3_fade_out_outside_home_delay(void *game_ptr) {
+    Game *game = (Game *)game_ptr;
+    add_event(game, chapter_3_fade_out_outside_home, 2);
+}
+
+void chapter_3_goto_road(Game *game) {
+    Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
+
+    level->minigame.active = false;
+
+    level->state = CHAPTER_3_STATE_ROAD;
+    game->post_processing.type = POST_PROCESSING_CRT;
+    //post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_LOW);
+
+    start_fade(game, FADE_IN, nullptr);
+}
 
 void chapter_3_next_document(Chapter_3_Job_Minigame *minigame) {
     if (minigame->current_document+1 < minigame->document_count) {
@@ -258,6 +316,13 @@ Entity *chapter_3_make_entity(Entity_Type type, float x, float y) {
         case ENTITY_CHAP_3_LUNCH_TABLE: {
             result->texture_id = 10;
         } break;
+        case ENTITY_CHAP_3_CAR: {
+            result->texture_id = 23;
+        } break;
+        case ENTITY_PHONE: {
+            result->texture_id = 26;
+            result->has_dialogue = true;
+        } break;
     }
 
     float texture_width  = entity_texture_width(result);
@@ -279,6 +344,37 @@ Entity *chapter_3_make_entity(Entity_Type type, float x, float y) {
     }
 
     return result;
+}
+
+void chapter_3_goto_home_outside(Game *game) {
+    Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
+
+    game->post_processing.type = POST_PROCESSING_CRT;
+    //post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_LOW);
+
+    level->home_background = 18;
+
+    level->camera.offset = {
+        0, -(float)render_height,
+    };
+    level->camera.zoom = 1;
+
+    level->state = CHAPTER_3_STATE_HOME;
+    for (int i = 0; i < game->entities.length; i++) {
+        free_entity(game->entities.data[i]);
+        array_remove(&game->entities, i--);
+    }
+
+    level->player = chapter_3_make_entity(ENTITY_PLAYER, 58, 6*render_height+95);
+    array_add(&game->entities, level->player);
+    array_add(&game->entities, chapter_3_make_entity(ENTITY_CHAP_3_CAR, 16, 6*render_height+112));
+
+    array_add(&game->entities, chapter_3_make_entity(ENTITY_PHONE, 164, 320+354));
+
+    add_wall(&game->entities, {0, 160, 63, 520});
+    add_wall(&game->entities, {129, 160, 63, 520});
+
+    start_fade(game, FADE_IN, 120, nullptr);
 }
 
 void add_cubicle(Array<Entity*> *entities, bool right, int x, int y) {
@@ -337,11 +433,12 @@ void chapter_3_goto_job_minigame(void *game_ptr) {
 void chapter_3_goto_window_text(Game *game) {
     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
 
+    game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
+
     level->state = CHAPTER_3_STATE_WINDOW;
     chapter_3_job_init(game, 3);
 
     chapter_3_goto_job_minigame(game);
-    //level->minigame.active = true;
 
     level->black_screen = false;
 }
@@ -661,7 +758,8 @@ void chapter_3_job_init(Game *game, int which_document_list) {
 void chapter_3_init(Game *game) {
     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
 
-    level->state = CHAPTER_3_STATE_OFFICE;
+    //level->state = CHAPTER_3_STATE_HOME_INSIDE;
+    //level->state = CHAPTER_3_STATE_ROAD;
 
     Texture2D *textures = atari_assets.textures;
     textures[0]  = load_texture(RES_DIR "art/desktop_wallpaper.png");
@@ -687,7 +785,18 @@ void chapter_3_init(Game *game) {
     textures[20] = load_texture(RES_DIR "art/smartphone.png");
     textures[21] = load_texture(RES_DIR "art/arrow_white.png");
     textures[22] = load_texture(RES_DIR "art/cursor.png");
-    //textures[22] = load_texture("art/arrow_black.png");
+    textures[23] = load_texture(RES_DIR "art/car.png");
+    textures[24] = load_texture(RES_DIR "art/tree1.png");
+    textures[25] = load_texture(RES_DIR "art/tree2.png");
+    textures[26] = load_texture(RES_DIR "art/phone.png");
+
+    level->car.texture = 23;
+    level->car.position = { (float)-textures[23].width, render_height/2.f + 20 };
+    level->car.color = WHITE;
+
+    level->other_car.texture = 23;
+    level->other_car.color = RED;
+    level->other_car.position = { (float)render_width, render_height/2.f - 5 };
 
     level->camera.zoom = 1;
 
@@ -701,7 +810,7 @@ void chapter_3_init(Game *game) {
                          speed,
                          nullptr);
 
-    String choices[] = { const_string("yes"), const_string("no") };
+    String choices[] = { const_string("Yes"), const_string("No") };
 
     Text_List *next[] = { nullptr, nullptr };
     void (*hooks[])(void*) = { chapter_3_goto_job_minigame, nullptr };
@@ -1010,21 +1119,127 @@ void chapter_3_init(Game *game) {
     game->text[55].location = Top;
     game->text[58].location = Top;
 
+    atari_text_list_init(&game->text[59],
+                         0,
+                         "*ring ring*\r*ring ring*\r... *click*",
+                         speed,
+                         &game->text[60]);
+    atari_text_list_init(&game->text[60],
+                         0,
+                         "*static*\r...\r...",
+                         speed,
+                         &game->text[61]);
+    atari_text_list_init(&game->text[61],
+                         0,
+                         "He hears a faint voice\nin the speaker:",
+                         speed,
+                         &game->text[62]);
+    atari_text_list_init(&game->text[62],
+                         "Voice",
+"\"The gods had condemned\nSisyphus to ceaselessly\nrolling a rock to the top",//of a mountain, whence",// the stone would fall back of its own weight. They had thought with some reason that there is no more dreadful punishment than futile and hopeless labor",
+                         speed,
+                         &game->text[63]);
+    atari_text_list_init(&game->text[63],
+                         "Voice",
+                         "of a mountain, whence the\nstone would fall back of\nits own weight.",
+                         speed,
+                         &game->text[64]);
+    atari_text_list_init(&game->text[64],
+                         "Voice",
+                         "They had thought with\nsome reason that there is\nno more dreadful",
+                         speed,
+                         &game->text[65]);
+    atari_text_list_init(&game->text[65],
+                         "Voice",
+                         "punishment than futile\nand hopeless labour.\"",
+                         speed,
+                         &game->text[66]);
+    atari_text_list_init(&game->text[66],
+                         0,
+                         "*static*\r...\r...",
+                         speed,
+                         &game->text[67]);
+    atari_text_list_init(&game->text[67],
+                         0,
+                         "He hears a faint voice\nin the speaker:",
+                         speed,
+                         &game->text[68]);
+    atari_text_list_init(&game->text[68],
+                         "Voice",
+                         "\"Sisyphus, proletarian of\nthe gods, powerless and\nrebellious,", 
+                         speed,
+                         &game->text[69]);
+    atari_text_list_init(&game->text[69],
+                         "Voice",
+                         "knows the whole extent\nof his wretched condition:", 
+                         speed,
+                         &game->text[70]);
+    atari_text_list_init(&game->text[70],
+                         "Voice",
+                         "it is what he thinks of\nduring his descent.\"", 
+                         speed,
+                         &game->text[71]);
+    atari_text_list_init(&game->text[71],
+                         0,
+                         "*static*\r...\r...", 
+                         speed,
+                         &game->text[72]);
+    atari_text_list_init(&game->text[72],
+                         0,
+                         "...\r...\r... That seems to be all.", 
+                         speed,
+                         nullptr);
+
+    // If the descent is thus sometimes performed in sorrow, it can also take place in joy.
+    // ...
+    // These are our nights of Gethsemane. But crushing truths perish from
+    // being acknowledged. Thus, Oedipus at the outset obeys fate without knowing it. But from the moment he
+    // knows, his tragedy begins. Yet at the same moment, blind and desperate, he realizes that the only bond
+    // linking him to the world is the cool hand of a girl.
+
+    atari_mid_text_list_init(&game->text[73],
+                             "\"If the descent is thus\nsometimes performed in\nsorrow, it can also take\nplace in joy.\"", 
+                             &game->text[74]);
+    atari_mid_text_list_init(&game->text[74],
+                             "...", 
+                             &game->text[75]);
+    atari_mid_text_list_init(&game->text[75],
+                             "These are our nights of\nGethsemane.\rBut crushing truths\nperish from being\nacknowledged.", 
+                             &game->text[76]);
+    atari_mid_text_list_init(&game->text[76],
+                             "Thus, Oedipus at the\noutset obeys fate\nwithout knowing it.\rBut from the moment he\nknows, his tragedy\nbegins.", 
+                             &game->text[77]);
+    atari_mid_text_list_init(&game->text[77],
+                             "Yet at the same moment,\rblind and desperate,\rhe realizes that the\nonly bond linking him\nto the world is the cool\nhand of a girl.", 
+                             nullptr);
+    game->text[77].callbacks[0] = chapter_3_fade_out_outside_home_delay;
+
+    atari_text_list_init(&game->text[80],
+                         0,
+                         "Apartment Complex 2B,\rA Corp.",
+                         speed,
+                         nullptr);
+
+    /*
     level->player = chapter_3_make_entity(ENTITY_PLAYER, 66, 96);
-
     array_add(&game->entities, level->player);
-
-    chapter_3_init_outside(game);
+    */
 
     level->virtual_mouse.texture = 22;
 
     chapter_3_job_init(game, 0);
 
     //chapter_3_goto_job_minigame(game);
-    //chapter_3_goto_window_text(game);
 
     //chapter_3_goto_lunch_room(game, CHAPTER_3_LUNCH_TEXT_3);
+    //chapter_3_goto_window_text(game);
     //level->minigame.active = true;
+
+    //chapter_3_init_outside(game);
+    //chapter_3_goto_home_inside(game);
+    chapter_3_goto_home_outside(game);
+
+    //chapter_3_goto_road(game);
 }
 
 void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,
@@ -1123,17 +1338,14 @@ void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,
         size_t length = word_on->end_index - word_on->start_index + 1;
 
         char word_before[128] = {};
-        if (word_on->start_index >= line_start_index)
-            strncpy(word_before, current_line.text, word_on->start_index - line_start_index);
-        else
-            __debugbreak();
+        assert(word_on->start_index >= line_start_index);
+
+        strncpy(word_before, current_line.text, word_on->start_index - line_start_index);
 
         char word[128] = {};
 
-        if (word_on->start_index >= line_start_index)
-            strncpy(word, current_line.text + word_on->start_index - line_start_index, length);
-        else
-            __debugbreak();
+        assert(word_on->start_index >= line_start_index);
+        strncpy(word, current_line.text + word_on->start_index - line_start_index, length);
 
         Vector2 before_size = MeasureTextEx(*font,
                                             word_before,
@@ -1301,14 +1513,15 @@ void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,
 
     auto click_next = [&]() -> void {
         if (complete_lot) {
-            minigame->active = false;
-
             Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
             int new_text = level->current_lunch_text + 1;
+
             if (new_text <= CHAPTER_3_LUNCH_TEXT_3) {
+                minigame->active = false;
+
                 chapter_3_goto_lunch_room(game, (Chapter_3_Lunch_Text) new_text);
-            } else {
-                level->state = CHAPTER_3_STATE_ROAD;
+            } else if (game->fader.direction == FADE_INVALID) {
+                start_fade(game, FADE_OUT, chapter_3_goto_road);
             }
         } else {
             chapter_3_next_document(minigame);
@@ -1368,10 +1581,16 @@ void chapter_3_entity_update(Entity *entity, Game *game, float dt) {
         case ENTITY_PLAYER: {
             // player tick player update player
 
+            if (game->current)
+                return;
+
             int dir_x = input_movement_x_axis_int(dt);//key_right() - key_left();
             int dir_y = input_movement_y_axis_int(dt);//key_down()  - key_up();
 
             float player_speed = 60;
+
+            if (level->state == CHAPTER_3_STATE_HOME)
+                player_speed = 30;
 
 #ifdef DEBUG
             if (IsKeyDown(KEY_P))
@@ -1385,7 +1604,15 @@ void chapter_3_entity_update(Entity *entity, Game *game, float dt) {
                 apply_velocity(entity, velocity, &game->entities);
                 
                 entity->pos.x = Clamp(entity->pos.x, 0, render_width - entity_texture_width(entity));
-                entity->pos.y = Clamp(entity->pos.y, 0, render_height - entity_texture_height(entity));
+
+                if (level->state == CHAPTER_3_STATE_HOME_INSIDE) {
+                    entity->pos.y = Clamp(entity->pos.y, 0, render_height - entity_texture_height(entity));
+                } else {
+                    int max = atari_assets.textures[level->home_background].height - entity_texture_height(entity);
+                    if (entity->pos.y > max) {
+                        entity->pos.y = max;
+                    }
+                }
                 break;
             }
 
@@ -1448,6 +1675,7 @@ void chapter_3_entity_update(Entity *entity, Game *game, float dt) {
             }
 
             bool can_scroll = true;
+
             if (level->state == CHAPTER_3_STATE_LUNCH && level->current_lunch_text == CHAPTER_3_LUNCH_TEXT_2 && scrolled_dir != DIRECTION_INVALID) {
                 chapter_3_job_init(game, 2);
                 //level->minigame.active = true;
@@ -1508,7 +1736,7 @@ void chapter_3_entity_update(Entity *entity, Game *game, float dt) {
                     add_cubicle(&game->entities, rand_bool(0.1), 140+rand_range(-3,3), 90+rand_range(-3,3));
                 }
 
-                if (level->screens_scrolled >= 14) {
+                if (level->screens_scrolled >= 12) {
                     int which = rand()%4;
 
                     int current = 0;
@@ -1533,6 +1761,12 @@ void chapter_3_entity_update(Entity *entity, Game *game, float dt) {
                         }
                     }
                 }
+            }
+        } break;
+        case ENTITY_PHONE: {
+            if (is_action_pressed() && open_dialogue) {
+                game->current = &game->text[59];
+                entity->has_dialogue = false;
             }
         } break;
         case ENTITY_CHAP_3_CUBICLE_CHAIR: {
@@ -1673,6 +1907,38 @@ void chapter_3_deinit(Game *game) {
 void chapter_3_update(Game *game, float dt) {
     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
 
+    if (level->state == CHAPTER_3_STATE_HOME) {
+        //int player_x = level->player->pos.x + entity_texture_width(level->player) / 2;
+        int player_y = level->player->pos.y + entity_texture_height(level->player) / 2;
+
+        int screen_y = player_y / render_height;
+
+        level->camera.offset.x = 0;
+        level->camera.offset.y = -screen_y * render_height;
+
+        if (level->player->pos.y + entity_texture_height(level->player)/2 < render_height) {
+            game->post_processing.crt.do_scanline_effect = 0;
+        } else {
+            game->post_processing.crt.do_scanline_effect = 1;
+        }
+
+        static bool started_event = false;
+        if (!started_event && level->player->pos.y + entity_texture_height(level->player) < 0) {
+            add_event(game, chapter_3_set_apartment_end_text, 5);
+            started_event = true;
+
+            for (int i = 0; i < game->entities.length; i++) {
+                free_entity(game->entities.data[i]);
+                array_remove(&game->entities, i--);
+            }
+        }
+
+#ifdef DEBUG
+        if (IsKeyPressed(KEY_EQUAL))
+            game->current = game->text + 73;
+#endif
+    }
+
     {
         level->virtual_mouse.pos = Vector2Add(level->virtual_mouse.pos, get_mouse_delta());
 
@@ -1756,11 +2022,13 @@ void chapter_3_draw(Game *game, float dt) {
     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
     Chapter_3_Job_Minigame *minigame = &level->minigame;
 
-    if (level->lunch_devil_effect) {
-        game->post_processing.type = POST_PROCESSING_VHS;
-        post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_MEDIUM_HIGH);
-    } else {
-        game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
+    if (level->state == CHAPTER_3_STATE_LUNCH) {
+        if (level->lunch_devil_effect) {
+            game->post_processing.type = POST_PROCESSING_VHS;
+            post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_MEDIUM_HIGH);
+        } else {
+            game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
+        }
     }
 
     switch (level->state) {
@@ -1840,50 +2108,150 @@ void chapter_3_draw(Game *game, float dt) {
             game->textbox_alpha = 255;
 
             level->road_time += dt;
-            if (level->road_time >= 3) {
-                level->state = CHAPTER_3_STATE_HOME;
-                for (int i = 0; i < game->entities.length; i++) {
-                    free_entity(game->entities.data[i]);
-                    array_remove(&game->entities, i--);
-                }
 
-                level->player = chapter_3_make_entity(ENTITY_PLAYER, 78, 137);
-                array_add(&game->entities, level->player);
-                add_wall(&game->entities, {0, 0, 192, 99});
+            if (level->road_time > 15) {
+                level->car.driving_off = true;
+
+                if (level->car.position.x > render_width + 25) {
+                    if (game->fader.direction == FADE_INVALID) {
+                        start_fade(game, FADE_OUT, chapter_3_goto_home_outside);
+                    }
+                }
             }
 
+            if (level->car.driving_off) {
+                level->car.position.x += 30 * dt;
+            } else if (level->car.has_control) {
+                if (key_right()) {
+                    level->car.position.x += dt * 30;
+                }
+                if (key_left()) {
+                    level->car.position.x -= dt * 30;
+                }
+
+                if (key_down()) {
+                    level->car.position.y += dt * 30;
+                }
+                if (key_up()) {
+                    level->car.position.y -= dt * 30;
+                }
+
+                if (level->car.position.x < 20)
+                    level->car.position.x = 20;
+                if (level->car.position.x > render_width - 80)
+                    level->car.position.x = render_width - 80;
+            } else {
+                level->car.position.x += 30 * dt;
+                if (level->car.position.x >= render_width/2 - 33)
+                    level->car.has_control = true;
+            }
+
+            level->other_car.position.x -= 400 * dt;
+            if (level->other_car.position.x < -100) {
+                level->other_car.position.x = render_width+300 + rand()%200;
+                level->other_car.color = { (uint8_t)(rand()%255), (uint8_t)(rand()%255), (uint8_t)(rand()%255), (uint8_t)255 };
+            }
+
+            if (level->car.position.y < 94)
+                level->car.position.y = 94;
+            if (level->car.position.y > 123 - atari_assets.textures[level->car.texture].height)
+                level->car.position.y = 123 - atari_assets.textures[level->car.texture].height;
+
+            static float offset = 0;
+
+            offset -= 240 * dt;
+
+            int num_lines = 5;
+            int line_width = render_width/num_lines;
+
+            /*
+            if (level->road_time >= 3) {
+            }
+            */
+
             DrawTexture(atari_assets.textures[17], 0, 0, WHITE);
+
+            int num_trees = 3;
+
+            for (int i = 0; i < num_trees; i++) {
+                int diff = 100;
+                int x = offset + i * diff;
+
+                while (x + diff <= 0) {
+                    x += render_width + diff;
+                }
+
+                DrawTexture(atari_assets.textures[24],
+                            x,
+                            10 + sin(i) * 2,
+                            WHITE);
+            }
+
+            for (int i = 0; i < num_lines; i++) {
+                int x = offset + i * (line_width*2);
+
+                while (x + line_width <= 0)
+                    x += render_width + line_width;
+
+                DrawLine(x,
+                         100,
+                         x + line_width,
+                         100,
+                         WHITE);
+            }
+
+            // draw the other car
+            int width = atari_assets.textures[level->car.texture].width;
+            int height = atari_assets.textures[level->car.texture].height;
+
+            DrawTextureRec(atari_assets.textures[level->other_car.texture],
+                           { 0, 0, (float)-width, (float)height },
+                           {level->other_car.position.x, level->other_car.position.y},
+                           level->other_car.color);
+
+            // draw the car
+            DrawTexture(atari_assets.textures[level->car.texture],
+                        level->car.position.x,
+                        level->car.position.y,
+                        level->car.color);
+
+
+            for (int i = 0; i < num_trees; i++) {
+                int diff = 70;
+                int x = offset + i * diff;
+
+                while (x + diff <= 0)
+                    x += render_width + diff;
+
+                DrawTexture(atari_assets.textures[24],
+                            x,
+                            110 + sin(i) * 10,
+                            WHITE);
+            }
         } break;
         case CHAPTER_3_STATE_HOME: {
             Rectangle player = level->player->base_collider;
             player.x += level->player->pos.x;
             player.y += level->player->pos.y;
 
-            level->open_door_popup = CheckCollisionRecs(player, {72,79,24,28});
+            level->read_sign_popup = CheckCollisionRecs(player, {0, 679, 62, 25});
 
-            if (level->open_door_popup && is_action_pressed()) {
-                level->state = CHAPTER_3_STATE_HOME_INSIDE;
-                level->player->pos = { 90, 100 };
-                for (int i = 0; i < game->entities.length; i++) {
-                    if (game->entities.data[i]->type == ENTITY_WALL) {
-                        free_entity(game->entities.data[i]);
-                        array_remove(&game->entities, i--);
-                    }
-                }
-                Rectangle bed = { 80, 8, 29, 44 };
-                add_wall(&game->entities, bed);
+            if (level->read_sign_popup && is_action_pressed()) {
+                game->current = game->text + 80;
             }
 
             ClearBackground(BLACK);
-            DrawTexture(atari_assets.textures[18], 0, 0, WHITE);
+            BeginMode2D(level->camera);
 
+            DrawTexture(atari_assets.textures[level->home_background], 0, 0, WHITE);
+
+            sort_entities(&game->entities);
             for (int i = 0; i < game->entities.length; i++) {
                 chapter_3_entity_draw(game->entities.data[i], game);
             }
 
-            if (level->open_door_popup) {
-                draw_popup("Open door.");
-            }
+            EndMode2D();
+
             game->textbox_alpha = 255;
         } break;
         case CHAPTER_3_STATE_HOME_INSIDE: {

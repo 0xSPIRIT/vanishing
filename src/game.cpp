@@ -68,6 +68,8 @@ enum Entity_Type {
 
     ENTITY_CHAP_3_LUNCH_TABLE,
 
+    ENTITY_CHAP_3_CAR,
+
     ENTITY_CHAP_4_WINDOW,
 };
 
@@ -124,6 +126,20 @@ struct Event {
     float time;
 };
 
+enum Fade_Direction {
+    FADE_IN = -1,
+    FADE_INVALID = 0,
+    FADE_OUT = 1,
+};
+
+struct Fader {
+    Fade_Direction direction;
+    float          alpha;
+    float          speed; // alpha per second
+
+    void (*action)(struct Game *);
+};
+
 struct Game {
     Render_State render_state;
 
@@ -142,6 +158,10 @@ struct Game {
 
     Event events[64];
     int   num_events;
+
+    bool include_text_in_target;
+
+    Fader fader;
 
     float textbox_alpha; // 0.0f to 255.0f
 
@@ -199,6 +219,45 @@ void tick_events(Game *game, float dt) {
             game->events[i--] = game->events[--game->num_events];
         }
     }
+}
+
+void start_fade(Game *game, Fade_Direction dir, float speed, void (*action)(Game *)) {
+    Fader f;
+
+    f.direction = dir;
+    f.action = action;
+    f.speed = speed;
+
+    switch (dir) {
+        case FADE_IN:  f.alpha = 255; break;
+        case FADE_OUT: f.alpha = 0; break;
+    }
+
+    game->fader = f;
+}
+
+void start_fade(Game *game, Fade_Direction dir, void (*action)(Game *)) {
+    start_fade(game, dir, 60, action);
+}
+
+void update_and_draw_fade(Game *game, Fader *fader, float dt) {
+    if (fader->direction == FADE_INVALID)
+        return;
+
+    fader->alpha += (int)fader->direction * fader->speed * dt;
+
+    bool done = (fader->direction == FADE_OUT && fader->alpha >= 255) || (fader->direction == FADE_IN && fader->alpha <= 0);
+
+    if (done) {
+        fader->alpha = Clamp(fader->alpha, 0, 255);
+        fader->direction = FADE_INVALID;
+
+        if (fader->action)
+            fader->action(game);
+    }
+
+    DrawRectangle(0, 0, render_width, render_height,
+                  {0, 0, 0, (uint8_t)fader->alpha});
 }
 
 Entity *entities_get_player(Array<Entity*> *entities) {
@@ -480,6 +539,8 @@ void sort_entities(Array<Entity*> *entities) {
     // Sort the entity array based on the bottom of the texture
     size_t entity_count = entities->length;
 
+    if (entity_count == 0) return;
+
     // do the DRAW_LAYER_LOW first
     int low_layer_count = 0;
 
@@ -613,7 +674,7 @@ void atari_update_and_draw_textbox(Game *game, float dt) {
     }
 
     if (game->current)
-        game->current = text_list_update_and_draw(output, &game->textbox_target, game->current, game, (uint8_t)game->textbox_alpha, dt);
+        game->current = text_list_update_and_draw(output, &game->textbox_target, game->current, game, (uint8_t)game->textbox_alpha, game->include_text_in_target, dt);
 
 }
 
@@ -634,6 +695,10 @@ void atari_text_list_init(Text_List *list, char *speaker,
         case 2: {
             list->color    = WHITE;
             list->bg_color = {27, 36, 41, 255};
+        } break;
+        default: {
+            list->color = WHITE;
+            list->bg_color = BLACK;
         } break;
     }
     list->center_text  = false;
@@ -672,9 +737,17 @@ void atari_mid_text_list_init(Text_List *list, char *line,
     list->font_spacing = 2;
     list->scale        = 0.125;
     list->scroll_speed = 15;
-    list->alpha_speed  = 0.5;
+    if (chapter == 1) 
+        list->alpha_speed  = 0.5;
+    else
+        list->alpha_speed = 1;
     list->color        = BLACK;
-    list->backdrop_color={163, 116, 80, 255};
+
+    if (chapter == 1)
+        list->backdrop_color={163, 116, 80, 255};
+    else
+        list->backdrop_color={180,180,180,255};
+
     list->center_text  = true;
     list->scroll_type  = EntireLine;
     list->render_type  = Bare;
@@ -869,6 +942,8 @@ void game_atari_run(Game *game) {
             case 6: chapter_6_draw(game); break;
             case 7: chapter_epilogue_draw(game); break;
         }
+
+        update_and_draw_fade(game, &game->fader, dt);
 
         atari_update_and_draw_textbox(game, dt);
 

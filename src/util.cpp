@@ -3,6 +3,7 @@
 #define Radians(degrees) (PI * degrees / 180.0)
 #define Degrees(radians) (180.0 * radians / PI)
 
+// Technically KiB, MiB, GiB
 #define Kilobytes(kb) ((size_t)kb * 1024)
 #define Megabytes(mb) ((size_t)mb * 1024 * 1024)
 #define Gigabytes(gb) ((size_t)gb * 1024 * 1024 * 1024)

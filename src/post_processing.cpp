@@ -1,6 +1,7 @@
 enum Post_Process_Shader_Type {
     POST_PROCESSING_PASSTHROUGH,
-    POST_PROCESSING_VHS
+    POST_PROCESSING_VHS,
+    POST_PROCESSING_CRT
 };
 
 enum Vhs_Intensity {
@@ -23,12 +24,21 @@ struct Post_Processing_Vhs {
     float  abberation_intensity;
 };
 
+struct Post_Processing_Crt {
+    Shader shader;
+    int    u_time;
+    int    u_do_scanline_effect;
+
+    int    do_scanline_effect;
+};
+
 struct Post_Processing {
     Post_Process_Shader_Type type;
     RenderTexture2D          target; // This is the size of the window, and is resized when a change in size is detected.
     RenderTexture2D          game_target; // This is the internal resolution.
 
     Post_Processing_Vhs vhs;
+    Post_Processing_Crt crt;
 };
 
 void post_process_init(Post_Processing *post) {
@@ -44,6 +54,12 @@ void post_process_init(Post_Processing *post) {
     post->vhs.abberation_intensity = 1;
 
     post->type = POST_PROCESSING_PASSTHROUGH;
+
+    post->crt.do_scanline_effect = 1;
+
+    post->crt.shader = LoadShader(0, RES_DIR "shaders/crt.fs");
+    post->crt.u_time = GetShaderLocation(post->crt.shader, "time");
+    post->crt.u_do_scanline_effect = GetShaderLocation(post->crt.shader, "do_scanline_effect");
 }
 
 void post_process_vhs_set_intensity(Post_Processing_Vhs *vhs, Vhs_Intensity intensity) {
@@ -72,16 +88,6 @@ void post_process_vhs_set_intensity(Post_Processing_Vhs *vhs, Vhs_Intensity inte
 }
 
 void post_process_vhs_uniforms(Post_Processing_Vhs *vhs) {
-    /*
-    for (int i = 0; i < 4; i++) {
-        if (IsKeyPressed(KEY_ONE + i)) {
-            post_process_vhs_set_intensity(vhs, (Vhs_Intensity)i);
-        }
-    }
-    */
-
-    // we can modulate these values over time
-
     float curtime = GetTime();
     SetShaderValue(vhs->shader, vhs->u_time, &curtime, SHADER_UNIFORM_FLOAT);
     SetShaderValue(vhs->shader, vhs->u_scan_intensity, &vhs->scan_intensity, SHADER_UNIFORM_FLOAT);
@@ -89,18 +95,27 @@ void post_process_vhs_uniforms(Post_Processing_Vhs *vhs) {
     SetShaderValue(vhs->shader, vhs->u_abberation_intensity, &vhs->abberation_intensity, SHADER_UNIFORM_FLOAT);
 }
 
+void post_process_crt_uniforms(Post_Processing_Crt *crt) {
+    float curtime = GetTime();
+    SetShaderValue(crt->shader, crt->u_time, &curtime, SHADER_UNIFORM_FLOAT);
+    SetShaderValue(crt->shader, crt->u_do_scanline_effect, &crt->do_scanline_effect, SHADER_UNIFORM_INT);
+}
+
 // Apply post processing shader, then draw it to the screen.
 void post_process(Post_Processing *post, Texture2D *game_texture) {
     Shader *current_shader = 0;
 
     switch (post->type) {
-        case POST_PROCESSING_VHS: { current_shader = &post->vhs.shader; } break;
+        case POST_PROCESSING_VHS: current_shader = &post->vhs.shader; break;
+        case POST_PROCESSING_CRT: current_shader = &post->crt.shader; break;
     }
 
 #ifdef DEBUG
     if (current_shader && IsKeyPressed(KEY_K)) {
+        Post_Process_Shader_Type type = post->type;
         UnloadShader(*current_shader);
         post_process_init(post);
+        post->type = type;
     }
 #endif
 
@@ -139,6 +154,9 @@ void post_process(Post_Processing *post, Texture2D *game_texture) {
         switch (post->type) {
             case POST_PROCESSING_VHS: {
                 post_process_vhs_uniforms(&post->vhs);
+            } break;
+            case POST_PROCESSING_CRT: {
+                post_process_crt_uniforms(&post->crt);
             } break;
             default: {
                 assert(false);
