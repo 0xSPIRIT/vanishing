@@ -1,5 +1,7 @@
 TODO 
 
+- Change the player sprite in chapter 6 desert segment to
+  crawling.
 - Create proper artwork for the apartment
   - And fix up the pixel locations for chapter 1, and 4.
 - Create proper artwork for the dinner party
@@ -14,8 +16,6 @@ V1 squad
   x Daniel
   x Varun
   (1/2) Anthony
-
-- "I'm sick of chasing" - double entendre
 
 Later
 - Chapter 4:

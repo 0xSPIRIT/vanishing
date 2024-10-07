@@ -1,4 +1,5 @@
 enum Chapter_6_State {
+    CHAPTER_6_STATE_SUPPORT_GROUP,
     CHAPTER_6_STATE_DESERT,
     CHAPTER_6_STATE_HOME,
     CHAPTER_6_STATE_TEXT,
@@ -19,6 +20,29 @@ struct Level_Chapter_6 {
 
     bool end;
 };
+
+Entity *chapter_6_make_entity(Entity_Type type, float x, float y);
+
+void chapter_6_goto_desert(Game *game) {
+    Level_Chapter_6 *level = (Level_Chapter_6 *)game->level;
+
+    level->state = CHAPTER_6_STATE_DESERT;
+
+    level->player = chapter_6_make_entity(ENTITY_PLAYER, render_width/2 - 4, 3*render_height/4);
+    array_add(&game->entities, level->player);
+
+    Entity *node = chapter_1_make_entity(ENTITY_NODE, render_width/2 - 16, render_height/4 - 16);
+    array_add(&game->entities, node);
+
+    game->post_processing.type = POST_PROCESSING_VHS;
+    post_process_vhs_set_intensity(&game->post_processing.vhs,
+                                   VHS_INTENSITY_MEDIUM);
+}
+
+void chapter_6_delayed_goto_desert(void *game_ptr) {
+    Game *game = (Game *)game_ptr;
+    add_event(game, chapter_6_goto_desert, 2);
+}
 
 float chapter_6_red_fade_alpha(float time) {
     return time * time * time;
@@ -43,6 +67,56 @@ void chapter_6_queue_godtext(void *game_ptr) {
     add_event(game, chapter_6_start_godtext, 2);
 }
 
+void chapter_6_support_text(Text_List *list, Font *font, char *speaker, char *line, Text_List *next) {
+    list->font = font;
+    list->font_spacing = 0;
+    list->scale = 0.125;
+    list->scroll_speed = 30;
+
+    list->color = WHITE;
+    list->bg_color = BLACK;
+
+    list->render_type = DrawTextbox;
+    list->location = Top;
+    list->take_keyboard_focus = true;
+
+    text_list_init(list, speaker, line, next);
+}
+
+void chapter_6_choice_text(Text_List *list,
+                           Font *font,
+                           char *speaker,
+                           char *line,
+                           String choices[],
+                           Text_List *next[],
+                           void (*hooks[])(void*),
+                           int choice_count)
+{
+    list->font = font;
+    list->font_spacing = 0;
+    list->scale = 0.125;
+    list->scroll_speed = 30;
+
+    list->color = WHITE;
+    list->bg_color = BLACK;
+
+    list->choice = true;
+    list->choice_count = choice_count;
+    list->choice_index = -1;
+
+    text_list_init(list, speaker, line, 0);
+
+    memcpy(list->choices,
+           choices,
+           sizeof(choices[0]) * choice_count);
+    memcpy(list->next,
+           next,
+           sizeof(next[0]) * choice_count);
+    memcpy(list->callbacks,
+           hooks,
+           sizeof(hooks[0]) * choice_count);
+}
+
 void chapter_6_text(bool scroll, bool chase, Text_List *list, char *line,
                     Text_List *next)
 {
@@ -54,8 +128,8 @@ void chapter_6_text(bool scroll, bool chase, Text_List *list, char *line,
     if (chase) {
         list->color = WHITE;
     } else {
-        list->color = GOD_COLOR;
-        list->backdrop_color = GOD_COLOR_BACKDROP;
+        list->color = {255,0,0,255};
+        list->backdrop_color = {100,0,0,255};
     }
 
     list->center_text = true;
@@ -89,9 +163,11 @@ Entity *chapter_6_make_entity(Entity_Type type, float x, float y) {
         } break;
         case ENTITY_FOOTSTEPS: {
             result->texture_id = 4 + rand() % 3;
+            result->draw_layer = DRAW_LAYER_LOW;
         } break;
         case ENTITY_BLOOD: {
             result->texture_id = 7 + rand() % 3;
+            result->draw_layer = DRAW_LAYER_LOW;
         } break;
         case ENTITY_NODE: {
             result->chap_1_node.active = true;
@@ -120,8 +196,7 @@ void chapter_6_init(Game *game) {
 
     game->render_state = RENDER_STATE_ATARI;
 
-    game->post_processing.type = POST_PROCESSING_VHS;
-    post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_MEDIUM);
+    game->entities = make_array<Entity*>(16);
 
     Texture *textures = atari_assets.textures;
     textures[0]  = load_texture(RES_DIR "art/player.png");
@@ -161,7 +236,7 @@ void chapter_6_init(Game *game) {
     chapter_6_text(true,
                    false,
                    &game->text[3],
-                   "What you NEED.\rMEANING. PURPOSE.\nCONTENTMENT.",
+                   "What you NEED.\rMEANING. PURPOSE.\nCONTENTMENT.\rYOU NEED MY HELP MORE\nTHAN EVER BEFORE!",
                    &game->text[4]);
     chapter_6_text(true,
                    false,
@@ -181,7 +256,7 @@ void chapter_6_init(Game *game) {
     chapter_6_text(true,
                    false,
                    &game->text[7],
-                   "A HOME AS LONELY AS\nTHE SILENCE BEFORE\nCREATION?",
+                   "A HOME AS LONELY AS\nTHE SILENCE BEFORE\nCREATION?\n\rFRIENDS THAT BELITTLE\nYOU AT EVERY TURN?",
                    &game->text[8]);
     chapter_6_text(true,
                    false,
@@ -217,15 +292,187 @@ void chapter_6_init(Game *game) {
                    "every second that I\nam able to overpower\nyou.",
                    nullptr);
 
+
+    // support group
+
+    int i = 20;
+
+    auto support_text = [&](char *speaker, char *line, bool end) -> void {
+        Text_List *curr = game->text + i;
+        i++;
+        Text_List *next  = game->text + i;
+
+        if (end)
+            next = 0;
+
+        chapter_6_support_text(curr,
+                               &atari_small_font,
+                               speaker,
+                               line,
+                               next);
+        curr->textbox_height += 4;
+    };
+
+    auto support_choice = [&](char *cstr_choices[], int choice_count) {
+        char *speaker = "Chase";
+        char *text_string = "...........";
+
+        Text_List *curr = game->text + i;
+        i++;
+        Text_List *next  = game->text + i;
+
+        String choices[99] = {};
+        for (int j = 0; j < choice_count; j++) {
+            strcpy(choices[j].text, cstr_choices[j]);
+            choices[j].length = strlen(cstr_choices[j]);
+        }
+
+        Text_List *nexts[99];
+        for (int j = 0; j < choice_count; j++) {
+            nexts[j] = next;
+        }
+
+        void (*hooks[99])(void*) = {};
+
+        curr->font = &atari_small_font;
+        curr->arrow_color = WHITE;
+        curr->scale = 0.125;
+        curr->scroll_speed = 30;
+        curr->font_spacing = 0;
+
+        text_list_init(curr, speaker, text_string, 0);
+        curr->choice = true;
+        curr->choice_count = choice_count;
+        curr->choice_index = -1;
+
+        memcpy(curr->choices,
+               choices,
+               sizeof(choices[0]) * choice_count);
+        memcpy(curr->next,
+               nexts,
+               sizeof(nexts[0]) * choice_count);
+        memcpy(curr->callbacks,
+               hooks,
+               sizeof(hooks[0]) * choice_count);
+    };
+
+    // Begin the chapter with a rotoscoped animation of
+    // a die being cast (the camera is close to the table,
+    // and the die is thrown until it's large in the camera's
+    // perspective)
+    //
+    // You have these people Aria, Tyrell and Noah talking
+    // about something that you don't care about (their other
+    // friends, and some girl Sonja breaking up and Noah
+    // likes her because she's white indian, skinny, has
+    // long straight hair and glasses)
+    //
+    // Tyrell and Aria are giving offhanded remarks
+    // about you being nerdy or silent, looking depressed.
+    //
+    // A kind of joking manner in which they speak to you
+    // where you're being belittled.
+    //
+    // Your friends here have social wealth as opposed to you
+    // Mention how much friends they have, and also portray
+    // that you don't know any of them.
+    //
+    // Portray that you feel inferior to them as was discussed
+    // in the ending of chapter 2.
+    // Portray it as like a form of torture.
+    // Portray the fact that whenever you ask a question it
+    // goes unanswered, like they do not respect you as an equal
+    // in the conversation (almost like they're pitying you
+    // by having you here)
+    //
+    // In this die game you have to hold the up direction to
+    // hrow a die and whoever gets the highest number wins,
+    // on the last time you have to do it, it instantly transitions
+    // into the desert part, so Chase is now moving upwards
+    // automatically because of the match-cut.
+    //
+    // The card game itself increases in creepiness over time,
+    // vhs effect, etc. At the end everyone has pyramid heads,
+    // and are staring down at you, saying weird stuff.
+    //
+    // The last line of dialogue before the cut is something like
+    //
+    //    Tyrell: "C'mon nerd, why can't you just have fun?"
+    //    Chase: "Why the hell would you say th-"
+    //
+    // The node at the end represents you being socially accepted,
+    // being normal, and finding meaning... But you never get it.
+    // Surely with this throw of the die everything will work out.
+    // You slow down as you approach it.
+    //
+    // Then, God appears telling you how you need his help more
+    // than ever before, and how you didn't complete the task
+    // that he asked... The rest is the same, ending with the
+    // satanic 666, and we fade into Epilogue.
+
+    // Actually we'll just do a dialogue thing instead.
+    // The only rotoscope thing we'll leave is the die being cast at the start.
+
+    support_text(0, "It was a bright cold day in April,\rand the clocks struck thirteen.\rChase took a meditative breath.", false);
+    support_text(0, "He found himself sitting despondently\nat a table with three of his friends.", false);
+    support_text(0, "Although earlier that day he felt some\nsemblance of understanding of his\nsituation,", false);
+    support_text(0, "all that he could feel now was malaise.", false);
+    support_text(0, "His eyes wandered into the void\nbetween the floorboards.\rHe forgot to blink.", false);
+    support_text(0, "There, the void whispered back to him,\nlike before.", false);
+    support_text(0, "But, before he could understand what\nit was saying...", false);
+
+    support_text("Aria",   "*Casts the die*\rYou guys remember Sonja?\rI bumped into her yesterday.", 0);
+    support_text(0,        "It landed on SIX.", 0);
+    support_text(0,        "She threw a card zealously onto the\ntable.\rHe wasn't completely sure why.", 0);
+    support_text("Tyrell", "Uhhh, Sonja from school or the other\none?", 0);
+    support_text("Aria",   "Other one.\rLong hair, tall, white-indian, skinny,\nwears glasses...", 0);
+    support_text("Tyrell", "HAH!\rLook, Noah's mouth is agape at the\nmention.", 0);
+    support_text("Noah",   "*Casts the die*", 0);
+    support_text(0,        "It landed on SIX.", 0);
+    support_text("Noah",   "....! Me and Sonja?!\rNooooooooo.....!", 0);
+
+    {
+        char *choices[] = {"Who's Sonja", "What's with Noah and Sonja?", "What did y'all say? I missed something."};
+        support_choice(choices, StaticArraySize(choices));
+    }
+
+    //support_text("Chase",  "Who's Sonja?\rWhat's with Noah and Sonja?\rWhat did y'all say? I can't hear.", 0);
+    support_text("Tyrell", "Hahah, look how his eyes widened,\rhe SO has a type, he just doesn't want\nto admit it.", 0);
+    support_text("Tyrell", "*Casts the die*", 0);
+    support_text(0,        "It landed on SIX.", 0);
+    support_text("Noah",   "..........\rOk maybe I do have a type.\rDoesn't she have a man though?", 0);
+    support_text("Aria",   "She and Leon are *pbbt*\rKaput, no more, separated.", 0);
+    support_text("Noah",   "How long since they broke up?", 0);
+    support_text("Aria",   "Literally yesterday.", 0);
+    support_text(0,        "Aria glances over at Chase with a\nlook of disapproval.\rShe realized he wasn't talking much.", 0);
+    support_text("Aria",   "Damn you're such a nerd.", 0);
+    support_text("Chase",  "...\rOh.", 0);
+    support_text(0,        "Although she had anticipated a\nplayful remark, his response was\nanything but.", 0);
+    support_text("Tyrell", "I guess it's Noah's turn for her, huh.\rIt'll make S jealous for sure.", 0);
+
+    {
+        char *choices[] = {"Who's S?", "I don't really know what to say.", "Can you guys hear me?"};
+        support_choice(choices, StaticArraySize(choices));
+    }
+
+    support_text("Chase",  "Uh, whose turn is it to play?\rMine?\r...", 0);
+    support_text("Tyrell", "... What?\rOh, uh whatever yeah your turn.", 0);
+    support_text("Chase",  "*Casts the die*", 0);
+    support_text(0,        "It landed on ONE.", 0);
+    support_text(0,        "Chase's face remains blank.", 0);
+    support_text("Tyrell", "...\rC'mon Chase, stop being such a nerrrrrdddd.", 0);
+    support_text("Aria",   "Ugh why do you look like that?\rCome onnn, the rest of us are having\nfun.", 0);
+    support_text("Chase",  "... Well I-", 0);
+    support_text("Tyrell", "How about you actually contribute to\nthe conversation?", 0);
+    support_text("Tyrell", "Why can't you just have fun?", 0);
+    support_text("Chase",  "... Why would you say tha-", 1);
+
+    game->text[i-1].callbacks[0] = chapter_6_delayed_goto_desert;
+
     game->text[13].callbacks[0] = chapter_6_queue_godtext;
 
-    game->entities = make_array<Entity*>(16);
-
-    level->player = chapter_6_make_entity(ENTITY_PLAYER, render_width/2 - 4, 3*render_height/4);
-    array_add(&game->entities, level->player);
-
-    Entity *node = chapter_1_make_entity(ENTITY_NODE, render_width/2 - 16, render_height/4 - 16);
-    array_add(&game->entities, node);
+    //chapter_6_goto_desert(game);
+    game->current = &game->text[20];
 }
 
 void chapter_6_entity_update(Entity *entity, Game *game, float dt) {
@@ -317,6 +564,8 @@ void chapter_6_update(Game *game, float dt) {
     Level_Chapter_6 *level = (Level_Chapter_6 *)game->level;
 
     switch (level->state) {
+        case CHAPTER_6_STATE_SUPPORT_GROUP: {
+        } break;
         case CHAPTER_6_STATE_DESERT: {
             for (int i = 0; i < game->entities.length; i++) {
                 chapter_6_entity_update(game->entities.data[i], game, dt);
@@ -403,6 +652,9 @@ void chapter_6_draw(Game *game) {
     Level_Chapter_6 *level = (Level_Chapter_6 *)game->level;
 
     switch (level->state) {
+        case CHAPTER_6_STATE_SUPPORT_GROUP: {
+            ClearBackground(BLACK);
+        } break;
         case CHAPTER_6_STATE_DESERT: {
             ClearBackground(DESERT_COLOR);
 

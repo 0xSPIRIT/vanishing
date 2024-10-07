@@ -877,7 +877,6 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                         }
                     }
 
-                    // Remove all of the cacti and footsteps and nodes
                     for (int i = 0; i < game->entities.length; i++) {
                         Entity *entity = game->entities.data[i];
                         Entity_Type type = entity->type;

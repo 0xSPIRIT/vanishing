@@ -1220,10 +1220,8 @@ void chapter_3_init(Game *game) {
                          speed,
                          nullptr);
 
-    /*
     level->player = chapter_3_make_entity(ENTITY_PLAYER, 66, 96);
     array_add(&game->entities, level->player);
-    */
 
     level->virtual_mouse.texture = 22;
 
@@ -1237,9 +1235,9 @@ void chapter_3_init(Game *game) {
 
     //chapter_3_init_outside(game);
     //chapter_3_goto_home_inside(game);
-    chapter_3_goto_home_outside(game);
+    //chapter_3_goto_home_outside(game);
 
-    //chapter_3_goto_road(game);
+    chapter_3_goto_road(game);
 }
 
 void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,

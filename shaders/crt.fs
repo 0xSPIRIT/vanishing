@@ -33,12 +33,14 @@ void main() {
     float t_off = t * 20 * scan_intensity;
 
     // sine wave to entire scene
-    tex_coord.x += sine_amplitude * sin(t_off + tex_coord.y * sine_frequency);
+    if (do_scanline_effect == 1) {
+        tex_coord.x += sine_amplitude * sin(t_off + tex_coord.y * sine_frequency);
 
-    float scanline_frequency = 4 * scan_intensity;
-    float scanline_amplitude = 0.0005 * scan_intensity;
-    float scanline_speed = 2 * scan_intensity * sqrt(scan_intensity);
-    tex_coord.x += scanline_amplitude * tan(t * scanline_speed + scanline_frequency * tex_coord.y);
+        float scanline_frequency = 4 * scan_intensity;
+        float scanline_amplitude = 0.0005 * scan_intensity;
+        float scanline_speed = 2 * scan_intensity * sqrt(scan_intensity);
+        tex_coord.x += scanline_amplitude * tan(t * scanline_speed + scanline_frequency * tex_coord.y);
+    }
 
     if (abberation_intensity > 0) {
         float redOffset   =  0.009;
@@ -55,6 +57,17 @@ void main() {
         finalColor = texture(texture0, tex_coord);
     }
 
+    // Vignette
+    float dist = 1;
+    dist = 0.6 - length(tex_coord.xy - vec2(0.5, 0.5));
+    //dist = sqrt(dist);
+    dist *= dist * 8;
+    dist += 0.3;
+
+    finalColor.r = clamp(finalColor.r * dist, 0, 1);
+    finalColor.g = clamp(finalColor.g * dist, 0, 1);
+    finalColor.b = clamp(finalColor.b * dist, 0, 1);
+
     float x = mod(fragTexCoord.x * 0.005 + t/2, 100);
     float y = mod(fragTexCoord.y * 0.006 + t*2, 100);
 
@@ -68,10 +81,5 @@ void main() {
             finalColor = mix(finalColor, vec4(0,0,0,1), 0.25);
         }
     }
-
-    // Vignette
-    float dist = 1 - length(tex_coord.xy - vec2(0.5, 0.5));
-    dist = sqrt(dist);
-    finalColor.a = dist;
 }
 

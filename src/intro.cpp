@@ -74,12 +74,18 @@ void game_intro_run(Game_Intro *game) {
     Font *font = &bold_font_big;
 
     Vector2 size = MeasureTextEx(*font, game->message, font->baseSize, spacing);
+
+    Color color = WHITE;
+    if (chapter == 7)
+        color = BLACK;
+    color.a = alpha;
+
     DrawTextEx(*font,
                game->message,
                { render_width/2 - size.x/2, render_height/2 - size.y/2 },
                font->baseSize,
                spacing,
-               {255,255,255,alpha});
+               color);
 
     bool debug = false;
 

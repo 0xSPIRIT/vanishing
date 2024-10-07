@@ -1,6 +1,10 @@
 #define _CRT_SECURE_NO_WARNINGS
 
-#define RES_DIR "./"
+#ifdef RELEASE
+  #define RES_DIR "data/"
+#else
+  #define RES_DIR "./"
+#endif
 
 #define RL_CULL_DISTANCE_NEAR 0.1
 #define RL_CULL_DISTANCE_FAR  1000
@@ -24,8 +28,6 @@
 #include <ctype.h>
 #include <math.h>
 #include <time.h>
-
-#include <iostream>
 
 #ifdef RELEASE
   #define MainFunction int WinMain
@@ -53,6 +55,7 @@ int render_height = default_height;
 
 enum Game_Mode {
     GAME_MODE_INVALID,
+    GAME_MODE_TITLESCREEN,
     GAME_MODE_INTRO,
     GAME_MODE_ATARI,
 };
@@ -60,7 +63,7 @@ Game_Mode game_mode = GAME_MODE_INVALID;
 
 int chapter = 1;
 
-Font global_font, atari_font, comic_sans, italics_font, bold_font, bold_2_font, mono_font, bold_font_big;
+Font global_font, atari_font, comic_sans, italics_font, bold_font, bold_2_font, mono_font, bold_font_big, atari_small_font, titlescreen_font;
 
 bool toggled_fullscreen_past_second = false;
 float fullscreen_timer = 0;
@@ -117,9 +120,11 @@ Rectangle get_screen_rectangle() {
 
 #include "game.cpp"
 #include "intro.cpp"
+#include "titlescreen.cpp"
 
-Game_Intro game_intro;
-Game       game_atari;
+Game_Intro  game_intro;
+Game        game_atari;
+Titlescreen game_titlescreen;
 
 void toggle_fullscreen() {
     toggled_fullscreen_past_second = true;
@@ -136,6 +141,7 @@ void set_game_mode(Game_Mode mode) {
     switch (mode) {
         case GAME_MODE_INTRO: game_intro_init(&game_intro); break;
         case GAME_MODE_ATARI: game_init(&game_atari); break;
+        case GAME_MODE_TITLESCREEN: titlescreen_init(&game_titlescreen); break;
     }
 }
 
@@ -170,6 +176,7 @@ MainFunction() {
     SetExitKey(0);
 
     atari_font    = LoadFont  (RES_DIR "art/romulus.png");
+    atari_small_font = LoadFontEx(RES_DIR "art/cambriaz.ttf",  14, 0, 0);
     global_font   = LoadFontEx(RES_DIR "art/frabk.ttf",    32, 0, 0);
     comic_sans    = LoadFontEx(RES_DIR "art/comic.ttf",    16, 0, 0);
     italics_font  = LoadFontEx(RES_DIR "art/cambriaz.ttf", 16, 0, 0);
@@ -177,6 +184,7 @@ MainFunction() {
     bold_font_big = LoadFontEx(RES_DIR "art/cambriab.ttf", 32, 0, 0);
     bold_2_font   = LoadFontEx(RES_DIR "art/BOOKOSB.TTF",  32, 0, 0);
     mono_font     = LoadFontEx(RES_DIR "art/cour.ttf",      8, 0, 0);
+    titlescreen_font = LoadFontEx(RES_DIR "art/cambriaz.ttf", 48, 0, 0);
 
     //DisableCursor();
 
@@ -212,8 +220,15 @@ MainFunction() {
         }
 
         switch (game_mode) {
-            case GAME_MODE_INTRO:   game_intro_run(&game_intro); break;
-            case GAME_MODE_ATARI:   game_atari_run(&game_atari); break;
+            case GAME_MODE_TITLESCREEN: {
+                titlescreen_update_and_draw(&game_titlescreen);
+            } break;
+            case GAME_MODE_INTRO: {
+                game_intro_run(&game_intro);
+            } break;
+            case GAME_MODE_ATARI: {
+                game_atari_run(&game_atari);
+            } break;
             case GAME_MODE_INVALID: assert(false);
         }
     }

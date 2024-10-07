@@ -1,5 +1,9 @@
+/*
 #define GOD_COLOR {58,0,0,255}
 #define GOD_COLOR_BACKDROP {72,0,0,255}
+*/
+#define GOD_COLOR {225,0,0,255}
+#define GOD_COLOR_BACKDROP {100,0,0,255}
 
 enum Chapter_4_State {
     CHAPTER_4_STATE_ATARI,
@@ -199,8 +203,13 @@ void chapter_4_init(Game *game) {
                           nullptr);
 
     level->text_handler.alarms[0]    = 2;
-    level->text_handler.next_list[0] = &game->text[2];
+    level->text_handler.next_list[0] = &game->text[50];
 
+    chapter_4_window_text(true,
+                          &game->text[50],
+                          "DO NOT BE AFRAID.",
+                          GOD_COLOR,
+                          &game->text[2]);
     chapter_4_window_text(true,
                           &game->text[2],
                           "I HEAR THEE, MY SON.",
@@ -267,27 +276,31 @@ void chapter_4_init(Game *game) {
 
     text_list_init(&game->text[9],
                    nullptr,
-                   "ACEDD2EAAC3582AD42435742073BF948\n"\
-                   "286F4F1392AC1B722EA896C3D0E3E3AB\n"\
-                   "9E5EEA55961C85624D3C62706CF85097\n"\
-                   "9E686B9E0A47B7E103C10928FA8A8143\n"\
-                   "D63A8310EB8BCBDADFC6D36A1155C2FF\n"\
-                   "ACEDD2EAAC3582AD42435742073BF948\n"\
-                   "286F4F1392AC1B722EA896C3D0E3E3AB\n"\
-                   "9E5EEA55961C85624D3C62706CF85097\n"\
-                   "9E686B9E0A47B7E103C10928FA8A8143\n"\
-                   "ACEDD2EAAC3582AD42435742073BF948\n"\
-                   "286F4F1392AC1B722EA896C3D0E3E3AB\n"\
-                   "9E5EEA55961C85624D3C62706CF85097\n"\
-                   "9E686B9E0A47B7E103C10928FA8A8143\n"\
-                   "D63A8310EB8BCBDADFC6D36A1155C2FF\n"\
-                   "D63A8310EB8BCBDADFC6D36A1155C2FF\n"\
-                   "ACEDD2EAAC3582AD42435742073BF948\n"\
-                   "286F4F1392AC1B722EA896C3D0E3E3AB\n"\
-                   "9E5EEA55961C85624D3C62706CF85097\n"\
-                   "9E686B9E0A47B7E103C10928FA8A8143\n"\
-                   "D63A8310EB8BCBDADFC6D36A1155C2FF",
+                   "5468656E207768656E2074686520626F\n"
+                   "79207265616368656420746865206167\n"
+                   "6520746F20776F726B20776974682068\n"
+                   "696D2C204162726168616D2073616964\n"
+                   "2C20224F206D79206465617220736F6E\n"
+                   "2120492068617665207365656E20696E\n"
+                   "206120647265616D2074686174204920\n"
+                   "6D757374207361637269666963652079\n"
+                   "6F752E20536F2074656C6C206D652077\n"
+                   "68617420796F75207468696E6B2E2220\n"
+                   "4865207265706C6965642C20224F206D\n"
+                   "79206465617220666174686572212044\n"
+                   "6F20617320796F752061726520636F6D\n"
+                   "6D616E6465642E20416C6C6168207769\n"
+                   "6C6C696E672C20796F752077696C6C20\n"
+                   "66696E64206D65207374656164666173\n"
+                   "742E22205468656E207768656E207468\n"
+                   "6579207375626D697474656420746F20\n"
+                   "416C6C61682019732057696C6C2C2061\n"
+                   "6E64204162726168616D206C61696420\n"
+                   "68696D206F6E20746865207369646520\n"
+                   "6F662068697320666F72656865616420\n"
+                   "666F72207361637269666963652E\n",
                    nullptr);
+
 
     level->text_handler.alarms[5]    = 2;
     level->text_handler.next_list[5] = &game->text[10];

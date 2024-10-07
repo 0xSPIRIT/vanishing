@@ -135,8 +135,6 @@ void post_process(Post_Processing *post, Texture2D *game_texture) {
             UnloadRenderTexture(post->game_target);
 
         post->game_target = LoadRenderTexture(render_width, render_height);
-
-        printf("resized to %d, %d\n", render_width, render_height);
     }
 
     if (post->type == POST_PROCESSING_PASSTHROUGH) {

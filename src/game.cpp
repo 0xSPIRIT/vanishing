@@ -719,6 +719,7 @@ void atari_choice_text_list_init(Text_List *list,
     list->choice = true;
     list->choice_count = choice_count;
     list->choice_index = -1;
+
     memcpy(list->choices,
            choices,
            sizeof(choices[0]) * choice_count);

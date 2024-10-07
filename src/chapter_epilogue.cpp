@@ -52,6 +52,7 @@ struct Level_Chapter_Epilogue {
 
     bool           door_popup;
     bool           door_strike_popup;
+    bool           bars_popup;
 
     bool           is_transitioning;
     float          transition_timer; // 0.0 to 1.0
@@ -547,7 +548,7 @@ void chapter_epilogue_init(Game *game) {
                          &game->text[77]);
     atari_text_list_init(&game->text[77],
                          "Chase",
-                         "Yeah, those were big inspirations.",
+                         "YEAH! Those were big inspirations.",
                          speed,
                          &game->text[78]);
     atari_text_list_init(&game->text[78],
@@ -616,6 +617,13 @@ void chapter_epilogue_init(Game *game) {
                          speed,
                          nullptr);
     game->text[90].callbacks[0] = epilogue_goto_credits;
+
+    atari_text_list_init(&game->text[100],
+                         0,
+                         "The bars are made of diamond.",
+                         speed,
+                         nullptr);
+    game->text[100].textbox_height = render_height/3.5;
 
     level->num_nodes = 5;
     Epilogue_Node *nodes = level->nodes;
@@ -921,15 +929,18 @@ void chapter_epilogue_update(Game *game, float dt) {
     if (level->transition_timer == 0 && game->current == nullptr) {
         Vector2 cam_pos = {level->camera.position.x, level->camera.position.z};
 
+        bool near_door = false;
+
         for (int i = 0; i < level->num_doors; i++) {
             Vector2 door_pos = { level->doors[i].pos.x, level->doors[i].pos.z };
 
             if (Vector2Distance(cam_pos, door_pos) < 3) {
+                near_door = true;
+
                 if (level->door_timer > 0) 
                     level->door_strike_popup = true;
                 else
                     level->door_popup = true;
-
 
                 if (is_action_pressed()) {
                     if (level->door_popup && level->state == EPILOGUE_STATE_THIRD) {
@@ -946,7 +957,27 @@ void chapter_epilogue_update(Game *game, float dt) {
                 break;
             }
         }
+
+        if (!near_door) {
+            if (cam_pos.x < -27 || cam_pos.x > 27 ||
+                cam_pos.y < -27 || cam_pos.y > 27)
+            {
+                level->bars_popup = true;
+            } else {
+                level->bars_popup = false;
+            }
+        }
+
+        if (near_door || level->door_popup || level->door_strike_popup)
+            level->bars_popup = false;
+
+        if (level->bars_popup && is_action_pressed()) {
+            game->current = &game->text[100];
+        }
     }
+
+    if (game->current)
+        level->bars_popup = false;
 
     if (!level->pause_door_timer) {
         level->door_timer -= dt;
@@ -1112,6 +1143,9 @@ void chapter_epilogue_draw(Game *game) {
     }
     if (level->door_popup) {
         draw_popup("Exit the prison", BLACK, Bottom);
+    }
+    if (level->bars_popup) {
+        draw_popup("Inspect the bars", {0, 38, 48, 255}, Bottom);
     }
 
     float transition_fade = sinf(level->transition_timer * PI);

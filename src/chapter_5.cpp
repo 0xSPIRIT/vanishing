@@ -740,7 +740,7 @@ void chapter_5_scene_init(Game *game) {
             train->able_to_close = false;
             train->speed = 0;
 
-            model_set_bilinear(&level->scenes[1]);
+            //model_set_bilinear(&level->scenes[1]);
 
             model_set_shader(&level->scenes[1], level->shader);
 
@@ -1187,7 +1187,7 @@ void chapter_5_scene_init(Game *game) {
                            &game->text[88]);
             chapter_5_text(&game->text[88],
                            "Penny",
-                           "Yep.\rWell, I'll talk to you later.",
+                           "Yup.\rWell, I'll talk to you later.",
                            30,
                            nullptr);
 
@@ -1704,7 +1704,7 @@ void chapter_5_scene_init(Game *game) {
 
             memset(game->text, 0, sizeof(game->text));
 
-            game->textbox_alpha = 255;
+            game->textbox_alpha = 220;
 
             chapter_5_text(&game->text[0],
                            0,
@@ -1738,7 +1738,7 @@ void chapter_5_scene_init(Game *game) {
                            &game->text[6]);
             chapter_5_text(&game->text[6],
                            "      ",
-                           "Yes! I did,\rwould you like to know how I did it?",
+                           "Yes! I did.\rWould you like to know how I did it?",
                            speed,
                            &game->text[7]);
             chapter_5_text(&game->text[7],
@@ -1920,7 +1920,7 @@ void chapter_5_init(Game *game) {
     level->models.real_head     = LoadModel(RES_DIR "models/real_head.glb");
     level->models.podium        = LoadModel(RES_DIR "models/podium.glb");
 
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_STAIRCASE);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_GALLERY);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {
@@ -2649,16 +2649,6 @@ void chapter_5_update_player_desert(Game *game, float dt) {
 
         update_camera_look(&level->camera, dt);
     }
-
-    /*
-    printf("{%.2ff, %.2ff, %.2ff} {%.2ff, %.2ff, %.2ff}\n",
-           level->camera.position.x,
-           level->camera.position.y,
-           level->camera.position.z,
-           level->camera.target.x,
-           level->camera.target.y,
-           level->camera.target.z);
-           */
 }
 
 void chapter_5_update_player_dinner_party(Game *game, float dt) {
@@ -2809,6 +2799,14 @@ void chapter_5_update(Game *game, float dt) {
                             level->state = CHAPTER_5_STATE_TRAIN_STATION_2;
                         }
                     }
+
+    printf("{%.2ff, %.2ff, %.2ff} {%.2ff, %.2ff, %.2ff}\n",
+           level->camera.position.x,
+           level->camera.position.y,
+           level->camera.position.z,
+           level->camera.target.x,
+           level->camera.target.y,
+           level->camera.target.z);
                     chapter_5_update_train(game, dt);
                     chapter_5_update_clerk(game, dt);
                     chapter_5_update_player_train_station(game, dt);
