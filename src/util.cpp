@@ -197,6 +197,14 @@ bool compare_colors(Color a, Color b) {
     return (a.r == b.r && a.g == b.g && a.b && b.b);
 }
 
+Color ColorScale(Color a, float b) {
+    a.r *= b;
+    a.g *= b;
+    a.b *= b;
+
+    return a;
+}
+
 void print_rectangle(Rectangle rect) {
     printf("{%f, %f, %f, %f}", rect.x, rect.y, rect.width, rect.height);
 }
