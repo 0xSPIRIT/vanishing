@@ -223,6 +223,10 @@ void chapter_2_end_eleanor_third_text(void *game_ptr) {
     Entity *player = level->player;
     player->chap_2_player.sitting_state = false;
     player->chap_2_player.speed_penny = 1;
+
+    game->post_processing.type = POST_PROCESSING_VHS;
+    post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_LOW);
+    game->post_processing.vhs.mix_factor = 0;
 }
 
 void chapter_2_end_fade(void *game_ptr) {
@@ -245,6 +249,10 @@ void chapter_2_setup_bathroom_walls(Game *game) {
 
     add_wall(&game->entities, {0, 0, 39, 160});
     add_wall(&game->entities, {0, 0, 192, 61});
+}
+
+void DEBUG_goto_penny_at_table(Game *game) {
+    chapter_2_sit_down(game);
 }
 
 void chapter_2_init(Game *game) {
@@ -957,6 +965,14 @@ void chapter_2_entity_update(Entity *e, Game *game, float dt) {
                                                                penny->pos));
 
                 player_speed = Clamp(distance * 0.25, 5, 60);
+
+                float t = 1 - Clamp(distance / 158.0f, 0, 1);
+
+                Post_Processing_Vhs *vhs = &game->post_processing.vhs;
+                vhs->mix_factor = t;
+                vhs->scan_intensity = 0.7f + t * 1.5f;
+                vhs->noise_intensity = 0.3f + t;
+                vhs->abberation_intensity = 0.7f + t;
             }
 
 #ifdef DEBUG
@@ -1061,6 +1077,9 @@ void chapter_2_entity_update(Entity *e, Game *game, float dt) {
             if (dialogue && player->chap_2_player.speed_penny == 1) {
                 level->current_area = CHAPTER_2_AREA_BATHROOM;
                 level->player->pos.x = fmod(level->player->pos.x, render_width);
+
+                game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
+                game->post_processing.vhs.mix_factor = 1; // reset for anyone else using it
                 break;
             }
 
@@ -1158,6 +1177,10 @@ void chapter_2_update(Game *game, float dt) {
     size_t entity_count = game->entities.length;
 
     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
+
+    if (IsKeyPressed(KEY_DELETE)) {
+        DEBUG_goto_penny_at_table(game);
+    }
 
     for (size_t i = 0; i < entity_count; i++) {
         Entity *e = game->entities.data[i];

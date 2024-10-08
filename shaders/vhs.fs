@@ -9,6 +9,7 @@ uniform float time;
 uniform float scan_intensity;
 uniform float noise_intensity;
 uniform float abberation_intensity;
+uniform float mix_factor;
 
 out vec4 finalColor;
 
@@ -18,6 +19,8 @@ float rand(vec2 co){
 
 void main() {
     vec2 tex_coord = fragTexCoord;
+
+    vec4 unprocessed_color = texture(texture0, tex_coord);
 
     const float pi = 3.14159265f;
 
@@ -89,7 +92,14 @@ void main() {
     }
 
     // noise
+    amp *= mix_factor;
     finalColor.r += -amp/2.0 + amp * rand(vec2(x_r, y_r));
     finalColor.g += -amp/2.0 + amp * rand(vec2(x_g, y_g));
     finalColor.b += -amp/2.0 + amp * rand(vec2(x_b, y_b));
+
+    //finalColor = mix(finalColor, unprocessed_color, mix_factor);
+    float tv = mix_factor;
+    finalColor.r = tv * (finalColor.r) + unprocessed_color.r * (1-tv);
+    finalColor.g = tv * (finalColor.g) + unprocessed_color.g * (1-tv);
+    finalColor.b = tv * (finalColor.b) + unprocessed_color.b * (1-tv);
 }

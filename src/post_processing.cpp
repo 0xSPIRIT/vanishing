@@ -18,10 +18,12 @@ struct Post_Processing_Vhs {
     int    u_scan_intensity;
     int    u_noise_intensity;
     int    u_abberation_intensity;
+    int    u_mix_factor;
 
     float  scan_intensity;
     float  noise_intensity;
     float  abberation_intensity;
+    float  mix_factor;
 };
 
 struct Post_Processing_Crt {
@@ -48,10 +50,12 @@ void post_process_init(Post_Processing *post) {
     post->vhs.u_scan_intensity       = GetShaderLocation(post->vhs.shader, "scan_intensity");
     post->vhs.u_noise_intensity      = GetShaderLocation(post->vhs.shader, "noise_intensity");
     post->vhs.u_abberation_intensity = GetShaderLocation(post->vhs.shader, "abberation_intensity");
+    post->vhs.u_mix_factor           = GetShaderLocation(post->vhs.shader, "mix_factor");
 
     post->vhs.scan_intensity = 1;
     post->vhs.noise_intensity = 1;
     post->vhs.abberation_intensity = 1;
+    post->vhs.mix_factor = 1;
 
     post->type = POST_PROCESSING_PASSTHROUGH;
 
@@ -93,6 +97,7 @@ void post_process_vhs_uniforms(Post_Processing_Vhs *vhs) {
     SetShaderValue(vhs->shader, vhs->u_scan_intensity, &vhs->scan_intensity, SHADER_UNIFORM_FLOAT);
     SetShaderValue(vhs->shader, vhs->u_noise_intensity, &vhs->noise_intensity, SHADER_UNIFORM_FLOAT);
     SetShaderValue(vhs->shader, vhs->u_abberation_intensity, &vhs->abberation_intensity, SHADER_UNIFORM_FLOAT);
+    SetShaderValue(vhs->shader, vhs->u_mix_factor, &vhs->mix_factor, SHADER_UNIFORM_FLOAT);
 }
 
 void post_process_crt_uniforms(Post_Processing_Crt *crt) {

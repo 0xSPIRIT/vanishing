@@ -1,7 +1,7 @@
 FileVersion = 1
 LastConfig = "Debug"
 LastPlatform = "Win64"
-RecentFilesList = ["c:\\dev\\vanishing\\src\\main.cpp", "c:\\dev\\vanishing\\src\\chapter_5.cpp", "c:\\dev\\vanishing\\src\\game.cpp", "c:\\dev\\vanishing\\src\\text.cpp", "c:\\dev\\vanishing\\src\\chapter_3.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\abort.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strncpy.asm", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\assert.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strlen.asm", "c:\\dev\\vanishing\\chapter_5.cpp", "c:\\dev\\vanishing\\game.cpp", "c:\\dev\\vanishing\\main.cpp", "c:\\dev\\vanishing\\util.cpp"]
+RecentFilesList = ["c:\\dev\\vanishing\\src\\chapter_2.cpp", "c:\\dev\\vanishing\\src\\game.cpp", "c:\\dev\\vanishing\\src\\main.cpp", "c:\\dev\\vanishing\\src\\titlescreen.cpp", "c:\\dev\\vanishing\\src\\chapter_5.cpp", "c:\\dev\\vanishing\\src\\text.cpp", "c:\\dev\\vanishing\\src\\chapter_3.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\abort.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strncpy.asm", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\assert.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strlen.asm", "c:\\dev\\vanishing\\chapter_5.cpp", "c:\\dev\\vanishing\\game.cpp", "c:\\dev\\vanishing\\main.cpp", "c:\\dev\\vanishing\\util.cpp"]
 
 [MainWindow]
 X = 362
@@ -25,56 +25,64 @@ Type = "TabbedView"
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 Active = true
+TabLabel = "chapter_2.cpp"
+TabWidth = 118.0851
+TabIsPinned = false
+Type = "SourceViewPanel"
+FilePath = "c:\\dev\\vanishing\\src\\chapter_2.cpp"
+CursorPos = 43026
+VertPos = 31276.0
+
+[[MainDockingFrame.DockedWidgets.Tabs]]
+TabLabel = "titlescreen.cpp"
+TabWidth = 121.8085
+TabIsPinned = false
+Type = "SourceViewPanel"
+FilePath = "c:\\dev\\vanishing\\src\\titlescreen.cpp"
+CursorPos = 3001
+VertPos = 2952.6
+
+[[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "main.cpp"
-TabWidth = 91.48936
+TabWidth = 81.59574
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\main.cpp"
-CursorPos = 1094
-VertPos = 5376.0
+CursorPos = 3471
+VertPos = 3724.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "chapter_5.cpp"
-TabWidth = 118.0851
+TabWidth = 108.1915
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\chapter_5.cpp"
 CursorPos = 96542
-VertPos = 66276.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "text.cpp"
-TabWidth = 84.57447
+TabWidth = 74.68085
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\text.cpp"
 CursorPos = 18664
-VertPos = 17192.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "game.cpp"
-TabWidth = 95.21277
+TabWidth = 85.31915
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\game.cpp"
-CursorPos = 17489
-VertPos = 18844.0
-
-[[MainDockingFrame.DockedWidgets.Tabs]]
-TabLabel = "abort.cpp"
-TabWidth = 93.61702
-TabIsPinned = false
-Type = "SourceViewPanel"
-FilePath = "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\abort.cpp"
+CursorPos = 7160
+VertPos = 8008.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "chapter_3.cpp"
-TabWidth = 118.0851
+TabWidth = 108.1915
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\chapter_3.cpp"
 CursorPos = 53327
-VertPos = 55468.0
 
 [[MainDockingFrame.DockedWidgets]]
 RequestedWidth = 750.0
@@ -103,7 +111,7 @@ TabWidth = 85.10638
 TabIsPinned = false
 Type = "WatchPanel"
 Columns = [{Width = 336.0}, {Width = 972.0001}, {Width = 211.0}]
-Items = ["game.text[100]", "Level", "camera", ""]
+Items = ["game.text[100]", "Level", "camera", "(float*)0x259'E8CB1224", "level.penny_state", ""]
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 TabLabel = "Auto"

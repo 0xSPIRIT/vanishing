@@ -1,14 +1,12 @@
 TODO 
 
-- Change the player sprite in chapter 6 desert segment to
-  crawling.
 - Create proper artwork for the apartment
   - And fix up the pixel locations for chapter 1, and 4.
 - Create proper artwork for the dinner party
 - Redo chapter 4 3d
 
 V1 squad
-  - Jaydn
+  (1/2) Jaydn
   - Rais
   - Saurav
   x Gyasi

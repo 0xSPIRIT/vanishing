@@ -413,7 +413,7 @@ void chapter_6_init(Game *game) {
     // Actually we'll just do a dialogue thing instead.
     // The only rotoscope thing we'll leave is the die being cast at the start.
 
-    support_text(0, "It was a bright cold day in April,\rand the clocks struck thirteen.\rChase took a meditative breath.", false);
+    support_text(0, "It was a bright cold day in April, and\nthe clocks were striking thirteen.\rChase took a meditative breath.", false);
     support_text(0, "He found himself sitting despondently\nat a table with three of his friends.", false);
     support_text(0, "Although earlier that day he felt some\nsemblance of understanding of his\nsituation,", false);
     support_text(0, "all that he could feel now was malaise.", false);
