@@ -149,7 +149,7 @@ void initialize_game_mode(Game_Mode mode) {
 }
 
 MainFunction() {
-    bool show_titlescreen = false;
+    bool show_titlescreen = true;
 
     if (__argc == 2) {
         show_titlescreen = false;

@@ -7,6 +7,9 @@ uniform sampler2D texture0;
 uniform float time;
 
 uniform int do_scanline_effect;
+uniform int do_warp_effect;
+uniform float abberation_intensity;
+uniform float vignette_intensity;
 
 out vec4 finalColor;
 
@@ -19,7 +22,6 @@ void main() {
 
     float scan_intensity = 0.5;
     float noise_intensity = 0.25;
-    float abberation_intensity = 1;
 
     const float pi = 3.14159265f;
 
@@ -33,7 +35,7 @@ void main() {
     float t_off = t * 20 * scan_intensity;
 
     // sine wave to entire scene
-    if (do_scanline_effect == 1) {
+    if (do_warp_effect == 1) {
         tex_coord.x += sine_amplitude * sin(t_off + tex_coord.y * sine_frequency);
 
         float scanline_frequency = 4 * scan_intensity;
@@ -43,7 +45,7 @@ void main() {
     }
 
     if (abberation_intensity > 0) {
-        float redOffset   =  0.009;
+        float redOffset   = -0.009;
         float greenOffset =  0.006;
         float blueOffset  = -0.006;
 
@@ -59,10 +61,18 @@ void main() {
 
     // Vignette
     float dist = 1;
-    dist = 0.6 - length(tex_coord.xy - vec2(0.5, 0.5));
-    //dist = sqrt(dist);
-    dist *= dist * 8;
-    dist += 0.3;
+    dist = length(tex_coord.xy - vec2(0.5, 0.5));
+    dist *= 2;
+
+    dist = 1-dist;
+    dist *= 1.35f * vignette_intensity;
+
+    dist *= (0.9 + 0.1 * rand(vec2(time, time)));
+
+    if (vignette_intensity == 1)
+        dist += 0.45;
+    else
+        dist = max(dist, 0.18);
 
     finalColor.r = clamp(finalColor.r * dist, 0, 1);
     finalColor.g = clamp(finalColor.g * dist, 0, 1);

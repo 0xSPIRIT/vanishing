@@ -163,6 +163,10 @@ void chapter_3_goto_road(Game *game) {
 
     level->state = CHAPTER_3_STATE_ROAD;
     game->post_processing.type = POST_PROCESSING_CRT;
+
+    game->post_processing.crt.do_scanline_effect = true;
+    game->post_processing.crt.do_warp_effect = true;
+    game->post_processing.crt.abberation_intensity = 1;
     //post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_LOW);
 
     start_fade(game, FADE_IN, nullptr);

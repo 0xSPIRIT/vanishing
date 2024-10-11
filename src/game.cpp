@@ -71,6 +71,8 @@ enum Entity_Type {
     ENTITY_CHAP_3_CAR,
 
     ENTITY_CHAP_4_WINDOW,
+    ENTITY_CHAP_4_DEVIL,
+    ENTITY_CHAP_4_MICROWAVE,
 };
 
 enum Draw_Layer {
@@ -113,6 +115,7 @@ struct Entity {
 
         // Chapter 4 entities
         Chapter_4_Window  chap_4_window;
+        Chapter_4_Devil   chap_4_devil;
     };
 };
 

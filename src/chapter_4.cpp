@@ -47,11 +47,16 @@ struct Level_Chapter_4 {
 
     Chapter_4_Text text_handler;
 
+    bool wait_devil;
+
     Entity *player;
     Entity *window;
+    Entity *djinn;
 
     bool window_popup;
     bool bed_popup;
+
+    Camera2D camera_2d;
 
     Camera3D camera;
     Model scene;
@@ -153,8 +158,16 @@ void chapter_4_init(Game *game) {
 
     level->state = CHAPTER_4_STATE_ATARI;
 
+    game->textbox_alpha = 255;
+
+    game->post_processing.type = POST_PROCESSING_CRT;
+    game->post_processing.crt.do_scanline_effect = true;
+    game->post_processing.crt.do_warp_effect = false;
+    game->post_processing.crt.abberation_intensity = 1;
+    game->post_processing.crt.vignette_intensity = 2;
+
     Texture2D *textures = atari_assets.textures;
-    textures[0] = load_texture(RES_DIR "art/apartment2.png");
+    textures[0] = load_texture(RES_DIR "art/apartment_test.png");
     textures[1] = load_texture(RES_DIR "art/player.png");
     textures[2] = load_texture(RES_DIR "art/window_opened.png");
     textures[3] = load_texture(RES_DIR "art/window_closed.png");
@@ -163,6 +176,12 @@ void chapter_4_init(Game *game) {
     textures[5] = load_texture(RES_DIR "art/chap4_scene_2.png");
     textures[6] = load_texture(RES_DIR "art/chap4_scene_3.png");
     textures[7] = load_texture(RES_DIR "art/chap4_scene_4.png");
+
+    textures[8] = load_texture(RES_DIR "art/tv_back.png");
+
+    textures[9] = load_texture(RES_DIR "art/djinn.png");
+    textures[10] = load_texture(RES_DIR "art/microwave_off.png");
+    textures[11] = load_texture(RES_DIR "art/microwave_on.png");
 
     // Setup cutscene
     Cutscene *cutscene = &level->bed_cutscene;
@@ -181,15 +200,35 @@ void chapter_4_init(Game *game) {
     cutscene->scale = 2;
     cutscene->active = true;
 
+    level->camera_2d.offset   = {};
+    level->camera_2d.target   = {};
+    level->camera_2d.rotation = 0;
+    level->camera_2d.zoom     = 1;
+
     game->entities = make_array<Entity*>(20);
 
-    level->player = chapter_4_make_entity(ENTITY_PLAYER, 84, 84);
+    level->player = chapter_4_make_entity(ENTITY_PLAYER, 84, 160+84);
     array_add(&game->entities, level->player);
 
-    level->window = chapter_4_make_entity(ENTITY_CHAP_4_WINDOW, 151, 72);
-    array_add(&game->entities, level->window);
+    Entity *microwave = chapter_4_make_entity(ENTITY_CHAP_4_MICROWAVE, 128, 189);
+    array_add(&game->entities, microwave);
 
-    add_wall(&game->entities, {80, 8, 29, 44});
+
+    //add_wall(&game->entities, {80, 8, 29, 44});
+    {
+        Array<Entity*> *e = &game->entities;
+        
+        add_wall(e, {91, 223, 34, 21});
+        add_wall(e, {37, 198, 108, 8});
+        add_wall(e, {36, 312, 117, 2});
+        add_wall(e, {139, 266, 13, 40});
+        add_wall(e, {144, 191, 134, 29});
+        add_wall(e, {29, 188, 8, 127});
+        add_wall(e, {46, 268, 55, 21});
+        add_wall(e, {152, 260, 174, 58});
+        add_wall(e, {267, 160, 11, 60});
+        add_wall(e, {318, 160, 26, 103});
+    }
 
     chapter_4_window_text(true,
                           &game->text[0],
@@ -207,7 +246,7 @@ void chapter_4_init(Game *game) {
 
     chapter_4_window_text(true,
                           &game->text[50],
-                          "DO NOT BE AFRAID.",
+                          "BE NOT AFRAID.",
                           GOD_COLOR,
                           &game->text[2]);
     chapter_4_window_text(true,
@@ -261,44 +300,70 @@ void chapter_4_init(Game *game) {
     level->text_handler.alarms[4]    = 3;
     level->text_handler.next_list[4] = &game->text[9];
 
-    game->text[9].font         = &atari_font;
-    game->text[9].font_spacing = 4;
-    game->text[9].scale        = 0.125;
-    game->text[9].alpha_speed  = 0.125;
-    //game->text[9].scroll_speed = 120;
-    game->text[9].color        = GOD_COLOR;
-    game->text[9].center_text  = true;
-    game->text[9].scroll_type  = EntireLine;
-    game->text[9].backdrop_color = GOD_COLOR_BACKDROP;
-    game->text[9].render_type  = Bare;
-    game->text[9].location     = Top;
-    game->text[9].take_keyboard_focus = true;
+    for (int i = 9; i == 9 || i == 100; i += 100-9) {
+        game->text[i].font         = &atari_font;
+        game->text[i].font_spacing = 4;
+        game->text[i].scale        = 0.125;
+        game->text[i].alpha_speed  = 0.125;
+        game->text[i].color        = GOD_COLOR;
+        game->text[i].center_text  = true;
+        game->text[i].scroll_type  = EntireLine;
+        game->text[i].backdrop_color = GOD_COLOR_BACKDROP;
+        game->text[i].render_type  = Bare;
+        game->text[i].location     = Top;
+        game->text[i].take_keyboard_focus = true;
+    }
+
+    /*
+       9 When they reached the place God had told him about,
+       Abraham built an altar there and arranged the wood on it.
+       He bound his son Isaac and laid him on the altar, on top of the wood.
+       10 Then he reached out his hand and took the knife to slay his son.
+       11 But the angel of the Lord called out to him from heaven, "Abraham!
+       Abraham!" "Here I am," he replied. 12 "Do not lay a hand on the boy,"
+       he said. "Do not do anything to him. Now I know that you fear God,
+       because you have not withheld from me your son, your only son.
+     */
 
     text_list_init(&game->text[9],
                    nullptr,
-                   "5468656E207768656E2074686520626F\n"
-                   "79207265616368656420746865206167\n"
-                   "6520746F20776F726B20776974682068\n"
-                   "696D2C204162726168616D2073616964\n"
-                   "2C20224F206D79206465617220736F6E\n"
-                   "2120492068617665207365656E20696E\n"
-                   "206120647265616D2074686174204920\n"
-                   "6D757374207361637269666963652079\n"
-                   "6F752E20536F2074656C6C206D652077\n"
-                   "68617420796F75207468696E6B2E2220\n"
-                   "4865207265706C6965642C20224F206D\n"
-                   "79206465617220666174686572212044\n"
-                   "6F20617320796F752061726520636F6D\n"
-                   "6D616E6465642E20416C6C6168207769\n"
-                   "6C6C696E672C20796F752077696C6C20\n"
-                   "66696E64206D65207374656164666173\n"
-                   "742E22205468656E207768656E207468\n"
-                   "6579207375626D697474656420746F20\n"
-                   "416C6C61682019732057696C6C2C2061\n"
-                   "6E64204162726168616D206C61696420\n"
-                   "68696D206F6E20746865207369646520\n"
-                   "6F662068697320666F72656865616420\n"
-                   "666F72207361637269666963652E\n",
+                   "39205768656E20746865792072656163\n"
+                   "6865642074686520706C61636520476F\n"
+                   "642068616420746F6C642068696D2061\n"
+                   "626F75742C204162726168616D206275\n"
+                   "696C7420616E20616C74617220746865\n"
+                   "726520616E6420617272616E67656420\n"
+                   "74686520776F6F64206F6E2069742E20\n"
+                   "486520626F756E642068697320736F6E\n"
+                   "20497361616320616E64206C61696420\n"
+                   "68696D206F6E2074686520616C746172\n"
+                   "2C206F6E20746F70206F662074686520\n"
+                   "776F6F642E203130205468656E206865\n"
+                   "2072656163686564206F757420686973\n"
+                   "2068616E6420616E6420746F6F6B2074\n"
+                   "6865206B6E69666520746F20736C6179\n"
+                   "2068697320736F6E2E20313120427574\n"
+                   "2074686520616E67656C206F66207468\n"
+                   "65204C6F72642063616C6C6564206F75\n"
+                   "7420746F2068696D2066726F6D206865\n"
+                   "6176656E2C20224162726168616D2120",
+                   &game->text[100]);
+
+    text_list_init(&game->text[100],
+                   nullptr,
+                   "4162726168616D212220224865726520\n"
+                   "4920616D2C22206865207265706C6965\n"
+                   "642E2031322022446F206E6F74206C61\n"
+                   "7920612068616E64206F6E2074686520\n"
+                   "626F792C2220686520736169642E2022\n"
+                   "446F206E6F7420646F20616E79746869\n"
+                   "6E6720746F2068696D2E204E6F772049\n"
+                   "206B6E6F77207468617420796F752066\n"
+                   "65617220476F642C2062656361757365\n"
+                   "20796F752068617665206E6F74207769\n"
+                   "746868656C642066726F6D206D652079\n"
+                   "6F757220736F6E2C20796F7572206F6E\n"
+                   "6C7920736F6E2E2\n\nGenesis 22:9-12 NIV",
                    nullptr);
 
 
@@ -333,6 +398,13 @@ void chapter_4_init(Game *game) {
                           nullptr);
 
     game->text[13].callbacks[0] = chapter_4_start_end_timer;
+
+    atari_text_list_init(&game->text[20],
+                         "Chase",
+                         "... Did that noise come from\noutside?",
+                         30,
+                         0);
+    game->current = &game->text[20];
 }
 
 void chapter_4_3d_update_camera(Level_Chapter_4 *level, Camera3D *camera) {
@@ -485,14 +557,27 @@ void chapter_4_draw(Game *game, float dt) {
 
     switch (level->state) {
         case CHAPTER_4_STATE_ATARI: {
-            ClearBackground(GOD_COLOR);
+            BeginMode2D(level->camera_2d);
+
+            ClearBackground(BLACK);
+
+            if (level->djinn)
+                chapter_4_entity_draw(level->djinn, game);
 
             DrawTexture(atari_assets.textures[0], 0, 0, WHITE);
 
+            sort_entities(&game->entities);
+
             for (int i = 0; i < game->entities.length; i++) {
                 Entity *e = game->entities.data[i];
-                chapter_4_entity_draw(e, game);
+
+                if (e->type != ENTITY_CHAP_4_DEVIL)
+                    chapter_4_entity_draw(e, game);
             }
+
+            DrawTexture(atari_assets.textures[8], 59, 160+134, WHITE);
+
+            EndMode2D();
 
             if (level->window_popup) {
                 if (level->window->chap_4_window.closed) {
@@ -519,7 +604,7 @@ void chapter_4_draw(Game *game, float dt) {
 
             draw_cutscene(&level->bed_cutscene, dt);
 
-                //chapter_4_3d_init(game);
+                chapter_4_3d_init(game);
             if (!level->bed_cutscene.active) {
                 chapter_4_3d_init(game);
             }
@@ -556,8 +641,18 @@ Entity *chapter_4_make_entity(Entity_Type type, float x, float y) {
         case ENTITY_PLAYER: {
             result->texture_id = 1;
         } break;
+        /*
         case ENTITY_CHAP_4_WINDOW: {
             result->texture_id = 2;
+        } break;
+        */
+        case ENTITY_CHAP_4_DEVIL: {
+            result->texture_id = 9;
+        } break;
+        case ENTITY_CHAP_4_MICROWAVE: {
+            result->texture_id = 10;
+            result->has_dialogue = true;
+            result->draw_layer = DRAW_LAYER_LOW;
         } break;
     }
 
@@ -582,13 +677,46 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
             int dir_x = input_movement_x_axis_int(dt);//key_right() - key_left();
             int dir_y = input_movement_y_axis_int(dt);//key_down()  - key_up();
 
-            const float speed = 60;
+            if (entity->pos.x > render_width+entity_texture_width(entity) && level->wait_devil)
+                dir_x = dir_y = 0;
+
+            const float speed = 30;
 
             Vector2 vel = { speed * dir_x * dt, speed * dir_y * dt };
             apply_velocity(entity, vel, &game->entities);
 
-            entity->pos.x = Clamp(entity->pos.x, 0, render_width - entity_texture_width(entity));
-            entity->pos.y = Clamp(entity->pos.y, 0, render_height - entity_texture_height(entity));
+            {
+                static bool first = true;
+
+                int x = (int)entity->pos.x + entity_texture_width(entity)/2;
+                int y = (int)entity->pos.y + entity_texture_height(entity)/2;
+
+                int screen_x = (x / render_width);
+                int screen_y = (y / render_height);
+
+                int desired_x = -render_width  * screen_x;
+                int desired_y = -render_height * screen_y;
+
+                if (level->camera_2d.offset.x != desired_x &&
+                    level->camera_2d.offset.x == 0)
+                {
+                    if (first) {
+                        level->wait_devil = true;
+                        first = false;
+
+                        level->djinn = chapter_4_make_entity(ENTITY_CHAP_4_DEVIL, -400, 145);
+                        array_add(&game->entities, level->djinn);
+                    }
+                }
+
+                if (!level->wait_devil) {
+                    level->camera_2d.offset.x = desired_x;
+                    level->camera_2d.offset.y = desired_y;
+                }
+            }
+
+            //entity->pos.x = Clamp(entity->pos.x, 0, render_width - entity_texture_width(entity));
+            //entity->pos.y = Clamp(entity->pos.y, 0, render_height - entity_texture_height(entity));
         } break;
         case ENTITY_CHAP_4_WINDOW: {
             Rectangle player = level->player->base_collider;
@@ -615,6 +743,28 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
                 } else {
                     entity->texture_id = 2;
                 }
+            }
+        } break;
+        case ENTITY_CHAP_4_DEVIL: {
+            entity->pos.x += 1 * (180 + sin(25 * entity->chap_4_devil.time) * 120) * dt;
+            entity->pos.y += sin(12 * entity->chap_4_devil.time) * 30 * dt;
+
+            if (entity->pos.x > render_width * 2) {
+                entity->pos.x = 0;
+                entity->pos.y = 0;
+                level->wait_devil = false;
+            }
+
+            entity->chap_4_devil.time += dt;
+        } break;
+        case ENTITY_CHAP_4_MICROWAVE: {
+            bool dlg = can_open_dialogue(game, entity, level->player);
+
+            if (dlg && is_action_pressed()) {
+                if (entity->texture_id == 10)
+                    entity->texture_id = 11;
+                else
+                    entity->texture_id = 10;
             }
         } break;
     }

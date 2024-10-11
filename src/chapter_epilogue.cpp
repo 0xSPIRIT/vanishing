@@ -518,7 +518,7 @@ void chapter_epilogue_init(Game *game) {
                          &game->text[71]);
     atari_text_list_init(&game->text[71],
                          "Chase",
-                         "WHAT?!\rYou don't like deadmau5, Daft Punk...?\rAphex Twin?!",
+                         "WHAT?!\rYou don't like deadmau5, Crystal Castles...?\rPinkPantheress?\rAphex Twin!?\rPastel Ghost?!!?!?",
                          speed,
                          &game->text[72]);
     atari_text_list_init(&game->text[72],

@@ -30,8 +30,14 @@ struct Post_Processing_Crt {
     Shader shader;
     int    u_time;
     int    u_do_scanline_effect;
+    int    u_do_warp_effect;
+    int    u_abberation_intensity;
+    int    u_vignette_intensity;
 
     int    do_scanline_effect;
+    int    do_warp_effect;
+    float  abberation_intensity;
+    float  vignette_intensity;
 };
 
 struct Post_Processing {
@@ -60,10 +66,15 @@ void post_process_init(Post_Processing *post) {
     post->type = POST_PROCESSING_PASSTHROUGH;
 
     post->crt.do_scanline_effect = 1;
+    post->crt.abberation_intensity = 1;
+    post->crt.vignette_intensity = 1;
 
     post->crt.shader = LoadShader(0, RES_DIR "shaders/crt.fs");
     post->crt.u_time = GetShaderLocation(post->crt.shader, "time");
     post->crt.u_do_scanline_effect = GetShaderLocation(post->crt.shader, "do_scanline_effect");
+    post->crt.u_do_warp_effect     = GetShaderLocation(post->crt.shader, "do_warp_effect");
+    post->crt.u_abberation_intensity = GetShaderLocation(post->crt.shader, "abberation_intensity");
+    post->crt.u_vignette_intensity = GetShaderLocation(post->crt.shader, "vignette_intensity");
 }
 
 void post_process_vhs_set_intensity(Post_Processing_Vhs *vhs, Vhs_Intensity intensity) {
@@ -104,6 +115,9 @@ void post_process_crt_uniforms(Post_Processing_Crt *crt) {
     float curtime = GetTime();
     SetShaderValue(crt->shader, crt->u_time, &curtime, SHADER_UNIFORM_FLOAT);
     SetShaderValue(crt->shader, crt->u_do_scanline_effect, &crt->do_scanline_effect, SHADER_UNIFORM_INT);
+    SetShaderValue(crt->shader, crt->u_do_warp_effect, &crt->do_warp_effect, SHADER_UNIFORM_INT);
+    SetShaderValue(crt->shader, crt->u_abberation_intensity, &crt->abberation_intensity, SHADER_UNIFORM_FLOAT);
+    SetShaderValue(crt->shader, crt->u_vignette_intensity, &crt->vignette_intensity, SHADER_UNIFORM_FLOAT);
 }
 
 // Apply post processing shader, then draw it to the screen.

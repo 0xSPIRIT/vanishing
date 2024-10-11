@@ -249,6 +249,13 @@ void chapter_2_setup_bathroom_walls(Game *game) {
 
     add_wall(&game->entities, {0, 0, 39, 160});
     add_wall(&game->entities, {0, 0, 192, 61});
+
+
+    game->post_processing.type = POST_PROCESSING_CRT;
+    game->post_processing.crt.do_scanline_effect = true;
+    game->post_processing.crt.do_warp_effect = false;
+    game->post_processing.crt.abberation_intensity = 1;
+    game->post_processing.crt.vignette_intensity = 1;
 }
 
 void DEBUG_goto_penny_at_table(Game *game) {
@@ -912,8 +919,10 @@ void chapter_2_init(Game *game) {
 
     add_door(&game->entities, { 569, 78, 7, 25 });
     
-    //level->current_area = CHAPTER_2_AREA_BATHROOM;
-    //chapter_2_setup_bathroom_walls(game);
+    /*
+    level->current_area = CHAPTER_2_AREA_BATHROOM;
+    chapter_2_setup_bathroom_walls(game);
+    */
 }
 
 void chapter_2_deinit(Game *game) {
