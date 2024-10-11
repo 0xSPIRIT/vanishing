@@ -67,7 +67,8 @@ void main() {
     dist = 1-dist;
     dist *= 1.35f * vignette_intensity;
 
-    dist *= (0.9 + 0.1 * rand(vec2(time, time)));
+    if (do_scanline_effect == 1)
+        dist *= (0.9 + 0.1 * rand(vec2(time, time)));
 
     if (vignette_intensity == 1)
         dist += 0.45;

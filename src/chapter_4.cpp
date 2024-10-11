@@ -208,6 +208,8 @@ void chapter_4_init(Game *game) {
     game->entities = make_array<Entity*>(20);
 
     level->player = chapter_4_make_entity(ENTITY_PLAYER, 84, 160+84);
+    //level->player = chapter_4_make_entity(ENTITY_PLAYER, 291, 152);
+
     array_add(&game->entities, level->player);
 
     Entity *microwave = chapter_4_make_entity(ENTITY_CHAP_4_MICROWAVE, 128, 189);
@@ -228,6 +230,15 @@ void chapter_4_init(Game *game) {
         add_wall(e, {152, 260, 174, 58});
         add_wall(e, {267, 160, 11, 60});
         add_wall(e, {318, 160, 26, 103});
+        add_wall(e, {233, 27, 6, 133});
+        add_wall(e, {238, 160, 40, 10});
+        add_wall(e, {318, 160, 19, 6});
+        add_wall(e, {337, 27, 13, 134});
+        add_wall(e, {238, 21, 100, 6});
+        add_wall(e, {246, 27, 31, 47});
+        add_wall(e, {279, 29, 10, 11});
+        add_wall(e, {322, 40, 15, 58});
+        add_wall(e, {310, 66, 11, 12});
     }
 
     chapter_4_window_text(true,
@@ -363,7 +374,7 @@ void chapter_4_init(Game *game) {
                    "20796F752068617665206E6F74207769\n"
                    "746868656C642066726F6D206D652079\n"
                    "6F757220736F6E2C20796F7572206F6E\n"
-                   "6C7920736F6E2E2\n\nGenesis 22:9-12 NIV",
+                   "6C7920736F6E2E2\n\n47656E657369732032323A392D3132\n204E4956",
                    nullptr);
 
 
@@ -404,7 +415,7 @@ void chapter_4_init(Game *game) {
                          "... Did that noise come from\noutside?",
                          30,
                          0);
-    game->current = &game->text[20];
+    //game->current = &game->text[20];
 }
 
 void chapter_4_3d_update_camera(Level_Chapter_4 *level, Camera3D *camera) {
@@ -746,6 +757,8 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
             }
         } break;
         case ENTITY_CHAP_4_DEVIL: {
+            if (!level->wait_devil) break;
+
             entity->pos.x += 1 * (180 + sin(25 * entity->chap_4_devil.time) * 120) * dt;
             entity->pos.y += sin(12 * entity->chap_4_devil.time) * 30 * dt;
 

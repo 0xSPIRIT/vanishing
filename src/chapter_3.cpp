@@ -1920,8 +1920,10 @@ void chapter_3_update(Game *game, float dt) {
 
         if (level->player->pos.y + entity_texture_height(level->player)/2 < render_height) {
             game->post_processing.crt.do_scanline_effect = 0;
+            game->post_processing.crt.do_warp_effect = 0;
         } else {
             game->post_processing.crt.do_scanline_effect = 1;
+            game->post_processing.crt.do_warp_effect = 1;
         }
 
         static bool started_event = false;
