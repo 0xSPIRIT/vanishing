@@ -37,10 +37,11 @@ void main() {
 
     // Fog calculation
     float dist = length(viewPos.xz - fragPosition.xz);
+    //vec4 fogColor = vec4(0.75,0.75,0.75,1);
     vec4 fogColor = vec4(1,1,1,1);
 
 
-    // fog_factor = 1.0/28.0
+    float fog_factor = 1.0/28.0;
     // lower value of fog_factor gives more visibility.
 
     dist = clamp(dist * fog_factor, 0, 1);

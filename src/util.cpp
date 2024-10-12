@@ -209,6 +209,10 @@ void print_rectangle(Rectangle rect) {
     printf("{%f, %f, %f, %f}", rect.x, rect.y, rect.width, rect.height);
 }
 
+void print_vec2(Vector2 vec) {
+    printf("%f, %f\n", vec.x, vec.y);
+}
+
 void print_vec3(Vector3 vec) {
     printf("%f, %f, %f\n", vec.x, vec.y, vec.z);
 }

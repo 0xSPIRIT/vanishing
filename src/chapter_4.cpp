@@ -1,7 +1,3 @@
-/*
-#define GOD_COLOR {58,0,0,255}
-#define GOD_COLOR_BACKDROP {72,0,0,255}
-*/
 #define GOD_COLOR {225,0,0,255}
 #define GOD_COLOR_BACKDROP {100,0,0,255}
 
@@ -53,7 +49,8 @@ struct Level_Chapter_4 {
     Entity *window;
     Entity *djinn;
 
-    bool window_popup;
+    bool window_popup; // bedroom
+    bool check_window_popup; // kitchen
     bool bed_popup;
 
     Camera2D camera_2d;
@@ -124,12 +121,10 @@ void chapter_4_3d_init(Game *game) {
 
     level->scene = LoadModel(RES_DIR "models/bedroom.glb");
 
-    float height = 1.67f;
+    float height = 0.9f;
 
-    height = 0.9f;
-
-    level->camera.position = { 2.81f, height, -0.126f };
-    level->camera.target   = { 2.46f, 1.094f, 0.793f };
+    level->camera.position = { 2.88f, height, -1.5f };
+    level->camera.target   = { -0.17f, 2.46f, -7.59f };
     level->camera.up       = { 0, 1, 0 };
     level->camera.fovy     = FOV_DEFAULT;
     level->camera.projection = CAMERA_PERSPECTIVE;
@@ -183,6 +178,9 @@ void chapter_4_init(Game *game) {
     textures[10] = load_texture(RES_DIR "art/microwave_off.png");
     textures[11] = load_texture(RES_DIR "art/microwave_on.png");
 
+    textures[12] = load_texture(RES_DIR "art/windows_closed.png");
+    textures[13] = load_texture(RES_DIR "art/windows_open.png");
+
     // Setup cutscene
     Cutscene *cutscene = &level->bed_cutscene;
 
@@ -207,14 +205,16 @@ void chapter_4_init(Game *game) {
 
     game->entities = make_array<Entity*>(20);
 
-    level->player = chapter_4_make_entity(ENTITY_PLAYER, 84, 160+84);
-    //level->player = chapter_4_make_entity(ENTITY_PLAYER, 291, 152);
+    level->player = chapter_4_make_entity(ENTITY_PLAYER, 130, 194);
+    //level->player = chapter_4_make_entity(ENTITY_PLAYER, 291, 142);
 
     array_add(&game->entities, level->player);
 
     Entity *microwave = chapter_4_make_entity(ENTITY_CHAP_4_MICROWAVE, 128, 189);
     array_add(&game->entities, microwave);
 
+    level->window = chapter_4_make_entity(ENTITY_CHAP_4_WINDOW, 216, 15);
+    array_add(&game->entities, level->window);
 
     //add_wall(&game->entities, {80, 8, 29, 44});
     {
@@ -324,7 +324,7 @@ void chapter_4_init(Game *game) {
         game->text[i].location     = Top;
         game->text[i].take_keyboard_focus = true;
     }
-
+//
     /*
        9 When they reached the place God had told him about,
        Abraham built an altar there and arranged the wood on it.
@@ -415,7 +415,9 @@ void chapter_4_init(Game *game) {
                          "... Did that noise come from\noutside?",
                          30,
                          0);
-    //game->current = &game->text[20];
+    game->current = &game->text[20];
+
+    //chapter_4_3d_init(game);
 }
 
 void chapter_4_3d_update_camera(Level_Chapter_4 *level, Camera3D *camera) {
@@ -465,17 +467,21 @@ void chapter_4_3d_update_camera(Level_Chapter_4 *level, Camera3D *camera) {
         Vector3 right = GetCameraRight(camera);
 
         Vector3 target_position = Vector3Subtract(camera->target, camera->position);
-
-        float max_angle_left = Vector3Angle({1,0,0}, target_position) - 1.7;
-        if (yaw_angle > max_angle_left)
-            yaw_angle = max_angle_left;
-
-        float max_angle_right = Vector3Angle({-1,0,0}, target_position) - 0.9;
-        max_angle_right *= -1;
-        if (yaw_angle < max_angle_right)
-            yaw_angle = max_angle_right;
-
         target_position = Vector3RotateByAxisAngle(target_position, up, yaw_angle);
+
+        float angle = atan2f(target_position.z, target_position.x);
+
+        float start = -2.34f;
+        float end   = -1.50f;
+
+        angle = Clamp(angle, start, end);
+
+        // clamped direction
+        float target_x = cos(angle);
+        float target_z = sin(angle);
+
+        target_position.x = target_x;
+        target_position.z = target_z;
 
         camera->target = Vector3Add(camera->position, target_position);
     }
@@ -526,7 +532,7 @@ void chapter_4_update(Game *game, float dt) {
             player.x += level->player->pos.x;
             player.y += level->player->pos.y;
 
-            Rectangle bed_interact = { 70, 0, 48, 60 };
+            Rectangle bed_interact = { 275, 31, 12, 43 };
 
             level->bed_popup = CheckCollisionRecs(player, bed_interact);
         } break;
@@ -549,16 +555,6 @@ void chapter_4_update(Game *game, float dt) {
             if (game->current && !is_text_list_at_end(game->current) && colors_equal(game->current->color, GOD_COLOR)) {
                 level->camera.fovy -= 1.25 * dt;
             }
-
-            /*
-            printf("%f, %f, %f || %f, %f, %f\n",
-                   level->camera.position.x,
-                   level->camera.position.y,
-                   level->camera.position.z,
-                   level->camera.target.x,
-                   level->camera.target.y,
-                   level->camera.target.z);
-                   */
         } break;
     }
 }
@@ -592,10 +588,14 @@ void chapter_4_draw(Game *game, float dt) {
 
             if (level->window_popup) {
                 if (level->window->chap_4_window.closed) {
-                    draw_popup("Open Window");
+                    draw_popup("Open windows");
                 } else {
-                    draw_popup("Close Window");
+                    draw_popup("Close windows");
                 }
+            }
+
+            if (level->check_window_popup) {
+                draw_popup("Check windows");
             }
 
             if (level->bed_popup) {
@@ -606,7 +606,7 @@ void chapter_4_draw(Game *game, float dt) {
                         level->state = CHAPTER_4_STATE_BED_1;
                     }
                 } else {
-                    draw_popup("Ensure the windows\nare closed.");
+                    draw_popup("Ensure the windows\n     are closed.");
                 }
             }
         } break;
@@ -652,16 +652,15 @@ Entity *chapter_4_make_entity(Entity_Type type, float x, float y) {
         case ENTITY_PLAYER: {
             result->texture_id = 1;
         } break;
-        /*
         case ENTITY_CHAP_4_WINDOW: {
-            result->texture_id = 2;
+            result->texture_id = 13;
+            result->chap_4_window.rect = { 239, 37, 15, 111 };
         } break;
-        */
         case ENTITY_CHAP_4_DEVIL: {
             result->texture_id = 9;
         } break;
         case ENTITY_CHAP_4_MICROWAVE: {
-            result->texture_id = 10;
+            result->texture_id = 11;
             result->has_dialogue = true;
             result->draw_layer = DRAW_LAYER_LOW;
         } break;
@@ -687,6 +686,9 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
         case ENTITY_PLAYER: {
             int dir_x = input_movement_x_axis_int(dt);//key_right() - key_left();
             int dir_y = input_movement_y_axis_int(dt);//key_down()  - key_up();
+
+            if (game->current)
+                dir_x = dir_y = 0;
 
             if (entity->pos.x > render_width+entity_texture_width(entity) && level->wait_devil)
                 dir_x = dir_y = 0;
@@ -726,6 +728,14 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
                 }
             }
 
+            {
+                Rectangle player = level->player->base_collider;
+                player.x += level->player->pos.x;
+                player.y += level->player->pos.y;
+
+                level->check_window_popup = CheckCollisionRecs(player, {50, 199, 60, 10});
+            }
+
             //entity->pos.x = Clamp(entity->pos.x, 0, render_width - entity_texture_width(entity));
             //entity->pos.y = Clamp(entity->pos.y, 0, render_height - entity_texture_height(entity));
         } break;
@@ -734,25 +744,14 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
             player.x += level->player->pos.x;
             player.y += level->player->pos.y;
 
-            float texture_width  = entity_texture_width(entity);
-            float texture_height = entity_texture_height(entity);
-
-            Rectangle window = { entity->pos.x, entity->pos.y, texture_width, texture_height };
-
-            int pad = 5;
-            window.x -= pad;
-            window.y -= pad;
-            window.width  += pad * 2;
-            window.height += pad * 2;
-
-            level->window_popup = CheckCollisionRecs(player, window);
+            level->window_popup = CheckCollisionRecs(player, entity->chap_4_window.rect);
 
             if (level->window_popup && is_action_pressed()) {
                 entity->chap_4_window.closed = !entity->chap_4_window.closed;
                 if (entity->chap_4_window.closed) {
-                    entity->texture_id = 3;
+                    entity->texture_id = 12;
                 } else {
-                    entity->texture_id = 2;
+                    entity->texture_id = 13;
                 }
             }
         } break;

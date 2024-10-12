@@ -212,7 +212,7 @@ void chapter_6_init(Game *game) {
     textures[10] = load_texture(RES_DIR "art/player_crawl.png");
     textures[11] = load_texture(RES_DIR "art/node_inactive.png");
     textures[12] = load_texture(RES_DIR "art/node_active.png");
-    textures[13] = load_texture(RES_DIR "art/apartment.png");
+    textures[13] = load_texture(RES_DIR "art/apartment2.png");
     textures[14] = load_texture(RES_DIR "art/player_white.png");
     textures[15] = load_texture(RES_DIR "art/godtext.png");
     textures[16] = load_texture(RES_DIR "art/godtext2.png");
@@ -419,7 +419,7 @@ void chapter_6_init(Game *game) {
     support_text(0, "all that he could feel now was malaise.", false);
     support_text(0, "His eyes wandered into the void\nbetween the floorboards.\rHe forgot to blink.", false);
     support_text(0, "There, the void whispered back to him,\nlike before.", false);
-    support_text(0, "But, before he could understand what\nit was saying...", false);
+    support_text(0, "But, before he could understand what\nshe was saying...", false);
 
     support_text("Aria",   "*Casts the die*\rYou guys remember Sonja?\rI bumped into her yesterday.", 0);
     support_text(0,        "It landed on SIX.", 0);

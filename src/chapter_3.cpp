@@ -134,15 +134,29 @@ void chapter_3_goto_home_inside(Game *game) {
 
     level->state = CHAPTER_3_STATE_HOME_INSIDE;
 
+    //game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
+    game->post_processing.type = POST_PROCESSING_CRT;
+
+    game->post_processing.crt.do_scanline_effect = true;
+    game->post_processing.crt.do_warp_effect = false;
+    game->post_processing.crt.abberation_intensity = 1;
+
     level->player = chapter_3_make_entity(ENTITY_PLAYER, 50, 50);
 
     array_add(&game->entities, level->player);
     level->player->pos = { 90, 100 };
 
-    Rectangle bed = { 80, 8, 29, 44 };
-    add_wall(&game->entities, bed);
+    {
+        Array<Entity*> *e = &game->entities;
 
-    game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
+        add_wall(e, {40, 25, 7, 135});
+        add_wall(e, {45, 23, 102, 4});
+        add_wall(e, {145, 27, 6, 133});
+        add_wall(e, {130, 40, 15, 58});
+        add_wall(e, {118, 58, 10, 20});
+        add_wall(e, {54, 24, 31, 51});
+        add_wall(e, {87, 27, 10, 13});
+    }
 
     start_fade(game, FADE_IN, 120, nullptr);
 }
@@ -1224,8 +1238,10 @@ void chapter_3_init(Game *game) {
                          speed,
                          nullptr);
 
+    /*
     level->player = chapter_3_make_entity(ENTITY_PLAYER, 66, 96);
     array_add(&game->entities, level->player);
+    */
 
     level->virtual_mouse.texture = 22;
 
@@ -1238,10 +1254,10 @@ void chapter_3_init(Game *game) {
     //level->minigame.active = true;
 
     //chapter_3_init_outside(game);
-    //chapter_3_goto_home_inside(game);
+    chapter_3_goto_home_inside(game);
     //chapter_3_goto_home_outside(game);
 
-    chapter_3_goto_road(game);
+    //chapter_3_goto_road(game);
 }
 
 void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,
@@ -2266,7 +2282,7 @@ void chapter_3_draw(Game *game, float dt) {
             player.x += level->player->pos.x;
             player.y += level->player->pos.y;
 
-            Rectangle bed_interact = { 70, 0, 48, 60 };
+            Rectangle bed_interact = { 84, 40, 12, 31 };
 
             level->bed_popup = CheckCollisionRecs(player, bed_interact);
             if (is_action_pressed() && level->bed_popup) {

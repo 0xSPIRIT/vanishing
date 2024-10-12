@@ -881,9 +881,15 @@ void chapter_5_scene_init(Game *game) {
 
             game->textbox_alpha = 220;
 
-            level->shader = LoadShader(0, RES_DIR "shaders/good_dinner.fs");
+            level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/fog.fs");
+
+            level->shader.locs[SHADER_LOC_VECTOR_VIEW] = GetShaderLocation(level->shader, "viewPos");
+
             model_set_shader(&level->scenes[2], level->shader);
             model_set_shader(&level->scenes[3], level->shader);
+
+            const float value = 0.02f;
+            SetShaderValue(level->shader, GetShaderLocation(level->shader, "fog_factor"), &value, SHADER_UNIFORM_FLOAT);
 
             level->camera.position   = { 0, level->camera_height, 0 };
             level->camera.target     = { -2.00f, level->camera_height, 0.00f };
@@ -1221,10 +1227,10 @@ void chapter_5_scene_init(Game *game) {
                 game->text[93].color = WHITE;
                 game->text[93].bg_color = BLACK;
                 game->text[93].render_type = DrawTextbox;
-                game->text[93].arrow_color = WHITE;
+                game->text[93].arrow_color = BLACK;
                 game->text[93].location = Bottom;
-                game->text[93].choice_backdrop_color = BLACK;
-                game->text[93].choice_color = WHITE;
+                game->text[93].choice_backdrop_color = {200,200,200,255};
+                game->text[93].choice_color = BLACK;
 
                 atari_choice_text_list_init(&game->text[93],
                                             "Eleanor",
@@ -1920,7 +1926,7 @@ void chapter_5_init(Game *game) {
     level->models.real_head     = LoadModel(RES_DIR "models/real_head.glb");
     level->models.podium        = LoadModel(RES_DIR "models/podium.glb");
 
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_GALLERY);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_STAIRCASE);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {
@@ -2762,16 +2768,6 @@ void chapter_5_update_player_dinner_party(Game *game, float dt) {
             }
         }
     }
-
-    /*
-    printf("{%.2ff, %.2ff, %.2ff} {%.2ff, %.2ff, %.2ff}\n",
-           level->camera.position.x,
-           level->camera.position.y,
-           level->camera.position.z,
-           level->camera.target.x,
-           level->camera.target.y,
-           level->camera.target.z);
-           */
 }
 
 void chapter_5_update(Game *game, float dt) {
@@ -2800,13 +2796,6 @@ void chapter_5_update(Game *game, float dt) {
                         }
                     }
 
-    printf("{%.2ff, %.2ff, %.2ff} {%.2ff, %.2ff, %.2ff}\n",
-           level->camera.position.x,
-           level->camera.position.y,
-           level->camera.position.z,
-           level->camera.target.x,
-           level->camera.target.y,
-           level->camera.target.z);
                     chapter_5_update_train(game, dt);
                     chapter_5_update_clerk(game, dt);
                     chapter_5_update_player_train_station(game, dt);
@@ -3097,6 +3086,8 @@ void chapter_5_draw(Game *game) {
             DrawRectangle(0, 0, render_width, render_height, {255, 0, 0, (uint8_t)(level->staircase_fade * 255)});
         } break;
         case CHAPTER_5_SCENE_DINNER_PARTY: {
+            SetShaderValue(level->shader, level->shader.locs[SHADER_LOC_VECTOR_VIEW], &level->camera.position.x, SHADER_UNIFORM_VEC3);
+
             if (level->black_state) {
                 if (level->black_state_text) {
                     const char *message = "Ex pluribus unum veritas";
@@ -3118,7 +3109,8 @@ void chapter_5_draw(Game *game) {
             }
 
             if (level->good) {
-                ClearBackground({32,32,32,255});
+                //DrawRectangleGradientV(0, 0, render_width, render_height, WHITE, GRAY);
+                ClearBackground(WHITE);
             }
 
             BeginMode3D(level->camera);

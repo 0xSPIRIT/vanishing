@@ -919,10 +919,8 @@ void chapter_2_init(Game *game) {
 
     add_door(&game->entities, { 569, 78, 7, 25 });
     
-    /*
-    level->current_area = CHAPTER_2_AREA_BATHROOM;
-    chapter_2_setup_bathroom_walls(game);
-    */
+    //level->current_area = CHAPTER_2_AREA_BATHROOM;
+    //chapter_2_setup_bathroom_walls(game);
 }
 
 void chapter_2_deinit(Game *game) {

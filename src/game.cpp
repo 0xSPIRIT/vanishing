@@ -745,6 +745,7 @@ void atari_mid_text_list_init(Text_List *list, char *line,
         list->alpha_speed  = 0.5;
     else
         list->alpha_speed = 1;
+
     list->color        = BLACK;
 
     if (chapter == 1)

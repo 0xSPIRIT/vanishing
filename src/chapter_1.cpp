@@ -1,5 +1,5 @@
-#define DESERT_COLOR { 214, 194, 105, 255 }
-#define FOREST_COLOR { 50, 168, 82, 255 }
+#define DESERT_COLOR { 235, 208, 145, 255}//214, 194, 105, 255 }
+//#define FOREST_COLOR { 50, 168, 82, 255 }
 #define CACTUS_COUNT 8
 
 enum Level_Chapter_1_State {
@@ -76,6 +76,7 @@ void chapter_1_end_intro(Game *game) {
 }
 
 void chapter_1_start_phone_call(Game *game) {
+    game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
     game->current = &game->text[35];
 }
 
@@ -194,6 +195,28 @@ void set_player_alarm(void *game_ptr) {
     level->about_to_exit = true;
 }
 
+void chapter_1_apartment_text(Text_List *list, char *line,
+                              Text_List *next)
+{
+    list->font         = &atari_font;
+    list->font_spacing = 2;
+    list->scale        = 0.125;
+    list->scroll_speed = 15;
+
+    list->alpha_speed = 1;
+
+    list->color        = WHITE;
+
+    list->backdrop_color={64,64,64,255};
+
+    list->center_text  = true;
+    list->scroll_type  = EntireLine;
+    list->render_type  = Bare;
+    list->location     = Middle;
+    list->take_keyboard_focus = false;
+
+    text_list_init(list, 0, line, next);
+}
 void chapter_1_init(Game *game) {
     Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
 
@@ -411,10 +434,10 @@ void chapter_1_init(Game *game) {
                              "but if you do exist,\r\n... please help me.",
                              nullptr);
 
-    atari_mid_text_list_init(&game->text[31],
+    chapter_1_apartment_text(&game->text[31],
                              "He tried getting out\nof bed.",
                              &game->text[32]);
-    atari_mid_text_list_init(&game->text[32],
+    chapter_1_apartment_text(&game->text[32],
                              "Maybe next time.",
                              nullptr);
     game->text[32].scroll_type = LetterByLetter;
@@ -690,6 +713,9 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
             if (level->state == LEVEL_CHAPTER_1_STATE_FOREST)
                 dir_x = 0;
 
+            if (level->state == LEVEL_CHAPTER_1_STATE_APARTMENT)
+                dir_x = dir_y = 0;
+
             if (e->alarm[0] == 0) {
                 e->chap_1_player.is_hurt = false;
             }
@@ -735,10 +761,10 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
             apply_velocity(e, velocity, &game->entities);
 
             if (level->state == LEVEL_CHAPTER_1_STATE_FOREST) {
-                if (e->pos.y < 2*render_height/3) {
+                if (e->pos.y < 95) {
                     level->state = LEVEL_CHAPTER_1_STATE_APARTMENT;
                     e->chap_1_player.walking_state = PLAYER_WALKING_STATE_SLOWED_1;
-                    game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
+                    //game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
 
                     e->alarm[1] = 3;
 
@@ -749,11 +775,6 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                             array_remove(&game->entities, i--);
                         }
                     }
-
-                    add_wall(&game->entities, {53,73,19,78});
-                    add_wall(&game->entities, {70,72,50,7});
-                    add_wall(&game->entities, {116,76,7,77});
-                    add_wall(&game->entities, {71,136,47,16});
                 }
             } else if (level->state == LEVEL_CHAPTER_1_STATE_APARTMENT) {
                 if (e->pos.y < 50)
@@ -924,6 +945,8 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                         e->pos.x = render_width/2 - entity_texture_width(e) / 2;
 
                         post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_LOW);
+
+                        game->post_processing.type = POST_PROCESSING_CRT;
                     }
 
                     if (level->state == LEVEL_CHAPTER_1_STATE_SUCCESSFUL_DIRECTIONS) {
@@ -1079,9 +1102,11 @@ void chapter_1_update(Game *game, float dt) {
         game->current = game->current->next[0];
     }
 
+    /*
     if (level->state == LEVEL_CHAPTER_1_STATE_FOREST) {
         level->background_color = FOREST_COLOR;
     }
+    */
 
     float diff = level->prayer_fader_to - level->prayer_fader;
 
@@ -1114,7 +1139,7 @@ void chapter_1_draw(Game *game) {
         }
 
         DrawTexture(atari_assets.textures[17 + level->god_index], 0, 0, WHITE);
-        DrawRectangle(0, level->god_scroll, render_width, render_height, {12,12,12,255});
+        DrawRectangle(0, level->god_scroll, render_width, render_height, {0,0,0,255});
 
         if (level->god_scroll == render_height) {
             float size = 5;
