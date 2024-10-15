@@ -15,25 +15,25 @@ void game_intro_init(Game_Intro *game) {
 
     switch (chapter) {
         case 1: {
-            game->message = "\"DYSANIA\"";
+            game->message = "DYSANIA";
         } break;
         case 2: {
-            game->message = "\"DINNER PARTY\"";
+            game->message = "DINNER PARTY";
         } break;
         case 3: {
-            game->message = "\"REPETITIONS\"";
+            game->message = "REPETITIONS";
         } break;
         case 4: {
-            game->message = "\"THEOPHANY\"";
+            game->message = "THEOPHANY";
         } break;
         case 5: {
-            game->message = "\"PERCEPTION\"";
+            game->message = "PERCEPTION";
         } break;
         case 6: {
-            game->message = "\"PATIENCE &\n\nBLASPHEMY\"";
+            game->message = "PATIENCE &\n\nBLASPHEMY";
         } break;
         case 7: {
-            game->message = "\"EPILOGUE\"";
+            game->message = "EPILOGUE";
         } break;
         case 8: {
             game->message = "Created by spritwolf\n\nThanks for playing.";

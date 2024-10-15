@@ -1254,10 +1254,10 @@ void chapter_3_init(Game *game) {
     //level->minigame.active = true;
 
     //chapter_3_init_outside(game);
-    chapter_3_goto_home_inside(game);
+    //chapter_3_goto_home_inside(game);
     //chapter_3_goto_home_outside(game);
 
-    //chapter_3_goto_road(game);
+    chapter_3_goto_road(game);
 }
 
 void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,

@@ -199,7 +199,7 @@ MainFunction() {
     if (show_titlescreen)
         set_game_mode(GAME_MODE_TITLESCREEN);
     else
-        set_game_mode(GAME_MODE_ATARI);
+        set_game_mode(GAME_MODE_INTRO);
 
     initialize_game_mode(game_mode);
 

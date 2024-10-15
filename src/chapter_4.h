@@ -6,3 +6,7 @@ struct Chapter_4_Window {
 struct Chapter_4_Devil {
     float time;
 };
+
+struct Chapter_4_Microwave {
+    float time;
+};

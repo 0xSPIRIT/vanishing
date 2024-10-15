@@ -417,6 +417,8 @@ void chapter_6_init(Game *game) {
     support_text(0, "He found himself sitting despondently\nat a table with three of his friends.", false);
     support_text(0, "Although earlier that day he felt some\nsemblance of understanding of his\nsituation,", false);
     support_text(0, "all that he could feel now was malaise.", false);
+    support_text(0, "Nothing has changed.\rIt's all back to the way things were\nbefore.", false);
+    support_text(0, "He sees his boulder at the base of the\nhill;\rprogress reset.", false);
     support_text(0, "His eyes wandered into the void\nbetween the floorboards.\rHe forgot to blink.", false);
     support_text(0, "There, the void whispered back to him,\nlike before.", false);
     support_text(0, "But, before he could understand what\nshe was saying...", false);
@@ -436,7 +438,7 @@ void chapter_6_init(Game *game) {
         support_choice(choices, StaticArraySize(choices));
     }
 
-    //support_text("Chase",  "Who's Sonja?\rWhat's with Noah and Sonja?\rWhat did y'all say? I can't hear.", 0);
+    support_text("Chase",  "Um I thin--", 0);
     support_text("Tyrell", "Hahah, look how his eyes widened,\rhe SO has a type, he just doesn't want\nto admit it.", 0);
     support_text("Tyrell", "*Casts the die*", 0);
     support_text(0,        "It landed on SIX.", 0);
@@ -465,7 +467,7 @@ void chapter_6_init(Game *game) {
     support_text("Chase",  "... Well I-", 0);
     support_text("Tyrell", "How about you actually contribute to\nthe conversation?", 0);
     support_text("Tyrell", "Why can't you just have fun?", 0);
-    support_text("Chase",  "... Why would you say tha-", 1);
+    support_text("Chase",  "... Why the hell would you say tha-", 1);
 
     game->text[i-1].callbacks[0] = chapter_6_delayed_goto_desert;
 

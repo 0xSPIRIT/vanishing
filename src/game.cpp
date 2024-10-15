@@ -114,8 +114,9 @@ struct Entity {
         Chapter_3_Circler chap_3_circler;
 
         // Chapter 4 entities
-        Chapter_4_Window  chap_4_window;
-        Chapter_4_Devil   chap_4_devil;
+        Chapter_4_Window    chap_4_window;
+        Chapter_4_Devil     chap_4_devil;
+        Chapter_4_Microwave chap_4_microwave;
     };
 };
 

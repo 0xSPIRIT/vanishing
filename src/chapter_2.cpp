@@ -513,7 +513,7 @@ void chapter_2_init(Game *game) {
                          speed,
                          &game->text[41]);
     atari_text_list_init(&game->text[41],
-                         "Amelia",
+                         "Amy",
                          "Chase!\rI didn't think you'd come!",
                          speed,
                          &game->text[42]);
@@ -523,7 +523,7 @@ void chapter_2_init(Game *game) {
                          speed,
                          &game->text[43]);
     atari_text_list_init(&game->text[43],
-                         "Amelia",
+                         "Amy",
                          "It's good you're getting\noutside every now and\nagain!",
                          speed,
                          &game->text[44]);
@@ -874,7 +874,7 @@ void chapter_2_init(Game *game) {
 
     Entity *bouncer = chapter_2_make_entity(ENTITY_CHAP_2_BOUNCER, 553, 80);
 
-    level->player   = chapter_2_make_entity(ENTITY_PLAYER, 118, 287);
+    level->player   = chapter_2_make_entity(ENTITY_PLAYER, 496, 232);
     //level->player   = chapter_2_make_entity(ENTITY_PLAYER, 600, 80); // skip to table section
 
     array_add(&game->entities, level->player);
@@ -902,10 +902,10 @@ void chapter_2_init(Game *game) {
     array_add(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 5.75*192-24-15, 3*160/4-4));
     array_add(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 5.25*192-24+13+50, 160/4+2));
 
-    add_wall(&game->entities, { 0, 188, 76, 27 }); // bar
+    add_wall(&game->entities, { 0, 188, 76, 35 }); // bar
     add_wall(&game->entities, { 64, 133, 19, 123 });
     add_wall(&game->entities, { 173, 133, 19, 123 });
-    add_wall(&game->entities, { 189, 160, 3, 160 });
+    add_wall(&game->entities, { 189, 160, 6, 110 });
     add_wall(&game->entities, { 0, 133, 78, 10 });
     add_wall(&game->entities, { 192, 0, 192*2 + 7, 47 });
     add_wall(&game->entities, { 0, 0, 105, 22 });
@@ -916,6 +916,9 @@ void chapter_2_init(Game *game) {
     add_wall(&game->entities, { 576, 160-3, 192*3, 8});
 
     add_wall(&game->entities, { 928, 0, 119, 63 });
+
+    add_wall(&game->entities, { 370, 160, 28, 68 });
+    add_wall(&game->entities, { 370, 253, 28, 67 });
 
     add_door(&game->entities, { 569, 78, 7, 25 });
     

@@ -4,7 +4,8 @@
 enum Chapter_4_State {
     CHAPTER_4_STATE_ATARI,
     CHAPTER_4_STATE_BED_1,
-    CHAPTER_4_STATE_3D
+    CHAPTER_4_STATE_3D,
+    CHAPTER_4_STATE_WINDOW
 };
 
 struct Cutscene_Frame {
@@ -49,9 +50,12 @@ struct Level_Chapter_4 {
     Entity *window;
     Entity *djinn;
 
+    bool yield_control;
+
     bool window_popup; // bedroom
     bool check_window_popup; // kitchen
     bool bed_popup;
+    bool microwave_popup;
 
     Camera2D camera_2d;
 
@@ -65,6 +69,19 @@ void    chapter_4_entity_update(Entity *entity, Game *game, float dt);
 void    chapter_4_entity_draw  (Entity *entity, Game *game);
 
 void    draw_cutscene(Cutscene *cutscene, float dt);
+
+void chapter_4_set_state_atari(Game *game) {
+    Level_Chapter_4 *level = (Level_Chapter_4 *)game->level;
+
+    level->state = CHAPTER_4_STATE_ATARI;
+}
+
+void chapter_4_start_text(Game *game) {
+    game->current = &game->text[20];
+    Level_Chapter_4 *level = (Level_Chapter_4 *)game->level;
+
+    level->yield_control = false;
+}
 
 void chapter_4_window_text(bool scroll, Text_List *list, char *line,
                            Color color, Text_List *next)
@@ -121,10 +138,10 @@ void chapter_4_3d_init(Game *game) {
 
     level->scene = LoadModel(RES_DIR "models/bedroom.glb");
 
-    float height = 0.9f;
+    //float height = 0.9f;
 
-    level->camera.position = { 2.88f, height, -1.5f };
-    level->camera.target   = { -0.17f, 2.46f, -7.59f };
+    level->camera.position = {2.880000f, 0.900000f, -1.500000f};
+    level->camera.target = {2.470594f, 1.091905f, -2.412352f};
     level->camera.up       = { 0, 1, 0 };
     level->camera.fovy     = FOV_DEFAULT;
     level->camera.projection = CAMERA_PERSPECTIVE;
@@ -150,6 +167,8 @@ void chapter_4_3d_init(Game *game) {
 
 void chapter_4_init(Game *game) {
     Level_Chapter_4 *level = (Level_Chapter_4 *)game->level;
+
+    level->yield_control = true;
 
     level->state = CHAPTER_4_STATE_ATARI;
 
@@ -180,6 +199,8 @@ void chapter_4_init(Game *game) {
 
     textures[12] = load_texture(RES_DIR "art/windows_closed.png");
     textures[13] = load_texture(RES_DIR "art/windows_open.png");
+
+    textures[14] = load_texture(RES_DIR "art/open_window.png");
 
     // Setup cutscene
     Cutscene *cutscene = &level->bed_cutscene;
@@ -414,8 +435,26 @@ void chapter_4_init(Game *game) {
                          "Chase",
                          "... Did that noise come from\noutside?",
                          30,
-                         0);
-    game->current = &game->text[20];
+                         &game->text[21]);
+    atari_text_list_init(&game->text[21],
+                         "Chase",
+                         "Let me check the windows.",
+                         30,
+                         nullptr);
+
+    add_event(game, chapter_4_start_text, 1);
+
+    atari_text_list_init(&game->text[22],
+                         "Chase",
+                         "Family.",
+                         30,
+                         nullptr);
+
+    atari_text_list_init(&game->text[23],
+                         "Chase",
+                         "There's nothing to watch.",
+                         30,
+                         nullptr);
 
     //chapter_4_3d_init(game);
 }
@@ -560,6 +599,8 @@ void chapter_4_update(Game *game, float dt) {
 }
 
 void chapter_4_draw(Game *game, float dt) {
+    (void)dt;
+
     Level_Chapter_4 *level = (Level_Chapter_4 *)game->level;
 
     switch (level->state) {
@@ -598,6 +639,10 @@ void chapter_4_draw(Game *game, float dt) {
                 draw_popup("Check windows");
             }
 
+            if (level->microwave_popup) {
+                draw_popup("I lost my apetite");
+            }
+
             if (level->bed_popup) {
                 if (level->window->chap_4_window.closed) {
                     draw_popup("Go to bed.");
@@ -611,14 +656,22 @@ void chapter_4_draw(Game *game, float dt) {
             }
         } break;
         case CHAPTER_4_STATE_BED_1: {
-            ClearBackground(GOD_COLOR);
+            ClearBackground(BLACK);
 
+            static bool first = true;
+
+            if (first) {
+                add_event(game, chapter_4_3d_init, 5);
+                first = false;
+            }
+
+            /*
             draw_cutscene(&level->bed_cutscene, dt);
 
-                chapter_4_3d_init(game);
             if (!level->bed_cutscene.active) {
                 chapter_4_3d_init(game);
             }
+            */
         } break;
         case CHAPTER_4_STATE_3D: {
             ClearBackground(BLUE);
@@ -638,6 +691,14 @@ void chapter_4_draw(Game *game, float dt) {
                 EndMode3D();
             }
             EndTextureMode();
+        } break;
+        case CHAPTER_4_STATE_WINDOW: {
+            ClearBackground(BLACK);
+
+            DrawTexture(atari_assets.textures[14],
+                        0,
+                        0,
+                        WHITE);
         } break;
     }
 }
@@ -663,6 +724,7 @@ Entity *chapter_4_make_entity(Entity_Type type, float x, float y) {
             result->texture_id = 11;
             result->has_dialogue = true;
             result->draw_layer = DRAW_LAYER_LOW;
+            result->chap_4_microwave.time = 10;
         } break;
     }
 
@@ -687,13 +749,16 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
             int dir_x = input_movement_x_axis_int(dt);//key_right() - key_left();
             int dir_y = input_movement_y_axis_int(dt);//key_down()  - key_up();
 
-            if (game->current)
+            if (game->current || level->yield_control)
                 dir_x = dir_y = 0;
 
             if (entity->pos.x > render_width+entity_texture_width(entity) && level->wait_devil)
                 dir_x = dir_y = 0;
 
-            const float speed = 30;
+            float speed = 30;
+
+            if (IsKeyDown(KEY_P))
+                speed = 120;
 
             Vector2 vel = { speed * dir_x * dt, speed * dir_y * dt };
             apply_velocity(entity, vel, &game->entities);
@@ -734,6 +799,25 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
                 player.y += level->player->pos.y;
 
                 level->check_window_popup = CheckCollisionRecs(player, {50, 199, 60, 10});
+                
+                bool pictures = CheckCollisionRecs(player, {128, 266, 11, 39});
+                bool tv = CheckCollisionRecs(player, {44, 287, 58, 25});
+
+                if (is_action_pressed()) {
+                    if (level->check_window_popup) {
+                        level->state = CHAPTER_4_STATE_WINDOW;
+                        add_event(game, chapter_4_set_state_atari, 5);
+                    }
+
+                    if (pictures) {
+                        game->current = &game->text[22];
+                    }
+
+                    if (tv) {
+                        game->current = &game->text[23];
+                    }
+                }
+
             }
 
             //entity->pos.x = Clamp(entity->pos.x, 0, render_width - entity_texture_width(entity));
@@ -748,6 +832,7 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
 
             if (level->window_popup && is_action_pressed()) {
                 entity->chap_4_window.closed = !entity->chap_4_window.closed;
+
                 if (entity->chap_4_window.closed) {
                     entity->texture_id = 12;
                 } else {
@@ -770,14 +855,15 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
             entity->chap_4_devil.time += dt;
         } break;
         case ENTITY_CHAP_4_MICROWAVE: {
-            bool dlg = can_open_dialogue(game, entity, level->player);
+            entity->chap_4_microwave.time -= dt;
 
-            if (dlg && is_action_pressed()) {
-                if (entity->texture_id == 10)
-                    entity->texture_id = 11;
-                else
-                    entity->texture_id = 10;
+            if (entity->chap_4_microwave.time <= 0) {
+                entity->chap_4_microwave.time = 0;
+                entity->texture_id = 10;
             }
+
+            bool dlg = can_open_dialogue(game, entity, level->player);
+            level->microwave_popup = (dlg && entity->texture_id == 10);
         } break;
     }
 }
