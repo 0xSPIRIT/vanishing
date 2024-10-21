@@ -30,7 +30,9 @@ void main() {
 
     float factor = 1;
 
-    float dist = factor * 0.008f * length(fragPosition) - (0.005 * fragPosition.y);
+    float dist = factor * 0.008f * length(fragPosition) - (0.003 * fragPosition.y);
+    dist *= dist;
+
     dist = clamp(dist, 0, 1);
 
     finalColor = texelColor * fragColor * colDiffuse;

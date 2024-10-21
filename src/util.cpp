@@ -9,6 +9,7 @@
 #define Gigabytes(gb) ((size_t)gb * 1024 * 1024 * 1024)
 
 #define BlenderPosition3D(x, y, z) {(x), (z), -(y)}
+#define BlenderPosition2D(x, y)    {(x), -(y)}
 
 // Arena Alloactor
 

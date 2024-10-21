@@ -436,11 +436,6 @@ void chapter_4_init(Game *game) {
                          "Chase",
                          "... Did that noise come from\noutside?",
                          30,
-                         &game->text[21]);
-    atari_text_list_init(&game->text[21],
-                         "Chase",
-                         "Let me check the windows.",
-                         30,
                          nullptr);
 
     add_event(game, chapter_4_start_text, 1);

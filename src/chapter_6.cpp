@@ -420,7 +420,7 @@ void chapter_6_init(Game *game) {
     support_text(0, "all that he could feel now was malaise.", false);
     support_text(0, "Even after all that work,\nnothing had changed!", false);
     support_text(0, "Back to the way things were.\rBusiness as usual.", false);
-    support_text(0, "He witnessed his boulder at the base\nof the hill, his progress reset.", false);
+    support_text(0, "He glared at his boulder at the base\nof the hill, his progress reset.", false);
     support_text(0, "His eyes wandered into the void\nbetween the floorboards.\rHe forgot to blink.", false);
     support_text(0, "There, the void whispered back to him,\nlike before.", false);
     support_text(0, "But, before he could understand what\nshe was saying...", false);

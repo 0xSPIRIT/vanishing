@@ -1,5 +1,7 @@
 TODO 
 
+- CHapter 5 make the black void do something cool so
+  people who go up to them won't waste their time.
 - Window fullscreen sprite
 - Chapter 3 road sprites
 - Create proper artwork for the dinner party

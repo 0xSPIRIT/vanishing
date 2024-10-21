@@ -99,6 +99,8 @@ void chapter_epilogue_init(Game *game) {
     game->textbox_target = LoadRenderTexture(render_width, render_height);
     game->textbox_alpha = 220;
 
+    game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
+
     level->fog_factor = level->fog_factor_to = 1.0f/28.0f;
 
     level->camera_height = 1.67f;

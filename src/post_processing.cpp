@@ -106,8 +106,11 @@ void post_process_init(Post_Processing *post) {
     post->crt.u_scanline_alpha       = GetShaderLocation(post->crt.shader, "scanline_alpha");
     post->crt.u_vignette_mix         = GetShaderLocation(post->crt.shader, "vignette_mix");
 
-    post->bloom.bloom_intensity   = 5;
-    post->bloom.vignette_mix      = 1;
+    //post->bloom.bloom_intensity   = 5;
+    //post->bloom.vignette_mix      = 1;
+
+    post->bloom.bloom_intensity = 4;
+    post->bloom.vignette_mix = 0.35f;
 
     post->bloom.shader            = LoadShader(0, RES_DIR "shaders/bloom.fs");
     post->bloom.u_time            = GetShaderLocation(post->bloom.shader, "time");
