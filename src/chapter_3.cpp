@@ -178,9 +178,13 @@ void chapter_3_goto_road(Game *game) {
     level->state = CHAPTER_3_STATE_ROAD;
     game->post_processing.type = POST_PROCESSING_CRT;
 
-    game->post_processing.crt.do_scanline_effect = true;
-    game->post_processing.crt.do_warp_effect = true;
-    game->post_processing.crt.abberation_intensity = 1;
+    Post_Processing_Crt *crt = &game->post_processing.crt;
+    crt->do_scanline_effect = true;
+    crt->do_warp_effect = true;
+    crt->abberation_intensity = 0.75f;
+    crt->vignette_intensity = 1;
+    crt->vignette_mix = 1;
+    crt->vignette_mix = 0.1f;
     //post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_LOW);
 
     start_fade(game, FADE_IN, nullptr);
@@ -368,6 +372,14 @@ void chapter_3_goto_home_outside(Game *game) {
     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
 
     game->post_processing.type = POST_PROCESSING_CRT;
+    Post_Processing_Crt *crt = &game->post_processing.crt;
+
+    crt->do_scanline_effect = true;
+    crt->do_warp_effect = true;
+    crt->abberation_intensity = 0.75;
+    crt->vignette_intensity = 1;
+    crt->vignette_mix = 1;
+    crt->scanline_alpha = 0.1f;
     //post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_LOW);
 
     level->home_background = 18;
@@ -392,7 +404,7 @@ void chapter_3_goto_home_outside(Game *game) {
     add_wall(&game->entities, {0, 160, 63, 520});
     add_wall(&game->entities, {129, 160, 63, 520});
 
-    start_fade(game, FADE_IN, 120, nullptr);
+    start_fade(game, FADE_IN, 240, nullptr);
 }
 
 void add_cubicle(Array<Entity*> *entities, bool right, int x, int y) {
@@ -446,6 +458,18 @@ void chapter_3_goto_job_minigame(void *game_ptr) {
     level->minigame.active = true;
     DisableCursor();
     level->virtual_mouse.pos = { render_width/2.f, render_height/2.f };
+
+    game->post_processing.type = POST_PROCESSING_CRT;
+
+    game->post_processing.crt.do_scanline_effect = true;
+    game->post_processing.crt.scanline_alpha = 0.25f;
+    game->post_processing.crt.do_warp_effect = false;
+    //game->post_processing.crt.abberation_intensity = 0.75f;
+
+    // abberation intensity is handled in update
+    game->post_processing.crt.vignette_intensity = 1;
+    game->post_processing.crt.vignette_mix = 0.75f;
+    game->post_processing.crt.scanline_alpha = 0.1f;
 }
 
 void chapter_3_goto_window_text(Game *game) {
@@ -497,6 +521,13 @@ void chapter_3_goto_lunch_room(Game *game, Chapter_3_Lunch_Text lunch_text) {
     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
 
     level->current_lunch_text = lunch_text;
+
+    game->post_processing.type = POST_PROCESSING_CRT;
+    game->post_processing.crt.do_scanline_effect = false;
+    game->post_processing.crt.do_warp_effect = false;
+    game->post_processing.crt.abberation_intensity = 0.5f;
+    game->post_processing.crt.vignette_intensity = 1;
+    game->post_processing.crt.vignette_mix = 0.5f;
 
     level->state = CHAPTER_3_STATE_LUNCH;
     level->minigame.active = false;
@@ -775,6 +806,14 @@ void chapter_3_job_init(Game *game, int which_document_list) {
 
 void chapter_3_init(Game *game) {
     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
+
+    game->post_processing.type = POST_PROCESSING_CRT;
+    game->post_processing.crt.do_scanline_effect = false;
+    game->post_processing.crt.scanline_alpha = 0.07f;
+    game->post_processing.crt.do_warp_effect = false;
+    game->post_processing.crt.abberation_intensity = 0.5f;
+    game->post_processing.crt.vignette_intensity = 1;
+    game->post_processing.crt.vignette_mix = 0.75f;
 
     //level->state = CHAPTER_3_STATE_HOME_INSIDE;
     //level->state = CHAPTER_3_STATE_ROAD;
@@ -1238,10 +1277,8 @@ void chapter_3_init(Game *game) {
                          speed,
                          nullptr);
 
-    /*
     level->player = chapter_3_make_entity(ENTITY_PLAYER, 66, 96);
     array_add(&game->entities, level->player);
-    */
 
     level->virtual_mouse.texture = 22;
 
@@ -1253,11 +1290,11 @@ void chapter_3_init(Game *game) {
     //chapter_3_goto_window_text(game);
     //level->minigame.active = true;
 
-    //chapter_3_init_outside(game);
+    chapter_3_init_outside(game);
     //chapter_3_goto_home_inside(game);
     //chapter_3_goto_home_outside(game);
 
-    chapter_3_goto_road(game);
+    //chapter_3_goto_road(game);
 }
 
 void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,
@@ -2037,7 +2074,7 @@ void chapter_3_update(Game *game, float dt) {
 }
 
 void chapter_3_draw(Game *game, float dt) {
-    game->textbox_alpha = 200;
+    game->textbox_alpha = 225;
 
     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
     Chapter_3_Job_Minigame *minigame = &level->minigame;
@@ -2046,14 +2083,18 @@ void chapter_3_draw(Game *game, float dt) {
         if (level->lunch_devil_effect) {
             game->post_processing.type = POST_PROCESSING_VHS;
             post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_MEDIUM_HIGH);
+            game->post_processing.vhs.vignette_mix = 1;
         } else {
-            game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
+            game->post_processing.type = POST_PROCESSING_CRT;
         }
     }
 
     switch (level->state) {
         case CHAPTER_3_STATE_OFFICE: {
             if (minigame->active) {
+                float t = GetTime() * 1;
+                game->post_processing.crt.abberation_intensity = 0.5 + 0.5f * sin(t) * sin(t);
+
                 job_minigame_run(game, minigame, dt, &game->atari_render_target);
             } else {
                 if (level->screens_scrolled <= 8) {

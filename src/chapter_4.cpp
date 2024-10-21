@@ -163,6 +163,7 @@ void chapter_4_3d_init(Game *game) {
 
     game->post_processing.type = POST_PROCESSING_VHS;
     post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_MEDIUM);
+    game->post_processing.vhs.vignette_mix = 1;
 }
 
 void chapter_4_init(Game *game) {

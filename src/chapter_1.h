@@ -19,6 +19,7 @@ struct Chapter_1_Player {
     Player_Walking_State walking_state;
     bool  is_hurt;
     bool  huffing_and_puffing;
+    int   dir_x, dir_y;
     int   footsteps_done;
     float blood_probability;
 };

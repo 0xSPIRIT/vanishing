@@ -19,17 +19,17 @@ enum Chapter_5_Scene {
 struct Chapter_5_Clerk {
     Vector3 position;
 
-    float saved_head_rotation;
+    float   saved_head_rotation;
 
-    bool  has_real_head;
+    bool    has_real_head;
 
-    float head_rotation;
-    float body_rotation;
+    float   head_rotation;
+    float   body_rotation;
 
-    bool  do_180_head;
+    bool    do_180_head;
 
-    bool  talk_popup;
-    bool  talked;
+    bool    talk_popup;
+    bool    talked;
 };
 
 struct Chapter_5_Bartender {
@@ -59,9 +59,9 @@ struct Chapter_5_Train {
 
 struct Chapter_5_Quote {
     Text_List *text;
-    Vector3 position;
-    Vector3 target;
-    float   fov;
+    Vector3    position;
+    Vector3    target;
+    float      fov;
 };
 
 enum Chair_State {
@@ -568,7 +568,7 @@ void chapter_5_scene_init(Game *game) {
             train->speed         = 0;
 
             level->shader = LoadShader(0, RES_DIR "shaders/cottage.fs");
-//
+
             //model_set_bilinear(&level->scenes[0]);
 
             model_set_shader(&level->scenes[0],         level->shader);
@@ -699,7 +699,7 @@ void chapter_5_scene_init(Game *game) {
 
             level->scenes[1] = LoadModel(RES_DIR "models/staircase.glb");
 
-            level->shader = LoadShader(0, RES_DIR "shaders/dinner.fs");
+            level->shader = LoadShader(0, RES_DIR "shaders/staircase.fs");
 
             float train_distance = -508;
 
@@ -881,7 +881,11 @@ void chapter_5_scene_init(Game *game) {
 
             game->textbox_alpha = 220;
 
-            level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/fog.fs");
+            if (level->good)
+                level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/fog.fs");
+            else
+                level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/dinner.fs");
+
 
             level->shader.locs[SHADER_LOC_VECTOR_VIEW] = GetShaderLocation(level->shader, "viewPos");
 
@@ -1188,12 +1192,22 @@ void chapter_5_scene_init(Game *game) {
                            &game->text[87]);
             chapter_5_text(&game->text[87],
                            "Chase",
-                           "You too!!\rI guess we finally met in-person, then.\rThat's good, haha.",
+                           "You too!!\rI guess we finally met in-person, then!\rThat's good, haha.",
                            30,
                            &game->text[88]);
             chapter_5_text(&game->text[88],
                            "Penny",
-                           "Yup.\rWell, I'll talk to you later.",
+                           "Yeah!\rYou're so cool, Eleanor told me more about\nyou!",
+                           30,
+                           &game->text[110]);
+            chapter_5_text(&game->text[110],
+                           "Chase",
+                           "Awe, thanks so much!!!\rSpeaking of Eleanor, I gotta meet her now.",
+                           30,
+                           &game->text[111]);
+            chapter_5_text(&game->text[111],
+                           "Penny",
+                           "Alright, see ya!",
                            30,
                            nullptr);
 
@@ -1362,18 +1376,24 @@ void chapter_5_scene_init(Game *game) {
         case CHAPTER_5_SCENE_DESERT: {
             level->camera_height = 1.8f;
 
-            level->scenes[4]           = LoadModel(RES_DIR "models/chap_5_cottage.glb");
+            level->scenes[4] = LoadModel(RES_DIR "models/desert.glb");
 
-
-            level->shader = LoadShader(0, RES_DIR "shaders/cottage.fs");
+            level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/desert.fs");
 
             //Model *scene_model = &level->scenes[4];
             //model_set_bilinear(scene_model);
 
+            game->post_processing.type = POST_PROCESSING_BLOOM;
+            game->post_processing.bloom.bloom_intensity = 6;
+            game->post_processing.bloom.vignette_mix = 0;
+
             model_set_shader(&level->scenes[4], level->shader);
 
-            level->camera.position   = BlenderPosition3D(-239.1f, -131.f, 53.62f + level->camera_height);
-            level->camera.target     = { 0, 0, 0 };
+            level->camera.position = {-90.408180f, -6.139406f, -92.159492f};
+            level->camera.target = {-32.406551f, 39.074921f, -15.338135f};
+
+            level->camera.position   = BlenderPosition3D(13, -5, 2.194f + level->camera_height);
+            //level->camera.target     = { 0, 0, 0 };
             level->camera.up         = { 0, 1, 0 };
             level->camera.fovy       = FOV_DEFAULT;
             level->camera.projection = CAMERA_PERSPECTIVE;
@@ -1487,6 +1507,7 @@ void chapter_5_scene_init(Game *game) {
                 level->podiums[level->podium_count++] = podium;
             };
 
+            /*
             add_podium(&game->text[0], {-226.8f, -123.9f}, -62);
             add_podium(&game->text[1], {-216.5f, -110.2f}, -68);
             add_podium(&game->text[2], {-202.8f, -103.2f}, -52);
@@ -1496,14 +1517,21 @@ void chapter_5_scene_init(Game *game) {
             add_podium(&game->text[7], {-109.f, -67}, -52);
             add_podium(&game->text[9], {-74, -47}, -72);
             add_podium(&game->text[10], {-39, -27}, -68);
+            */
         } break;
         case CHAPTER_5_SCENE_GALLERY: {
             level->camera_height = 1.8f;
+
+            game->textbox_alpha = 255;
 
             level->scenes[5] = LoadModel(RES_DIR "models/artgallery.glb");
 
             level->shader = LoadShader(0, RES_DIR "shaders/cottage.fs");
             model_set_shader(&level->scenes[5], level->shader);
+
+            game->post_processing.type = POST_PROCESSING_BLOOM;
+            game->post_processing.bloom.bloom_intensity = 7;
+            game->post_processing.bloom.vignette_mix = 0.55f;
 
             memset(game->text, 0, sizeof(game->text));
 
@@ -1926,7 +1954,7 @@ void chapter_5_init(Game *game) {
     level->models.real_head     = LoadModel(RES_DIR "models/real_head.glb");
     level->models.podium        = LoadModel(RES_DIR "models/podium.glb");
 
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_STAIRCASE);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_GALLERY);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {
@@ -3147,7 +3175,14 @@ void chapter_5_draw(Game *game) {
             }
         } break;
         case CHAPTER_5_SCENE_DESERT: {
-            ClearBackground(SKYBLUE);
+            float time_value = GetTime();
+            int time_loc = GetShaderLocation(level->shader, "time");
+            SetShaderValue(level->shader,
+                           time_loc,
+                           &time_value,
+                           SHADER_UNIFORM_FLOAT);
+
+            ClearBackground({255, 241, 186, 255});
 
             BeginMode3D(level->camera);
 

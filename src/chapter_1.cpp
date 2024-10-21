@@ -1,6 +1,6 @@
-#define DESERT_COLOR { 235, 208, 145, 255}//214, 194, 105, 255 }
+#define DESERT_COLOR { 232, 204, 124, 255 }
 //#define FOREST_COLOR { 50, 168, 82, 255 }
-#define CACTUS_COUNT 8
+#define CACTUS_COUNT 4
 
 enum Level_Chapter_1_State {
     LEVEL_CHAPTER_1_STATE_BEFORE_PHONE = 0,
@@ -114,7 +114,7 @@ Entity *chapter_1_make_entity(Entity_Type type, float x, float y) {
             result->texture_id = (rand() % 2 == 0) ? 1 : 2;
         } break;
         case ENTITY_ROCK: {
-            result->texture_id = 3;
+            result->texture_id = rand_int(24, 31);
         } break;
         case ENTITY_FOOTSTEPS: {
             result->texture_id = 4 + rand() % 3;
@@ -217,21 +217,42 @@ void chapter_1_apartment_text(Text_List *list, char *line,
 
     text_list_init(list, 0, line, next);
 }
+
+void chapter_1_call_text(Text_List *list, char *speaker,
+                         char *line, float scroll_speed,
+                         Text_List *next)
+{
+    list->font         = &atari_font;
+    list->font_spacing = 1;
+    list->scale        = 0.125;
+    list->scroll_speed = scroll_speed;
+
+    list->color = WHITE;
+    list->bg_color = BLACK;
+    list->center_text  = false;
+
+    text_list_init(list, speaker, line, next);
+}
+
 void chapter_1_init(Game *game) {
     Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
 
-    level->intro = true;
+    level->intro = false;
     level->god_scroll = chapter_1_god_text_y[0];
+
+    game->textbox_alpha = 255;
 
     game->post_processing.type = POST_PROCESSING_VHS;
     post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_MEDIUM);
+    game->post_processing.vhs.vignette_mix = 0.5f;
+    game->post_processing.vhs.vignette_intensity = 1;
 
     Texture2D *textures = atari_assets.textures;
 
     textures[0]  = load_texture(RES_DIR "art/player.png");
     textures[1]  = load_texture(RES_DIR "art/cactus_1.png");
     textures[2]  = load_texture(RES_DIR "art/cactus_2.png");
-    textures[3]  = load_texture(RES_DIR "art/rock.png");
+    textures[3]  = load_texture(RES_DIR "art/player_crawl_up.png");
     textures[4]  = load_texture(RES_DIR "art/footsteps_1.png");
     textures[5]  = load_texture(RES_DIR "art/footsteps_2.png");
     textures[6]  = load_texture(RES_DIR "art/footsteps_3.png");
@@ -252,6 +273,10 @@ void chapter_1_init(Game *game) {
     textures[21] = load_texture(RES_DIR "art/window_1.png");
     textures[22] = load_texture(RES_DIR "art/prayer_mat.png");
     textures[23] = load_texture(RES_DIR "art/player_white.png");
+
+    for (int i = 1; i <= 8; i++) {
+        textures[24+i-1] = load_texture(TextFormat(RES_DIR "art/rock%d.png", i));
+    }
 
     level->background_color = DESERT_COLOR;
 
@@ -445,126 +470,126 @@ void chapter_1_init(Game *game) {
 
     speed = 30;
 
-    atari_text_list_init(&game->text[35],
-                         0,
-                         "*ring ring*\r*click*",
-                         speed,
-                         &game->text[36]);
-    atari_text_list_init(&game->text[36],
-                         "Chase",
-                         "Uh hello?",
-                         speed,
-                         &game->text[37]);
-    atari_text_list_init(&game->text[37],
-                         "Eleanor",
-                         "Heyyyy Chase!!\rI got someone for you.",
-                         speed,
-                         &game->text[38]);
-    atari_text_list_init(&game->text[38],
-                         "Chase",
-                         "Uhhh what?",
-                         speed,
-                         &game->text[39]);
-    atari_text_list_init(&game->text[39],
-                         "Eleanor",
-                         "Y'know, SOMEONE!!!",
-                         speed,
-                         &game->text[40]);
-    atari_text_list_init(&game->text[40],
-                         "Chase",
-                         "Does this really require\na phone call?",
-                         speed,
-                         &game->text[41]);
-    atari_text_list_init(&game->text[41],
-                         "Chase",
-                         "You could've sent me a\ntext that I would have\npretended not to read.",
-                         speed,
-                         &game->text[42]);
-    atari_text_list_init(&game->text[42],
-                         "Eleanor",
-                         "UGH. FINE.\rYou're an ass, you know\nthat?!",
-                         speed,
-                         &game->text[43]);
-    atari_text_list_init(&game->text[43],
-                         "Chase",
-                         "Waaait hold on,\rI've been trying to get\nup for the past 45 minutes.",
-                         speed,
-                         &game->text[44]);
-    atari_text_list_init(&game->text[44],
-                         "Chase",
-                         "I'm just cranky.\rWe're already here.\nWho do you got?",
-                         speed,
-                         &game->text[45]);
-    atari_text_list_init(&game->text[45],
-                         "Eleanor",
-                         "Penny.",
-                         speed,
-                         &game->text[46]);
-    atari_text_list_init(&game->text[46],
-                         "Chase",
-                         "Penny?\rUh, Jason's Penny?",
-                         speed,
-                         &game->text[47]);
-    atari_text_list_init(&game->text[47],
-                         "Eleanor",
-                         "Come on, she's perfect.\rShe even composes like\nyou!!!",
-                         speed,
-                         &game->text[48]);
-    atari_text_list_init(&game->text[48],
-                         "Chase",
-                         "Oh really?\rWhat type of music?",
-                         speed,
-                         &game->text[49]);
-    atari_text_list_init(&game->text[49],
-                         "Eleanor",
-                         "Talk to her yourself and\nfind out.",
-                         speed,
-                         &game->text[50]);
-    atari_text_list_init(&game->text[50],
-                         "Chase",
-                         "Can I state the obvious\nhere sis?\r",
-                         speed,
-                         &game->text[51]);
-    atari_text_list_init(&game->text[51],
-                         "Chase",
-                         "It's JASON's Penny.",
-                         speed,
-                         &game->text[52]);
-    atari_text_list_init(&game->text[52],
-                         "Eleanor",
-                         "Uh, the same Jason that\nswears at her and treats\nher like shit?",
-                         speed,
-                         &game->text[53]);
-    atari_text_list_init(&game->text[53],
-                         "Eleanor",
-                         "They broke up. They do\nthat like every 5 days.\rIt doesn't matter, trust me.",
-                         speed,
-                         &game->text[54]);
-    atari_text_list_init(&game->text[54],
-                         "Chase",
-                         "...",
-                         speed,
-                         &game->text[55]);
-    atari_text_list_init(&game->text[55],
-                         "Eleanor",
-                         "Soooo what do you think\nbro?",
-                         speed,
-                         &game->text[56]);
-    atari_text_list_init(&game->text[56],
-                         "Chase",
-                         "...\r...\rI'll think about it.",
-                         speed,
-                         &game->text[57]);
-    atari_text_list_init(&game->text[57],
-                         "Eleanor",
-                         "*sigh*\rWe all know what that\nmea--",
-                         speed,
-                         &game->text[58]);
-    atari_text_list_init(&game->text[58],
-                         "Chase",
-                         "*click*",
-                         speed,
-                         nullptr);
+    chapter_1_call_text(&game->text[35],
+                        0,
+                        "*ring ring*\r*click*",
+                        speed,
+                        &game->text[36]);
+    chapter_1_call_text(&game->text[36],
+                        "Chase",
+                        "Uh hello?",
+                        speed,
+                        &game->text[37]);
+    chapter_1_call_text(&game->text[37],
+                        "Eleanor",
+                        "Heyyyy Chase!!\rI got someone for you.",
+                        speed,
+                        &game->text[38]);
+    chapter_1_call_text(&game->text[38],
+                        "Chase",
+                        "Uhhh what?",
+                        speed,
+                        &game->text[39]);
+    chapter_1_call_text(&game->text[39],
+                        "Eleanor",
+                        "Y'know, SOMEONE!!!",
+                        speed,
+                        &game->text[40]);
+    chapter_1_call_text(&game->text[40],
+                        "Chase",
+                        "Does this really require\na phone call?",
+                        speed,
+                        &game->text[41]);
+    chapter_1_call_text(&game->text[41],
+                        "Chase",
+                        "You could've sent me a\ntext that I would have\npretended not to read.",
+                        speed,
+                        &game->text[42]);
+    chapter_1_call_text(&game->text[42],
+                        "Eleanor",
+                        "UGH. FINE.\rYou're an ass, you know\nthat?!",
+                        speed,
+                        &game->text[43]);
+    chapter_1_call_text(&game->text[43],
+                        "Chase",
+                        "Waaait hold on,\rI've been trying to get\nup for the past 45 minutes.",
+                        speed,
+                        &game->text[44]);
+    chapter_1_call_text(&game->text[44],
+                        "Chase",
+                        "I'm just cranky.\rWe're already here.\nWho do you got?",
+                        speed,
+                        &game->text[45]);
+    chapter_1_call_text(&game->text[45],
+                        "Eleanor",
+                        "Penny.",
+                        speed,
+                        &game->text[46]);
+    chapter_1_call_text(&game->text[46],
+                        "Chase",
+                        "Penny?\rUh, Jason's Penny?",
+                        speed,
+                        &game->text[47]);
+    chapter_1_call_text(&game->text[47],
+                        "Eleanor",
+                        "Come on, she's perfect.\rShe even composes like\nyou!!!",
+                        speed,
+                        &game->text[48]);
+    chapter_1_call_text(&game->text[48],
+                        "Chase",
+                        "Oh really?\rWhat type of music?",
+                        speed,
+                        &game->text[49]);
+    chapter_1_call_text(&game->text[49],
+                        "Eleanor",
+                        "Talk to her yourself and\nfind out.",
+                        speed,
+                        &game->text[50]);
+    chapter_1_call_text(&game->text[50],
+                        "Chase",
+                        "Can I state the obvious\nhere sis?\r",
+                        speed,
+                        &game->text[51]);
+    chapter_1_call_text(&game->text[51],
+                        "Chase",
+                        "It's JASON's Penny.",
+                        speed,
+                        &game->text[52]);
+    chapter_1_call_text(&game->text[52],
+                        "Eleanor",
+                        "Uh, the same Jason that\nswears at her and treats\nher like shit?",
+                        speed,
+                        &game->text[53]);
+    chapter_1_call_text(&game->text[53],
+                        "Eleanor",
+                        "They broke up. They do\nthat like every 5 days.\rIt doesn't matter, trust me.",
+                        speed,
+                        &game->text[54]);
+    chapter_1_call_text(&game->text[54],
+                        "Chase",
+                        "...",
+                        speed,
+                        &game->text[55]);
+    chapter_1_call_text(&game->text[55],
+                        "Eleanor",
+                        "Soooo what do you think\nbro?",
+                        speed,
+                        &game->text[56]);
+    chapter_1_call_text(&game->text[56],
+                        "Chase",
+                        "...\r...\rI'll think about it.",
+                        speed,
+                        &game->text[57]);
+    chapter_1_call_text(&game->text[57],
+                        "Eleanor",
+                        "*sigh*\rWe all know what that\nmea--",
+                        speed,
+                        &game->text[58]);
+    chapter_1_call_text(&game->text[58],
+                        "Chase",
+                        "*click*",
+                        speed,
+                        nullptr);
 
     game->text[58].callbacks[0] = chapter_1_end;
 
@@ -616,7 +641,7 @@ void add_cactuses_randomly(Array<Entity*> *entities, size_t cactus_count) {
         int x = rand()%(render_width - 8);
         int y = rand()%(render_height - 8);
 
-        Entity_Type type = (rand()%2 == 0) ? ENTITY_CACTUS : ENTITY_ROCK;
+        Entity_Type type = (rand_float() < 0.2) ? ENTITY_CACTUS : ENTITY_ROCK;
 
         Entity *cactus_a = chapter_1_make_entity(type, x, y);
         array_add(entities, cactus_a);
@@ -716,9 +741,14 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
             if (level->state == LEVEL_CHAPTER_1_STATE_APARTMENT)
                 dir_x = dir_y = 0;
 
+            e->chap_1_player.dir_x = dir_x;
+            e->chap_1_player.dir_y = dir_y;
+
             if (e->alarm[0] == 0) {
                 e->chap_1_player.is_hurt = false;
             }
+
+            //e->chap_1_player.walking_state = PLAYER_WALKING_STATE_CRAWLING;
 
             switch (e->chap_1_player.walking_state) {
                 case PLAYER_WALKING_STATE_NORMAL: {
@@ -765,6 +795,15 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                     level->state = LEVEL_CHAPTER_1_STATE_APARTMENT;
                     e->chap_1_player.walking_state = PLAYER_WALKING_STATE_SLOWED_1;
                     //game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
+
+                    //post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_LOW);
+                    Post_Processing_Vhs *vhs = &game->post_processing.vhs;
+                    vhs->scan_intensity = 0;
+                    vhs->noise_intensity = 0;
+                    vhs->abberation_intensity = 1;
+                    vhs->vignette_intensity = 1;
+                    vhs->vignette_mix = 1;
+                    vhs->mix_factor = 1;
 
                     e->alarm[1] = 3;
 
@@ -944,9 +983,11 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                         level->state = LEVEL_CHAPTER_1_STATE_FOREST;
                         e->pos.x = render_width/2 - entity_texture_width(e) / 2;
 
-                        post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_LOW);
+                        post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_HIGH);
+                        game->post_processing.vhs.vignette_intensity = 1;
+                        game->post_processing.vhs.vignette_mix = 1;
 
-                        game->post_processing.type = POST_PROCESSING_CRT;
+                        //game->post_processing.type = POST_PROCESSING_CRT;
                     }
 
                     if (level->state == LEVEL_CHAPTER_1_STATE_SUCCESSFUL_DIRECTIONS) {
@@ -1008,12 +1049,49 @@ void chapter_1_entity_draw(Entity *e, Game *game) {
                 BeginShaderMode(level->flashing_shader);
             }
 
+            int xoff = 0;
+            int yoff = 0;
+
             if (level->prayer_fader > 0) {
                 texture = &atari_assets.textures[23];
             }
 
+            if (level->state == LEVEL_CHAPTER_1_STATE_FOREST || level->state == LEVEL_CHAPTER_1_STATE_APARTMENT) {
+                e->texture_id = 3;
+                texture = &atari_assets.textures[3];
+                xoff += 4;
+            }
+
             if (texture) {
-                DrawTexture(*texture, x, y, WHITE);
+                if (e->texture_id != 3 && e->chap_1_player.walking_state == PLAYER_WALKING_STATE_CRAWLING) {
+                    static int x_sign = 1;
+                    static int y_sign = 1;
+
+                    if (e->chap_1_player.dir_x != 0)
+                        x_sign = e->chap_1_player.dir_x;
+
+                    if (e->chap_1_player.dir_x != 0 ||
+                        e->chap_1_player.dir_y != 0)
+                    {
+                        y_sign = (int)(GetTime())%2==0 ? 1 : -1;
+                    }
+
+                    Rectangle src = {
+                        0, 0,
+                        x_sign * entity_texture_width(e),
+                        y_sign * entity_texture_height(e),
+                    };
+
+                    Rectangle dst = {
+                        (int)e->pos.x, (int)e->pos.y,
+                        entity_texture_width(e),
+                        entity_texture_height(e),
+                    };
+
+                    DrawTexturePro(*texture, src, dst, {}, 0, WHITE);
+                } else {
+                    DrawTexture(*texture, x+xoff, y+yoff, WHITE);
+                }
             }
 
             if (e->chap_1_player.is_hurt) {
@@ -1153,11 +1231,6 @@ void chapter_1_draw(Game *game) {
         }
         return;
     }
-
-    if (level->final_text)
-        game->textbox_alpha = 255;
-    else 
-        game->textbox_alpha = 220;
 
     switch (level->state) {
         case LEVEL_CHAPTER_1_STATE_FOREST: {

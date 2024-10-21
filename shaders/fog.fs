@@ -41,7 +41,6 @@ void main() {
     vec4 fogColor = vec4(1,1,1,1);
 
 
-    float fog_factor = 1.0/28.0;
     // lower value of fog_factor gives more visibility.
 
     dist = clamp(dist * fog_factor, 0, 1);

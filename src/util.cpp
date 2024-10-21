@@ -151,6 +151,16 @@ void array_print(Array<T> array, const char *t_format_specifier) {
 
 // Misc
 
+void print_cam(Camera3D *cam) {
+    printf("position = {%ff, %ff, %ff}\ntarget = {%ff, %ff, %ff}\n\n",
+           cam->position.x,
+           cam->position.y,
+           cam->position.z,
+           cam->target.x,
+           cam->target.y,
+           cam->target.z);
+}
+
 float get_frame_time_clamped() {
     float dt = GetFrameTime();
 

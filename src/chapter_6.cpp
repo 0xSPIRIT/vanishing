@@ -37,6 +37,7 @@ void chapter_6_goto_desert(Game *game) {
     game->post_processing.type = POST_PROCESSING_VHS;
     post_process_vhs_set_intensity(&game->post_processing.vhs,
                                    VHS_INTENSITY_MEDIUM);
+    game->post_processing.vhs.vignette_mix = 0.8f;
 }
 
 void chapter_6_delayed_goto_desert(void *game_ptr) {
@@ -417,8 +418,9 @@ void chapter_6_init(Game *game) {
     support_text(0, "He found himself sitting despondently\nat a table with three of his friends.", false);
     support_text(0, "Although earlier that day he felt some\nsemblance of understanding of his\nsituation,", false);
     support_text(0, "all that he could feel now was malaise.", false);
-    support_text(0, "Nothing has changed.\rIt's all back to the way things were\nbefore.", false);
-    support_text(0, "He sees his boulder at the base of the\nhill;\rprogress reset.", false);
+    support_text(0, "Even after all that work,\nnothing had changed!", false);
+    support_text(0, "Back to the way things were.\rBusiness as usual.", false);
+    support_text(0, "He witnessed his boulder at the base\nof the hill, his progress reset.", false);
     support_text(0, "His eyes wandered into the void\nbetween the floorboards.\rHe forgot to blink.", false);
     support_text(0, "There, the void whispered back to him,\nlike before.", false);
     support_text(0, "But, before he could understand what\nshe was saying...", false);
@@ -462,12 +464,12 @@ void chapter_6_init(Game *game) {
     support_text("Chase",  "*Casts the die*", 0);
     support_text(0,        "It landed on ONE.", 0);
     support_text(0,        "Chase's face remains blank.", 0);
-    support_text("Tyrell", "...\rC'mon Chase, stop being such a nerrrrrdddd.", 0);
-    support_text("Aria",   "Ugh why do you look like that?\rCome onnn, the rest of us are having\nfun.", 0);
+    support_text("Tyrell", "...\rC'mon Chase, stop being like thaattttttt", 0);
+    support_text("Aria",   "Chase.\rCome on man, what are you doing here.", 0);
     support_text("Chase",  "... Well I-", 0);
     support_text("Tyrell", "How about you actually contribute to\nthe conversation?", 0);
     support_text("Tyrell", "Why can't you just have fun?", 0);
-    support_text("Chase",  "... Why the hell would you say tha-", 1);
+    support_text("Chase",  "... Why would you say tha-", 1);
 
     game->text[i-1].callbacks[0] = chapter_6_delayed_goto_desert;
 
@@ -632,10 +634,16 @@ void chapter_6_update(Game *game, float dt) {
             if (level->godtext == 2) {
                 level->red_fade_time += 0.05f * dt;
 
-                if (level->red_fade_time > 0.5f)
+                if (level->red_fade_time > 0.5f) {
                     game->post_processing.vhs.noise_intensity -= 0.25f * dt;
+                    game->post_processing.vhs.vignette_mix    -= 0.04f * dt;
+                }
+
                 if (game->post_processing.vhs.noise_intensity < 0)
                     game->post_processing.vhs.noise_intensity = 0;
+
+                if (game->post_processing.vhs.vignette_mix < 0)
+                    game->post_processing.vhs.vignette_mix = 0;
 
                 if (level->red_fade_time > 1) {
                     level->red_fade_time = 1;

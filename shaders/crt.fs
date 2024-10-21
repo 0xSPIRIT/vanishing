@@ -7,14 +7,45 @@ uniform sampler2D texture0;
 uniform float time;
 
 uniform int do_scanline_effect;
+uniform float scanline_alpha;
 uniform int do_warp_effect;
 uniform float abberation_intensity;
 uniform float vignette_intensity;
+uniform float vignette_mix;
 
 out vec4 finalColor;
 
 float rand(vec2 co){
     return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
+}
+
+vec4 vignette(vec2 tex_coord, vec4 col) {
+    vec4 unprocessed = col;
+
+    if (vignette_intensity == 0) return col;
+
+    float dist = 1;
+    dist = length(tex_coord.xy - vec2(0.5, 0.5));
+    dist *= 2;
+
+    dist = 1-dist;
+    dist *= 1.35f * vignette_intensity;
+
+    if (do_scanline_effect == 1)
+        dist *= (0.9 + 0.1 * rand(vec2(time, time)));
+
+    if (vignette_intensity == 1)
+        dist += 0.45;
+    else
+        dist = max(dist, 0.18);
+
+    col.r = clamp(col.r * dist, 0, 1);
+    col.g = clamp(col.g * dist, 0, 1);
+    col.b = clamp(col.b * dist, 0, 1);
+
+    col = mix(unprocessed, col, vignette_mix);
+
+    return col;
 }
 
 void main() {
@@ -50,34 +81,21 @@ void main() {
         float blueOffset  = -0.006;
 
         vec2 dir = vec2(0.32,0.32);
-        dir *= abberation_intensity;
+        //dir *= abberation_intensity;
 
-        finalColor.r  = texture(texture0, tex_coord + dir * vec2(redOffset)).r;
-        finalColor.g  = texture(texture0, tex_coord + dir * vec2(greenOffset)).g;
-        finalColor.ba = texture(texture0, tex_coord + dir * vec2(blueOffset)).ba;
+        vec4 abberated = vec4(1.0);
+
+        abberated.r  = texture(texture0, tex_coord + dir * vec2(redOffset)).r;
+        abberated.g  = texture(texture0, tex_coord + dir * vec2(greenOffset)).g;
+        abberated.ba = texture(texture0, tex_coord + dir * vec2(blueOffset)).ba;
+
+        finalColor = mix(texture(texture0, tex_coord), abberated, abberation_intensity);
     } else {
         finalColor = texture(texture0, tex_coord);
     }
 
     // Vignette
-    float dist = 1;
-    dist = length(tex_coord.xy - vec2(0.5, 0.5));
-    dist *= 2;
-
-    dist = 1-dist;
-    dist *= 1.35f * vignette_intensity;
-
-    if (do_scanline_effect == 1)
-        dist *= (0.9 + 0.1 * rand(vec2(time, time)));
-
-    if (vignette_intensity == 1)
-        dist += 0.45;
-    else
-        dist = max(dist, 0.18);
-
-    finalColor.r = clamp(finalColor.r * dist, 0, 1);
-    finalColor.g = clamp(finalColor.g * dist, 0, 1);
-    finalColor.b = clamp(finalColor.b * dist, 0, 1);
+    finalColor = vignette(tex_coord, finalColor);
 
     float x = mod(fragTexCoord.x * 0.005 + t/2, 100);
     float y = mod(fragTexCoord.y * 0.006 + t*2, 100);
@@ -89,7 +107,7 @@ void main() {
         int y_i = int(round(y * scanline_count * 1));
 
         if (y_i % 2 == 0) {
-            finalColor = mix(finalColor, vec4(0,0,0,1), 0.25);
+            finalColor = mix(finalColor, vec4(0,0,0,1), scanline_alpha);
         }
     }
 }

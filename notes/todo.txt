@@ -1,5 +1,7 @@
 TODO 
 
+- Window fullscreen sprite
+- Chapter 3 road sprites
 - Create proper artwork for the dinner party
 
 V1 squad
@@ -16,25 +18,3 @@ Later
 - Chapter 4:
   Really distorted, pitched-down text to speech voice for chase
   rather than text scroll sound.
-- chapter 2: add white vhs thing right before teleporting to bathroom with hope
-- Add a white vhs overlay that slowly increases in intensity over time
-  for suspense.
-
-------
-
-The only implementation related thing that might need some elbow
-grease is a VHS shader, but that's something that we know can
-be made, and should be one of the last things that I even do
-on the game.
-
-https://www.reddit.com/r/opengl/comments/cfx7e4/what_is_the_best_way_to_achive_crt_looks_using/
-https://www.youtube.com/watch?v=Z30cKoFvha4
-https://www.shadertoy.com/view/Ms3XWH
-
-Add some sort of intensity uniform that can affect how bad the
-VHS quality drops. Also, I like when it has the artifact of
-the image stretching really bad at the bottom and top.
-
-------
-
-We should work hard; 2-3 days per segment.

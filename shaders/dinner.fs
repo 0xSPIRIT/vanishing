@@ -22,17 +22,11 @@ void main() {
         discard;
     }
 
-    // Windows
-    if (colDiffuse == vec4(0,0,1,1)) {
-        discard;
-    }
+    float dist = 0.05 * length(fragPosition + vec3(20,0,-10));
 
-    // Windows (special case)
-    vec4 window_color = vec4(0.0, 0.0, 0.7, 0.2);
-
-    if (colDiffuse.r == 1 && colDiffuse.g == 0 && colDiffuse.b == 1) {
-        finalColor = window_color;
-    } else {
-        finalColor = texelColor * fragColor * colDiffuse;
-    }
+    if (dist > 1)
+        finalColor = vec4(0,0,0,1);
+    else
+        finalColor = mix(texelColor, vec4(0,0,0,1), dist);
 }
+

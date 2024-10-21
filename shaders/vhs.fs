@@ -10,11 +10,44 @@ uniform float scan_intensity;
 uniform float noise_intensity;
 uniform float abberation_intensity;
 uniform float mix_factor;
+uniform float vignette_intensity;
+uniform float vignette_mix;
 
 out vec4 finalColor;
 
 float rand(vec2 co){
     return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
+}
+
+vec4 vignette(vec2 tex_coord, vec4 col, float intensity) {
+    vec4 unprocessed = col;
+
+    if (intensity == 0) return col;
+
+    float dist = 1;
+    dist = length(tex_coord.xy - vec2(0.5, 0.5));
+    dist *= 2;
+
+    dist = 1-dist;
+    dist *= 1.35f * intensity;
+
+    /*
+    if (do_scanline_effect == 1)
+        dist *= (0.9 + 0.1 * rand(vec2(time, time)));
+        */
+
+    if (intensity == 1)
+        dist += 0.45;
+    else
+        dist = max(dist, 0.18);
+
+    col.r = clamp(col.r * dist, 0, 1);
+    col.g = clamp(col.g * dist, 0, 1);
+    col.b = clamp(col.b * dist, 0, 1);
+
+    col = mix(unprocessed, col, vignette_mix);
+
+    return col;
 }
 
 void main() {
@@ -97,9 +130,12 @@ void main() {
     finalColor.g += -amp/2.0 + amp * rand(vec2(x_g, y_g));
     finalColor.b += -amp/2.0 + amp * rand(vec2(x_b, y_b));
 
-    //finalColor = mix(finalColor, unprocessed_color, mix_factor);
     float tv = mix_factor;
+
     finalColor.r = tv * (finalColor.r) + unprocessed_color.r * (1-tv);
     finalColor.g = tv * (finalColor.g) + unprocessed_color.g * (1-tv);
     finalColor.b = tv * (finalColor.b) + unprocessed_color.b * (1-tv);
+
+    // apply the vignette after
+    finalColor = vignette(fragTexCoord, finalColor, 1);
 }

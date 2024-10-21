@@ -21,7 +21,7 @@
 // Loaded and unloaded for each chapter,
 // so you can use different texture ID's.
 struct Atari_Assets {
-    Texture2D textures[32];
+    Texture2D textures[64];
 } atari_assets;
 
 enum Entity_Type {
@@ -693,8 +693,8 @@ void atari_text_list_init(Text_List *list, char *speaker,
 
     switch (chapter) {
         case 1: {
-            list->color    = WHITE;
-            list->bg_color = BLACK;
+            list->color    = {68,40,0,255};
+            list->bg_color = {232,204,124,255};
         } break;
         case 2: {
             list->color    = WHITE;
@@ -796,9 +796,15 @@ void update_camera_3d(Camera3D *camera, float speed, bool allow_run, float dt) {
     float dir_x = input_movement_x_axis(dt);//key_right() - key_left();
     float dir_y = input_movement_y_axis(dt);//key_down()  - key_up();
 
+    float run_speed = 7;
+
+#ifdef DEBUG
+    run_speed = 30;
+#endif
+
     if (allow_run) {
         if (IsKeyDown(KEY_LEFT_SHIFT) ||
-            (IsGamepadAvailable(0) && IsGamepadButtonDown(0, GAMEPAD_BUTTON_RIGHT_TRIGGER_2))) speed = 7;
+            (IsGamepadAvailable(0) && IsGamepadButtonDown(0, GAMEPAD_BUTTON_RIGHT_TRIGGER_2))) speed = run_speed;
         if (IsKeyDown(KEY_LEFT_ALT)) speed = 0.5f;
     }
 

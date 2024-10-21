@@ -211,6 +211,8 @@ void chapter_2_end_eleanor_second_text(void *game_ptr) {
     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
 
     level->penny_state = CHAPTER_2_PENNY_STATE_WALKING;
+    game->post_processing.crt.abberation_intensity = 0;
+
     level->penny = chapter_2_make_entity(ENTITY_CHAP_2_PENNY, 620, 70);
     level->penny->alarm[0] = 1;
     array_add(&game->entities, level->penny);
@@ -226,6 +228,7 @@ void chapter_2_end_eleanor_third_text(void *game_ptr) {
 
     game->post_processing.type = POST_PROCESSING_VHS;
     post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_LOW);
+    game->post_processing.vhs.vignette_intensity = 1;
     game->post_processing.vhs.mix_factor = 0;
 }
 
@@ -252,7 +255,7 @@ void chapter_2_setup_bathroom_walls(Game *game) {
 
 
     game->post_processing.type = POST_PROCESSING_CRT;
-    game->post_processing.crt.do_scanline_effect = true;
+    game->post_processing.crt.do_scanline_effect = false;
     game->post_processing.crt.do_warp_effect = false;
     game->post_processing.crt.abberation_intensity = 1;
     game->post_processing.crt.vignette_intensity = 1;
@@ -266,6 +269,12 @@ void chapter_2_init(Game *game) {
     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
 
     level->window_target = LoadRenderTexture(90, 17);
+
+    game->post_processing.type = POST_PROCESSING_CRT;
+
+    game->post_processing.crt.do_scanline_effect = false;
+    game->post_processing.crt.do_warp_effect = false;
+    game->post_processing.crt.abberation_intensity = 1;
 
     Texture2D *textures = atari_assets.textures;
     textures[0]  = load_texture(RES_DIR "art/player.png");
