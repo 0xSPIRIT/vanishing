@@ -60,6 +60,7 @@ Arena	src/util.cpp	/^struct Arena {$/;"	s	file:
 Array	src/util.cpp	/^struct Array {$/;"	s	file:
 Atari_Assets	src/game.cpp	/^struct Atari_Assets {$/;"	s	file:
 Bare	src/text.cpp	/^    Bare,$/;"	e	enum:Render_Type	file:
+BlenderPosition2D	src/util.cpp	/^#define BlenderPosition2D(/;"	d	file:
 BlenderPosition3D	src/util.cpp	/^#define BlenderPosition3D(/;"	d	file:
 Bottom	src/text.cpp	/^    Bottom$/;"	e	enum:Location	file:
 CACTUS_COUNT	src/chapter_1.cpp	/^#define CACTUS_COUNT /;"	d	file:
@@ -302,12 +303,14 @@ PLAYER_WALKING_STATE_CRAWLING	src/chapter_1.h	/^    PLAYER_WALKING_STATE_CRAWLIN
 PLAYER_WALKING_STATE_NORMAL	src/chapter_1.h	/^    PLAYER_WALKING_STATE_NORMAL,$/;"	e	enum:Player_Walking_State
 PLAYER_WALKING_STATE_SLOWED_1	src/chapter_1.h	/^    PLAYER_WALKING_STATE_SLOWED_1,$/;"	e	enum:Player_Walking_State
 PLAYER_WALKING_STATE_SLOWED_2	src/chapter_1.h	/^    PLAYER_WALKING_STATE_SLOWED_2,$/;"	e	enum:Player_Walking_State
-POST_PROCESSING_CRT	src/post_processing.cpp	/^    POST_PROCESSING_CRT$/;"	e	enum:Post_Process_Shader_Type	file:
+POST_PROCESSING_BLOOM	src/post_processing.cpp	/^    POST_PROCESSING_BLOOM,$/;"	e	enum:Post_Process_Shader_Type	file:
+POST_PROCESSING_CRT	src/post_processing.cpp	/^    POST_PROCESSING_CRT,$/;"	e	enum:Post_Process_Shader_Type	file:
 POST_PROCESSING_PASSTHROUGH	src/post_processing.cpp	/^    POST_PROCESSING_PASSTHROUGH,$/;"	e	enum:Post_Process_Shader_Type	file:
 POST_PROCESSING_VHS	src/post_processing.cpp	/^    POST_PROCESSING_VHS,$/;"	e	enum:Post_Process_Shader_Type	file:
 Player_Walking_State	src/chapter_1.h	/^enum Player_Walking_State {$/;"	g
 Post_Process_Shader_Type	src/post_processing.cpp	/^enum Post_Process_Shader_Type {$/;"	g	file:
 Post_Processing	src/post_processing.cpp	/^struct Post_Processing {$/;"	s	file:
+Post_Processing_Bloom	src/post_processing.cpp	/^struct Post_Processing_Bloom {$/;"	s	file:
 Post_Processing_Crt	src/post_processing.cpp	/^struct Post_Processing_Crt {$/;"	s	file:
 Post_Processing_Vhs	src/post_processing.cpp	/^struct Post_Processing_Vhs {$/;"	s	file:
 QUOTE_COUNT	src/chapter_5.cpp	/^#define QUOTE_COUNT /;"	d	file:
@@ -440,6 +443,8 @@ black_state_text	src/chapter_5.cpp	/^        bool             black_state_text;$
 black_texture	src/chapter_epilogue.cpp	/^    Texture        pink_dot, orange_dot, black_texture;$/;"	m	struct:Level_Chapter_Epilogue	typeref:typename:Texture	file:
 black_timer	src/chapter_3.cpp	/^    float black_timer;$/;"	m	struct:Chapter_3_Phone	typeref:typename:float	file:
 blood_probability	src/chapter_1.h	/^    float blood_probability;$/;"	m	struct:Chapter_1_Player	typeref:typename:float
+bloom	src/post_processing.cpp	/^    Post_Processing_Bloom bloom;$/;"	m	struct:Post_Processing	typeref:typename:Post_Processing_Bloom	file:
+bloom_intensity	src/post_processing.cpp	/^    float   bloom_intensity;$/;"	m	struct:Post_Processing_Bloom	typeref:typename:float	file:
 body	src/chapter_5.cpp	/^              body,$/;"	m	struct:Level_Chapter_5::Models	typeref:typename:Model	file:
 body_rotation	src/chapter_5.cpp	/^    float   body_rotation;$/;"	m	struct:Chapter_5_Clerk	typeref:typename:float	file:
 bold_2_font	src/main.cpp	/^Font global_font, atari_font, comic_sans, italics_font, bold_font, bold_2_font, mono_font, bold_/;"	v	typeref:typename:Font
@@ -482,9 +487,10 @@ chap_3_cubicle	src/game.cpp	/^        Chapter_3_Cubicle chap_3_cubicle;$/;"	m	un
 chap_4_devil	src/game.cpp	/^        Chapter_4_Devil     chap_4_devil;$/;"	m	union:Entity::__anoneafbdd87010a	typeref:typename:Chapter_4_Devil	file:
 chap_4_microwave	src/game.cpp	/^        Chapter_4_Microwave chap_4_microwave;$/;"	m	union:Entity::__anoneafbdd87010a	typeref:typename:Chapter_4_Microwave	file:
 chap_4_window	src/game.cpp	/^        Chapter_4_Window    chap_4_window;$/;"	m	union:Entity::__anoneafbdd87010a	typeref:typename:Chapter_4_Window	file:
-chapter	src/main.cpp	/^int chapter = 1;$/;"	v	typeref:typename:int
+chapter	src/main.cpp	/^int chapter = 5;$/;"	v	typeref:typename:int
 chapter_1_activate_node	src/chapter_1.cpp	/^void chapter_1_activate_node(void *ptr_game) {$/;"	f	typeref:typename:void
 chapter_1_apartment_text	src/chapter_1.cpp	/^void chapter_1_apartment_text(Text_List *list, char *line,$/;"	f	typeref:typename:void
+chapter_1_call_text	src/chapter_1.cpp	/^void chapter_1_call_text(Text_List *list, char *speaker,$/;"	f	typeref:typename:void
 chapter_1_deinit	src/chapter_1.cpp	/^void chapter_1_deinit(Game *game) {$/;"	f	typeref:typename:void
 chapter_1_draw	src/chapter_1.cpp	/^void chapter_1_draw(Game *game) {$/;"	f	typeref:typename:void
 chapter_1_end	src/chapter_1.cpp	/^void chapter_1_end(void *game_ptr) {$/;"	f	typeref:typename:void
@@ -637,7 +643,7 @@ compare_colors	src/util.cpp	/^bool compare_colors(Color a, Color b) {$/;"	f	type
 const_string	src/text.cpp	/^#define const_string(/;"	d	file:
 correction	src/chapter_3.cpp	/^    char *correction; \/\/ becomes nullptr when corrected$/;"	m	struct:Word	typeref:typename:char *	file:
 crawling_text_state	src/chapter_1.cpp	/^    int crawling_text_state;$/;"	m	struct:Level_Chapter_1	typeref:typename:int	file:
-crt	src/post_processing.cpp	/^    Post_Processing_Crt crt;$/;"	m	struct:Post_Processing	typeref:typename:Post_Processing_Crt	file:
+crt	src/post_processing.cpp	/^    Post_Processing_Crt   crt;$/;"	m	struct:Post_Processing	typeref:typename:Post_Processing_Crt	file:
 cubicle_chair	src/chapter_3.h	/^    struct Entity *cubicle_chair, *cubicle_top, *cubicle_vertical;$/;"	m	struct:Chapter_3_Cubicle	typeref:struct:Entity *
 cubicle_top	src/chapter_3.h	/^    struct Entity *cubicle_chair, *cubicle_top, *cubicle_vertical;$/;"	m	struct:Chapter_3_Cubicle	typeref:struct:Entity *
 cubicle_vertical	src/chapter_3.h	/^    struct Entity *cubicle_chair, *cubicle_top, *cubicle_vertical;$/;"	m	struct:Chapter_3_Cubicle	typeref:struct:Entity *
@@ -690,6 +696,7 @@ draw_layer	src/game.cpp	/^    Draw_Layer  draw_layer;$/;"	m	struct:Entity	typere
 draw_popup	src/game.cpp	/^void draw_popup(const char *text) {$/;"	f	typeref:typename:void
 draw_popup	src/game.cpp	/^void draw_popup(const char *text, Color color) {$/;"	f	typeref:typename:void
 draw_popup	src/game.cpp	/^void draw_popup(const char *text, Color color, Location location) {$/;"	f	typeref:typename:void
+draw_popup	src/game.cpp	/^void draw_popup(const char *text, Color color, Location location, int xoff, int yoff) {$/;"	f	typeref:typename:void
 draw_walls	src/chapter_2.cpp	/^bool draw_walls = false;$/;"	v	typeref:typename:bool
 driving_off	src/chapter_3.cpp	/^    bool driving_off;$/;"	m	struct:Chapter_3_Car	typeref:typename:bool	file:
 end	src/chapter_6.cpp	/^    bool end;$/;"	m	struct:Level_Chapter_6	typeref:typename:bool	file:
@@ -748,7 +755,7 @@ font_spacing	src/chapter_3.cpp	/^    int font_spacing;$/;"	m	struct:Chapter_3_Jo
 font_spacing	src/text.cpp	/^    int font_spacing;$/;"	m	struct:Text	typeref:typename:int	file:
 font_spacing	src/text.cpp	/^    int font_spacing;$/;"	m	struct:Text_List	typeref:typename:int	file:
 footsteps_done	src/chapter_1.h	/^    int   footsteps_done;$/;"	m	struct:Chapter_1_Player	typeref:typename:int
-fov	src/chapter_5.cpp	/^    float   fov;$/;"	m	struct:Chapter_5_Quote	typeref:typename:float	file:
+fov	src/chapter_5.cpp	/^    float      fov;$/;"	m	struct:Chapter_5_Quote	typeref:typename:float	file:
 frame_arena	src/game.cpp	/^    Arena frame_arena; \/\/ 32k scratch space$/;"	m	struct:Game	typeref:typename:Arena	file:
 frame_count	src/chapter_4.cpp	/^    int frame_count;$/;"	m	struct:Cutscene	typeref:typename:int	file:
 frame_time	src/chapter_4.cpp	/^    float frame_time;$/;"	m	struct:Cutscene_Frame	typeref:typename:float	file:
@@ -1313,12 +1320,13 @@ position	src/chapter_3.cpp	/^    Vector2 position;$/;"	m	struct:Chapter_3_Car	ty
 position	src/chapter_5.cpp	/^    Vector3         position;$/;"	m	struct:Chapter_5_Table	typeref:typename:Vector3	file:
 position	src/chapter_5.cpp	/^    Vector3     position;$/;"	m	struct:Chapter_5_Train	typeref:typename:Vector3	file:
 position	src/chapter_5.cpp	/^    Vector3    position;$/;"	m	struct:Chapter_5_Podium	typeref:typename:Vector3	file:
+position	src/chapter_5.cpp	/^    Vector3    position;$/;"	m	struct:Chapter_5_Quote	typeref:typename:Vector3	file:
 position	src/chapter_5.cpp	/^    Vector3 position;$/;"	m	struct:Chapter_5_Bartender	typeref:typename:Vector3	file:
 position	src/chapter_5.cpp	/^    Vector3 position;$/;"	m	struct:Chapter_5_Clerk	typeref:typename:Vector3	file:
-position	src/chapter_5.cpp	/^    Vector3 position;$/;"	m	struct:Chapter_5_Quote	typeref:typename:Vector3	file:
 position	src/chapter_epilogue.cpp	/^    Vector3 position;$/;"	m	struct:Epilogue_Node	typeref:typename:Vector3	file:
 position	src/text.cpp	/^    Vector2 position;$/;"	m	struct:Text	typeref:typename:Vector2	file:
 post_process	src/post_processing.cpp	/^void post_process(Post_Processing *post, Texture2D *game_texture) {$/;"	f	typeref:typename:void
+post_process_bloom_uniforms	src/post_processing.cpp	/^void post_process_bloom_uniforms(Post_Processing_Bloom *bloom) {$/;"	f	typeref:typename:void
 post_process_crt_uniforms	src/post_processing.cpp	/^void post_process_crt_uniforms(Post_Processing_Crt *crt) {$/;"	f	typeref:typename:void
 post_process_init	src/post_processing.cpp	/^void post_process_init(Post_Processing *post) {$/;"	f	typeref:typename:void
 post_process_vhs_set_intensity	src/post_processing.cpp	/^void post_process_vhs_set_intensity(Post_Processing_Vhs *vhs, Vhs_Intensity intensity) {$/;"	f	typeref:typename:void
@@ -1327,6 +1335,7 @@ post_processing	src/game.cpp	/^    Post_Processing post_processing;$/;"	m	struct
 prayer_fader	src/chapter_1.cpp	/^    float prayer_fader, prayer_fader_to;$/;"	m	struct:Level_Chapter_1	typeref:typename:float	file:
 prayer_fader_to	src/chapter_1.cpp	/^    float prayer_fader, prayer_fader_to;$/;"	m	struct:Level_Chapter_1	typeref:typename:float	file:
 prayer_mat	src/chapter_1.cpp	/^    Entity *player, *prayer_mat;$/;"	m	struct:Level_Chapter_1	typeref:typename:Entity *	file:
+print_cam	src/util.cpp	/^void print_cam(Camera3D *cam) {$/;"	f	typeref:typename:void
 print_rectangle	src/util.cpp	/^void print_rectangle(Rectangle rect) {$/;"	f	typeref:typename:void
 print_vec2	src/util.cpp	/^void print_vec2(Vector2 vec) {$/;"	f	typeref:typename:void
 print_vec3	src/util.cpp	/^void print_vec3(Vector3 vec) {$/;"	f	typeref:typename:void
@@ -1366,6 +1375,7 @@ scale	src/chapter_4.cpp	/^    float scale;$/;"	m	struct:Cutscene	typeref:typenam
 scale	src/text.cpp	/^    float scale = 1;$/;"	m	struct:Text_List	typeref:typename:float	file:
 scale	src/text.cpp	/^    float scale;$/;"	m	struct:Text	typeref:typename:float	file:
 scan_intensity	src/post_processing.cpp	/^    float  scan_intensity;$/;"	m	struct:Post_Processing_Vhs	typeref:typename:float	file:
+scanline_alpha	src/post_processing.cpp	/^    float  scanline_alpha;$/;"	m	struct:Post_Processing_Crt	typeref:typename:float	file:
 scene	src/chapter_4.cpp	/^    Model scene;$/;"	m	struct:Level_Chapter_4	typeref:typename:Model	file:
 scene	src/chapter_epilogue.cpp	/^    Model          scene, bars, node, door, timer_model;$/;"	m	struct:Level_Chapter_Epilogue	typeref:typename:Model	file:
 scene	src/titlescreen.cpp	/^    Model scene;$/;"	m	struct:Titlescreen	typeref:typename:Model	file:
@@ -1390,6 +1400,7 @@ setoff_timer	src/chapter_5.cpp	/^    float       setoff_timer;$/;"	m	struct:Chap
 shader	src/chapter_4.cpp	/^    Shader shader;$/;"	m	struct:Level_Chapter_4	typeref:typename:Shader	file:
 shader	src/chapter_5.cpp	/^    Shader   shader;$/;"	m	struct:Level_Chapter_5	typeref:typename:Shader	file:
 shader	src/chapter_epilogue.cpp	/^    Shader         shader;$/;"	m	struct:Level_Chapter_Epilogue	typeref:typename:Shader	file:
+shader	src/post_processing.cpp	/^    Shader shader;$/;"	m	struct:Post_Processing_Bloom	typeref:typename:Shader	file:
 shader	src/post_processing.cpp	/^    Shader shader;$/;"	m	struct:Post_Processing_Crt	typeref:typename:Shader	file:
 shader	src/post_processing.cpp	/^    Shader shader;$/;"	m	struct:Post_Processing_Vhs	typeref:typename:Shader	file:
 show_window	src/chapter_2.cpp	/^    bool show_window; \/\/ TODO: Show the window in fullscreen at the very end.$/;"	m	struct:Level_Chapter_2	typeref:typename:bool	file:
@@ -1440,7 +1451,7 @@ talked	src/chapter_5.cpp	/^    bool talked;$/;"	m	struct:Chapter_5_Table	typeref
 talked_behind	src/chapter_5.cpp	/^    bool    talked_front, talked_behind;$/;"	m	struct:Chapter_5_Bartender	typeref:typename:bool	file:
 talked_front	src/chapter_5.cpp	/^    bool    talked_front, talked_behind;$/;"	m	struct:Chapter_5_Bartender	typeref:typename:bool	file:
 talked_to_penny	src/chapter_5.cpp	/^        bool talked_to_penny;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80708	typeref:typename:bool	file:
-target	src/chapter_5.cpp	/^    Vector3 target;$/;"	m	struct:Chapter_5_Quote	typeref:typename:Vector3	file:
+target	src/chapter_5.cpp	/^    Vector3    target;$/;"	m	struct:Chapter_5_Quote	typeref:typename:Vector3	file:
 target	src/post_processing.cpp	/^    RenderTexture2D          target; \/\/ This is the size of the window, and is resized when a /;"	m	struct:Post_Processing	typeref:typename:RenderTexture2D	file:
 target	src/titlescreen.cpp	/^    RenderTexture target;$/;"	m	struct:Titlescreen	typeref:typename:RenderTexture	file:
 text	src/chapter_5.cpp	/^    Text_List *text;$/;"	m	struct:Chapter_5_Podium	typeref:typename:Text_List *	file:
@@ -1468,7 +1479,7 @@ texture	src/chapter_3.cpp	/^    int texture;$/;"	m	struct:Chapter_3_Car	typeref:
 texture	src/chapter_3.cpp	/^    int texture;$/;"	m	struct:Virtual_Mouse	typeref:typename:int	file:
 texture_id	src/chapter_4.cpp	/^    int   texture_id;$/;"	m	struct:Cutscene_Frame	typeref:typename:int	file:
 texture_id	src/game.cpp	/^    int         texture_id;      \/\/ Index into atari_assets.textures[]$/;"	m	struct:Entity	typeref:typename:int	file:
-textures	src/game.cpp	/^    Texture2D textures[32];$/;"	m	struct:Atari_Assets	typeref:typename:Texture2D[32]	file:
+textures	src/game.cpp	/^    Texture2D textures[64];$/;"	m	struct:Atari_Assets	typeref:typename:Texture2D[64]	file:
 tick_events	src/game.cpp	/^void tick_events(Game *game, float dt) {$/;"	f	typeref:typename:void
 ticket	src/chapter_5.cpp	/^        bool     ticket;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80208	typeref:typename:bool	file:
 time	src/chapter_4.h	/^    float time;$/;"	m	struct:Chapter_4_Devil	typeref:typename:float
@@ -1499,20 +1510,32 @@ type	src/post_processing.cpp	/^    Post_Process_Shader_Type type;$/;"	m	struct:P
 u	src/util.cpp	/^        } u;$/;"	m	union:_LARGE_INTEGER	typeref:struct:_LARGE_INTEGER::__anon84520d2b0208	file:
 u_abberation_intensity	src/post_processing.cpp	/^    int    u_abberation_intensity;$/;"	m	struct:Post_Processing_Crt	typeref:typename:int	file:
 u_abberation_intensity	src/post_processing.cpp	/^    int    u_abberation_intensity;$/;"	m	struct:Post_Processing_Vhs	typeref:typename:int	file:
+u_bloom_intensity	src/post_processing.cpp	/^    int    u_bloom_intensity;$/;"	m	struct:Post_Processing_Bloom	typeref:typename:int	file:
 u_do_scanline_effect	src/post_processing.cpp	/^    int    u_do_scanline_effect;$/;"	m	struct:Post_Processing_Crt	typeref:typename:int	file:
 u_do_warp_effect	src/post_processing.cpp	/^    int    u_do_warp_effect;$/;"	m	struct:Post_Processing_Crt	typeref:typename:int	file:
 u_mix_factor	src/post_processing.cpp	/^    int    u_mix_factor;$/;"	m	struct:Post_Processing_Vhs	typeref:typename:int	file:
 u_noise_intensity	src/post_processing.cpp	/^    int    u_noise_intensity;$/;"	m	struct:Post_Processing_Vhs	typeref:typename:int	file:
 u_scan_intensity	src/post_processing.cpp	/^    int    u_scan_intensity;$/;"	m	struct:Post_Processing_Vhs	typeref:typename:int	file:
+u_scanline_alpha	src/post_processing.cpp	/^    int    u_scanline_alpha;$/;"	m	struct:Post_Processing_Crt	typeref:typename:int	file:
+u_time	src/post_processing.cpp	/^    int    u_time;$/;"	m	struct:Post_Processing_Bloom	typeref:typename:int	file:
 u_time	src/post_processing.cpp	/^    int    u_time;$/;"	m	struct:Post_Processing_Crt	typeref:typename:int	file:
 u_time	src/post_processing.cpp	/^    int    u_time;$/;"	m	struct:Post_Processing_Vhs	typeref:typename:int	file:
 u_vignette_intensity	src/post_processing.cpp	/^    int    u_vignette_intensity;$/;"	m	struct:Post_Processing_Crt	typeref:typename:int	file:
+u_vignette_intensity	src/post_processing.cpp	/^    int    u_vignette_intensity;$/;"	m	struct:Post_Processing_Vhs	typeref:typename:int	file:
+u_vignette_mix	src/post_processing.cpp	/^    int    u_vignette_mix;$/;"	m	struct:Post_Processing_Bloom	typeref:typename:int	file:
+u_vignette_mix	src/post_processing.cpp	/^    int    u_vignette_mix;$/;"	m	struct:Post_Processing_Crt	typeref:typename:int	file:
+u_vignette_mix	src/post_processing.cpp	/^    int    u_vignette_mix;$/;"	m	struct:Post_Processing_Vhs	typeref:typename:int	file:
+u_window_size	src/post_processing.cpp	/^    int    u_window_size;$/;"	m	struct:Post_Processing_Bloom	typeref:typename:int	file:
 update_and_draw_fade	src/game.cpp	/^void update_and_draw_fade(Game *game, Fader *fader, float dt) {$/;"	f	typeref:typename:void
 update_camera_3d	src/game.cpp	/^void update_camera_3d(Camera3D *camera, float speed, bool allow_run, float dt) {$/;"	f	typeref:typename:void
 update_camera_look	src/game.cpp	/^void update_camera_look(Camera3D *camera, float dt) {$/;"	f	typeref:typename:void
 used	src/util.cpp	/^    size_t   used;$/;"	m	struct:Arena	typeref:typename:size_t	file:
-vhs	src/post_processing.cpp	/^    Post_Processing_Vhs vhs;$/;"	m	struct:Post_Processing	typeref:typename:Post_Processing_Vhs	file:
+vhs	src/post_processing.cpp	/^    Post_Processing_Vhs   vhs;$/;"	m	struct:Post_Processing	typeref:typename:Post_Processing_Vhs	file:
 vignette_intensity	src/post_processing.cpp	/^    float  vignette_intensity;$/;"	m	struct:Post_Processing_Crt	typeref:typename:float	file:
+vignette_intensity	src/post_processing.cpp	/^    float  vignette_intensity;$/;"	m	struct:Post_Processing_Vhs	typeref:typename:float	file:
+vignette_mix	src/post_processing.cpp	/^    float   vignette_mix;$/;"	m	struct:Post_Processing_Bloom	typeref:typename:float	file:
+vignette_mix	src/post_processing.cpp	/^    float  vignette_mix;$/;"	m	struct:Post_Processing_Crt	typeref:typename:float	file:
+vignette_mix	src/post_processing.cpp	/^    float  vignette_mix;$/;"	m	struct:Post_Processing_Vhs	typeref:typename:float	file:
 virtual_mouse	src/chapter_3.cpp	/^    Virtual_Mouse virtual_mouse;$/;"	m	struct:Level_Chapter_3	typeref:typename:Virtual_Mouse	file:
 wait_devil	src/chapter_4.cpp	/^    bool wait_devil;$/;"	m	struct:Level_Chapter_4	typeref:typename:bool	file:
 walking_state	src/chapter_1.h	/^    Player_Walking_State walking_state;$/;"	m	struct:Chapter_1_Player	typeref:typename:Player_Walking_State

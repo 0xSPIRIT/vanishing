@@ -1403,13 +1403,13 @@ void chapter_5_scene_init(Game *game) {
 
             model_set_shader(&level->scenes[4], level->shader);
 
-            //level->camera.position = {-90.408180f, -6.139406f, -92.159492f};
-            //level->camera.target = {-32.406551f, 39.074921f, -15.338135f};
+            level->camera.position = {-131.842697f, -36.907467f, -128.376816f};
+            level->camera.target = {-18.829216f, 93.483704f, -24.776115f};
 
-            level->camera.position   = BlenderPosition3D(-135.1f, 132.4f, 66.94f + level->camera_height);
-            level->camera.target     = { 0, 0, 0 };
+            //level->camera.position   = BlenderPosition3D(-135.1f, 132.4f, 66.94f + level->camera_height);
+            //level->camera.target     = { 0, 0, 0 };
             level->camera.up         = { 0, 1, 0 };
-            level->camera.fovy       = FOV_DEFAULT;
+            level->camera.fovy       = 70;
             level->camera.projection = CAMERA_PERSPECTIVE;
 
             game->textbox_alpha = 220;
@@ -1515,33 +1515,21 @@ void chapter_5_scene_init(Game *game) {
 
                 RayCollision result = GetRayCollisionMesh(ray, level->scenes[4].meshes[0], MatrixIdentity());
 
-                position.y = result.point.y;
+                position.y = result.point.y - 0.1f;
 
                 Chapter_5_Podium podium = { text, position, rotation };
                 level->podiums[level->podium_count++] = podium;
             };
 
-            add_podium(&game->text[0], BlenderPosition2D(-124, 124), 180+40);
-            add_podium(&game->text[1], BlenderPosition2D(-118, 114), 180+40);
-            add_podium(&game->text[2], BlenderPosition2D(-100, 99),  180+40);
-            add_podium(&game->text[3], BlenderPosition2D(-87, 86),   180+40);
-            add_podium(&game->text[4], BlenderPosition2D(-76, 65),   180+40);
-            add_podium(&game->text[5], BlenderPosition2D(-69, 50),   180+40);
-            add_podium(&game->text[7], BlenderPosition2D(-50, 40),   180+40);
-            add_podium(&game->text[9], BlenderPosition2D(-24, 25),   180+40);
-            add_podium(&game->text[10], BlenderPosition2D(-20, 10),  180+40);
-
-            /*
-            add_podium(&game->text[0], {-226.8f, -123.9f}, -62);
-            add_podium(&game->text[1], {-216.5f, -110.2f}, -68);
-            add_podium(&game->text[2], {-202.8f, -103.2f}, -52);
-            add_podium(&game->text[3], {-187.0f, -87.51f}, -72);
-            add_podium(&game->text[4], {-169.4f, -78.83f}, -70);
-            add_podium(&game->text[5], {-136.f, -63}, -82);
-            add_podium(&game->text[7], {-109.f, -67}, -52);
-            add_podium(&game->text[9], {-74, -47}, -72);
-            add_podium(&game->text[10], {-39, -27}, -68);
-            */
+            add_podium(&game->text[0], BlenderPosition2D(-124, 124), 220+rand_int(-10,10));
+            add_podium(&game->text[1], BlenderPosition2D(-118, 114), 220+rand_int(-10,10));
+            add_podium(&game->text[2], BlenderPosition2D(-100, 99),  220+rand_int(-10,10));
+            add_podium(&game->text[3], BlenderPosition2D(-87, 86),   220+rand_int(-10,10));
+            add_podium(&game->text[4], BlenderPosition2D(-76, 65),   220+rand_int(-10,10));
+            add_podium(&game->text[5], BlenderPosition2D(-69, 50),   220+rand_int(-10,10));
+            add_podium(&game->text[7], BlenderPosition2D(-50, 40),   220+rand_int(-10,10));
+            add_podium(&game->text[9], BlenderPosition2D(-24, 25),   220+rand_int(-10,10));
+            add_podium(&game->text[10], BlenderPosition2D(-20, 10),  220+rand_int(-10,10));
         } break;
         case CHAPTER_5_SCENE_GALLERY: {
             level->camera_height = 1.8f;
@@ -3229,7 +3217,7 @@ void chapter_5_draw(Game *game) {
             }
 
             if (level->desert_door_popup) {
-                draw_popup("Drink the Water", BLACK, Bottom);
+                draw_popup("Drink the Holy Water", BLACK, Middle, 0, 0);
             }
         } break;
         case CHAPTER_5_SCENE_GALLERY: {

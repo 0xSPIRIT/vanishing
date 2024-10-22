@@ -23,6 +23,9 @@ void main() {
         discard;
     }
 
+    if (colDiffuse == vec4(1,0,0,1)) {
+        discard;
+    }
     if (colDiffuse == vec4(1,0,1,1)) {
         finalColor = vec4(1,1,1,1);
         return;
@@ -30,8 +33,8 @@ void main() {
 
     float factor = 1;
 
-    float dist = factor * 0.008f * length(fragPosition) - (0.003 * fragPosition.y);
-    dist *= dist;
+    float dist = factor * 0.005f * length(fragPosition) - (0.003 * fragPosition.y);
+    //dist *= dist;
 
     dist = clamp(dist, 0, 1);
 
