@@ -1966,7 +1966,7 @@ void chapter_5_init(Game *game) {
     level->models.real_head     = LoadModel(RES_DIR "models/real_head.glb");
     level->models.podium        = LoadModel(RES_DIR "models/podium.glb");
 
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_DESERT);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_GALLERY);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {
