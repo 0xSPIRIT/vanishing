@@ -70,6 +70,17 @@ void epilogue_start_final_conversation(Game *game) {
     game->current = &game->text[70];
 }
 
+void epilogue_start_final_conversation_delayed(Game *game) {
+    add_event(game, epilogue_start_final_conversation, 5);
+}
+
+void epilogue_start_movie(Game *game) {
+    (void)game;
+    __debugbreak();
+    movie_init(&game_movie, MOVIE_SEVENTH);
+    game_movie.end_movie_callback = epilogue_start_final_conversation_delayed;
+}
+
 void epilogue_goto_credits(void *game_ptr) {
     Game *game = (Game *)game_ptr;
     add_event(game, atari_queue_deinit_and_goto_intro, 5);
@@ -88,8 +99,6 @@ void epilogue_raise_node_last_scene(void *game_ptr) {
 
 void chapter_epilogue_init(Game *game) {
     Level_Chapter_Epilogue *level = (Level_Chapter_Epilogue*)game->level;
-
-    DisableCursor();
 
     render_width  = DIM_3D_WIDTH;
     render_height = DIM_3D_HEIGHT;
@@ -644,6 +653,11 @@ void chapter_epilogue_init(Game *game) {
     nodes[2].text = &game->text[7];
     nodes[3].text = &game->text[10];
     nodes[4].text = &game->text[13];
+
+    level->state = EPILOGUE_STATE_THIRD;
+    level->transitioned = false;
+    level->transition_timer = 0.5;
+    level->is_transitioning = true;
 }
 
 void epilogue_handle_transition(Game *game, float dt) {
@@ -722,11 +736,19 @@ void epilogue_handle_transition(Game *game, float dt) {
 
                 game->textbox_alpha = 255;
 
-                add_event(game, epilogue_start_congratulations_text, 5);
+                float time = 5;
+#ifdef DEBUG
+                time = 1;
+#endif
+                add_event(game, epilogue_start_congratulations_text, time);
 
                 level->num_nodes = 1;
 
                 float y = -15;
+
+#ifdef DEBUG
+                y = -1;
+#endif
 
                 nodes[0].position = { -1, y, 0 };
                 nodes[0].text = &game->text[65];
@@ -897,7 +919,7 @@ void chapter_epilogue_update(Game *game, float dt) {
     if (game->current == nullptr && level->transition_timer == 0) {
         if (level->current_node) {
             if (level->state == EPILOGUE_STATE_FOURTH) {
-                add_event(game, epilogue_start_final_conversation, 5);
+                add_event(game, epilogue_start_movie, 5);
                 level->is_transitioning = true;
             } else {
                 level->current_node->text = 0;

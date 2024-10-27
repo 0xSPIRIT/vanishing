@@ -923,19 +923,20 @@ void game_atari_run(Game *game) {
 
     tick_events(game, dt);
 
-    switch (chapter) {
-        case 1: chapter_1_update(game, dt); break;
-        case 2: chapter_2_update(game, dt); break;
-        case 3: chapter_3_update(game, dt); break;
-        case 4: chapter_4_update(game, dt); break;
-        case 5: chapter_5_update(game, dt); break;
-        case 6: chapter_6_update(game, dt); break;
-        case 7: chapter_epilogue_update(game, dt); break;
-    }
+    if (!game_movie.movie) {
+        switch (chapter) {
+            case 1: chapter_1_update(game, dt); break;
+            case 2: chapter_2_update(game, dt); break;
+            case 3: chapter_3_update(game, dt); break;
+            case 4: chapter_4_update(game, dt); break;
+            case 5: chapter_5_update(game, dt); break;
+            case 6: chapter_6_update(game, dt); break;
+            case 7: chapter_epilogue_update(game, dt); break;
+        }
 
-    BeginDrawing();
-    ClearBackground(BLACK);
-    {
+        BeginDrawing();
+        ClearBackground(BLACK);
+
         RenderTexture2D *target = 0;
 
         switch (game->render_state) {
@@ -967,24 +968,26 @@ void game_atari_run(Game *game) {
         atari_update_and_draw_textbox(game, dt);
 
         EndTextureMode();
-    }
 
-    Texture2D *texture = 0;
-    switch (game->render_state) {
-        case RENDER_STATE_ATARI: {
-            texture = &game->atari_render_target.texture;
-        } break;
-        case RENDER_STATE_3D: {
-            texture = &game->render_target_3d.texture;
-        } break;
-        default: {
-            assert(false);
-        } break;
-    }
+        Texture2D *texture = 0;
+        switch (game->render_state) {
+            case RENDER_STATE_ATARI: {
+                texture = &game->atari_render_target.texture;
+            } break;
+            case RENDER_STATE_3D: {
+                texture = &game->render_target_3d.texture;
+            } break;
+            default: {
+                assert(false);
+            } break;
+        }
 
-    // Apply post processing shader, then draw it to the screen, or
-    // just pass it through if game->post_procesing.type == POST_PROCESSING_PASSTHROUGH
-    post_process(&game->post_processing, texture);
+        // Apply post processing shader, then draw it to the screen, or
+        // just pass it through if game->post_procesing.type == POST_PROCESSING_PASSTHROUGH
+        post_process(&game->post_processing, texture);
+    } else {
+        movie_run(&game_movie);
+    }
 
     EndDrawing();
 

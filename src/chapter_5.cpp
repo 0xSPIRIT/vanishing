@@ -40,7 +40,13 @@ struct Chapter_5_Bartender {
 
 struct Chapter_5_Train {
     bool        flipped;
+    bool        visible;
+
+    double      move_t;
+
     Vector3     position;
+    Vector3     position_to;
+
     float       delta_x;
     float       speed;
     bool        closed;
@@ -49,6 +55,7 @@ struct Chapter_5_Train {
     bool        player_in;
     float       player_in_timer;
     float       door_openness; // 0.0 to 1.0
+
     BoundingBox bounding_box;
     int         instances;
     float       setoff_timer;
@@ -553,7 +560,9 @@ void chapter_5_scene_init(Game *game) {
 
             game->post_processing.type = POST_PROCESSING_BLOOM;
             game->post_processing.bloom.bloom_intensity = 4;
-            game->post_processing.bloom.vignette_mix = 0.5;
+            game->post_processing.bloom.vignette_mix = 0.55f;
+
+            level->train.visible = false;
 
             level->scenes[0] = LoadModel(RES_DIR "models/train_station2.glb");
 
@@ -565,6 +574,7 @@ void chapter_5_scene_init(Game *game) {
             Chapter_5_Train *train = &level->train;
 
             train->position     = {500, 0, 10};
+            train->position_to  = {  0, 0, 10};
             train->bounding_box = GetMeshBoundingBox(level->models.train.meshes[0]);
             train->instances    = 4;
             train->setoff_timer = 0;
@@ -732,8 +742,10 @@ void chapter_5_scene_init(Game *game) {
 
             memset(train, 0, sizeof(*train));
 
+            train->visible = true;
             train->flipped      = true;
             train->position     = { train_distance, 0, 0 };
+            train->position_to  = { 1.75f, 0, 0 };
             train->bounding_box = GetMeshBoundingBox(level->models.train.meshes[0]);
             train->instances    = 4;
             train->setoff_timer = 0;
@@ -1966,7 +1978,7 @@ void chapter_5_init(Game *game) {
     level->models.real_head     = LoadModel(RES_DIR "models/real_head.glb");
     level->models.podium        = LoadModel(RES_DIR "models/podium.glb");
 
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_GALLERY);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_TRAIN_STATION);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {
@@ -2029,6 +2041,7 @@ void chapter_5_update_clerk(Game *game, float dt) {
     if (is_action_pressed() && clerk->talk_popup) {
         if (level->state == CHAPTER_5_STATE_TRAIN_STATION_1) {
             clerk->talked = true;
+            level->train.visible = true;
             game->current = &game->text[3];
         }
     }
@@ -2044,22 +2057,27 @@ void chapter_5_update_train(Game *game, float dt) {
         train->position.x = 0;
         train->closed = true;
         train->moving = false;
+        train->visible = true;
     }
 
     if (IsKeyPressed(KEY_C)) {
         train->closed = !train->closed;
+        train->visible = true;
     }
 
     if (IsKeyPressed(KEY_G)) {
         train->moving = true;
+        train->visible = true;
     }
 #endif
 
     float prev_x = train->position.x;
 
-    const float top_speed = 60;
-    const float train_time = 8.5;
-    const float acceleration = 30;
+    // TODO: Change this into a format where you have
+    //       a 'to' position, and it goes towards that.
+    //       based on some function.
+    //
+    //       No need for train->speed.
 
     int direction = 1;
 
@@ -2067,6 +2085,22 @@ void chapter_5_update_train(Game *game, float dt) {
         direction = -1;
     }
 
+    if (train->moving) {
+        const float top_speed = 1 * 60 * dt;
+
+        train->position = GotoSmoothVec3(train->position, train->position_to, top_speed, train->move_t);
+
+        train->move_t += dt * 0.001;
+
+        if (Vector3Distance(train->position, train->position_to) < 0.05) {
+            train->position = train->position_to;
+            train->moving = false;
+            train->door_open_alarm = 2;
+            train->move_timer = 0;
+        }
+    }
+
+    /*
     if (train->moving) {
         train->position.x += direction * train->speed * dt;
         train->move_timer += dt;
@@ -2087,6 +2121,7 @@ void chapter_5_update_train(Game *game, float dt) {
             }
         }
     }
+    */
 
     train->delta_x = train->position.x - prev_x;
 
@@ -2106,6 +2141,10 @@ void chapter_5_update_train(Game *game, float dt) {
             if (train->player_in_timer >= 2) {
                 train->closed = true;
                 train->setoff_timer = 3;
+
+                if (level->current_scene == CHAPTER_5_SCENE_TRAIN_STATION) {
+                    train->position_to = {-500, 0, 10};
+                }
             }
         } else {
             train->player_in_timer = 0;
@@ -2115,6 +2154,7 @@ void chapter_5_update_train(Game *game, float dt) {
     if (train->setoff_timer > 0) {
         train->setoff_timer -= dt;
         if (train->setoff_timer <= 0) {
+            train->move_t = 0;
             train->setoff_timer = 0;
             train->moving = true;
             level->ticket = false;
@@ -2274,6 +2314,9 @@ void chapter_5_draw_table(Game *game, Chapter_5_Table *table) {
 }
 
 void chapter_5_draw_train(Level_Chapter_5 *level, Chapter_5_Train *train) {
+    if (!train->visible)
+        return;
+
     int length = chapter_5_train_length(train);
 
     for (int i = 0; i < train->instances; i++) {
@@ -2304,6 +2347,8 @@ void chapter_5_draw_train(Level_Chapter_5 *level, Chapter_5_Train *train) {
             if (train->flipped) {
                 door_position.z += 2.9f;
                 door_position.x -= 3;
+            } else {
+                door_position.z -= 0.15f;
             }
 
             door_position.x += openness;
@@ -2327,8 +2372,9 @@ void chapter_5_draw_train(Level_Chapter_5 *level, Chapter_5_Train *train) {
             if (train->flipped) {
                 door_position.z += 2.9f;
                 door_position.x -= 3;
+            } else {
+                door_position.z -= 0.15f;
             }
-
 
             float x_inverse_floats[] = {
                 -1, 0, 0, 0,
@@ -2505,6 +2551,7 @@ void chapter_5_update_player_train_station(Game *game, float dt) {
 
     if (is_x_in_door_area(train, camera->x) && !train->closed) {
         clamp_to_curb = false;
+
         if (camera->z > curb)
             train->player_in = true;
     }
@@ -2540,7 +2587,6 @@ void chapter_5_update_player_train_station(Game *game, float dt) {
     if (can_move) {
         update_camera_look(&level->camera, dt);
     }
-
 }
 
 void chapter_5_update_player_staircase(Game *game, float dt) {
@@ -2559,6 +2605,12 @@ void chapter_5_update_player_staircase(Game *game, float dt) {
     bool is_in_door = is_x_in_door_area(train, camera->x);
 
     float curb = 1.f; // + makes you go out of the train more
+
+    //print_cam(&level->camera);
+
+    float rel_x = camera->x - train->position.x;
+    rel_x = Clamp(rel_x, -53, 30);
+    camera->x = rel_x + train->position.x;
 
     if (!train->closed) {
         if (is_in_door) {
@@ -3082,7 +3134,6 @@ void chapter_5_draw(Game *game) {
             BeginShaderMode(level->shader);
 
             staircase_draw_scene(level);
-            //DrawModel(level->scenes[1], {}, 1, WHITE);
 
             chapter_5_draw_train(level, &level->train);
 
@@ -3194,11 +3245,13 @@ void chapter_5_draw(Game *game) {
                            &time_value,
                            SHADER_UNIFORM_FLOAT);
 
+            /*
             if (IsKeyPressed(KEY_K)) {
                 UnloadShader(level->shader);
                 level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/desert.fs");
                 model_set_shader(&level->scenes[4], level->shader);
             }
+            */
 
             ClearBackground({255, 241, 186, 255});
 

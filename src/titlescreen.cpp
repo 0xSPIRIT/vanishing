@@ -108,7 +108,7 @@ void titlescreen_update_and_draw(Titlescreen *tit) {
         {
             auto text = [&](int off, Color a) {
                 DrawTextEx(titlescreen_font,
-                           "Silence",
+                           "Veil",
                            {20.f+off, 36.f+off},
                            titlescreen_font.baseSize,
                            0,

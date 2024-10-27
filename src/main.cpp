@@ -29,6 +29,8 @@
 #include <math.h>
 #include <time.h>
 
+#include "pl_mpeg.h"
+
 #ifdef RELEASE
   #define MainFunction int WinMain
   #define NDEBUG
@@ -61,13 +63,15 @@ enum Game_Mode {
 };
 Game_Mode game_mode = GAME_MODE_INVALID;
 
-int chapter = 5;
+int chapter = 7;
 
 Font global_font, atari_font, comic_sans, italics_font, bold_font, bold_2_font, mono_font, bold_font_big, atari_small_font, titlescreen_font, titlescreen_minor_font;
 
 bool toggled_fullscreen_past_second = false;
 float fullscreen_timer = 0;
 bool fullscreen = false;
+
+bool automatically_init_game_mode = true;
 
 enum Keyboard_Focus {
     NO_KEYBOARD_FOCUS,      // we're free to move around
@@ -105,6 +109,8 @@ Rectangle get_screen_rectangle() {
     return result;
 }
 
+void initialize_game_mode(Game_Mode mode);
+
 #include "util.cpp"
 
 #include "keys.cpp"
@@ -118,11 +124,15 @@ Rectangle get_screen_rectangle() {
 #include "chapter_3.h"
 #include "chapter_4.h"
 
+#include "movie.h"
+
 #include "game.cpp"
 #include "intro.cpp"
 
 Game_Intro  game_intro;
 Game        game_atari;
+
+#include "movie.cpp"
 
 #include "titlescreen.cpp"
 Titlescreen game_titlescreen;
@@ -173,7 +183,9 @@ MainFunction() {
     // seems really jerky.
     SetTargetFPS(60);
 
-    InitWindow(default_width, default_height, "Video Game");
+    InitAudioDevice();
+
+    InitWindow(default_width, default_height, "Veil");
 
     gladLoadGL();
 
@@ -194,7 +206,9 @@ MainFunction() {
     titlescreen_font = LoadFontEx(RES_DIR "art/cambriaz.ttf", 48, 0, 0);
     titlescreen_minor_font = LoadFontEx(RES_DIR "art/cambriaz.ttf", 24, 0, 0);
 
-    //DisableCursor();
+    DisableCursor();
+
+    memset(&game_movie, 0, sizeof(Movie));
 
     if (show_titlescreen)
         set_game_mode(GAME_MODE_TITLESCREEN);
@@ -247,8 +261,10 @@ MainFunction() {
             case GAME_MODE_INVALID: assert(false);
         }
 
-        if (previous_game_mode != game_mode)
+        if (automatically_init_game_mode && previous_game_mode != game_mode)
             initialize_game_mode(game_mode);
+
+        automatically_init_game_mode = true;
     }
 
     CloseWindow();

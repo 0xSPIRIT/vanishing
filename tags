@@ -140,6 +140,7 @@ Chapter_6_State	src/chapter_6.cpp	/^enum Chapter_6_State {$/;"	g	file:
 ColorScale	src/util.cpp	/^Color ColorScale(Color a, float b) {$/;"	f	typeref:typename:Color
 Cutscene	src/chapter_4.cpp	/^struct Cutscene {$/;"	s	file:
 Cutscene_Frame	src/chapter_4.cpp	/^struct Cutscene_Frame {$/;"	s	file:
+D	src/pl_mpeg.h	/^	float D[1024];$/;"	m	struct:plm_audio_t	typeref:typename:float[1024]
 DEBUG	src/main.cpp	/^  #define DEBUG$/;"	d	file:
 DEBUG_goto_penny_at_table	src/chapter_2.cpp	/^void DEBUG_goto_penny_at_table(Game *game) {$/;"	f	typeref:typename:void
 DESERT_COLOR	src/chapter_1.cpp	/^#define DESERT_COLOR /;"	d	file:
@@ -217,6 +218,8 @@ Event	src/game.cpp	/^struct Event {$/;"	s	file:
 FADE_IN	src/game.cpp	/^    FADE_IN = -1,$/;"	e	enum:Fade_Direction	file:
 FADE_INVALID	src/game.cpp	/^    FADE_INVALID = 0,$/;"	e	enum:Fade_Direction	file:
 FADE_OUT	src/game.cpp	/^    FADE_OUT = 1,$/;"	e	enum:Fade_Direction	file:
+FALSE	src/pl_mpeg.h	/^#define FALSE /;"	d
+FIRST_WAY	src/movie.cpp	/^#define FIRST_WAY /;"	d	file:
 FOV_DEFAULT	src/main.cpp	/^#define FOV_DEFAULT /;"	d	file:
 Fade_Direction	src/game.cpp	/^enum Fade_Direction {$/;"	g	file:
 Fader	src/game.cpp	/^struct Fader {$/;"	s	file:
@@ -245,6 +248,7 @@ Game	src/game.cpp	/^struct Game {$/;"	s	file:
 Game_Intro	src/intro.cpp	/^struct Game_Intro {$/;"	s	file:
 Game_Mode	src/main.cpp	/^enum Game_Mode {$/;"	g	file:
 Gigabytes	src/util.cpp	/^#define Gigabytes(/;"	d	file:
+GotoSmoothVec3	src/util.cpp	/^Vector3 GotoSmoothVec3(Vector3 a, Vector3 b, float top_speed_frame, double t) {$/;"	f	typeref:typename:Vector3
 HAVE_WINAPIFAMILY	src/glad/glad.c	/^    #define HAVE_WINAPIFAMILY /;"	d	file:
 HAVE_WINAPIFAMILY	src/glad/glad.c	/^  #define HAVE_WINAPIFAMILY /;"	d	file:
 HighPart	src/util.cpp	/^            uint32_t HighPart;$/;"	m	struct:_LARGE_INTEGER::__anon84520d2b0108	typeref:typename:uint32_t	file:
@@ -263,6 +267,7 @@ LEVEL_CHAPTER_1_STATE_FOREST	src/chapter_1.cpp	/^    LEVEL_CHAPTER_1_STATE_FORES
 LEVEL_CHAPTER_1_STATE_PHONE_EXISTS	src/chapter_1.cpp	/^    LEVEL_CHAPTER_1_STATE_PHONE_EXISTS,$/;"	e	enum:Level_Chapter_1_State	file:
 LEVEL_CHAPTER_1_STATE_PHONE_WAS_CALLED	src/chapter_1.cpp	/^    LEVEL_CHAPTER_1_STATE_PHONE_WAS_CALLED,$/;"	e	enum:Level_Chapter_1_State	file:
 LEVEL_CHAPTER_1_STATE_SUCCESSFUL_DIRECTIONS	src/chapter_1.cpp	/^    LEVEL_CHAPTER_1_STATE_SUCCESSFUL_DIRECTIONS,$/;"	e	enum:Level_Chapter_1_State	file:
+LerpVec3	src/util.cpp	/^Vector3 LerpVec3(Vector3 a, Vector3 b, double t) {$/;"	f	typeref:typename:Vector3
 LetterByLetter	src/text.cpp	/^    LetterByLetter,$/;"	e	enum:Scroll_Type	file:
 Level_Chapter_1	src/chapter_1.cpp	/^struct Level_Chapter_1 {$/;"	s	file:
 Level_Chapter_1_State	src/chapter_1.cpp	/^enum Level_Chapter_1_State {$/;"	g	file:
@@ -279,11 +284,16 @@ MAX_CORRECTIONS	src/chapter_3.cpp	/^#define MAX_CORRECTIONS /;"	d	file:
 MAX_DOCUMENTS	src/chapter_3.cpp	/^#define MAX_DOCUMENTS /;"	d	file:
 MEM_COMMIT	src/util.cpp	/^#define MEM_COMMIT /;"	d	file:
 MEM_RESERVE	src/util.cpp	/^#define MEM_RESERVE /;"	d	file:
+MOVIE_DRACULA	src/movie.h	/^    MOVIE_DRACULA,$/;"	e	enum:__anondf04acb20103
+MOVIE_EMPTINESS	src/movie.h	/^    MOVIE_EMPTINESS$/;"	e	enum:__anondf04acb20103
+MOVIE_OFF	src/movie.h	/^    MOVIE_OFF,$/;"	e	enum:__anondf04acb20103
+MOVIE_SEVENTH	src/movie.h	/^    MOVIE_SEVENTH,$/;"	e	enum:__anondf04acb20103
 MainFunction	src/main.cpp	/^  #define MainFunction /;"	d	file:
 MainFunction	src/main.cpp	/^MainFunction() {$/;"	f
 Megabytes	src/util.cpp	/^#define Megabytes(/;"	d	file:
 Middle	src/text.cpp	/^    Middle,$/;"	e	enum:Location	file:
 Models	src/chapter_5.cpp	/^    struct Models {$/;"	s	struct:Level_Chapter_5	file:
+Movie	src/movie.h	/^struct Movie {$/;"	s
 NDEBUG	src/main.cpp	/^  #define NDEBUG$/;"	d	file:
 NODE_FIRST	src/chapter_1.h	/^    NODE_FIRST,$/;"	e	enum:Node_Type
 NODE_INVALID	src/chapter_1.h	/^    NODE_INVALID,$/;"	e	enum:Node_Type
@@ -303,16 +313,93 @@ PLAYER_WALKING_STATE_CRAWLING	src/chapter_1.h	/^    PLAYER_WALKING_STATE_CRAWLIN
 PLAYER_WALKING_STATE_NORMAL	src/chapter_1.h	/^    PLAYER_WALKING_STATE_NORMAL,$/;"	e	enum:Player_Walking_State
 PLAYER_WALKING_STATE_SLOWED_1	src/chapter_1.h	/^    PLAYER_WALKING_STATE_SLOWED_1,$/;"	e	enum:Player_Walking_State
 PLAYER_WALKING_STATE_SLOWED_2	src/chapter_1.h	/^    PLAYER_WALKING_STATE_SLOWED_2,$/;"	e	enum:Player_Walking_State
+PLM_AUDIO_BIT_RATE	src/pl_mpeg.h	/^static const short PLM_AUDIO_BIT_RATE[] = {$/;"	v	typeref:typename:const short[]
+PLM_AUDIO_LAYER_I	src/pl_mpeg.h	/^static const int PLM_AUDIO_LAYER_I = 0x3;$/;"	v	typeref:typename:const int
+PLM_AUDIO_LAYER_II	src/pl_mpeg.h	/^static const int PLM_AUDIO_LAYER_II = 0x2;$/;"	v	typeref:typename:const int
+PLM_AUDIO_LAYER_III	src/pl_mpeg.h	/^static const int PLM_AUDIO_LAYER_III = 0x1;$/;"	v	typeref:typename:const int
+PLM_AUDIO_MODE_DUAL_CHANNEL	src/pl_mpeg.h	/^static const int PLM_AUDIO_MODE_DUAL_CHANNEL = 0x2;$/;"	v	typeref:typename:const int
+PLM_AUDIO_MODE_JOINT_STEREO	src/pl_mpeg.h	/^static const int PLM_AUDIO_MODE_JOINT_STEREO = 0x1;$/;"	v	typeref:typename:const int
+PLM_AUDIO_MODE_MONO	src/pl_mpeg.h	/^static const int PLM_AUDIO_MODE_MONO = 0x3;$/;"	v	typeref:typename:const int
+PLM_AUDIO_MODE_STEREO	src/pl_mpeg.h	/^static const int PLM_AUDIO_MODE_STEREO = 0x0;$/;"	v	typeref:typename:const int
+PLM_AUDIO_MPEG_1	src/pl_mpeg.h	/^static const int PLM_AUDIO_MPEG_1 = 0x3;$/;"	v	typeref:typename:const int
+PLM_AUDIO_MPEG_2	src/pl_mpeg.h	/^static const int PLM_AUDIO_MPEG_2 = 0x2;$/;"	v	typeref:typename:const int
+PLM_AUDIO_MPEG_2_5	src/pl_mpeg.h	/^static const int PLM_AUDIO_MPEG_2_5 = 0x0;$/;"	v	typeref:typename:const int
+PLM_AUDIO_QUANT_LUT_STEP_1	src/pl_mpeg.h	/^static const uint8_t PLM_AUDIO_QUANT_LUT_STEP_1[2][16] = {$/;"	v	typeref:typename:const uint8_t[2][16]
+PLM_AUDIO_QUANT_LUT_STEP_3	src/pl_mpeg.h	/^static const uint8_t PLM_AUDIO_QUANT_LUT_STEP_3[3][32] = {$/;"	v	typeref:typename:const uint8_t[3][32]
+PLM_AUDIO_QUANT_LUT_STEP_4	src/pl_mpeg.h	/^static const uint8_t PLM_AUDIO_QUANT_LUT_STEP_4[6][16] = {$/;"	v	typeref:typename:const uint8_t[6][16]
+PLM_AUDIO_QUANT_TAB	src/pl_mpeg.h	/^static const plm_quantizer_spec_t PLM_AUDIO_QUANT_TAB[] = {$/;"	v	typeref:typename:const plm_quantizer_spec_t[]
+PLM_AUDIO_QUANT_TAB_A	src/pl_mpeg.h	/^#define PLM_AUDIO_QUANT_TAB_A /;"	d
+PLM_AUDIO_QUANT_TAB_B	src/pl_mpeg.h	/^#define PLM_AUDIO_QUANT_TAB_B /;"	d
+PLM_AUDIO_QUANT_TAB_C	src/pl_mpeg.h	/^#define PLM_AUDIO_QUANT_TAB_C /;"	d
+PLM_AUDIO_QUANT_TAB_D	src/pl_mpeg.h	/^#define PLM_AUDIO_QUANT_TAB_D /;"	d
+PLM_AUDIO_SAMPLES_PER_FRAME	src/pl_mpeg.h	/^#define PLM_AUDIO_SAMPLES_PER_FRAME /;"	d
+PLM_AUDIO_SAMPLE_RATE	src/pl_mpeg.h	/^static const unsigned short PLM_AUDIO_SAMPLE_RATE[] = {$/;"	v	typeref:typename:const unsigned short[]
+PLM_AUDIO_SCALEFACTOR_BASE	src/pl_mpeg.h	/^static const int PLM_AUDIO_SCALEFACTOR_BASE[] = {$/;"	v	typeref:typename:const int[]
+PLM_AUDIO_SYNTHESIS_WINDOW	src/pl_mpeg.h	/^static const float PLM_AUDIO_SYNTHESIS_WINDOW[] = {$/;"	v	typeref:typename:const float[]
+PLM_BLOCK_SET	src/pl_mpeg.h	/^#define PLM_BLOCK_SET(/;"	d
+PLM_BUFFER_DEFAULT_SIZE	src/pl_mpeg.h	/^#define PLM_BUFFER_DEFAULT_SIZE /;"	d
+PLM_BUFFER_MODE_APPEND	src/pl_mpeg.h	/^	PLM_BUFFER_MODE_APPEND$/;"	e	enum:plm_buffer_mode
+PLM_BUFFER_MODE_FILE	src/pl_mpeg.h	/^	PLM_BUFFER_MODE_FILE,$/;"	e	enum:plm_buffer_mode
+PLM_BUFFER_MODE_FIXED_MEM	src/pl_mpeg.h	/^	PLM_BUFFER_MODE_FIXED_MEM,$/;"	e	enum:plm_buffer_mode
+PLM_BUFFER_MODE_RING	src/pl_mpeg.h	/^	PLM_BUFFER_MODE_RING,$/;"	e	enum:plm_buffer_mode
+PLM_DEFINE_FRAME_CONVERT_FUNCTION	src/pl_mpeg.h	/^#define PLM_DEFINE_FRAME_CONVERT_FUNCTION(/;"	d
+PLM_DEMUX_PACKET_AUDIO_1	src/pl_mpeg.h	/^static const int PLM_DEMUX_PACKET_AUDIO_1 = 0xC0;$/;"	v	typeref:typename:const int
+PLM_DEMUX_PACKET_AUDIO_2	src/pl_mpeg.h	/^static const int PLM_DEMUX_PACKET_AUDIO_2 = 0xC1;$/;"	v	typeref:typename:const int
+PLM_DEMUX_PACKET_AUDIO_3	src/pl_mpeg.h	/^static const int PLM_DEMUX_PACKET_AUDIO_3 = 0xC2;$/;"	v	typeref:typename:const int
+PLM_DEMUX_PACKET_AUDIO_4	src/pl_mpeg.h	/^static const int PLM_DEMUX_PACKET_AUDIO_4 = 0xC3;$/;"	v	typeref:typename:const int
+PLM_DEMUX_PACKET_PRIVATE	src/pl_mpeg.h	/^static const int PLM_DEMUX_PACKET_PRIVATE = 0xBD;$/;"	v	typeref:typename:const int
+PLM_DEMUX_PACKET_VIDEO_1	src/pl_mpeg.h	/^static const int PLM_DEMUX_PACKET_VIDEO_1 = 0xE0;$/;"	v	typeref:typename:const int
+PLM_FREE	src/pl_mpeg.h	/^	#define PLM_FREE(/;"	d
+PLM_MALLOC	src/pl_mpeg.h	/^	#define PLM_MALLOC(/;"	d
+PLM_MB_CASE	src/pl_mpeg.h	/^	#define PLM_MB_CASE(/;"	d
+PLM_PACKET_INVALID_TS	src/pl_mpeg.h	/^#define PLM_PACKET_INVALID_TS /;"	d
+PLM_PUT_PIXEL	src/pl_mpeg.h	/^#define PLM_PUT_PIXEL(/;"	d
+PLM_REALLOC	src/pl_mpeg.h	/^	#define PLM_REALLOC(/;"	d
+PLM_START_END	src/pl_mpeg.h	/^static const int PLM_START_END = 0xB9;$/;"	v	typeref:typename:const int
+PLM_START_EXTENSION	src/pl_mpeg.h	/^static const int PLM_START_EXTENSION = 0xB5;$/;"	v	typeref:typename:const int
+PLM_START_IS_SLICE	src/pl_mpeg.h	/^#define PLM_START_IS_SLICE(/;"	d
+PLM_START_PACK	src/pl_mpeg.h	/^static const int PLM_START_PACK = 0xBA;$/;"	v	typeref:typename:const int
+PLM_START_PICTURE	src/pl_mpeg.h	/^static const int PLM_START_PICTURE = 0x00;$/;"	v	typeref:typename:const int
+PLM_START_SEQUENCE	src/pl_mpeg.h	/^static const int PLM_START_SEQUENCE = 0xB3;$/;"	v	typeref:typename:const int
+PLM_START_SLICE_FIRST	src/pl_mpeg.h	/^static const int PLM_START_SLICE_FIRST = 0x01;$/;"	v	typeref:typename:const int
+PLM_START_SLICE_LAST	src/pl_mpeg.h	/^static const int PLM_START_SLICE_LAST = 0xAF;$/;"	v	typeref:typename:const int
+PLM_START_SYSTEM	src/pl_mpeg.h	/^static const int PLM_START_SYSTEM = 0xBB;$/;"	v	typeref:typename:const int
+PLM_START_USER_DATA	src/pl_mpeg.h	/^static const int PLM_START_USER_DATA = 0xB2;$/;"	v	typeref:typename:const int
+PLM_UNUSED	src/pl_mpeg.h	/^#define PLM_UNUSED(/;"	d
+PLM_VIDEO_CODE_BLOCK_PATTERN	src/pl_mpeg.h	/^static const plm_vlc_t PLM_VIDEO_CODE_BLOCK_PATTERN[] = {$/;"	v	typeref:typename:const plm_vlc_t[]
+PLM_VIDEO_DCT_COEFF	src/pl_mpeg.h	/^static const plm_vlc_uint_t PLM_VIDEO_DCT_COEFF[] = {$/;"	v	typeref:typename:const plm_vlc_uint_t[]
+PLM_VIDEO_DCT_SIZE	src/pl_mpeg.h	/^static const plm_vlc_t *PLM_VIDEO_DCT_SIZE[] = {$/;"	v	typeref:typename:const plm_vlc_t * []
+PLM_VIDEO_DCT_SIZE_CHROMINANCE	src/pl_mpeg.h	/^static const plm_vlc_t PLM_VIDEO_DCT_SIZE_CHROMINANCE[] = {$/;"	v	typeref:typename:const plm_vlc_t[]
+PLM_VIDEO_DCT_SIZE_LUMINANCE	src/pl_mpeg.h	/^static const plm_vlc_t PLM_VIDEO_DCT_SIZE_LUMINANCE[] = {$/;"	v	typeref:typename:const plm_vlc_t[]
+PLM_VIDEO_INTRA_QUANT_MATRIX	src/pl_mpeg.h	/^static const uint8_t PLM_VIDEO_INTRA_QUANT_MATRIX[] = {$/;"	v	typeref:typename:const uint8_t[]
+PLM_VIDEO_MACROBLOCK_ADDRESS_INCREMENT	src/pl_mpeg.h	/^static const plm_vlc_t PLM_VIDEO_MACROBLOCK_ADDRESS_INCREMENT[] = {$/;"	v	typeref:typename:const plm_vlc_t[]
+PLM_VIDEO_MACROBLOCK_TYPE	src/pl_mpeg.h	/^static const plm_vlc_t *PLM_VIDEO_MACROBLOCK_TYPE[] = {$/;"	v	typeref:typename:const plm_vlc_t * []
+PLM_VIDEO_MACROBLOCK_TYPE_B	src/pl_mpeg.h	/^static const plm_vlc_t PLM_VIDEO_MACROBLOCK_TYPE_B[] = {$/;"	v	typeref:typename:const plm_vlc_t[]
+PLM_VIDEO_MACROBLOCK_TYPE_INTRA	src/pl_mpeg.h	/^static const plm_vlc_t PLM_VIDEO_MACROBLOCK_TYPE_INTRA[] = {$/;"	v	typeref:typename:const plm_vlc_t[]
+PLM_VIDEO_MACROBLOCK_TYPE_PREDICTIVE	src/pl_mpeg.h	/^static const plm_vlc_t PLM_VIDEO_MACROBLOCK_TYPE_PREDICTIVE[] = {$/;"	v	typeref:typename:const plm_vlc_t[]
+PLM_VIDEO_MOTION	src/pl_mpeg.h	/^static const plm_vlc_t PLM_VIDEO_MOTION[] = {$/;"	v	typeref:typename:const plm_vlc_t[]
+PLM_VIDEO_NON_INTRA_QUANT_MATRIX	src/pl_mpeg.h	/^static const uint8_t PLM_VIDEO_NON_INTRA_QUANT_MATRIX[] = {$/;"	v	typeref:typename:const uint8_t[]
+PLM_VIDEO_PICTURE_RATE	src/pl_mpeg.h	/^static const double PLM_VIDEO_PICTURE_RATE[] = {$/;"	v	typeref:typename:const double[]
+PLM_VIDEO_PICTURE_TYPE_B	src/pl_mpeg.h	/^static const int PLM_VIDEO_PICTURE_TYPE_B = 3;$/;"	v	typeref:typename:const int
+PLM_VIDEO_PICTURE_TYPE_INTRA	src/pl_mpeg.h	/^static const int PLM_VIDEO_PICTURE_TYPE_INTRA = 1;$/;"	v	typeref:typename:const int
+PLM_VIDEO_PICTURE_TYPE_PREDICTIVE	src/pl_mpeg.h	/^static const int PLM_VIDEO_PICTURE_TYPE_PREDICTIVE = 2;$/;"	v	typeref:typename:const int
+PLM_VIDEO_PIXEL_ASPECT_RATIO	src/pl_mpeg.h	/^static const float PLM_VIDEO_PIXEL_ASPECT_RATIO[] = {$/;"	v	typeref:typename:const float[]
+PLM_VIDEO_PREMULTIPLIER_MATRIX	src/pl_mpeg.h	/^static const uint8_t PLM_VIDEO_PREMULTIPLIER_MATRIX[] = {$/;"	v	typeref:typename:const uint8_t[]
+PLM_VIDEO_ZIG_ZAG	src/pl_mpeg.h	/^static const uint8_t PLM_VIDEO_ZIG_ZAG[] = {$/;"	v	typeref:typename:const uint8_t[]
+PL_MPEG_H	src/pl_mpeg.h	/^#define PL_MPEG_H$/;"	d
+PL_MPEG_IMPLEMENTATION	src/pl_mpeg.cpp	/^#define PL_MPEG_IMPLEMENTATION$/;"	d	file:
 POST_PROCESSING_BLOOM	src/post_processing.cpp	/^    POST_PROCESSING_BLOOM,$/;"	e	enum:Post_Process_Shader_Type	file:
 POST_PROCESSING_CRT	src/post_processing.cpp	/^    POST_PROCESSING_CRT,$/;"	e	enum:Post_Process_Shader_Type	file:
 POST_PROCESSING_PASSTHROUGH	src/post_processing.cpp	/^    POST_PROCESSING_PASSTHROUGH,$/;"	e	enum:Post_Process_Shader_Type	file:
 POST_PROCESSING_VHS	src/post_processing.cpp	/^    POST_PROCESSING_VHS,$/;"	e	enum:Post_Process_Shader_Type	file:
+PROFILE	src/movie.cpp	/^#define PROFILE /;"	d	file:
 Player_Walking_State	src/chapter_1.h	/^enum Player_Walking_State {$/;"	g
 Post_Process_Shader_Type	src/post_processing.cpp	/^enum Post_Process_Shader_Type {$/;"	g	file:
 Post_Processing	src/post_processing.cpp	/^struct Post_Processing {$/;"	s	file:
 Post_Processing_Bloom	src/post_processing.cpp	/^struct Post_Processing_Bloom {$/;"	s	file:
 Post_Processing_Crt	src/post_processing.cpp	/^struct Post_Processing_Crt {$/;"	s	file:
 Post_Processing_Vhs	src/post_processing.cpp	/^struct Post_Processing_Vhs {$/;"	s	file:
+QUANT_LUT_STEP_2	src/pl_mpeg.h	/^static const uint8_t QUANT_LUT_STEP_2[3][3] = {$/;"	v	typeref:typename:const uint8_t[3][3]
 QUOTE_COUNT	src/chapter_5.cpp	/^#define QUOTE_COUNT /;"	d	file:
 QuadPart	src/util.cpp	/^        uint64_t QuadPart;$/;"	m	union:_LARGE_INTEGER	typeref:typename:uint64_t	file:
 RCAMERA_IMPLEMENTATION	src/main.cpp	/^#define RCAMERA_IMPLEMENTATION$/;"	d	file:
@@ -333,11 +420,14 @@ StaticArraySize	src/util.cpp	/^#define StaticArraySize(/;"	d	file:
 String	src/text.cpp	/^struct String {$/;"	s	file:
 TEXT_LINE_MAX	src/text.cpp	/^#define TEXT_LINE_MAX /;"	d	file:
 TEXT_LIST_SIZE	src/text.cpp	/^#define TEXT_LIST_SIZE /;"	d	file:
+TRUE	src/pl_mpeg.h	/^#define TRUE /;"	d
 Text	src/text.cpp	/^struct Text {$/;"	s	file:
 Text_List	src/text.cpp	/^struct Text_List {$/;"	s	file:
 Titlescreen	src/titlescreen.cpp	/^struct Titlescreen {$/;"	s	file:
 Titlescreen_Options	src/titlescreen.cpp	/^enum Titlescreen_Options {$/;"	g	file:
 Top	src/text.cpp	/^    Top,$/;"	e	enum:Location	file:
+U	src/pl_mpeg.h	/^	float U[32];$/;"	m	struct:plm_audio_t	typeref:typename:float[32]
+V	src/pl_mpeg.h	/^	float V[2][1024];$/;"	m	struct:plm_audio_t	typeref:typename:float[2][1024]
 VHS_INTENSITY_HIGH	src/post_processing.cpp	/^    VHS_INTENSITY_HIGH$/;"	e	enum:Vhs_Intensity	file:
 VHS_INTENSITY_LOW	src/post_processing.cpp	/^    VHS_INTENSITY_LOW,$/;"	e	enum:Vhs_Intensity	file:
 VHS_INTENSITY_MEDIUM	src/post_processing.cpp	/^    VHS_INTENSITY_MEDIUM,$/;"	e	enum:Vhs_Intensity	file:
@@ -349,12 +439,20 @@ _CRT_SECURE_NO_WARNINGS	src/main.cpp	/^#define _CRT_SECURE_NO_WARNINGS$/;"	d	fil
 _GLAD_IS_SOME_NEW_VERSION	src/glad/glad.c	/^#define _GLAD_IS_SOME_NEW_VERSION /;"	d	file:
 _LARGE_INTEGER	src/util.cpp	/^    typedef union _LARGE_INTEGER {$/;"	u	file:
 __anon38f4ce720102	src/text.cpp	/^    auto finish_target = [&]() {$/;"	f	function:text_list_update_and_draw	file:
+__anon6b50db360108	src/pl_mpeg.h	/^typedef struct {$/;"	s
+__anon6b50db360208	src/pl_mpeg.h	/^typedef struct {$/;"	s
+__anon6b50db360308	src/pl_mpeg.h	/^typedef struct {$/;"	s
+__anon6b50db360408	src/pl_mpeg.h	/^typedef struct {$/;"	s
+__anon6b50db360508	src/pl_mpeg.h	/^typedef struct {$/;"	s
+__anon6b50db360608	src/pl_mpeg.h	/^typedef struct {$/;"	s
+__anon6b50db360708	src/pl_mpeg.h	/^typedef struct {$/;"	s
 __anon84520d2b0108	src/util.cpp	/^        struct {$/;"	s	union:_LARGE_INTEGER	file:
 __anon84520d2b0208	src/util.cpp	/^        struct {$/;"	s	union:_LARGE_INTEGER	file:
 __anon9cf613ef0102	src/titlescreen.cpp	/^            auto text = [&](int off, Color a) {$/;"	f	function:titlescreen_update_and_draw	file:
 __anon9cf613ef0202	src/titlescreen.cpp	/^            auto text = [&](int i, char *message, bool selected, Color c, float offset) {$/;"	f	function:titlescreen_update_and_draw	file:
 __anonb290d74d0102	src/chapter_epilogue.cpp	/^    auto node_text = [&](int index, int yes_index) {$/;"	f	function:chapter_epilogue_init	file:
 __anonb290d74d0202	src/chapter_epilogue.cpp	/^        auto draw_bars = [&](float scale) {$/;"	f	function:chapter_epilogue_draw	file:
+__anondf04acb20103	src/movie.h	/^enum {$/;"	g
 __anoneafbdd87010a	src/game.cpp	/^    union {$/;"	u	struct:Entity	file:
 __anoneafbdd870202	src/game.cpp	/^    auto selection_sort = [&](size_t start, size_t end) {$/;"	f	function:sort_entities	file:
 __anonecaab4e60102	src/chapter_3.cpp	/^    auto add_line = [&]() -> void {$/;"	f	function:job_minigame_run	typeref:typename:void	file:
@@ -391,6 +489,7 @@ add_wall	src/game.cpp	/^void add_wall(Array<Entity*> *entities, Rectangle r) {$/
 alarm	src/game.cpp	/^    float       alarm[10];       \/\/ General purpose alarms$/;"	m	struct:Entity	typeref:typename:float[10]	file:
 alarms	src/chapter_4.cpp	/^    float      alarms[20];$/;"	m	struct:Chapter_4_Text	typeref:typename:float[20]	file:
 allocate_entity	src/game.cpp	/^Entity *allocate_entity(void) {$/;"	f	typeref:typename:Entity *
+allocation	src/pl_mpeg.h	/^	const plm_quantizer_spec_t *allocation[2][32];$/;"	m	struct:plm_audio_t	typeref:typename:const plm_quantizer_spec_t * [2][32]
 alpha	src/game.cpp	/^    float          alpha;$/;"	m	struct:Fader	typeref:typename:float	file:
 alpha	src/text.cpp	/^    float alpha, alpha_speed; \/\/ alpha_speed is in units\/second$/;"	m	struct:Text	typeref:typename:float	file:
 alpha_speed	src/text.cpp	/^    float alpha, alpha_speed; \/\/ alpha_speed is in units\/second$/;"	m	struct:Text	typeref:typename:float	file:
@@ -410,6 +509,7 @@ array_free	src/util.cpp	/^void array_free(Array<T> *array) {$/;"	f	typeref:typen
 array_print	src/util.cpp	/^void array_print(Array<T> array, const char *t_format_specifier) {$/;"	f	typeref:typename:void
 array_remove	src/util.cpp	/^void array_remove(Array<T> *array, int index) {$/;"	f	typeref:typename:void
 arrow_color	src/text.cpp	/^    Color arrow_color       = BLACK;$/;"	m	struct:Text_List	typeref:typename:Color	file:
+assume_no_b_frames	src/pl_mpeg.h	/^	int assume_no_b_frames;$/;"	m	struct:plm_video_t	typeref:typename:int
 atari_assets	src/game.cpp	/^} atari_assets;$/;"	v	typeref:struct:Atari_Assets
 atari_choice_text_list_init	src/game.cpp	/^void atari_choice_text_list_init(Text_List *list,$/;"	f	typeref:typename:void
 atari_deinit	src/game.cpp	/^void atari_deinit(Game *game) {$/;"	f	typeref:typename:void
@@ -420,6 +520,16 @@ atari_render_target	src/game.cpp	/^    RenderTexture2D atari_render_target;$/;"	
 atari_small_font	src/main.cpp	/^Font global_font, atari_font, comic_sans, italics_font, bold_font, bold_2_font, mono_font, bold_/;"	v	typeref:typename:Font
 atari_text_list_init	src/game.cpp	/^void atari_text_list_init(Text_List *list, char *speaker,$/;"	f	typeref:typename:void
 atari_update_and_draw_textbox	src/game.cpp	/^void atari_update_and_draw_textbox(Game *game, float dt) {$/;"	f	typeref:typename:void
+audio	src/movie.h	/^    Music   audio;$/;"	m	struct:Movie	typeref:typename:Music
+audio_buffer	src/pl_mpeg.h	/^	plm_buffer_t *audio_buffer;$/;"	m	struct:plm_t	typeref:typename:plm_buffer_t *
+audio_decode_callback	src/pl_mpeg.h	/^	plm_audio_decode_callback audio_decode_callback;$/;"	m	struct:plm_t	typeref:typename:plm_audio_decode_callback
+audio_decode_callback_user_data	src/pl_mpeg.h	/^	void *audio_decode_callback_user_data;$/;"	m	struct:plm_t	typeref:typename:void *
+audio_decoder	src/pl_mpeg.h	/^	plm_audio_t *audio_decoder;$/;"	m	struct:plm_t	typeref:typename:plm_audio_t *
+audio_enabled	src/pl_mpeg.h	/^	int audio_enabled;$/;"	m	struct:plm_t	typeref:typename:int
+audio_lead_time	src/pl_mpeg.h	/^	double audio_lead_time;$/;"	m	struct:plm_t	typeref:typename:double
+audio_packet_type	src/pl_mpeg.h	/^	int audio_packet_type;$/;"	m	struct:plm_t	typeref:typename:int
+audio_stream_index	src/pl_mpeg.h	/^	int audio_stream_index;$/;"	m	struct:plm_t	typeref:typename:int
+automatically_init_game_mode	src/main.cpp	/^bool automatically_init_game_mode = true;$/;"	v	typeref:typename:bool
 backdrop_color	src/text.cpp	/^    Color backdrop_color    = {0, 0, 0, 0};$/;"	m	struct:Text_List	typeref:typename:Color	file:
 backdrop_color	src/text.cpp	/^    Color color, bg_color, backdrop_color;$/;"	m	struct:Text	typeref:typename:Color	file:
 background	src/text.cpp	/^    bool  background;$/;"	m	struct:Text	typeref:typename:bool	file:
@@ -436,12 +546,17 @@ bed_popup	src/chapter_4.cpp	/^    bool bed_popup;$/;"	m	struct:Level_Chapter_4	t
 before_first_text	src/chapter_1.cpp	/^    bool before_first_text;$/;"	m	struct:Level_Chapter_1	typeref:typename:bool	file:
 bg_color	src/text.cpp	/^    Color bg_color          = BLACK;$/;"	m	struct:Text_List	typeref:typename:Color	file:
 bg_color	src/text.cpp	/^    Color color, bg_color, backdrop_color;$/;"	m	struct:Text	typeref:typename:Color	file:
+bit_index	src/pl_mpeg.h	/^	size_t bit_index;$/;"	m	struct:plm_buffer_t	typeref:typename:size_t
+bitrate_index	src/pl_mpeg.h	/^	int bitrate_index;$/;"	m	struct:plm_audio_t	typeref:typename:int
+bits	src/pl_mpeg.h	/^	unsigned char bits;$/;"	m	struct:plm_quantizer_spec_t	typeref:typename:unsigned char
+black	src/chapter_4.cpp	/^    bool black;$/;"	m	struct:Level_Chapter_4	typeref:typename:bool	file:
 black_screen	src/chapter_3.cpp	/^    bool black_screen;$/;"	m	struct:Level_Chapter_3	typeref:typename:bool	file:
 black_screen_timer	src/chapter_5.cpp	/^        float    black_screen_timer;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80208	typeref:typename:float	file:
 black_state	src/chapter_5.cpp	/^        bool             black_state;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80408	typeref:typename:bool	file:
 black_state_text	src/chapter_5.cpp	/^        bool             black_state_text;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80408	typeref:typename:bool	file:
 black_texture	src/chapter_epilogue.cpp	/^    Texture        pink_dot, orange_dot, black_texture;$/;"	m	struct:Level_Chapter_Epilogue	typeref:typename:Texture	file:
 black_timer	src/chapter_3.cpp	/^    float black_timer;$/;"	m	struct:Chapter_3_Phone	typeref:typename:float	file:
+block_data	src/pl_mpeg.h	/^	int block_data[64];$/;"	m	struct:plm_video_t	typeref:typename:int[64]
 blood_probability	src/chapter_1.h	/^    float blood_probability;$/;"	m	struct:Chapter_1_Player	typeref:typename:float
 bloom	src/post_processing.cpp	/^    Post_Processing_Bloom bloom;$/;"	m	struct:Post_Processing	typeref:typename:Post_Processing_Bloom	file:
 bloom_intensity	src/post_processing.cpp	/^    float   bloom_intensity;$/;"	m	struct:Post_Processing_Bloom	typeref:typename:float	file:
@@ -450,8 +565,13 @@ body_rotation	src/chapter_5.cpp	/^    float   body_rotation;$/;"	m	struct:Chapte
 bold_2_font	src/main.cpp	/^Font global_font, atari_font, comic_sans, italics_font, bold_font, bold_2_font, mono_font, bold_/;"	v	typeref:typename:Font
 bold_font	src/main.cpp	/^Font global_font, atari_font, comic_sans, italics_font, bold_font, bold_2_font, mono_font, bold_/;"	v	typeref:typename:Font
 bold_font_big	src/main.cpp	/^Font global_font, atari_font, comic_sans, italics_font, bold_font, bold_2_font, mono_font, bold_/;"	v	typeref:typename:Font
+bound	src/pl_mpeg.h	/^	int bound;$/;"	m	struct:plm_audio_t	typeref:typename:int
 bounding_box	src/chapter_5.cpp	/^    BoundingBox bounding_box;$/;"	m	struct:Chapter_5_Train	typeref:typename:BoundingBox	file:
+buffer	src/pl_mpeg.h	/^	plm_buffer_t *buffer;$/;"	m	struct:plm_audio_t	typeref:typename:plm_buffer_t *
+buffer	src/pl_mpeg.h	/^	plm_buffer_t *buffer;$/;"	m	struct:plm_demux_t	typeref:typename:plm_buffer_t *
+buffer	src/pl_mpeg.h	/^	plm_buffer_t *buffer;$/;"	m	struct:plm_video_t	typeref:typename:plm_buffer_t *
 buffer	src/util.cpp	/^    uint8_t *buffer;$/;"	m	struct:Arena	typeref:typename:uint8_t *	file:
+bytes	src/pl_mpeg.h	/^	uint8_t *bytes;$/;"	m	struct:plm_buffer_t	typeref:typename:uint8_t *
 c1	src/chapter_3.cpp	/^    Color c1, c2;$/;"	m	struct:Chapter_3_Phone	typeref:typename:Color	file:
 c2	src/chapter_3.cpp	/^    Color c1, c2;$/;"	m	struct:Chapter_3_Phone	typeref:typename:Color	file:
 callbacks	src/text.cpp	/^    void (*callbacks[CHOICE_MAX])(void *);$/;"	m	struct:Text_List	typeref:typename:void (* [CHOICE_MAX])(void *)	file:
@@ -468,9 +588,11 @@ camera_height	src/chapter_epilogue.cpp	/^    float          camera_height;$/;"	m
 camera_position_saved	src/chapter_5.cpp	/^        Vector3          camera_position_saved;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80608	typeref:typename:Vector3	file:
 camera_target_saved	src/chapter_5.cpp	/^        Vector3          camera_target_saved;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80608	typeref:typename:Vector3	file:
 can_open_dialogue	src/game.cpp	/^bool can_open_dialogue(Game *game, Entity *e, Entity *player) {$/;"	f	typeref:typename:bool
+capacity	src/pl_mpeg.h	/^	size_t capacity;$/;"	m	struct:plm_buffer_t	typeref:typename:size_t
 capacity	src/util.cpp	/^    size_t   capacity;$/;"	m	struct:Arena	typeref:typename:size_t	file:
 capacity	src/util.cpp	/^    size_t capacity;$/;"	m	struct:Array	typeref:typename:size_t	file:
 car	src/chapter_3.cpp	/^    Chapter_3_Car          car, other_car;$/;"	m	struct:Level_Chapter_3	typeref:typename:Chapter_3_Car	file:
+cb	src/pl_mpeg.h	/^	plm_plane_t cb;$/;"	m	struct:__anon6b50db360308	typeref:typename:plm_plane_t
 center_position	src/chapter_3.h	/^    Vector2 center_position;$/;"	m	struct:Chapter_3_Circler	typeref:typename:Vector2
 center_text	src/text.cpp	/^    bool center_text;$/;"	m	struct:Text	typeref:typename:bool	file:
 center_text	src/text.cpp	/^    bool center_text;$/;"	m	struct:Text_List	typeref:typename:bool	file:
@@ -487,7 +609,7 @@ chap_3_cubicle	src/game.cpp	/^        Chapter_3_Cubicle chap_3_cubicle;$/;"	m	un
 chap_4_devil	src/game.cpp	/^        Chapter_4_Devil     chap_4_devil;$/;"	m	union:Entity::__anoneafbdd87010a	typeref:typename:Chapter_4_Devil	file:
 chap_4_microwave	src/game.cpp	/^        Chapter_4_Microwave chap_4_microwave;$/;"	m	union:Entity::__anoneafbdd87010a	typeref:typename:Chapter_4_Microwave	file:
 chap_4_window	src/game.cpp	/^        Chapter_4_Window    chap_4_window;$/;"	m	union:Entity::__anoneafbdd87010a	typeref:typename:Chapter_4_Window	file:
-chapter	src/main.cpp	/^int chapter = 5;$/;"	v	typeref:typename:int
+chapter	src/main.cpp	/^int chapter = 6;$/;"	v	typeref:typename:int
 chapter_1_activate_node	src/chapter_1.cpp	/^void chapter_1_activate_node(void *ptr_game) {$/;"	f	typeref:typename:void
 chapter_1_apartment_text	src/chapter_1.cpp	/^void chapter_1_apartment_text(Text_List *list, char *line,$/;"	f	typeref:typename:void
 chapter_1_call_text	src/chapter_1.cpp	/^void chapter_1_call_text(Text_List *list, char *speaker,$/;"	f	typeref:typename:void
@@ -500,7 +622,7 @@ chapter_1_entity_draw	src/chapter_1.cpp	/^void chapter_1_entity_draw(Entity *e, 
 chapter_1_entity_update	src/chapter_1.cpp	/^void chapter_1_entity_update(Entity *e, Game *game, float dt) {$/;"	f	typeref:typename:void
 chapter_1_first_text	src/chapter_1.cpp	/^void chapter_1_first_text(Game *game) {$/;"	f	typeref:typename:void
 chapter_1_god_text_y	src/chapter_1.cpp	/^int chapter_1_god_text_y[] = { 55, 16 };$/;"	v	typeref:typename:int[]
-chapter_1_god_text_y_end	src/chapter_1.cpp	/^int chapter_1_god_text_y_end[] = { 103, 146};$/;"	v	typeref:typename:int[]
+chapter_1_god_text_y_end	src/chapter_1.cpp	/^int chapter_1_god_text_y_end[] = { 103, 146 };$/;"	v	typeref:typename:int[]
 chapter_1_init	src/chapter_1.cpp	/^void chapter_1_init(Game *game) {$/;"	f	typeref:typename:void
 chapter_1_make_entity	src/chapter_1.cpp	/^Entity *chapter_1_make_entity(Entity_Type type, float x, float y) {$/;"	f	typeref:typename:Entity *
 chapter_1_prayer_text	src/chapter_1.cpp	/^void chapter_1_prayer_text(Game *game) {$/;"	f	typeref:typename:void
@@ -544,13 +666,16 @@ chapter_3_next_document	src/chapter_3.cpp	/^void chapter_3_next_document(Chapter
 chapter_3_set_apartment_end_text	src/chapter_3.cpp	/^void chapter_3_set_apartment_end_text(Game *game) {$/;"	f	typeref:typename:void
 chapter_3_update	src/chapter_3.cpp	/^void chapter_3_update(Game *game, float dt) {$/;"	f	typeref:typename:void
 chapter_4_3d_init	src/chapter_4.cpp	/^void chapter_4_3d_init(Game *game) {$/;"	f	typeref:typename:void
+chapter_4_3d_init_after_delay	src/chapter_4.cpp	/^void chapter_4_3d_init_after_delay(Game *game) {$/;"	f	typeref:typename:void
 chapter_4_3d_update_camera	src/chapter_4.cpp	/^void chapter_4_3d_update_camera(Level_Chapter_4 *level, Camera3D *camera) {$/;"	f	typeref:typename:void
 chapter_4_draw	src/chapter_4.cpp	/^void chapter_4_draw(Game *game, float dt) {$/;"	f	typeref:typename:void
 chapter_4_entity_draw	src/chapter_4.cpp	/^void chapter_4_entity_draw(Entity *entity, Game *game) {$/;"	f	typeref:typename:void
 chapter_4_entity_update	src/chapter_4.cpp	/^void chapter_4_entity_update(Entity *entity, Game *game, float dt) {$/;"	f	typeref:typename:void
+chapter_4_goto_movie	src/chapter_4.cpp	/^void chapter_4_goto_movie(Game *game) {$/;"	f	typeref:typename:void
 chapter_4_init	src/chapter_4.cpp	/^void chapter_4_init(Game *game) {$/;"	f	typeref:typename:void
+chapter_4_look_outside_text	src/chapter_4.cpp	/^void chapter_4_look_outside_text(Game *game) {$/;"	f	typeref:typename:void
 chapter_4_make_entity	src/chapter_4.cpp	/^Entity *chapter_4_make_entity(Entity_Type type, float x, float y) {$/;"	f	typeref:typename:Entity *
-chapter_4_set_state_atari	src/chapter_4.cpp	/^void chapter_4_set_state_atari(Game *game) {$/;"	f	typeref:typename:void
+chapter_4_set_state_atari	src/chapter_4.cpp	/^void chapter_4_set_state_atari(void *game_ptr) {$/;"	f	typeref:typename:void
 chapter_4_start_end_timer	src/chapter_4.cpp	/^void chapter_4_start_end_timer(void *game_ptr) {$/;"	f	typeref:typename:void
 chapter_4_start_text	src/chapter_4.cpp	/^void chapter_4_start_text(Game *game) {$/;"	f	typeref:typename:void
 chapter_4_update	src/chapter_4.cpp	/^void chapter_4_update(Game *game, float dt) {$/;"	f	typeref:typename:void
@@ -601,12 +726,14 @@ chapter_5_update_train	src/chapter_5.cpp	/^void chapter_5_update_train(Game *gam
 chapter_5_window_text	src/chapter_5.cpp	/^void chapter_5_window_text(bool scroll, Text_List *list, char *line, Color color, Text_List *nex/;"	f	typeref:typename:void
 chapter_6_begin_text	src/chapter_6.cpp	/^void chapter_6_begin_text(Game *game) {$/;"	f	typeref:typename:void
 chapter_6_choice_text	src/chapter_6.cpp	/^void chapter_6_choice_text(Text_List *list,$/;"	f	typeref:typename:void
-chapter_6_delayed_goto_desert	src/chapter_6.cpp	/^void chapter_6_delayed_goto_desert(void *game_ptr) {$/;"	f	typeref:typename:void
+chapter_6_delayed_goto_desert	src/chapter_6.cpp	/^void chapter_6_delayed_goto_desert(Game *game) {$/;"	f	typeref:typename:void
 chapter_6_draw	src/chapter_6.cpp	/^void chapter_6_draw(Game *game) {$/;"	f	typeref:typename:void
 chapter_6_entity_draw	src/chapter_6.cpp	/^void chapter_6_entity_draw(Entity *entity, Game *game) {$/;"	f	typeref:typename:void
 chapter_6_entity_update	src/chapter_6.cpp	/^void chapter_6_entity_update(Entity *entity, Game *game, float dt) {$/;"	f	typeref:typename:void
 chapter_6_goto_desert	src/chapter_6.cpp	/^void chapter_6_goto_desert(Game *game) {$/;"	f	typeref:typename:void
 chapter_6_goto_home	src/chapter_6.cpp	/^void chapter_6_goto_home(Game *game) {$/;"	f	typeref:typename:void
+chapter_6_goto_movie	src/chapter_6.cpp	/^void chapter_6_goto_movie(Game *game) {$/;"	f	typeref:typename:void
+chapter_6_goto_movie_delayed	src/chapter_6.cpp	/^void chapter_6_goto_movie_delayed(void *game_ptr) {$/;"	f	typeref:typename:void
 chapter_6_init	src/chapter_6.cpp	/^void chapter_6_init(Game *game) {$/;"	f	typeref:typename:void
 chapter_6_make_entity	src/chapter_6.cpp	/^Entity *chapter_6_make_entity(Entity_Type type, float x, float y) {$/;"	f	typeref:typename:Entity *
 chapter_6_queue_godtext	src/chapter_6.cpp	/^void chapter_6_queue_godtext(void *game_ptr) {$/;"	f	typeref:typename:void
@@ -621,6 +748,7 @@ chapter_epilogue_init	src/chapter_epilogue.cpp	/^void chapter_epilogue_init(Game
 chapter_epilogue_update	src/chapter_epilogue.cpp	/^void chapter_epilogue_update(Game *game, float dt) {$/;"	f	typeref:typename:void
 chapter_epilogue_update_ending	src/chapter_epilogue.cpp	/^void chapter_epilogue_update_ending(Game *game, float dt) {$/;"	f	typeref:typename:void
 check_window_popup	src/chapter_4.cpp	/^    bool check_window_popup; \/\/ kitchen$/;"	m	struct:Level_Chapter_4	typeref:typename:bool	file:
+checked_window	src/chapter_4.cpp	/^    bool checked_window;$/;"	m	struct:Level_Chapter_4	typeref:typename:bool	file:
 choice	src/text.cpp	/^    bool choice;$/;"	m	struct:Text_List	typeref:typename:bool	file:
 choice_backdrop_color	src/text.cpp	/^    Color choice_backdrop_color = BLACK;$/;"	m	struct:Text_List	typeref:typename:Color	file:
 choice_color	src/text.cpp	/^    Color choice_color      = WHITE;$/;"	m	struct:Text_List	typeref:typename:Color	file:
@@ -628,9 +756,12 @@ choice_count	src/text.cpp	/^    int choice_count;$/;"	m	struct:Text_List	typeref
 choice_index	src/text.cpp	/^    int choice_index;$/;"	m	struct:Text_List	typeref:typename:int	file:
 choice_text_list_init	src/text.cpp	/^Text_List choice_text_list_init(char *speaker,$/;"	f	typeref:typename:Text_List
 choices	src/text.cpp	/^    String choices[CHOICE_MAX];$/;"	m	struct:Text_List	typeref:typename:String[]	file:
+chroma_height	src/pl_mpeg.h	/^	int chroma_height;$/;"	m	struct:plm_video_t	typeref:typename:int
+chroma_width	src/pl_mpeg.h	/^	int chroma_width;$/;"	m	struct:plm_video_t	typeref:typename:int
 clerk	src/chapter_5.cpp	/^        Chapter_5_Clerk clerk;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80208	typeref:typename:Chapter_5_Clerk	file:
 clerk	src/titlescreen.cpp	/^    Model clerk, head;$/;"	m	struct:Titlescreen	typeref:typename:Model	file:
 close_gl	src/glad/glad.c	/^void close_gl(void) {$/;"	f	typeref:typename:void	file:
+close_when_done	src/pl_mpeg.h	/^	int close_when_done;$/;"	m	struct:plm_buffer_t	typeref:typename:int
 closed	src/chapter_4.h	/^    bool closed;$/;"	m	struct:Chapter_4_Window	typeref:typename:bool
 closed	src/chapter_5.cpp	/^    bool        closed;$/;"	m	struct:Chapter_5_Train	typeref:typename:bool	file:
 collision_result	src/chapter_5.cpp	/^        RayCollision collision_result;$/;"	m	struct:apply_3d_velocity::Is_Bad_Position_Result	typeref:typename:RayCollision	file:
@@ -642,6 +773,8 @@ comic_sans	src/main.cpp	/^Font global_font, atari_font, comic_sans, italics_font
 compare_colors	src/util.cpp	/^bool compare_colors(Color a, Color b) {$/;"	f	typeref:typename:bool
 const_string	src/text.cpp	/^#define const_string(/;"	d	file:
 correction	src/chapter_3.cpp	/^    char *correction; \/\/ becomes nullptr when corrected$/;"	m	struct:Word	typeref:typename:char *	file:
+count	src/pl_mpeg.h	/^	unsigned int count;$/;"	m	struct:__anon6b50db360408	typeref:typename:unsigned int
+cr	src/pl_mpeg.h	/^	plm_plane_t cr;$/;"	m	struct:__anon6b50db360308	typeref:typename:plm_plane_t
 crawling_text_state	src/chapter_1.cpp	/^    int crawling_text_state;$/;"	m	struct:Level_Chapter_1	typeref:typename:int	file:
 crt	src/post_processing.cpp	/^    Post_Processing_Crt   crt;$/;"	m	struct:Post_Processing	typeref:typename:Post_Processing_Crt	file:
 cubicle_chair	src/chapter_3.h	/^    struct Entity *cubicle_chair, *cubicle_top, *cubicle_vertical;$/;"	m	struct:Chapter_3_Cubicle	typeref:struct:Entity *
@@ -656,21 +789,30 @@ current_index	src/chapter_4.cpp	/^    int        current_index;$/;"	m	struct:Cha
 current_line	src/text.cpp	/^    int current_line;$/;"	m	struct:Text	typeref:typename:int	file:
 current_lunch_text	src/chapter_3.cpp	/^    Chapter_3_Lunch_Text current_lunch_text;$/;"	m	struct:Level_Chapter_3	typeref:typename:Chapter_3_Lunch_Text	file:
 current_node	src/chapter_epilogue.cpp	/^    Epilogue_Node *current_node;$/;"	m	struct:Level_Chapter_Epilogue	typeref:typename:Epilogue_Node *	file:
+current_packet	src/pl_mpeg.h	/^	plm_packet_t current_packet;$/;"	m	struct:plm_demux_t	typeref:typename:plm_packet_t
 current_quote	src/chapter_5.cpp	/^        Chapter_5_Quote *current_quote;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80608	typeref:typename:Chapter_5_Quote *	file:
 current_quote_time	src/chapter_5.cpp	/^        float            current_quote_time;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80608	typeref:typename:float	file:
 current_scene	src/chapter_5.cpp	/^    int      current_scene;$/;"	m	struct:Level_Chapter_5	typeref:typename:int	file:
+data	src/pl_mpeg.h	/^	uint8_t *data;$/;"	m	struct:__anon6b50db360108	typeref:typename:uint8_t *
+data	src/pl_mpeg.h	/^	uint8_t *data;$/;"	m	struct:__anon6b50db360208	typeref:typename:uint8_t *
 data	src/util.cpp	/^    T *data;$/;"	m	struct:Array	typeref:typename:T *	file:
+dc_predictor	src/pl_mpeg.h	/^	int dc_predictor[3];$/;"	m	struct:plm_video_t	typeref:typename:int[3]
 default_entity_draw	src/game.cpp	/^void default_entity_draw(Entity *e) {$/;"	f	typeref:typename:void
 default_height	src/main.cpp	/^const int default_height = 144*5;$/;"	v	typeref:typename:const int
 default_width	src/main.cpp	/^const int default_width  = 192*5;$/;"	v	typeref:typename:const int
 delta_x	src/chapter_5.cpp	/^    float       delta_x;$/;"	m	struct:Chapter_5_Train	typeref:typename:float	file:
+demux	src/pl_mpeg.h	/^	plm_demux_t *demux;$/;"	m	struct:plm_t	typeref:typename:plm_demux_t *
 desert_door_popup	src/chapter_5.cpp	/^        bool             desert_door_popup;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80508	typeref:typename:bool	file:
+destroy_buffer_when_done	src/pl_mpeg.h	/^	int destroy_buffer_when_done;$/;"	m	struct:plm_audio_t	typeref:typename:int
+destroy_buffer_when_done	src/pl_mpeg.h	/^	int destroy_buffer_when_done;$/;"	m	struct:plm_demux_t	typeref:typename:int
+destroy_buffer_when_done	src/pl_mpeg.h	/^	int destroy_buffer_when_done;$/;"	m	struct:plm_video_t	typeref:typename:int
 dialogue_state	src/game.cpp	/^    int         dialogue_state;$/;"	m	struct:Entity	typeref:typename:int	file:
 dir_x	src/chapter_1.h	/^    int   dir_x, dir_y;$/;"	m	struct:Chapter_1_Player	typeref:typename:int
 dir_y	src/chapter_1.h	/^    int   dir_x, dir_y;$/;"	m	struct:Chapter_1_Player	typeref:typename:int
 direction	src/game.cpp	/^    Fade_Direction direction;$/;"	m	struct:Fader	typeref:typename:Fade_Direction	file:
 disallow_skipping	src/text.cpp	/^    bool disallow_skipping = false;$/;"	m	struct:Text_List	typeref:typename:bool	file:
 disallow_skipping	src/text.cpp	/^    bool disallow_skipping;$/;"	m	struct:Text	typeref:typename:bool	file:
+discard_read_bytes	src/pl_mpeg.h	/^	int discard_read_bytes;$/;"	m	struct:plm_buffer_t	typeref:typename:int
 djinn	src/chapter_4.cpp	/^    Entity *djinn;$/;"	m	struct:Level_Chapter_4	typeref:typename:Entity *	file:
 do_180_head	src/chapter_5.cpp	/^    bool    do_180_head;$/;"	m	struct:Chapter_5_Clerk	typeref:typename:bool	file:
 do_scanline_effect	src/post_processing.cpp	/^    int    do_scanline_effect;$/;"	m	struct:Post_Processing_Crt	typeref:typename:int	file:
@@ -699,10 +841,12 @@ draw_popup	src/game.cpp	/^void draw_popup(const char *text, Color color, Locatio
 draw_popup	src/game.cpp	/^void draw_popup(const char *text, Color color, Location location, int xoff, int yoff) {$/;"	f	typeref:typename:void
 draw_walls	src/chapter_2.cpp	/^bool draw_walls = false;$/;"	v	typeref:typename:bool
 driving_off	src/chapter_3.cpp	/^    bool driving_off;$/;"	m	struct:Chapter_3_Car	typeref:typename:bool	file:
+duration	src/pl_mpeg.h	/^	double duration;$/;"	m	struct:plm_demux_t	typeref:typename:double
 end	src/chapter_6.cpp	/^    bool end;$/;"	m	struct:Level_Chapter_6	typeref:typename:bool	file:
 end_chapter_5_after_stop	src/chapter_5.cpp	/^void end_chapter_5_after_stop(void *game_ptr) {$/;"	f	typeref:typename:void
 end_index	src/chapter_3.cpp	/^    int   end_index;$/;"	m	struct:Word	typeref:typename:int	file:
 end_index	src/util.cpp	/^    int end_index;$/;"	m	struct:Find_Word_Result	typeref:typename:int	file:
+end_movie_callback	src/movie.h	/^    void (*end_movie_callback)(struct Game *game);$/;"	m	struct:Movie	typeref:typename:void (*)(struct Game * game)
 end_steps	src/chapter_3.cpp	/^    float end_steps;$/;"	m	struct:Level_Chapter_3	typeref:typename:float	file:
 end_timer	src/chapter_4.cpp	/^    float text_start_timer, end_timer;$/;"	m	struct:Level_Chapter_4	typeref:typename:float	file:
 enlarge_rectangle	src/text.cpp	/^Rectangle enlarge_rectangle(Rectangle a, float amount) {$/;"	f	typeref:typename:Rectangle
@@ -729,6 +873,7 @@ fade_alpha	src/chapter_6.cpp	/^    float fade_alpha;$/;"	m	struct:Level_Chapter_
 fade_to_dinner	src/chapter_5.cpp	/^        bool                fade_to_dinner;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80308	typeref:typename:bool	file:
 fader	src/game.cpp	/^    Fader fader;$/;"	m	struct:Game	typeref:typename:Fader	file:
 fader	src/intro.cpp	/^    float fader; \/\/ 0.0 is 0 alpha, 1.0 is 255 alpha, 2.0 is 0 alpha.$/;"	m	struct:Game_Intro	typeref:typename:float	file:
+fh	src/pl_mpeg.h	/^	FILE *fh;$/;"	m	struct:plm_buffer_t	typeref:typename:FILE *
 final_dialogue_alarm	src/chapter_2.cpp	/^    float final_dialogue_alarm;$/;"	m	struct:Level_Chapter_2	typeref:typename:float	file:
 final_text	src/chapter_1.cpp	/^    bool final_text;$/;"	m	struct:Level_Chapter_1	typeref:typename:bool	file:
 final_text	src/chapter_2.h	/^    bool final_text;$/;"	m	struct:Chapter_2_Penny	typeref:typename:bool
@@ -757,11 +902,21 @@ font_spacing	src/text.cpp	/^    int font_spacing;$/;"	m	struct:Text_List	typeref
 footsteps_done	src/chapter_1.h	/^    int   footsteps_done;$/;"	m	struct:Chapter_1_Player	typeref:typename:int
 fov	src/chapter_5.cpp	/^    float      fov;$/;"	m	struct:Chapter_5_Quote	typeref:typename:float	file:
 frame_arena	src/game.cpp	/^    Arena frame_arena; \/\/ 32k scratch space$/;"	m	struct:Game	typeref:typename:Arena	file:
+frame_backward	src/pl_mpeg.h	/^	plm_frame_t frame_backward;$/;"	m	struct:plm_video_t	typeref:typename:plm_frame_t
 frame_count	src/chapter_4.cpp	/^    int frame_count;$/;"	m	struct:Cutscene	typeref:typename:int	file:
+frame_current	src/pl_mpeg.h	/^	plm_frame_t frame_current;$/;"	m	struct:plm_video_t	typeref:typename:plm_frame_t
+frame_forward	src/pl_mpeg.h	/^	plm_frame_t frame_forward;$/;"	m	struct:plm_video_t	typeref:typename:plm_frame_t
 frame_time	src/chapter_4.cpp	/^    float frame_time;$/;"	m	struct:Cutscene_Frame	typeref:typename:float	file:
+framerate	src/movie.h	/^    double  framerate;$/;"	m	struct:Movie	typeref:typename:double
+framerate	src/pl_mpeg.h	/^	double framerate;$/;"	m	struct:plm_video_t	typeref:typename:double
 frames	src/chapter_4.cpp	/^    Cutscene_Frame *frames;$/;"	m	struct:Cutscene	typeref:typename:Cutscene_Frame *	file:
+frames	src/movie.h	/^    int     frames;$/;"	m	struct:Movie	typeref:typename:int
+frames_data	src/pl_mpeg.h	/^	uint8_t *frames_data;$/;"	m	struct:plm_video_t	typeref:typename:uint8_t *
+frames_decoded	src/pl_mpeg.h	/^	int frames_decoded;$/;"	m	struct:plm_video_t	typeref:typename:int
 free_entity	src/game.cpp	/^void free_entity(Entity *entity) {$/;"	f	typeref:typename:void
 free_exts	src/glad/glad.c	/^static void free_exts(void) {$/;"	f	typeref:typename:void	file:
+free_when_done	src/pl_mpeg.h	/^	int free_when_done;$/;"	m	struct:plm_buffer_t	typeref:typename:int
+full_px	src/pl_mpeg.h	/^	int full_px;$/;"	m	struct:__anon6b50db360708	typeref:typename:int
 fullscreen	src/main.cpp	/^bool fullscreen = false;$/;"	v	typeref:typename:bool
 fullscreen_timer	src/main.cpp	/^float fullscreen_timer = 0;$/;"	v	typeref:typename:float
 gallery_check_quotes	src/chapter_5.cpp	/^void gallery_check_quotes(Game *game, float dt) {$/;"	f	typeref:typename:void
@@ -773,6 +928,7 @@ game_intro	src/main.cpp	/^Game_Intro  game_intro;$/;"	v	typeref:typename:Game_In
 game_intro_init	src/intro.cpp	/^void game_intro_init(Game_Intro *game) {$/;"	f	typeref:typename:void
 game_intro_run	src/intro.cpp	/^void game_intro_run(Game_Intro *game) {$/;"	f	typeref:typename:void
 game_mode	src/main.cpp	/^Game_Mode game_mode = GAME_MODE_INVALID;$/;"	v	typeref:typename:Game_Mode
+game_movie	src/movie.h	/^Movie game_movie;$/;"	v	typeref:typename:Movie
 game_target	src/post_processing.cpp	/^    RenderTexture2D          game_target; \/\/ This is the internal resolution.$/;"	m	struct:Post_Processing	typeref:typename:RenderTexture2D	file:
 game_titlescreen	src/main.cpp	/^Titlescreen game_titlescreen;$/;"	v	typeref:typename:Titlescreen
 gamepad_movement_angle	src/keys.cpp	/^float gamepad_movement_angle(float dt) {$/;"	f	typeref:typename:float
@@ -1172,20 +1328,37 @@ god_scroll	src/chapter_6.cpp	/^    float god_scroll;$/;"	m	struct:Level_Chapter_
 godtext	src/chapter_1.cpp	/^    int godtext;$/;"	m	struct:Level_Chapter_1	typeref:typename:int	file:
 godtext	src/chapter_6.cpp	/^    int godtext;$/;"	m	struct:Level_Chapter_6	typeref:typename:int	file:
 good	src/chapter_5.cpp	/^        bool             good;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80408	typeref:typename:bool	file:
+group	src/pl_mpeg.h	/^	unsigned char group;$/;"	m	struct:plm_quantizer_spec_t	typeref:typename:unsigned char
 guy_sitting	src/chapter_5.cpp	/^        Model guy_sitting,$/;"	m	struct:Level_Chapter_5::Models	typeref:typename:Model	file:
+h	src/pl_mpeg.h	/^	int h;$/;"	m	struct:__anon6b50db360708	typeref:typename:int
 has_control	src/chapter_3.cpp	/^    bool has_control;$/;"	m	struct:Chapter_3_Car	typeref:typename:bool	file:
+has_decoders	src/pl_mpeg.h	/^	int has_decoders;$/;"	m	struct:plm_t	typeref:typename:int
 has_dialogue	src/game.cpp	/^    bool        has_dialogue;$/;"	m	struct:Entity	typeref:typename:bool	file:
+has_ended	src/pl_mpeg.h	/^	int has_ended;$/;"	m	struct:plm_buffer_t	typeref:typename:int
+has_ended	src/pl_mpeg.h	/^	int has_ended;$/;"	m	struct:plm_t	typeref:typename:int
 has_ext	src/glad/glad.c	/^static int has_ext(const char *ext) {$/;"	f	typeref:typename:int	file:
+has_header	src/pl_mpeg.h	/^	int has_header;$/;"	m	struct:plm_audio_t	typeref:typename:int
+has_headers	src/pl_mpeg.h	/^	int has_headers;$/;"	m	struct:plm_demux_t	typeref:typename:int
+has_pack_header	src/pl_mpeg.h	/^	int has_pack_header;$/;"	m	struct:plm_demux_t	typeref:typename:int
 has_real_head	src/chapter_5.cpp	/^    bool    has_real_head;$/;"	m	struct:Chapter_5_Clerk	typeref:typename:bool	file:
+has_reference_frame	src/pl_mpeg.h	/^	int has_reference_frame;$/;"	m	struct:plm_video_t	typeref:typename:int
+has_sequence_header	src/pl_mpeg.h	/^	int has_sequence_header;$/;"	m	struct:plm_video_t	typeref:typename:int
+has_system_header	src/pl_mpeg.h	/^	int has_system_header;$/;"	m	struct:plm_demux_t	typeref:typename:int
 head	src/titlescreen.cpp	/^    Model clerk, head;$/;"	m	struct:Titlescreen	typeref:typename:Model	file:
 head_rotation	src/chapter_5.cpp	/^    float   head_rotation;$/;"	m	struct:Chapter_5_Clerk	typeref:typename:float	file:
 height	src/chapter_2.cpp	/^    int width, height;$/;"	m	struct:Level_Chapter_2	typeref:typename:int	file:
+height	src/pl_mpeg.h	/^	int height;$/;"	m	struct:plm_video_t	typeref:typename:int
+height	src/pl_mpeg.h	/^	unsigned int height;$/;"	m	struct:__anon6b50db360208	typeref:typename:unsigned int
+height	src/pl_mpeg.h	/^	unsigned int height;$/;"	m	struct:__anon6b50db360308	typeref:typename:unsigned int
 height	src/text.cpp	/^    float height;$/;"	m	struct:Text	typeref:typename:float	file:
 home_background	src/chapter_3.cpp	/^    int home_background;$/;"	m	struct:Level_Chapter_3	typeref:typename:int	file:
 hsv	src/util.cpp	/^Color hsv(float hue, float saturation, float value) {$/;"	f	typeref:typename:Color
 huffing_and_puffing	src/chapter_1.h	/^    bool  huffing_and_puffing;$/;"	m	struct:Chapter_1_Player	typeref:typename:bool
 include_text_in_target	src/game.cpp	/^    bool include_text_in_target;$/;"	m	struct:Game	typeref:typename:bool	file:
+index	src/pl_mpeg.h	/^	int16_t index;$/;"	m	struct:__anon6b50db360508	typeref:typename:int16_t
+index	src/pl_mpeg.h	/^	int16_t index;$/;"	m	struct:__anon6b50db360608	typeref:typename:int16_t
 init_text_list_default	src/text.cpp	/^void init_text_list_default(Text_List *list, char *speaker, char *text_string, Text_List *next) /;"	f	typeref:typename:void
+initial_load	src/movie.h	/^    bool    initial_load;$/;"	m	struct:Movie	typeref:typename:bool
 initialize_game_mode	src/main.cpp	/^void initialize_game_mode(Game_Mode mode) {$/;"	f	typeref:typename:void
 input_movement_cont_look_axis	src/keys.cpp	/^Vector2 input_movement_cont_look_axis(float dt) {$/;"	f	typeref:typename:Vector2
 input_movement_look	src/keys.cpp	/^Vector2 input_movement_look(float dt) {$/;"	f	typeref:typename:Vector2
@@ -1197,6 +1370,8 @@ instance_positions	src/chapter_5.cpp	/^    Vector3     instance_positions;$/;"	m
 instances	src/chapter_5.cpp	/^    int         instances;$/;"	m	struct:Chapter_5_Train	typeref:typename:int	file:
 int_vec2	src/util.cpp	/^inline Vector2 int_vec2(Vector2 in) {$/;"	f	typeref:typename:Vector2
 integer_rectangle	src/util.cpp	/^Rectangle integer_rectangle(Rectangle rect) {$/;"	f	typeref:typename:Rectangle
+interleaved	src/pl_mpeg.h	/^		float interleaved[PLM_AUDIO_SAMPLES_PER_FRAME * 2];$/;"	m	struct:__anon6b50db360408	typeref:typename:float[]
+intra_quant_matrix	src/pl_mpeg.h	/^	uint8_t intra_quant_matrix[64];$/;"	m	struct:plm_video_t	typeref:typename:uint8_t[64]
 intro	src/chapter_1.cpp	/^    bool intro;$/;"	m	struct:Level_Chapter_1	typeref:typename:bool	file:
 is_action_pressed	src/keys.cpp	/^bool is_action_pressed() {$/;"	f	typeref:typename:bool
 is_entity_collidable	src/game.cpp	/^bool is_entity_collidable(Entity *e) {$/;"	f	typeref:typename:bool
@@ -1205,6 +1380,7 @@ is_hurt	src/chapter_1.h	/^    bool  is_hurt;$/;"	m	struct:Chapter_1_Player	typer
 is_mesh_collider	src/chapter_5.cpp	/^bool is_mesh_collider(Model *model, int mesh_index) {$/;"	f	typeref:typename:bool
 is_newline	src/text.cpp	/^bool is_newline(char c) {$/;"	f	typeref:typename:bool
 is_player_close_to_entity	src/game.cpp	/^bool is_player_close_to_entity(Entity *player, Entity *e, int closeness) {$/;"	f	typeref:typename:bool
+is_set	src/pl_mpeg.h	/^	int is_set;$/;"	m	struct:__anon6b50db360708	typeref:typename:int
 is_text_at_end	src/text.cpp	/^bool is_text_at_end(Text *text) {$/;"	f	typeref:typename:bool
 is_text_list_at_end	src/text.cpp	/^bool is_text_list_at_end(Text_List *list) {$/;"	f	typeref:typename:bool
 is_transitioning	src/chapter_epilogue.cpp	/^    bool           is_transitioning;$/;"	m	struct:Level_Chapter_Epilogue	typeref:typename:bool	file:
@@ -1218,7 +1394,14 @@ key_right	src/keys.cpp	/^bool key_right() {$/;"	f	typeref:typename:bool
 key_up	src/keys.cpp	/^bool key_up() {$/;"	f	typeref:typename:bool
 key_up_pressed	src/keys.cpp	/^int key_up_pressed() {$/;"	f	typeref:typename:int
 keyboard_focus	src/game.cpp	/^Keyboard_Focus keyboard_focus(Game *game) {$/;"	f	typeref:typename:Keyboard_Focus
+last_decoded_pts	src/pl_mpeg.h	/^	double last_decoded_pts;$/;"	m	struct:plm_demux_t	typeref:typename:double
+last_file_size	src/pl_mpeg.h	/^	size_t last_file_size;$/;"	m	struct:plm_demux_t	typeref:typename:size_t
 last_movements	src/chapter_1.cpp	/^    Direction last_movements[4];$/;"	m	struct:Level_Chapter_1	typeref:typename:Direction[4]	file:
+last_time	src/movie.h	/^    double  last_time;$/;"	m	struct:Movie	typeref:typename:double
+layer	src/pl_mpeg.h	/^	int layer;$/;"	m	struct:plm_audio_t	typeref:typename:int
+left	src/pl_mpeg.h	/^		float left[PLM_AUDIO_SAMPLES_PER_FRAME];$/;"	m	struct:__anon6b50db360408	typeref:typename:float[]
+length	src/pl_mpeg.h	/^	size_t length;$/;"	m	struct:__anon6b50db360108	typeref:typename:size_t
+length	src/pl_mpeg.h	/^	size_t length;$/;"	m	struct:plm_buffer_t	typeref:typename:size_t
 length	src/text.cpp	/^    size_t length;$/;"	m	struct:String	typeref:typename:size_t	file:
 length	src/util.cpp	/^    size_t length;$/;"	m	struct:Array	typeref:typename:size_t	file:
 lerp_color	src/util.cpp	/^Color lerp_color(Color a, Color b, double t) {$/;"	f	typeref:typename:Color
@@ -1227,6 +1410,7 @@ lerp_vector3	src/util.cpp	/^Vector3 lerp_vector3(Vector3 a, Vector3 b, float t) 
 level	src/game.cpp	/^    void *level; \/\/ Points to the specific chapter level struct.$/;"	m	struct:Game	typeref:typename:void *	file:
 level_arena	src/game.cpp	/^    Arena  *level_arena;$/;"	m	struct:Entity_Allocator	typeref:typename:Arena *	file:
 level_arena	src/game.cpp	/^    Arena level_arena;$/;"	m	struct:Game	typeref:typename:Arena	file:
+levels	src/pl_mpeg.h	/^	unsigned short levels;$/;"	m	struct:plm_quantizer_spec_t	typeref:typename:unsigned short
 libGL	src/glad/glad.c	/^static HMODULE libGL;$/;"	v	typeref:typename:HMODULE	file:
 libGL	src/glad/glad.c	/^static void* libGL;$/;"	v	typeref:typename:void *	file:
 line_count	src/chapter_3.cpp	/^    int   line_count;$/;"	m	struct:Chapter_3_Job_Minigame	typeref:typename:int	file:
@@ -1245,42 +1429,69 @@ load_GL_VERSION_3_0	src/glad/glad.c	/^static void load_GL_VERSION_3_0(GLADloadpr
 load_GL_VERSION_3_1	src/glad/glad.c	/^static void load_GL_VERSION_3_1(GLADloadproc load) {$/;"	f	typeref:typename:void	file:
 load_GL_VERSION_3_2	src/glad/glad.c	/^static void load_GL_VERSION_3_2(GLADloadproc load) {$/;"	f	typeref:typename:void	file:
 load_GL_VERSION_3_3	src/glad/glad.c	/^static void load_GL_VERSION_3_3(GLADloadproc load) {$/;"	f	typeref:typename:void	file:
+load_callback	src/pl_mpeg.h	/^	plm_buffer_load_callback load_callback;$/;"	m	struct:plm_buffer_t	typeref:typename:plm_buffer_load_callback
+load_callback_user_data	src/pl_mpeg.h	/^	void *load_callback_user_data;$/;"	m	struct:plm_buffer_t	typeref:typename:void *
 load_texture	src/util.cpp	/^Texture2D load_texture(const char *filename) {$/;"	f	typeref:typename:Texture2D
 location	src/text.cpp	/^    Location location       = Location::Bottom;$/;"	m	struct:Text_List	typeref:typename:Location	file:
 look_angle	src/chapter_5.cpp	/^    float look_angle;$/;"	m	struct:Chapter_5_Chair	typeref:typename:float	file:
 look_timer	src/chapter_5.cpp	/^    float look_timer;$/;"	m	struct:Chapter_5_Chair	typeref:typename:float	file:
 looking_at	src/chapter_5.cpp	/^    Chapter_5_Chair *looking_at; \/\/ null for looking at the camera$/;"	m	struct:Chapter_5_Chair	typeref:typename:Chapter_5_Chair *	file:
+loop	src/pl_mpeg.h	/^	int loop;$/;"	m	struct:plm_t	typeref:typename:int
+luma_height	src/pl_mpeg.h	/^	int luma_height;$/;"	m	struct:plm_video_t	typeref:typename:int
+luma_width	src/pl_mpeg.h	/^	int luma_width;$/;"	m	struct:plm_video_t	typeref:typename:int
 lunch_devil_effect	src/chapter_3.cpp	/^    bool lunch_devil_effect;$/;"	m	struct:Level_Chapter_3	typeref:typename:bool	file:
+macroblock_address	src/pl_mpeg.h	/^	int macroblock_address;$/;"	m	struct:plm_video_t	typeref:typename:int
+macroblock_intra	src/pl_mpeg.h	/^	int macroblock_intra;$/;"	m	struct:plm_video_t	typeref:typename:int
+macroblock_type	src/pl_mpeg.h	/^	int macroblock_type;$/;"	m	struct:plm_video_t	typeref:typename:int
 make_arena	src/util.cpp	/^Arena make_arena(size_t size) {$/;"	f	typeref:typename:Arena
 make_array	src/util.cpp	/^Array<T> make_array(size_t initial_capacity) {$/;"	f	typeref:typename:Array<T>
 max	src/text.cpp	/^#define max(/;"	d	file:
 max_loaded_major	src/glad/glad.c	/^static int max_loaded_major;$/;"	v	typeref:typename:int	file:
 max_loaded_minor	src/glad/glad.c	/^static int max_loaded_minor;$/;"	v	typeref:typename:int	file:
+mb_col	src/pl_mpeg.h	/^	int mb_col;$/;"	m	struct:plm_video_t	typeref:typename:int
+mb_height	src/pl_mpeg.h	/^	int mb_height;$/;"	m	struct:plm_video_t	typeref:typename:int
+mb_row	src/pl_mpeg.h	/^	int mb_row;$/;"	m	struct:plm_video_t	typeref:typename:int
+mb_size	src/pl_mpeg.h	/^	int mb_size;$/;"	m	struct:plm_video_t	typeref:typename:int
+mb_width	src/pl_mpeg.h	/^	int mb_width;$/;"	m	struct:plm_video_t	typeref:typename:int
 message	src/intro.cpp	/^    const char *message;$/;"	m	struct:Game_Intro	typeref:typename:const char *	file:
 microwave_popup	src/chapter_4.cpp	/^    bool microwave_popup;$/;"	m	struct:Level_Chapter_4	typeref:typename:bool	file:
 min	src/text.cpp	/^#define min(/;"	d	file:
 minigame	src/chapter_3.cpp	/^    Chapter_3_Job_Minigame minigame;$/;"	m	struct:Level_Chapter_3	typeref:typename:Chapter_3_Job_Minigame	file:
 mirror_popup	src/chapter_2.cpp	/^    bool mirror_popup;$/;"	m	struct:Level_Chapter_2	typeref:typename:bool	file:
 mix_factor	src/post_processing.cpp	/^    float  mix_factor;$/;"	m	struct:Post_Processing_Vhs	typeref:typename:float	file:
+mode	src/pl_mpeg.h	/^	enum plm_buffer_mode mode;$/;"	m	struct:plm_buffer_t	typeref:enum:plm_buffer_mode
+mode	src/pl_mpeg.h	/^	int mode;$/;"	m	struct:plm_audio_t	typeref:typename:int
 model_set_bilinear	src/game.cpp	/^void model_set_bilinear(Model *model) {$/;"	f	typeref:typename:void
 model_set_shader	src/game.cpp	/^void model_set_shader(Model *model, Shader shader) {$/;"	f	typeref:typename:void
 models	src/chapter_5.cpp	/^    } models;$/;"	m	struct:Level_Chapter_5	typeref:struct:Level_Chapter_5::Models	file:
 mono_font	src/main.cpp	/^Font global_font, atari_font, comic_sans, italics_font, bold_font, bold_2_font, mono_font, bold_/;"	v	typeref:typename:Font
+motion_backward	src/pl_mpeg.h	/^	plm_video_motion_t motion_backward;$/;"	m	struct:plm_video_t	typeref:typename:plm_video_motion_t
+motion_forward	src/pl_mpeg.h	/^	plm_video_motion_t motion_forward;$/;"	m	struct:plm_video_t	typeref:typename:plm_video_motion_t
+move_t	src/chapter_5.cpp	/^    double      move_t;$/;"	m	struct:Chapter_5_Train	typeref:typename:double	file:
 move_timer	src/chapter_5.cpp	/^    float       move_timer;$/;"	m	struct:Chapter_5_Train	typeref:typename:float	file:
+movie	src/movie.h	/^    int     movie;$/;"	m	struct:Movie	typeref:typename:int
+movie_handle_frame	src/movie.cpp	/^void movie_handle_frame(plm_t *mpeg, plm_frame_t *frame, void *user) {$/;"	f	typeref:typename:void
+movie_init	src/movie.cpp	/^void movie_init(Movie *movie, int which_movie) {$/;"	f	typeref:typename:void
+movie_load_video	src/movie.cpp	/^void movie_load_video(Movie *movie, const char *movie_file, const char *audio_file) {$/;"	f	typeref:typename:void
+movie_run	src/movie.cpp	/^void movie_run(Movie *movie) {$/;"	f	typeref:typename:void
 moving	src/chapter_5.cpp	/^    bool        moving;$/;"	m	struct:Chapter_5_Train	typeref:typename:bool	file:
 moving_down	src/chapter_epilogue.cpp	/^    bool moving_up, moving_down;$/;"	m	struct:Epilogue_Node	typeref:typename:bool	file:
 moving_up	src/chapter_epilogue.cpp	/^    bool moving_up, moving_down;$/;"	m	struct:Epilogue_Node	typeref:typename:bool	file:
 next	src/text.cpp	/^    Text_List *next[CHOICE_MAX];$/;"	m	struct:Text_List	typeref:typename:Text_List * []	file:
+next_frame_data_size	src/pl_mpeg.h	/^	int next_frame_data_size;$/;"	m	struct:plm_audio_t	typeref:typename:int
 next_free	src/game.cpp	/^    Entity     *next_free;$/;"	m	struct:Entity	typeref:typename:Entity *	file:
 next_list	src/chapter_4.cpp	/^    Text_List *next_list[20];$/;"	m	struct:Chapter_4_Text	typeref:typename:Text_List * [20]	file:
 next_node_to_appear	src/chapter_epilogue.cpp	/^    int            next_node_to_appear; \/\/ index$/;"	m	struct:Level_Chapter_Epilogue	typeref:typename:int	file:
+next_packet	src/pl_mpeg.h	/^	plm_packet_t next_packet;$/;"	m	struct:plm_demux_t	typeref:typename:plm_packet_t
 node	src/chapter_epilogue.cpp	/^    Model          scene, bars, node, door, timer_model;$/;"	m	struct:Level_Chapter_Epilogue	typeref:typename:Model	file:
 node_popup	src/chapter_epilogue.cpp	/^    bool           node_popup;$/;"	m	struct:Level_Chapter_Epilogue	typeref:typename:bool	file:
 node_timer	src/chapter_epilogue.cpp	/^    float          node_timer, node_timer_max;$/;"	m	struct:Level_Chapter_Epilogue	typeref:typename:float	file:
 node_timer_max	src/chapter_epilogue.cpp	/^    float          node_timer, node_timer_max;$/;"	m	struct:Level_Chapter_Epilogue	typeref:typename:float	file:
 nodes	src/chapter_epilogue.cpp	/^    Epilogue_Node  nodes[EPILOGUE_NODE_MAX];$/;"	m	struct:Level_Chapter_Epilogue	typeref:typename:Epilogue_Node[]	file:
 noise_intensity	src/post_processing.cpp	/^    float  noise_intensity;$/;"	m	struct:Post_Processing_Vhs	typeref:typename:float	file:
+non_intra_quant_matrix	src/pl_mpeg.h	/^	uint8_t non_intra_quant_matrix[64];$/;"	m	struct:plm_video_t	typeref:typename:uint8_t[64]
 not_first_frame	src/text.cpp	/^    bool finished, not_first_frame;$/;"	m	struct:Text	typeref:typename:bool	file:
+num_audio_streams	src/pl_mpeg.h	/^	int num_audio_streams;$/;"	m	struct:plm_demux_t	typeref:typename:int
 num_chairs	src/chapter_5.cpp	/^    int             num_chairs;$/;"	m	struct:Chapter_5_Table	typeref:typename:int	file:
 num_corrections	src/chapter_3.cpp	/^    int     num_corrections;$/;"	m	struct:Document	typeref:typename:int	file:
 num_doors	src/chapter_epilogue.cpp	/^    int            num_doors;$/;"	m	struct:Level_Chapter_Epilogue	typeref:typename:int	file:
@@ -1288,6 +1499,7 @@ num_events	src/game.cpp	/^    int   num_events;$/;"	m	struct:Game	typeref:typena
 num_exts_i	src/glad/glad.c	/^static int num_exts_i = 0;$/;"	v	typeref:typename:int	file:
 num_nodes	src/chapter_epilogue.cpp	/^    int            num_nodes;$/;"	m	struct:Level_Chapter_Epilogue	typeref:typename:int	file:
 num_tables	src/chapter_5.cpp	/^        int              num_tables;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80408	typeref:typename:int	file:
+num_video_streams	src/pl_mpeg.h	/^	int num_video_streams;$/;"	m	struct:plm_demux_t	typeref:typename:int
 number	src/chapter_3.h	/^    int number;$/;"	m	struct:Chapter_3_Cubicle	typeref:typename:int
 ok	src/chapter_5.cpp	/^        bool ok;$/;"	m	struct:apply_3d_velocity::Is_Bad_Position_Result	typeref:typename:bool	file:
 open_gl	src/glad/glad.c	/^int open_gl(void) {$/;"	f	typeref:typename:int	file:
@@ -1302,7 +1514,9 @@ penny	src/chapter_2.cpp	/^    Entity *penny;$/;"	m	struct:Level_Chapter_2	typere
 penny	src/chapter_5.cpp	/^        Chapter_5_Chair *penny;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80408	typeref:typename:Chapter_5_Chair *	file:
 penny_state	src/chapter_2.cpp	/^    Chapter_2_Penny_State penny_state;$/;"	m	struct:Level_Chapter_2	typeref:typename:Chapter_2_Penny_State	file:
 phone	src/chapter_3.cpp	/^    Chapter_3_Phone        phone;$/;"	m	struct:Level_Chapter_3	typeref:typename:Chapter_3_Phone	file:
+picture_type	src/pl_mpeg.h	/^	int picture_type;$/;"	m	struct:plm_video_t	typeref:typename:int
 pink_dot	src/chapter_epilogue.cpp	/^    Texture        pink_dot, orange_dot, black_texture;$/;"	m	struct:Level_Chapter_Epilogue	typeref:typename:Texture	file:
+pixel_aspect_ratio	src/pl_mpeg.h	/^	double pixel_aspect_ratio;$/;"	m	struct:plm_video_t	typeref:typename:double
 player	src/chapter_1.cpp	/^    Entity *player, *prayer_mat;$/;"	m	struct:Level_Chapter_1	typeref:typename:Entity *	file:
 player	src/chapter_2.cpp	/^    Entity *player; \/\/ quick access to the player$/;"	m	struct:Level_Chapter_2	typeref:typename:Entity *	file:
 player	src/chapter_3.cpp	/^    Entity *player;$/;"	m	struct:Level_Chapter_3	typeref:typename:Entity *	file:
@@ -1310,6 +1524,155 @@ player	src/chapter_4.cpp	/^    Entity *player;$/;"	m	struct:Level_Chapter_4	type
 player	src/chapter_6.cpp	/^    Entity *player;$/;"	m	struct:Level_Chapter_6	typeref:typename:Entity *	file:
 player_in	src/chapter_5.cpp	/^    bool        player_in;$/;"	m	struct:Chapter_5_Train	typeref:typename:bool	file:
 player_in_timer	src/chapter_5.cpp	/^    float       player_in_timer;$/;"	m	struct:Chapter_5_Train	typeref:typename:float	file:
+plm	src/movie.h	/^    plm_t  *plm;$/;"	m	struct:Movie	typeref:typename:plm_t *
+plm_audio_create_with_buffer	src/pl_mpeg.h	/^plm_audio_t *plm_audio_create_with_buffer(plm_buffer_t *buffer, int destroy_when_done) {$/;"	f	typeref:typename:plm_audio_t *
+plm_audio_decode	src/pl_mpeg.h	/^plm_samples_t *plm_audio_decode(plm_audio_t *self) {$/;"	f	typeref:typename:plm_samples_t *
+plm_audio_decode_callback	src/pl_mpeg.h	/^typedef void(*plm_audio_decode_callback)$/;"	t	typeref:typename:void (*)(plm_t * self,plm_samples_t * samples,void * user)
+plm_audio_decode_frame	src/pl_mpeg.h	/^void plm_audio_decode_frame(plm_audio_t *self) {$/;"	f	typeref:typename:void
+plm_audio_decode_header	src/pl_mpeg.h	/^int plm_audio_decode_header(plm_audio_t *self) {$/;"	f	typeref:typename:int
+plm_audio_destroy	src/pl_mpeg.h	/^void plm_audio_destroy(plm_audio_t *self) {$/;"	f	typeref:typename:void
+plm_audio_find_frame_sync	src/pl_mpeg.h	/^int plm_audio_find_frame_sync(plm_audio_t *self) {$/;"	f	typeref:typename:int
+plm_audio_get_samplerate	src/pl_mpeg.h	/^int plm_audio_get_samplerate(plm_audio_t *self) {$/;"	f	typeref:typename:int
+plm_audio_get_time	src/pl_mpeg.h	/^double plm_audio_get_time(plm_audio_t *self) {$/;"	f	typeref:typename:double
+plm_audio_has_ended	src/pl_mpeg.h	/^int plm_audio_has_ended(plm_audio_t *self) {$/;"	f	typeref:typename:int
+plm_audio_has_header	src/pl_mpeg.h	/^int plm_audio_has_header(plm_audio_t *self) {$/;"	f	typeref:typename:int
+plm_audio_idct36	src/pl_mpeg.h	/^void plm_audio_idct36(int s[32][3], int ss, float *d, int dp) {$/;"	f	typeref:typename:void
+plm_audio_read_allocation	src/pl_mpeg.h	/^const plm_quantizer_spec_t *plm_audio_read_allocation(plm_audio_t *self, int sb, int tab3) {$/;"	f	typeref:typename:const plm_quantizer_spec_t *
+plm_audio_read_samples	src/pl_mpeg.h	/^void plm_audio_read_samples(plm_audio_t *self, int ch, int sb, int part) {$/;"	f	typeref:typename:void
+plm_audio_rewind	src/pl_mpeg.h	/^void plm_audio_rewind(plm_audio_t *self) {$/;"	f	typeref:typename:void
+plm_audio_set_time	src/pl_mpeg.h	/^void plm_audio_set_time(plm_audio_t *self, double time) {$/;"	f	typeref:typename:void
+plm_audio_t	src/pl_mpeg.h	/^struct plm_audio_t {$/;"	s
+plm_audio_t	src/pl_mpeg.h	/^typedef struct plm_audio_t plm_audio_t;$/;"	t	typeref:struct:plm_audio_t
+plm_buffer_align	src/pl_mpeg.h	/^void plm_buffer_align(plm_buffer_t *self) {$/;"	f	typeref:typename:void
+plm_buffer_create_for_appending	src/pl_mpeg.h	/^plm_buffer_t *plm_buffer_create_for_appending(size_t initial_capacity) {$/;"	f	typeref:typename:plm_buffer_t *
+plm_buffer_create_with_capacity	src/pl_mpeg.h	/^plm_buffer_t *plm_buffer_create_with_capacity(size_t capacity) {$/;"	f	typeref:typename:plm_buffer_t *
+plm_buffer_create_with_file	src/pl_mpeg.h	/^plm_buffer_t *plm_buffer_create_with_file(FILE *fh, int close_when_done) {$/;"	f	typeref:typename:plm_buffer_t *
+plm_buffer_create_with_filename	src/pl_mpeg.h	/^plm_buffer_t *plm_buffer_create_with_filename(const char *filename) {$/;"	f	typeref:typename:plm_buffer_t *
+plm_buffer_create_with_memory	src/pl_mpeg.h	/^plm_buffer_t *plm_buffer_create_with_memory(uint8_t *bytes, size_t length, int free_when_done) {$/;"	f	typeref:typename:plm_buffer_t *
+plm_buffer_destroy	src/pl_mpeg.h	/^void plm_buffer_destroy(plm_buffer_t *self) {$/;"	f	typeref:typename:void
+plm_buffer_discard_read_bytes	src/pl_mpeg.h	/^void plm_buffer_discard_read_bytes(plm_buffer_t *self) {$/;"	f	typeref:typename:void
+plm_buffer_find_start_code	src/pl_mpeg.h	/^int plm_buffer_find_start_code(plm_buffer_t *self, int code) {$/;"	f	typeref:typename:int
+plm_buffer_get_remaining	src/pl_mpeg.h	/^size_t plm_buffer_get_remaining(plm_buffer_t *self) {$/;"	f	typeref:typename:size_t
+plm_buffer_get_size	src/pl_mpeg.h	/^size_t plm_buffer_get_size(plm_buffer_t *self) {$/;"	f	typeref:typename:size_t
+plm_buffer_has	src/pl_mpeg.h	/^int plm_buffer_has(plm_buffer_t *self, size_t count) {$/;"	f	typeref:typename:int
+plm_buffer_has_ended	src/pl_mpeg.h	/^int plm_buffer_has_ended(plm_buffer_t *self) {$/;"	f	typeref:typename:int
+plm_buffer_has_start_code	src/pl_mpeg.h	/^int plm_buffer_has_start_code(plm_buffer_t *self, int code) {$/;"	f	typeref:typename:int
+plm_buffer_load_callback	src/pl_mpeg.h	/^typedef void(*plm_buffer_load_callback)(plm_buffer_t *self, void *user);$/;"	t	typeref:typename:void (*)(plm_buffer_t * self,void * user)
+plm_buffer_load_file_callback	src/pl_mpeg.h	/^void plm_buffer_load_file_callback(plm_buffer_t *self, void *user) {$/;"	f	typeref:typename:void
+plm_buffer_mode	src/pl_mpeg.h	/^enum plm_buffer_mode {$/;"	g
+plm_buffer_next_start_code	src/pl_mpeg.h	/^int plm_buffer_next_start_code(plm_buffer_t *self) {$/;"	f	typeref:typename:int
+plm_buffer_peek_non_zero	src/pl_mpeg.h	/^int plm_buffer_peek_non_zero(plm_buffer_t *self, int bit_count) {$/;"	f	typeref:typename:int
+plm_buffer_read	src/pl_mpeg.h	/^int plm_buffer_read(plm_buffer_t *self, int count) {$/;"	f	typeref:typename:int
+plm_buffer_read_vlc	src/pl_mpeg.h	/^int16_t plm_buffer_read_vlc(plm_buffer_t *self, const plm_vlc_t *table) {$/;"	f	typeref:typename:int16_t
+plm_buffer_read_vlc_uint	src/pl_mpeg.h	/^uint16_t plm_buffer_read_vlc_uint(plm_buffer_t *self, const plm_vlc_uint_t *table) {$/;"	f	typeref:typename:uint16_t
+plm_buffer_rewind	src/pl_mpeg.h	/^void plm_buffer_rewind(plm_buffer_t *self) {$/;"	f	typeref:typename:void
+plm_buffer_seek	src/pl_mpeg.h	/^void plm_buffer_seek(plm_buffer_t *self, size_t pos) {$/;"	f	typeref:typename:void
+plm_buffer_set_load_callback	src/pl_mpeg.h	/^void plm_buffer_set_load_callback(plm_buffer_t *self, plm_buffer_load_callback fp, void *user) {$/;"	f	typeref:typename:void
+plm_buffer_signal_end	src/pl_mpeg.h	/^void plm_buffer_signal_end(plm_buffer_t *self) {$/;"	f	typeref:typename:void
+plm_buffer_skip	src/pl_mpeg.h	/^void plm_buffer_skip(plm_buffer_t *self, size_t count) {$/;"	f	typeref:typename:void
+plm_buffer_skip_bytes	src/pl_mpeg.h	/^int plm_buffer_skip_bytes(plm_buffer_t *self, uint8_t v) {$/;"	f	typeref:typename:int
+plm_buffer_t	src/pl_mpeg.h	/^struct plm_buffer_t {$/;"	s
+plm_buffer_t	src/pl_mpeg.h	/^typedef struct plm_buffer_t plm_buffer_t;$/;"	t	typeref:struct:plm_buffer_t
+plm_buffer_tell	src/pl_mpeg.h	/^size_t plm_buffer_tell(plm_buffer_t *self) {$/;"	f	typeref:typename:size_t
+plm_buffer_write	src/pl_mpeg.h	/^size_t plm_buffer_write(plm_buffer_t *self, uint8_t *bytes, size_t length) {$/;"	f	typeref:typename:size_t
+plm_clamp	src/pl_mpeg.h	/^static inline uint8_t plm_clamp(int n) {$/;"	f	typeref:typename:uint8_t
+plm_create_with_buffer	src/pl_mpeg.h	/^plm_t *plm_create_with_buffer(plm_buffer_t *buffer, int destroy_when_done) {$/;"	f	typeref:typename:plm_t *
+plm_create_with_file	src/pl_mpeg.h	/^plm_t *plm_create_with_file(FILE *fh, int close_when_done) {$/;"	f	typeref:typename:plm_t *
+plm_create_with_filename	src/pl_mpeg.h	/^plm_t *plm_create_with_filename(const char *filename) {$/;"	f	typeref:typename:plm_t *
+plm_create_with_memory	src/pl_mpeg.h	/^plm_t *plm_create_with_memory(uint8_t *bytes, size_t length, int free_when_done) {$/;"	f	typeref:typename:plm_t *
+plm_decode	src/pl_mpeg.h	/^void plm_decode(plm_t *self, double tick) {$/;"	f	typeref:typename:void
+plm_decode_audio	src/pl_mpeg.h	/^plm_samples_t *plm_decode_audio(plm_t *self) {$/;"	f	typeref:typename:plm_samples_t *
+plm_decode_video	src/pl_mpeg.h	/^plm_frame_t *plm_decode_video(plm_t *self) {$/;"	f	typeref:typename:plm_frame_t *
+plm_demux_buffer_seek	src/pl_mpeg.h	/^void plm_demux_buffer_seek(plm_demux_t *self, size_t pos) {$/;"	f	typeref:typename:void
+plm_demux_create	src/pl_mpeg.h	/^plm_demux_t *plm_demux_create(plm_buffer_t *buffer, int destroy_when_done) {$/;"	f	typeref:typename:plm_demux_t *
+plm_demux_decode	src/pl_mpeg.h	/^plm_packet_t *plm_demux_decode(plm_demux_t *self) {$/;"	f	typeref:typename:plm_packet_t *
+plm_demux_decode_packet	src/pl_mpeg.h	/^plm_packet_t *plm_demux_decode_packet(plm_demux_t *self, int type) {$/;"	f	typeref:typename:plm_packet_t *
+plm_demux_decode_time	src/pl_mpeg.h	/^double plm_demux_decode_time(plm_demux_t *self) {$/;"	f	typeref:typename:double
+plm_demux_destroy	src/pl_mpeg.h	/^void plm_demux_destroy(plm_demux_t *self) {$/;"	f	typeref:typename:void
+plm_demux_get_duration	src/pl_mpeg.h	/^double plm_demux_get_duration(plm_demux_t *self, int type) {$/;"	f	typeref:typename:double
+plm_demux_get_num_audio_streams	src/pl_mpeg.h	/^int plm_demux_get_num_audio_streams(plm_demux_t *self) {$/;"	f	typeref:typename:int
+plm_demux_get_num_video_streams	src/pl_mpeg.h	/^int plm_demux_get_num_video_streams(plm_demux_t *self) {$/;"	f	typeref:typename:int
+plm_demux_get_packet	src/pl_mpeg.h	/^plm_packet_t *plm_demux_get_packet(plm_demux_t *self) {$/;"	f	typeref:typename:plm_packet_t *
+plm_demux_get_start_time	src/pl_mpeg.h	/^double plm_demux_get_start_time(plm_demux_t *self, int type) {$/;"	f	typeref:typename:double
+plm_demux_has_ended	src/pl_mpeg.h	/^int plm_demux_has_ended(plm_demux_t *self) {$/;"	f	typeref:typename:int
+plm_demux_has_headers	src/pl_mpeg.h	/^int plm_demux_has_headers(plm_demux_t *self) {$/;"	f	typeref:typename:int
+plm_demux_probe	src/pl_mpeg.h	/^int plm_demux_probe(plm_demux_t *self, size_t probesize) {$/;"	f	typeref:typename:int
+plm_demux_rewind	src/pl_mpeg.h	/^void plm_demux_rewind(plm_demux_t *self) {$/;"	f	typeref:typename:void
+plm_demux_seek	src/pl_mpeg.h	/^plm_packet_t *plm_demux_seek(plm_demux_t *self, double seek_time, int type, int force_intra) {$/;"	f	typeref:typename:plm_packet_t *
+plm_demux_t	src/pl_mpeg.h	/^struct plm_demux_t {$/;"	s
+plm_demux_t	src/pl_mpeg.h	/^typedef struct plm_demux_t plm_demux_t;$/;"	t	typeref:struct:plm_demux_t
+plm_destroy	src/pl_mpeg.h	/^void plm_destroy(plm_t *self) {$/;"	f	typeref:typename:void
+plm_frame_t	src/pl_mpeg.h	/^} plm_frame_t;$/;"	t	typeref:struct:__anon6b50db360308
+plm_get_audio_enabled	src/pl_mpeg.h	/^int plm_get_audio_enabled(plm_t *self) {$/;"	f	typeref:typename:int
+plm_get_audio_lead_time	src/pl_mpeg.h	/^double plm_get_audio_lead_time(plm_t *self) {$/;"	f	typeref:typename:double
+plm_get_duration	src/pl_mpeg.h	/^double plm_get_duration(plm_t *self) {$/;"	f	typeref:typename:double
+plm_get_framerate	src/pl_mpeg.h	/^double plm_get_framerate(plm_t *self) {$/;"	f	typeref:typename:double
+plm_get_height	src/pl_mpeg.h	/^int plm_get_height(plm_t *self) {$/;"	f	typeref:typename:int
+plm_get_loop	src/pl_mpeg.h	/^int plm_get_loop(plm_t *self) {$/;"	f	typeref:typename:int
+plm_get_num_audio_streams	src/pl_mpeg.h	/^int plm_get_num_audio_streams(plm_t *self) {$/;"	f	typeref:typename:int
+plm_get_num_video_streams	src/pl_mpeg.h	/^int plm_get_num_video_streams(plm_t *self) {$/;"	f	typeref:typename:int
+plm_get_pixel_aspect_ratio	src/pl_mpeg.h	/^double plm_get_pixel_aspect_ratio(plm_t *self) {$/;"	f	typeref:typename:double
+plm_get_samplerate	src/pl_mpeg.h	/^int plm_get_samplerate(plm_t *self) {$/;"	f	typeref:typename:int
+plm_get_time	src/pl_mpeg.h	/^double plm_get_time(plm_t *self) {$/;"	f	typeref:typename:double
+plm_get_video_enabled	src/pl_mpeg.h	/^int plm_get_video_enabled(plm_t *self) {$/;"	f	typeref:typename:int
+plm_get_width	src/pl_mpeg.h	/^int plm_get_width(plm_t *self) {$/;"	f	typeref:typename:int
+plm_handle_end	src/pl_mpeg.h	/^void plm_handle_end(plm_t *self) {$/;"	f	typeref:typename:void
+plm_has_ended	src/pl_mpeg.h	/^int plm_has_ended(plm_t *self) {$/;"	f	typeref:typename:int
+plm_has_headers	src/pl_mpeg.h	/^int plm_has_headers(plm_t *self) {$/;"	f	typeref:typename:int
+plm_init_decoders	src/pl_mpeg.h	/^int plm_init_decoders(plm_t *self) {$/;"	f	typeref:typename:int
+plm_packet_t	src/pl_mpeg.h	/^} plm_packet_t;$/;"	t	typeref:struct:__anon6b50db360108
+plm_plane_t	src/pl_mpeg.h	/^} plm_plane_t;$/;"	t	typeref:struct:__anon6b50db360208
+plm_probe	src/pl_mpeg.h	/^int plm_probe(plm_t *self, size_t probesize) {$/;"	f	typeref:typename:int
+plm_quantizer_spec_t	src/pl_mpeg.h	/^typedef struct plm_quantizer_spec_t {$/;"	s
+plm_quantizer_spec_t	src/pl_mpeg.h	/^} plm_quantizer_spec_t;$/;"	t	typeref:struct:plm_quantizer_spec_t
+plm_read_audio_packet	src/pl_mpeg.h	/^void plm_read_audio_packet(plm_buffer_t *buffer, void *user) {$/;"	f	typeref:typename:void
+plm_read_packets	src/pl_mpeg.h	/^void plm_read_packets(plm_t *self, int requested_type) {$/;"	f	typeref:typename:void
+plm_read_video_packet	src/pl_mpeg.h	/^void plm_read_video_packet(plm_buffer_t *buffer, void *user) {$/;"	f	typeref:typename:void
+plm_rewind	src/pl_mpeg.h	/^void plm_rewind(plm_t *self) {$/;"	f	typeref:typename:void
+plm_samples_t	src/pl_mpeg.h	/^} plm_samples_t;$/;"	t	typeref:struct:__anon6b50db360408
+plm_seek	src/pl_mpeg.h	/^int plm_seek(plm_t *self, double time, int seek_exact) {$/;"	f	typeref:typename:int
+plm_seek_frame	src/pl_mpeg.h	/^plm_frame_t *plm_seek_frame(plm_t *self, double time, int seek_exact) {$/;"	f	typeref:typename:plm_frame_t *
+plm_set_audio_decode_callback	src/pl_mpeg.h	/^void plm_set_audio_decode_callback(plm_t *self, plm_audio_decode_callback fp, void *user) {$/;"	f	typeref:typename:void
+plm_set_audio_enabled	src/pl_mpeg.h	/^void plm_set_audio_enabled(plm_t *self, int enabled) {$/;"	f	typeref:typename:void
+plm_set_audio_lead_time	src/pl_mpeg.h	/^void plm_set_audio_lead_time(plm_t *self, double lead_time) {$/;"	f	typeref:typename:void
+plm_set_audio_stream	src/pl_mpeg.h	/^void plm_set_audio_stream(plm_t *self, int stream_index) {$/;"	f	typeref:typename:void
+plm_set_loop	src/pl_mpeg.h	/^void plm_set_loop(plm_t *self, int loop) {$/;"	f	typeref:typename:void
+plm_set_video_decode_callback	src/pl_mpeg.h	/^void plm_set_video_decode_callback(plm_t *self, plm_video_decode_callback fp, void *user) {$/;"	f	typeref:typename:void
+plm_set_video_enabled	src/pl_mpeg.h	/^void plm_set_video_enabled(plm_t *self, int enabled) {$/;"	f	typeref:typename:void
+plm_t	src/pl_mpeg.h	/^struct plm_t {$/;"	s
+plm_t	src/pl_mpeg.h	/^typedef struct plm_t plm_t;$/;"	t	typeref:struct:plm_t
+plm_video_copy_macroblock	src/pl_mpeg.h	/^void plm_video_copy_macroblock(plm_video_t *self, plm_frame_t *s, int motion_h, int motion_v) {$/;"	f	typeref:typename:void
+plm_video_create_with_buffer	src/pl_mpeg.h	/^plm_video_t * plm_video_create_with_buffer(plm_buffer_t *buffer, int destroy_when_done) {$/;"	f	typeref:typename:plm_video_t *
+plm_video_decode	src/pl_mpeg.h	/^plm_frame_t *plm_video_decode(plm_video_t *self) {$/;"	f	typeref:typename:plm_frame_t *
+plm_video_decode_block	src/pl_mpeg.h	/^void plm_video_decode_block(plm_video_t *self, int block) {$/;"	f	typeref:typename:void
+plm_video_decode_callback	src/pl_mpeg.h	/^typedef void(*plm_video_decode_callback)$/;"	t	typeref:typename:void (*)(plm_t * self,plm_frame_t * frame,void * user)
+plm_video_decode_macroblock	src/pl_mpeg.h	/^void plm_video_decode_macroblock(plm_video_t *self) {$/;"	f	typeref:typename:void
+plm_video_decode_motion_vector	src/pl_mpeg.h	/^int plm_video_decode_motion_vector(plm_video_t *self, int r_size, int motion) {$/;"	f	typeref:typename:int
+plm_video_decode_motion_vectors	src/pl_mpeg.h	/^void plm_video_decode_motion_vectors(plm_video_t *self) {$/;"	f	typeref:typename:void
+plm_video_decode_picture	src/pl_mpeg.h	/^void plm_video_decode_picture(plm_video_t *self) {$/;"	f	typeref:typename:void
+plm_video_decode_sequence_header	src/pl_mpeg.h	/^int plm_video_decode_sequence_header(plm_video_t *self) {$/;"	f	typeref:typename:int
+plm_video_decode_slice	src/pl_mpeg.h	/^void plm_video_decode_slice(plm_video_t *self, int slice) {$/;"	f	typeref:typename:void
+plm_video_destroy	src/pl_mpeg.h	/^void plm_video_destroy(plm_video_t *self) {$/;"	f	typeref:typename:void
+plm_video_get_framerate	src/pl_mpeg.h	/^double plm_video_get_framerate(plm_video_t *self) {$/;"	f	typeref:typename:double
+plm_video_get_height	src/pl_mpeg.h	/^int plm_video_get_height(plm_video_t *self) {$/;"	f	typeref:typename:int
+plm_video_get_pixel_aspect_ratio	src/pl_mpeg.h	/^double plm_video_get_pixel_aspect_ratio(plm_video_t *self) {$/;"	f	typeref:typename:double
+plm_video_get_time	src/pl_mpeg.h	/^double plm_video_get_time(plm_video_t *self) {$/;"	f	typeref:typename:double
+plm_video_get_width	src/pl_mpeg.h	/^int plm_video_get_width(plm_video_t *self) {$/;"	f	typeref:typename:int
+plm_video_has_ended	src/pl_mpeg.h	/^int plm_video_has_ended(plm_video_t *self) {$/;"	f	typeref:typename:int
+plm_video_has_header	src/pl_mpeg.h	/^int plm_video_has_header(plm_video_t *self) {$/;"	f	typeref:typename:int
+plm_video_idct	src/pl_mpeg.h	/^void plm_video_idct(int *block) {$/;"	f	typeref:typename:void
+plm_video_init_frame	src/pl_mpeg.h	/^void plm_video_init_frame(plm_video_t *self, plm_frame_t *frame, uint8_t *base) {$/;"	f	typeref:typename:void
+plm_video_interpolate_macroblock	src/pl_mpeg.h	/^void plm_video_interpolate_macroblock(plm_video_t *self, plm_frame_t *s, int motion_h, int motio/;"	f	typeref:typename:void
+plm_video_motion_t	src/pl_mpeg.h	/^} plm_video_motion_t;$/;"	t	typeref:struct:__anon6b50db360708
+plm_video_predict_macroblock	src/pl_mpeg.h	/^void plm_video_predict_macroblock(plm_video_t *self) {$/;"	f	typeref:typename:void
+plm_video_process_macroblock	src/pl_mpeg.h	/^void plm_video_process_macroblock($/;"	f	typeref:typename:void
+plm_video_rewind	src/pl_mpeg.h	/^void plm_video_rewind(plm_video_t *self) {$/;"	f	typeref:typename:void
+plm_video_set_no_delay	src/pl_mpeg.h	/^void plm_video_set_no_delay(plm_video_t *self, int no_delay) {$/;"	f	typeref:typename:void
+plm_video_set_time	src/pl_mpeg.h	/^void plm_video_set_time(plm_video_t *self, double time) {$/;"	f	typeref:typename:void
+plm_video_t	src/pl_mpeg.h	/^struct plm_video_t {$/;"	s
+plm_video_t	src/pl_mpeg.h	/^typedef struct plm_video_t plm_video_t;$/;"	t	typeref:struct:plm_video_t
+plm_vlc_t	src/pl_mpeg.h	/^} plm_vlc_t;$/;"	t	typeref:struct:__anon6b50db360508
+plm_vlc_uint_t	src/pl_mpeg.h	/^} plm_vlc_uint_t;$/;"	t	typeref:struct:__anon6b50db360608
 podium	src/chapter_5.cpp	/^              podium;$/;"	m	struct:Level_Chapter_5::Models	typeref:typename:Model	file:
 podium_count	src/chapter_5.cpp	/^        int              podium_count;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80508	typeref:typename:int	file:
 podiums	src/chapter_5.cpp	/^        Chapter_5_Podium podiums[32];$/;"	m	struct:Level_Chapter_5::__anoneccee5e80508	typeref:typename:Chapter_5_Podium[32]	file:
@@ -1325,6 +1688,7 @@ position	src/chapter_5.cpp	/^    Vector3 position;$/;"	m	struct:Chapter_5_Barten
 position	src/chapter_5.cpp	/^    Vector3 position;$/;"	m	struct:Chapter_5_Clerk	typeref:typename:Vector3	file:
 position	src/chapter_epilogue.cpp	/^    Vector3 position;$/;"	m	struct:Epilogue_Node	typeref:typename:Vector3	file:
 position	src/text.cpp	/^    Vector2 position;$/;"	m	struct:Text	typeref:typename:Vector2	file:
+position_to	src/chapter_5.cpp	/^    Vector3     position_to;$/;"	m	struct:Chapter_5_Train	typeref:typename:Vector3	file:
 post_process	src/post_processing.cpp	/^void post_process(Post_Processing *post, Texture2D *game_texture) {$/;"	f	typeref:typename:void
 post_process_bloom_uniforms	src/post_processing.cpp	/^void post_process_bloom_uniforms(Post_Processing_Bloom *bloom) {$/;"	f	typeref:typename:void
 post_process_crt_uniforms	src/post_processing.cpp	/^void post_process_crt_uniforms(Post_Processing_Crt *crt) {$/;"	f	typeref:typename:void
@@ -1339,11 +1703,14 @@ print_cam	src/util.cpp	/^void print_cam(Camera3D *cam) {$/;"	f	typeref:typename:
 print_rectangle	src/util.cpp	/^void print_rectangle(Rectangle rect) {$/;"	f	typeref:typename:void
 print_vec2	src/util.cpp	/^void print_vec2(Vector2 vec) {$/;"	f	typeref:typename:void
 print_vec3	src/util.cpp	/^void print_vec3(Vector3 vec) {$/;"	f	typeref:typename:void
+pts	src/pl_mpeg.h	/^	double pts;$/;"	m	struct:__anon6b50db360108	typeref:typename:double
 pyramid_head	src/chapter_5.cpp	/^              pyramid_head,$/;"	m	struct:Level_Chapter_5::Models	typeref:typename:Model	file:
+quantizer_scale	src/pl_mpeg.h	/^	int quantizer_scale;$/;"	m	struct:plm_video_t	typeref:typename:int
 queue_deinit_and_goto_intro	src/game.cpp	/^    bool  queue_deinit_and_goto_intro;$/;"	m	struct:Game	typeref:typename:bool	file:
 queued_scene	src/chapter_5.cpp	/^    int      queued_scene;$/;"	m	struct:Level_Chapter_5	typeref:typename:int	file:
 quote_count	src/chapter_5.cpp	/^        int              quote_count;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80608	typeref:typename:int	file:
 quotes	src/chapter_5.cpp	/^        Chapter_5_Quote  quotes[QUOTE_COUNT];$/;"	m	struct:Level_Chapter_5::__anoneccee5e80608	typeref:typename:Chapter_5_Quote[]	file:
+r_size	src/pl_mpeg.h	/^	int r_size;$/;"	m	struct:__anon6b50db360708	typeref:typename:int
 radius_x	src/chapter_3.h	/^    float radius_x;$/;"	m	struct:Chapter_3_Circler	typeref:typename:float
 radius_y	src/chapter_3.h	/^    float radius_y;$/;"	m	struct:Chapter_3_Circler	typeref:typename:float
 rand_bool	src/util.cpp	/^bool rand_bool(double prob_true) {$/;"	f	typeref:typename:bool
@@ -1367,13 +1734,20 @@ render_type	src/text.cpp	/^    Render_Type render_type = Render_Type::DrawTextbo
 render_width	src/main.cpp	/^int render_width = default_width;$/;"	v	typeref:typename:int
 reset_text	src/text.cpp	/^void reset_text(Text *text) {$/;"	f	typeref:typename:void
 reset_text_list	src/text.cpp	/^void reset_text_list(Text_List *list) {$/;"	f	typeref:typename:void
+right	src/pl_mpeg.h	/^		float right[PLM_AUDIO_SAMPLES_PER_FRAME];$/;"	m	struct:__anon6b50db360408	typeref:typename:float[]
 road_time	src/chapter_3.cpp	/^    float road_time;$/;"	m	struct:Level_Chapter_3	typeref:typename:float	file:
 rotating_heads	src/chapter_5.cpp	/^        bool             rotating_heads;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80408	typeref:typename:bool	file:
 rotation	src/chapter_5.cpp	/^    float      rotation;$/;"	m	struct:Chapter_5_Podium	typeref:typename:float	file:
+sample	src/pl_mpeg.h	/^	int sample[2][32][3];$/;"	m	struct:plm_audio_t	typeref:typename:int[2][32][3]
+samplerate_index	src/pl_mpeg.h	/^	int samplerate_index;$/;"	m	struct:plm_audio_t	typeref:typename:int
+samples	src/pl_mpeg.h	/^	plm_samples_t samples;$/;"	m	struct:plm_audio_t	typeref:typename:plm_samples_t
+samples_decoded	src/pl_mpeg.h	/^	int samples_decoded;$/;"	m	struct:plm_audio_t	typeref:typename:int
 saved_head_rotation	src/chapter_5.cpp	/^    float   saved_head_rotation;$/;"	m	struct:Chapter_5_Clerk	typeref:typename:float	file:
 scale	src/chapter_4.cpp	/^    float scale;$/;"	m	struct:Cutscene	typeref:typename:float	file:
 scale	src/text.cpp	/^    float scale = 1;$/;"	m	struct:Text_List	typeref:typename:float	file:
 scale	src/text.cpp	/^    float scale;$/;"	m	struct:Text	typeref:typename:float	file:
+scale_factor	src/pl_mpeg.h	/^	int scale_factor[2][32][3];$/;"	m	struct:plm_audio_t	typeref:typename:int[2][32][3]
+scale_factor_info	src/pl_mpeg.h	/^	uint8_t scale_factor_info[2][32];$/;"	m	struct:plm_audio_t	typeref:typename:uint8_t[2][32]
 scan_intensity	src/post_processing.cpp	/^    float  scan_intensity;$/;"	m	struct:Post_Processing_Vhs	typeref:typename:float	file:
 scanline_alpha	src/post_processing.cpp	/^    float  scanline_alpha;$/;"	m	struct:Post_Processing_Crt	typeref:typename:float	file:
 scene	src/chapter_4.cpp	/^    Model scene;$/;"	m	struct:Level_Chapter_4	typeref:typename:Model	file:
@@ -1408,6 +1782,7 @@ sign	src/util.cpp	/^int sign(float a) {$/;"	f	typeref:typename:int
 sitting_at_table	src/chapter_5.cpp	/^        bool             sitting_at_table;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80408	typeref:typename:bool	file:
 sitting_state	src/chapter_2.h	/^    int sitting_state;$/;"	m	struct:Chapter_2_Player	typeref:typename:int
 sitting_timer	src/chapter_5.cpp	/^        float            sitting_timer;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80408	typeref:typename:float	file:
+slice_begin	src/pl_mpeg.h	/^	int slice_begin;$/;"	m	struct:plm_video_t	typeref:typename:int
 smoothstep	src/util.cpp	/^float smoothstep(float start, float end, float t) {$/;"	f	typeref:typename:float
 smoothstep_vector3	src/util.cpp	/^Vector3 smoothstep_vector3(Vector3 start, Vector3 end, float t) {$/;"	f	typeref:typename:Vector3
 sort_entities	src/game.cpp	/^void sort_entities(Array<Entity*> *entities) {$/;"	f	typeref:typename:void
@@ -1419,10 +1794,13 @@ staircase_draw_scene	src/chapter_5.cpp	/^void staircase_draw_scene(Level_Chapter
 staircase_fade	src/chapter_5.cpp	/^        float               staircase_fade;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80308	typeref:typename:float	file:
 staircase_podium_current	src/chapter_5.cpp	/^        int                 staircase_podium_current;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80308	typeref:typename:int	file:
 staircase_podiums	src/chapter_5.cpp	/^        Chapter_5_Podium    staircase_podiums[7];$/;"	m	struct:Level_Chapter_5::__anoneccee5e80308	typeref:typename:Chapter_5_Podium[7]	file:
+start_code	src/pl_mpeg.h	/^	int start_code;$/;"	m	struct:plm_demux_t	typeref:typename:int
+start_code	src/pl_mpeg.h	/^	int start_code;$/;"	m	struct:plm_video_t	typeref:typename:int
 start_fade	src/game.cpp	/^void start_fade(Game *game, Fade_Direction dir, float speed, void (*action)(Game *)) {$/;"	f	typeref:typename:void
 start_fade	src/game.cpp	/^void start_fade(Game *game, Fade_Direction dir, void (*action)(Game *)) {$/;"	f	typeref:typename:void
 start_index	src/chapter_3.cpp	/^    int   start_index;$/;"	m	struct:Word	typeref:typename:int	file:
 start_index	src/util.cpp	/^    int start_index;$/;"	m	struct:Find_Word_Result	typeref:typename:int	file:
+start_time	src/pl_mpeg.h	/^	double start_time;$/;"	m	struct:plm_demux_t	typeref:typename:double
 started_text	src/chapter_6.cpp	/^    bool  started_text;$/;"	m	struct:Level_Chapter_6	typeref:typename:bool	file:
 state	src/chapter_1.cpp	/^    Level_Chapter_1_State state;$/;"	m	struct:Level_Chapter_1	typeref:typename:Level_Chapter_1_State	file:
 state	src/chapter_2.h	/^    int state;$/;"	m	struct:Chapter_2_Penny	typeref:typename:int
@@ -1437,6 +1815,7 @@ string	src/chapter_3.cpp	/^    char   *string; \/\/ Recalculate length because i
 string_compare	src/util.cpp	/^bool string_compare(const char *major, const char *minor) {$/;"	f	typeref:typename:bool
 string_concatenate	src/text.cpp	/^void string_concatenate(String *dest, String src) {$/;"	f	typeref:typename:void
 string_concatenate	src/text.cpp	/^void string_concatenate(String *dest, char ch) {$/;"	f	typeref:typename:void
+system_clock_ref	src/pl_mpeg.h	/^	double system_clock_ref;$/;"	m	struct:plm_demux_t	typeref:typename:double
 table	src/chapter_5.cpp	/^              table,$/;"	m	struct:Level_Chapter_5::Models	typeref:typename:Model	file:
 table	src/chapter_5.cpp	/^    struct Chapter_5_Table *table;$/;"	m	struct:Chapter_5_Chair	typeref:struct:Chapter_5_Table *	file:
 table_angle	src/chapter_5.cpp	/^    float table_angle;$/;"	m	struct:Chapter_5_Chair	typeref:typename:float	file:
@@ -1477,6 +1856,7 @@ textbox_height	src/text.cpp	/^    float textbox_height;$/;"	m	struct:Text_List	t
 textbox_target	src/game.cpp	/^    RenderTexture2D textbox_target;$/;"	m	struct:Game	typeref:typename:RenderTexture2D	file:
 texture	src/chapter_3.cpp	/^    int texture;$/;"	m	struct:Chapter_3_Car	typeref:typename:int	file:
 texture	src/chapter_3.cpp	/^    int texture;$/;"	m	struct:Virtual_Mouse	typeref:typename:int	file:
+texture	src/movie.h	/^    Texture texture;   \/\/ current frame$/;"	m	struct:Movie	typeref:typename:Texture
 texture_id	src/chapter_4.cpp	/^    int   texture_id;$/;"	m	struct:Cutscene_Frame	typeref:typename:int	file:
 texture_id	src/game.cpp	/^    int         texture_id;      \/\/ Index into atari_assets.textures[]$/;"	m	struct:Entity	typeref:typename:int	file:
 textures	src/game.cpp	/^    Texture2D textures[64];$/;"	m	struct:Atari_Assets	typeref:typename:Texture2D[64]	file:
@@ -1485,6 +1865,11 @@ ticket	src/chapter_5.cpp	/^        bool     ticket;$/;"	m	struct:Level_Chapter_5
 time	src/chapter_4.h	/^    float time;$/;"	m	struct:Chapter_4_Devil	typeref:typename:float
 time	src/chapter_4.h	/^    float time;$/;"	m	struct:Chapter_4_Microwave	typeref:typename:float
 time	src/game.cpp	/^    float time;$/;"	m	struct:Event	typeref:typename:float	file:
+time	src/pl_mpeg.h	/^	double time;$/;"	m	struct:__anon6b50db360308	typeref:typename:double
+time	src/pl_mpeg.h	/^	double time;$/;"	m	struct:__anon6b50db360408	typeref:typename:double
+time	src/pl_mpeg.h	/^	double time;$/;"	m	struct:plm_audio_t	typeref:typename:double
+time	src/pl_mpeg.h	/^	double time;$/;"	m	struct:plm_t	typeref:typename:double
+time	src/pl_mpeg.h	/^	double time;$/;"	m	struct:plm_video_t	typeref:typename:double
 time_up	src/chapter_epilogue.cpp	/^    float time_up; \/\/ the time that it's been up$/;"	m	struct:Epilogue_Node	typeref:typename:float	file:
 timer	src/chapter_1.cpp	/^    float timer;$/;"	m	struct:Level_Chapter_1	typeref:typename:float	file:
 timer	src/chapter_4.cpp	/^    float timer;$/;"	m	struct:Cutscene	typeref:typename:float	file:
@@ -1497,6 +1882,7 @@ titlescreen_minor_font	src/main.cpp	/^Font global_font, atari_font, comic_sans, 
 titlescreen_update_and_draw	src/titlescreen.cpp	/^void titlescreen_update_and_draw(Titlescreen *tit) {$/;"	f	typeref:typename:void
 toggle_fullscreen	src/main.cpp	/^void toggle_fullscreen() {$/;"	f	typeref:typename:void
 toggled_fullscreen_past_second	src/main.cpp	/^bool toggled_fullscreen_past_second = false;$/;"	v	typeref:typename:bool
+total_size	src/pl_mpeg.h	/^	size_t total_size;$/;"	m	struct:plm_buffer_t	typeref:typename:size_t
 train	src/chapter_5.cpp	/^              train,$/;"	m	struct:Level_Chapter_5::Models	typeref:typename:Model	file:
 train	src/chapter_5.cpp	/^        Chapter_5_Train train;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80208	typeref:typename:Chapter_5_Train	file:
 train_door	src/chapter_5.cpp	/^              train_door,$/;"	m	struct:Level_Chapter_5::Models	typeref:typename:Model	file:
@@ -1506,6 +1892,7 @@ transition_timer	src/chapter_epilogue.cpp	/^    float          transition_timer;
 transitioned	src/chapter_epilogue.cpp	/^    bool           transitioned;$/;"	m	struct:Level_Chapter_Epilogue	typeref:typename:bool	file:
 type	src/chapter_1.h	/^    Node_Type type;$/;"	m	struct:Chapter_1_Node	typeref:typename:Node_Type
 type	src/game.cpp	/^    Entity_Type type;$/;"	m	struct:Entity	typeref:typename:Entity_Type	file:
+type	src/pl_mpeg.h	/^	int type;$/;"	m	struct:__anon6b50db360108	typeref:typename:int
 type	src/post_processing.cpp	/^    Post_Process_Shader_Type type;$/;"	m	struct:Post_Processing	typeref:typename:Post_Process_Shader_Type	file:
 u	src/util.cpp	/^        } u;$/;"	m	union:_LARGE_INTEGER	typeref:struct:_LARGE_INTEGER::__anon84520d2b0208	file:
 u_abberation_intensity	src/post_processing.cpp	/^    int    u_abberation_intensity;$/;"	m	struct:Post_Processing_Crt	typeref:typename:int	file:
@@ -1530,18 +1917,33 @@ update_and_draw_fade	src/game.cpp	/^void update_and_draw_fade(Game *game, Fader 
 update_camera_3d	src/game.cpp	/^void update_camera_3d(Camera3D *camera, float speed, bool allow_run, float dt) {$/;"	f	typeref:typename:void
 update_camera_look	src/game.cpp	/^void update_camera_look(Camera3D *camera, float dt) {$/;"	f	typeref:typename:void
 used	src/util.cpp	/^    size_t   used;$/;"	m	struct:Arena	typeref:typename:size_t	file:
+v	src/pl_mpeg.h	/^	int v;$/;"	m	struct:__anon6b50db360708	typeref:typename:int
+v_pos	src/pl_mpeg.h	/^	int v_pos;$/;"	m	struct:plm_audio_t	typeref:typename:int
+value	src/pl_mpeg.h	/^	int16_t value;$/;"	m	struct:__anon6b50db360508	typeref:typename:int16_t
+value	src/pl_mpeg.h	/^	uint16_t value;$/;"	m	struct:__anon6b50db360608	typeref:typename:uint16_t
+version	src/pl_mpeg.h	/^	int version;$/;"	m	struct:plm_audio_t	typeref:typename:int
 vhs	src/post_processing.cpp	/^    Post_Processing_Vhs   vhs;$/;"	m	struct:Post_Processing	typeref:typename:Post_Processing_Vhs	file:
+video_buffer	src/pl_mpeg.h	/^	plm_buffer_t *video_buffer;$/;"	m	struct:plm_t	typeref:typename:plm_buffer_t *
+video_decode_callback	src/pl_mpeg.h	/^	plm_video_decode_callback video_decode_callback;$/;"	m	struct:plm_t	typeref:typename:plm_video_decode_callback
+video_decode_callback_user_data	src/pl_mpeg.h	/^	void *video_decode_callback_user_data;$/;"	m	struct:plm_t	typeref:typename:void *
+video_decoder	src/pl_mpeg.h	/^	plm_video_t *video_decoder;$/;"	m	struct:plm_t	typeref:typename:plm_video_t *
+video_enabled	src/pl_mpeg.h	/^	int video_enabled;$/;"	m	struct:plm_t	typeref:typename:int
+video_packet_type	src/pl_mpeg.h	/^	int video_packet_type;$/;"	m	struct:plm_t	typeref:typename:int
 vignette_intensity	src/post_processing.cpp	/^    float  vignette_intensity;$/;"	m	struct:Post_Processing_Crt	typeref:typename:float	file:
 vignette_intensity	src/post_processing.cpp	/^    float  vignette_intensity;$/;"	m	struct:Post_Processing_Vhs	typeref:typename:float	file:
 vignette_mix	src/post_processing.cpp	/^    float   vignette_mix;$/;"	m	struct:Post_Processing_Bloom	typeref:typename:float	file:
 vignette_mix	src/post_processing.cpp	/^    float  vignette_mix;$/;"	m	struct:Post_Processing_Crt	typeref:typename:float	file:
 vignette_mix	src/post_processing.cpp	/^    float  vignette_mix;$/;"	m	struct:Post_Processing_Vhs	typeref:typename:float	file:
 virtual_mouse	src/chapter_3.cpp	/^    Virtual_Mouse virtual_mouse;$/;"	m	struct:Level_Chapter_3	typeref:typename:Virtual_Mouse	file:
+visible	src/chapter_5.cpp	/^    bool        visible;$/;"	m	struct:Chapter_5_Train	typeref:typename:bool	file:
 wait_devil	src/chapter_4.cpp	/^    bool wait_devil;$/;"	m	struct:Level_Chapter_4	typeref:typename:bool	file:
 walking_state	src/chapter_1.h	/^    Player_Walking_State walking_state;$/;"	m	struct:Chapter_1_Player	typeref:typename:Player_Walking_State
 white_fade_alpha	src/chapter_6.cpp	/^    float white_fade_alpha;$/;"	m	struct:Level_Chapter_6	typeref:typename:float	file:
 whiteness_overlay	src/chapter_5.cpp	/^        float            whiteness_overlay;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80408	typeref:typename:float	file:
 width	src/chapter_2.cpp	/^    int width, height;$/;"	m	struct:Level_Chapter_2	typeref:typename:int	file:
+width	src/pl_mpeg.h	/^	int width;$/;"	m	struct:plm_video_t	typeref:typename:int
+width	src/pl_mpeg.h	/^	unsigned int width;$/;"	m	struct:__anon6b50db360208	typeref:typename:unsigned int
+width	src/pl_mpeg.h	/^	unsigned int width;$/;"	m	struct:__anon6b50db360308	typeref:typename:unsigned int
 window	src/chapter_4.cpp	/^    Entity *window;$/;"	m	struct:Level_Chapter_4	typeref:typename:Entity *	file:
 window_alpha	src/chapter_3.cpp	/^    uint8_t window_alpha;$/;"	m	struct:Chapter_3_Job_Minigame	typeref:typename:uint8_t	file:
 window_bg_color	src/chapter_3.cpp	/^    Color window_bg_color;$/;"	m	struct:Chapter_3_Job_Minigame	typeref:typename:Color	file:
@@ -1554,4 +1956,5 @@ window_target	src/chapter_2.cpp	/^    RenderTexture2D window_target;$/;"	m	struc
 window_title_bar_size	src/chapter_3.cpp	/^    int window_title_bar_size;$/;"	m	struct:Chapter_3_Job_Minigame	typeref:typename:int	file:
 word_count	src/chapter_3.cpp	/^    size_t  word_count;$/;"	m	struct:Document	typeref:typename:size_t	file:
 words	src/chapter_3.cpp	/^    Word    words[MAX_CORRECTIONS];$/;"	m	struct:Document	typeref:typename:Word[]	file:
+y	src/pl_mpeg.h	/^	plm_plane_t y;$/;"	m	struct:__anon6b50db360308	typeref:typename:plm_plane_t
 yield_control	src/chapter_4.cpp	/^    bool yield_control;$/;"	m	struct:Level_Chapter_4	typeref:typename:bool	file:

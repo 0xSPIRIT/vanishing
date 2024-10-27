@@ -22,7 +22,7 @@ enum Direction {
 };
 
 int chapter_1_god_text_y[] = { 55, 16 };
-int chapter_1_god_text_y_end[] = { 103, 146};
+int chapter_1_god_text_y_end[] = { 103, 146 };
 
 struct Level_Chapter_1 {
     Color background_color;
@@ -237,7 +237,7 @@ void chapter_1_call_text(Text_List *list, char *speaker,
 void chapter_1_init(Game *game) {
     Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
 
-    level->intro = false;
+    level->intro = true;
     level->god_scroll = chapter_1_god_text_y[0];
 
     game->textbox_alpha = 255;

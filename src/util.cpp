@@ -162,6 +162,8 @@ void print_cam(Camera3D *cam) {
            cam->target.z);
 }
 
+// TODO: Ensure this works with vsync, and target framerates such
+//       as 165hz, 144hz...
 float get_frame_time_clamped() {
     float dt = GetFrameTime();
 
@@ -267,6 +269,39 @@ int sign(float a) {
 // where f = remaining percentage after one second.
 float lerp_dt(float a, float b, float t, float dt) {
     return Lerp(a, b, 60 * dt * t);
+}
+
+Vector3 LerpVec3(Vector3 a, Vector3 b, double t) {
+    a.x = a.x + (b.x - a.x) * t;
+    a.y = a.y + (b.y - a.y) * t;
+    a.z = a.z + (b.z - a.z) * t;
+
+    return a;
+}
+
+// top_speed_frame -> Maximum distance to travel in 1 frame.
+// t = 0 -> start (result = a)
+// t = 1 -> end   (result = b)
+// Caller should keep t (probably as a static variable) that
+// persists over frames
+Vector3 GotoSmoothVec3(Vector3 a, Vector3 b, float top_speed_frame, double t) {
+    double proportion = 1 - (t-1)*(t-1); // 2t - t^2
+
+    double dist = Vector3Distance(b, a);
+
+    double to_travel = proportion * dist;
+
+    // limit the distance to travel to top speed.
+    if (to_travel > top_speed_frame) {
+        to_travel = top_speed_frame;
+
+        // recalculate proportion based on that.
+        proportion = to_travel / dist;
+    }
+
+    Vector3 result = LerpVec3(a, b, proportion);
+
+    return result;
 }
 
 // t = (0.0, 1.0)

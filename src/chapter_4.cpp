@@ -40,6 +40,8 @@ struct Level_Chapter_4 {
     Chapter_4_State state;
     float text_start_timer, end_timer;
 
+    bool black;
+
     Cutscene bed_cutscene;
 
     Chapter_4_Text text_handler;
@@ -51,6 +53,8 @@ struct Level_Chapter_4 {
     Entity *djinn;
 
     bool yield_control;
+
+    bool checked_window;
 
     bool window_popup; // bedroom
     bool check_window_popup; // kitchen
@@ -70,7 +74,8 @@ void    chapter_4_entity_draw  (Entity *entity, Game *game);
 
 void    draw_cutscene(Cutscene *cutscene, float dt);
 
-void chapter_4_set_state_atari(Game *game) {
+void chapter_4_set_state_atari(void *game_ptr) {
+    Game *game = (Game *)game_ptr;
     Level_Chapter_4 *level = (Level_Chapter_4 *)game->level;
 
     level->state = CHAPTER_4_STATE_ATARI;
@@ -81,6 +86,10 @@ void chapter_4_start_text(Game *game) {
     Level_Chapter_4 *level = (Level_Chapter_4 *)game->level;
 
     level->yield_control = false;
+}
+
+void chapter_4_look_outside_text(Game *game) {
+    game->current = &game->text[21];
 }
 
 void chapter_4_window_text(bool scroll, Text_List *list, char *line,
@@ -105,6 +114,7 @@ void chapter_4_window_text(bool scroll, Text_List *list, char *line,
     else
         list->scroll_type  = EntireLine;
 
+
     list->render_type  = Bare;
     list->location     = Middle;
     list->take_keyboard_focus = true;
@@ -119,8 +129,16 @@ void chapter_4_start_end_timer(void *game_ptr) {
     level->end_timer = 4;
 }
 
+void chapter_4_goto_movie(Game *game) {
+    (void)game;
+
+    movie_init(&game_movie, MOVIE_DRACULA);
+}
+
 void chapter_4_3d_init(Game *game) {
     Level_Chapter_4 *level = (Level_Chapter_4 *)game->level;
+
+    level->black = false;
 
     level->state = CHAPTER_4_STATE_3D;
 
@@ -164,6 +182,14 @@ void chapter_4_3d_init(Game *game) {
     game->post_processing.type = POST_PROCESSING_VHS;
     post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_MEDIUM);
     game->post_processing.vhs.vignette_mix = 1;
+}
+
+void chapter_4_3d_init_after_delay(Game *game) {
+    Level_Chapter_4 *level = (Level_Chapter_4 *)game->level;
+
+    level->black = true;
+
+    add_event(game, chapter_4_3d_init, 5);
 }
 
 void chapter_4_init(Game *game) {
@@ -227,7 +253,7 @@ void chapter_4_init(Game *game) {
 
     game->entities = make_array<Entity*>(20);
 
-    level->player = chapter_4_make_entity(ENTITY_PLAYER, 130, 194);
+    level->player = chapter_4_make_entity(ENTITY_PLAYER, 69, 277);
     //level->player = chapter_4_make_entity(ENTITY_PLAYER, 291, 142);
 
     array_add(&game->entities, level->player);
@@ -346,7 +372,7 @@ void chapter_4_init(Game *game) {
         game->text[i].location     = Top;
         game->text[i].take_keyboard_focus = true;
     }
-//
+
     /*
        9 When they reached the place God had told him about,
        Abraham built an altar there and arranged the wood on it.
@@ -438,7 +464,18 @@ void chapter_4_init(Game *game) {
                          30,
                          nullptr);
 
-    add_event(game, chapter_4_start_text, 1);
+    atari_text_list_init(&game->text[21],
+                         0,
+                         "The night is still.\r...\r...",
+                         30,
+                         &game->text[24]);
+    atari_text_list_init(&game->text[24],
+                         "Chase",
+                         "Something feels strange.\rI should go to bed.",
+                         30,
+                         nullptr);
+
+    game->text[24].callbacks[0] = chapter_4_set_state_atari;
 
     atari_text_list_init(&game->text[22],
                          "Chase",
@@ -542,6 +579,15 @@ void chapter_4_update_text(Game *game, float dt) {
 void chapter_4_update(Game *game, float dt) {
     Level_Chapter_4 *level = (Level_Chapter_4 *)game->level;
 
+    if (level->black)
+        return;
+
+    static bool first = true;
+    if (first) {
+        add_event(game, chapter_4_start_text, 1);
+        first = false;
+    }
+
     if (level->end_timer > 0) {
         level->end_timer -= dt;
         if (level->end_timer <= 0) {
@@ -598,6 +644,11 @@ void chapter_4_draw(Game *game, float dt) {
     (void)dt;
 
     Level_Chapter_4 *level = (Level_Chapter_4 *)game->level;
+
+    if (level->black) {
+        ClearBackground(BLACK);
+        return;
+    }
 
     switch (level->state) {
         case CHAPTER_4_STATE_ATARI: {
@@ -657,7 +708,9 @@ void chapter_4_draw(Game *game, float dt) {
             static bool first = true;
 
             if (first) {
-                add_event(game, chapter_4_3d_init, 5);
+                //add_event(game, chapter_4_3d_init, 5);
+                add_event(game, chapter_4_goto_movie, 0.25);
+                game_movie.end_movie_callback = chapter_4_3d_init_after_delay;
                 first = false;
             }
 
@@ -717,7 +770,7 @@ Entity *chapter_4_make_entity(Entity_Type type, float x, float y) {
             result->texture_id = 9;
         } break;
         case ENTITY_CHAP_4_MICROWAVE: {
-            result->texture_id = 11;
+            result->texture_id = 10;
             result->has_dialogue = true;
             result->draw_layer = DRAW_LAYER_LOW;
             result->chap_4_microwave.time = 10;
@@ -765,6 +818,11 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
                 int x = (int)entity->pos.x + entity_texture_width(entity)/2;
                 int y = (int)entity->pos.y + entity_texture_height(entity)/2;
 
+                if (!level->checked_window) {
+                    if (entity->pos.x > render_width-entity_texture_width(entity))
+                        entity->pos.x = render_width-entity_texture_width(entity);
+                }
+
                 int screen_x = (x / render_width);
                 int screen_y = (y / render_height);
 
@@ -789,7 +847,7 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
                 }
             }
 
-            {
+            if (!game->current) {
                 Rectangle player = level->player->base_collider;
                 player.x += level->player->pos.x;
                 player.y += level->player->pos.y;
@@ -802,7 +860,8 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
                 if (is_action_pressed()) {
                     if (level->check_window_popup) {
                         level->state = CHAPTER_4_STATE_WINDOW;
-                        add_event(game, chapter_4_set_state_atari, 5);
+                        add_event(game, chapter_4_look_outside_text, 1.5);
+                        level->checked_window = true;
                     }
 
                     if (pictures) {
@@ -842,7 +901,7 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
             entity->pos.x += 1 * (180 + sin(25 * entity->chap_4_devil.time) * 120) * dt;
             entity->pos.y += sin(12 * entity->chap_4_devil.time) * 30 * dt;
 
-            if (entity->pos.x > render_width * 2) {
+            if (entity->pos.x > render_width * 3) {
                 entity->pos.x = 0;
                 entity->pos.y = 0;
                 level->wait_devil = false;
@@ -866,7 +925,14 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
 
 void chapter_4_entity_draw(Entity *entity, Game *game) {
     (void)game;
-    default_entity_draw(entity);
+    if (entity->type == ENTITY_CHAP_4_DEVIL) {
+        Texture2D *texture = entity_get_texture(entity);
+        if (texture) {
+            DrawTexture(*texture, entity->pos.x, entity->pos.y, {200,200,200,255});
+        }
+    } else {
+        default_entity_draw(entity);
+    }
 }
 
 void draw_cutscene(Cutscene *cutscene, float dt) {

@@ -181,6 +181,7 @@ void chapter_3_goto_road(Game *game) {
     Post_Processing_Crt *crt = &game->post_processing.crt;
     crt->do_scanline_effect = true;
     crt->do_warp_effect = true;
+    crt->scanline_alpha = 0.25;
     crt->abberation_intensity = 0.75f;
     crt->vignette_intensity = 1;
     crt->vignette_mix = 1;
@@ -531,7 +532,6 @@ void chapter_3_goto_lunch_room(Game *game, Chapter_3_Lunch_Text lunch_text) {
 
     level->state = CHAPTER_3_STATE_LUNCH;
     level->minigame.active = false;
-    EnableCursor();
 
     for (int i = 0; i < game->entities.length; i++) {
         Entity *e = game->entities.data[i];
@@ -1290,11 +1290,11 @@ void chapter_3_init(Game *game) {
     //chapter_3_goto_window_text(game);
     //level->minigame.active = true;
 
-    chapter_3_init_outside(game);
+    //chapter_3_init_outside(game);
     //chapter_3_goto_home_inside(game);
     //chapter_3_goto_home_outside(game);
 
-    //chapter_3_goto_road(game);
+    chapter_3_goto_road(game);
 }
 
 void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,

@@ -184,6 +184,14 @@ Entity *chapter_6_make_entity(Entity_Type type, float x, float y) {
     return result;
 }
 
+void chapter_6_start_text(Game *game) {
+    game->current = &game->text[20];
+}
+
+void chapter_6_start_text_delayed(Game *game) {
+    add_event(game, chapter_6_start_text, 10);
+}
+
 void chapter_6_init(Game *game) {
     Level_Chapter_6 *level = (Level_Chapter_6 *)game->level;
     memset(level, 0, sizeof(Level_Chapter_6));
@@ -476,7 +484,9 @@ void chapter_6_init(Game *game) {
     game->text[13].callbacks[0] = chapter_6_queue_godtext;
 
     //chapter_6_goto_desert(game);
-    game->current = &game->text[20];
+
+    movie_init(&game_movie, MOVIE_EMPTINESS);
+    game_movie.end_movie_callback = chapter_6_start_text_delayed;
 }
 
 void chapter_6_entity_update(Entity *entity, Game *game, float dt) {
@@ -566,6 +576,8 @@ void chapter_6_entity_draw(Entity *entity, Game *game) {
 
 void chapter_6_update(Game *game, float dt) {
     Level_Chapter_6 *level = (Level_Chapter_6 *)game->level;
+
+    if (game_movie.movie != 0) return;
 
     switch (level->state) {
         case CHAPTER_6_STATE_SUPPORT_GROUP: {
@@ -660,6 +672,8 @@ void chapter_6_update(Game *game, float dt) {
 
 void chapter_6_draw(Game *game) {
     Level_Chapter_6 *level = (Level_Chapter_6 *)game->level;
+
+    if (game_movie.movie != 0) return;
 
     switch (level->state) {
         case CHAPTER_6_STATE_SUPPORT_GROUP: {
