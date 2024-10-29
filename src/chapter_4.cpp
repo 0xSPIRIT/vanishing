@@ -8,24 +8,6 @@ enum Chapter_4_State {
     CHAPTER_4_STATE_WINDOW
 };
 
-struct Cutscene_Frame {
-    int   texture_id;
-    float frame_time;
-};
-
-struct Cutscene {
-    bool active;
-
-    float scale;
-
-    Cutscene_Frame *frames;
-
-    int frame_count;
-    int current_frame;
-
-    float timer;
-};
-
 struct Chapter_4_Text {
     // Each alarm corresponds to a rest in the text, denoted by when
     // the current Text_List's next pointer is null. After alarm[current_index],
@@ -41,8 +23,6 @@ struct Level_Chapter_4 {
     float text_start_timer, end_timer;
 
     bool black;
-
-    Cutscene bed_cutscene;
 
     Chapter_4_Text text_handler;
 
@@ -71,8 +51,6 @@ struct Level_Chapter_4 {
 Entity *chapter_4_make_entity  (Entity_Type type, float x, float y);
 void    chapter_4_entity_update(Entity *entity, Game *game, float dt);
 void    chapter_4_entity_draw  (Entity *entity, Game *game);
-
-void    draw_cutscene(Cutscene *cutscene, float dt);
 
 void chapter_4_set_state_atari(void *game_ptr) {
     Game *game = (Game *)game_ptr;
@@ -213,10 +191,12 @@ void chapter_4_init(Game *game) {
     textures[2] = load_texture(RES_DIR "art/window_opened.png");
     textures[3] = load_texture(RES_DIR "art/window_closed.png");
 
+    /*
     textures[4] = load_texture(RES_DIR "art/chap4_scene_1.png");
     textures[5] = load_texture(RES_DIR "art/chap4_scene_2.png");
     textures[6] = load_texture(RES_DIR "art/chap4_scene_3.png");
     textures[7] = load_texture(RES_DIR "art/chap4_scene_4.png");
+    */
 
     textures[8] = load_texture(RES_DIR "art/tv_back.png");
 
@@ -228,23 +208,6 @@ void chapter_4_init(Game *game) {
     textures[13] = load_texture(RES_DIR "art/windows_open.png");
 
     textures[14] = load_texture(RES_DIR "art/open_window.png");
-
-    // Setup cutscene
-    Cutscene *cutscene = &level->bed_cutscene;
-
-    Cutscene_Frame bed_cutscene[] = {
-        { 4, 3.0 },
-        { 5, 3.5 },
-        { 6, 1.0 },
-        { 7, 2.0 },
-    };
-
-    cutscene->frame_count = StaticArraySize(bed_cutscene);
-    cutscene->frames = (Cutscene_Frame *)arena_push(&game->level_arena,
-                                                    cutscene->frame_count * sizeof(Cutscene_Frame));
-    memcpy(cutscene->frames, bed_cutscene, sizeof(bed_cutscene));
-    cutscene->scale = 2;
-    cutscene->active = true;
 
     level->camera_2d.offset   = {};
     level->camera_2d.target   = {};
@@ -709,7 +672,7 @@ void chapter_4_draw(Game *game, float dt) {
 
             if (first) {
                 //add_event(game, chapter_4_3d_init, 5);
-                add_event(game, chapter_4_goto_movie, 0.25);
+                add_event(game, chapter_4_goto_movie, 5);
                 game_movie.end_movie_callback = chapter_4_3d_init_after_delay;
                 first = false;
             }
@@ -933,26 +896,4 @@ void chapter_4_entity_draw(Entity *entity, Game *game) {
     } else {
         default_entity_draw(entity);
     }
-}
-
-void draw_cutscene(Cutscene *cutscene, float dt) {
-    if (!cutscene->active)
-        return;
-
-    cutscene->timer += dt;
-
-    float target = cutscene->frames[cutscene->current_frame].frame_time;
-
-    if (cutscene->timer >= target) {
-        cutscene->timer = 0;
-        cutscene->current_frame++;
-
-        if (cutscene->current_frame >= cutscene->frame_count) {
-            cutscene->active = false;
-            return;
-        }
-    }
-
-    DrawTextureEx(atari_assets.textures[cutscene->frames[cutscene->current_frame].texture_id],
-                  {0, 0}, 0, cutscene->scale, WHITE);
 }

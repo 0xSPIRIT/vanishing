@@ -598,7 +598,7 @@ void chapter_3_job_init(Game *game, int which_document_list) {
     switch (which_document_list) {
         case 0: {
             documents[count++] =
-                "Introduction\n----------------\n\nOn your keyboard use UP and DOWN or SCROLL WHEEL to scroll, or on your controller use RIGHT STICK to scroll.\n\nThese are excerpts from documents throughout our company. Your job is to read the document thoroughly and click on any errors to correct them before they are sent to the next editor in our document assurance unit-- we mustn't look unprefesional!";
+                "Introduction\n----------------\n\nOn your keyboard use UP and DOWN or SCROLL WHEEL to scroll, or on your controller use RIGHT STICK to scroll.\n\nThese are excerpts from documents throughout our company. Your job is to read the document thoroughly and click on any errors to correct them. After this, they're sent to the next editor in our document assurance unit. We mustn't look unprefesional!";
             documents[count++] =
                 "Memo\n-------\n\nDear Team,\n  This is a frendly reminder about our upcoming employee dinner party scheduled for June 20th.\n  Due to the influx of new employees, it'll be a great place to get setled into the company culture!\n  Please ensure you RSVP by June 10th to help with planing the catering arrangements.\n\nBest Regards,\nJane Smith\n(HR Manager)";
             documents[count++] =
@@ -889,7 +889,7 @@ void chapter_3_init(Game *game) {
     atari_text_list_init(&game->text[3],
                          0,
                          "You shouldn't be here.",
-                         15,
+                         10,
                          nullptr);
 
     speed = 30;
@@ -1261,13 +1261,13 @@ void chapter_3_init(Game *game) {
                              "...", 
                              &game->text[75]);
     atari_mid_text_list_init(&game->text[75],
-                             "These are our nights of\nGethsemane.\rBut crushing truths\nperish from being\nacknowledged.", 
+                             "\"These are our nights of\nGethsemane.\rBut crushing truths\nperish from being\nacknowledged.", 
                              &game->text[76]);
     atari_mid_text_list_init(&game->text[76],
                              "Thus, Oedipus at the\noutset obeys fate\nwithout knowing it.\rBut from the moment he\nknows, his tragedy\nbegins.", 
                              &game->text[77]);
     atari_mid_text_list_init(&game->text[77],
-                             "Yet at the same moment,\rblind and desperate,\rhe realizes that the\nonly bond linking him\nto the world is the cool\nhand of a girl.", 
+                             "Yet at the same moment,\rblind and desperate,\rhe realizes that the\nonly bond linking him\nto the world is the cool\nhand of a girl.\" [2]", 
                              nullptr);
     game->text[77].callbacks[0] = chapter_3_fade_out_outside_home_delay;
 
@@ -1292,9 +1292,9 @@ void chapter_3_init(Game *game) {
 
     //chapter_3_init_outside(game);
     //chapter_3_goto_home_inside(game);
-    //chapter_3_goto_home_outside(game);
+    chapter_3_goto_home_outside(game);
 
-    chapter_3_goto_road(game);
+    //chapter_3_goto_road(game);
 }
 
 void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,

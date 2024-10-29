@@ -9,8 +9,6 @@ struct Movie {
     int     movie;
     int     frames;
 
-    bool    initial_load;
-
     plm_t  *plm;
     double  last_time;
     double  framerate;

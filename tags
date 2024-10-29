@@ -609,7 +609,7 @@ chap_3_cubicle	src/game.cpp	/^        Chapter_3_Cubicle chap_3_cubicle;$/;"	m	un
 chap_4_devil	src/game.cpp	/^        Chapter_4_Devil     chap_4_devil;$/;"	m	union:Entity::__anoneafbdd87010a	typeref:typename:Chapter_4_Devil	file:
 chap_4_microwave	src/game.cpp	/^        Chapter_4_Microwave chap_4_microwave;$/;"	m	union:Entity::__anoneafbdd87010a	typeref:typename:Chapter_4_Microwave	file:
 chap_4_window	src/game.cpp	/^        Chapter_4_Window    chap_4_window;$/;"	m	union:Entity::__anoneafbdd87010a	typeref:typename:Chapter_4_Window	file:
-chapter	src/main.cpp	/^int chapter = 6;$/;"	v	typeref:typename:int
+chapter	src/main.cpp	/^int chapter = 7;$/;"	v	typeref:typename:int
 chapter_1_activate_node	src/chapter_1.cpp	/^void chapter_1_activate_node(void *ptr_game) {$/;"	f	typeref:typename:void
 chapter_1_apartment_text	src/chapter_1.cpp	/^void chapter_1_apartment_text(Text_List *list, char *line,$/;"	f	typeref:typename:void
 chapter_1_call_text	src/chapter_1.cpp	/^void chapter_1_call_text(Text_List *list, char *speaker,$/;"	f	typeref:typename:void
@@ -726,19 +726,19 @@ chapter_5_update_train	src/chapter_5.cpp	/^void chapter_5_update_train(Game *gam
 chapter_5_window_text	src/chapter_5.cpp	/^void chapter_5_window_text(bool scroll, Text_List *list, char *line, Color color, Text_List *nex/;"	f	typeref:typename:void
 chapter_6_begin_text	src/chapter_6.cpp	/^void chapter_6_begin_text(Game *game) {$/;"	f	typeref:typename:void
 chapter_6_choice_text	src/chapter_6.cpp	/^void chapter_6_choice_text(Text_List *list,$/;"	f	typeref:typename:void
-chapter_6_delayed_goto_desert	src/chapter_6.cpp	/^void chapter_6_delayed_goto_desert(Game *game) {$/;"	f	typeref:typename:void
+chapter_6_delayed_goto_desert	src/chapter_6.cpp	/^void chapter_6_delayed_goto_desert(void *game_ptr) {$/;"	f	typeref:typename:void
 chapter_6_draw	src/chapter_6.cpp	/^void chapter_6_draw(Game *game) {$/;"	f	typeref:typename:void
 chapter_6_entity_draw	src/chapter_6.cpp	/^void chapter_6_entity_draw(Entity *entity, Game *game) {$/;"	f	typeref:typename:void
 chapter_6_entity_update	src/chapter_6.cpp	/^void chapter_6_entity_update(Entity *entity, Game *game, float dt) {$/;"	f	typeref:typename:void
 chapter_6_goto_desert	src/chapter_6.cpp	/^void chapter_6_goto_desert(Game *game) {$/;"	f	typeref:typename:void
 chapter_6_goto_home	src/chapter_6.cpp	/^void chapter_6_goto_home(Game *game) {$/;"	f	typeref:typename:void
-chapter_6_goto_movie	src/chapter_6.cpp	/^void chapter_6_goto_movie(Game *game) {$/;"	f	typeref:typename:void
-chapter_6_goto_movie_delayed	src/chapter_6.cpp	/^void chapter_6_goto_movie_delayed(void *game_ptr) {$/;"	f	typeref:typename:void
 chapter_6_init	src/chapter_6.cpp	/^void chapter_6_init(Game *game) {$/;"	f	typeref:typename:void
 chapter_6_make_entity	src/chapter_6.cpp	/^Entity *chapter_6_make_entity(Entity_Type type, float x, float y) {$/;"	f	typeref:typename:Entity *
 chapter_6_queue_godtext	src/chapter_6.cpp	/^void chapter_6_queue_godtext(void *game_ptr) {$/;"	f	typeref:typename:void
 chapter_6_red_fade_alpha	src/chapter_6.cpp	/^float chapter_6_red_fade_alpha(float time) {$/;"	f	typeref:typename:float
 chapter_6_start_godtext	src/chapter_6.cpp	/^void chapter_6_start_godtext(Game *game) {$/;"	f	typeref:typename:void
+chapter_6_start_text	src/chapter_6.cpp	/^void chapter_6_start_text(Game *game) {$/;"	f	typeref:typename:void
+chapter_6_start_text_delayed	src/chapter_6.cpp	/^void chapter_6_start_text_delayed(Game *game) {$/;"	f	typeref:typename:void
 chapter_6_support_text	src/chapter_6.cpp	/^void chapter_6_support_text(Text_List *list, Font *font, char *speaker, char *line, Text_List *n/;"	f	typeref:typename:void
 chapter_6_text	src/chapter_6.cpp	/^void chapter_6_text(bool scroll, bool chase, Text_List *list, char *line,$/;"	f	typeref:typename:void
 chapter_6_update	src/chapter_6.cpp	/^void chapter_6_update(Game *game, float dt) {$/;"	f	typeref:typename:void
@@ -863,6 +863,8 @@ epilogue_handle_transition	src/chapter_epilogue.cpp	/^void epilogue_handle_trans
 epilogue_raise_node_last_scene	src/chapter_epilogue.cpp	/^void epilogue_raise_node_last_scene(void *game_ptr) {$/;"	f	typeref:typename:void
 epilogue_start_congratulations_text	src/chapter_epilogue.cpp	/^void epilogue_start_congratulations_text(Game *game) {$/;"	f	typeref:typename:void
 epilogue_start_final_conversation	src/chapter_epilogue.cpp	/^void epilogue_start_final_conversation(Game *game) {$/;"	f	typeref:typename:void
+epilogue_start_final_conversation_delayed	src/chapter_epilogue.cpp	/^void epilogue_start_final_conversation_delayed(Game *game) {$/;"	f	typeref:typename:void
+epilogue_start_movie	src/chapter_epilogue.cpp	/^void epilogue_start_movie(Game *game) {$/;"	f	typeref:typename:void
 epilogue_start_transition	src/chapter_epilogue.cpp	/^void epilogue_start_transition(void *game_ptr) {$/;"	f	typeref:typename:void
 error_count	src/chapter_3.cpp	/^    size_t  error_count;$/;"	m	struct:Document	typeref:typename:size_t	file:
 events	src/game.cpp	/^    Event events[64];$/;"	m	struct:Game	typeref:typename:Event[64]	file:
@@ -1358,7 +1360,6 @@ include_text_in_target	src/game.cpp	/^    bool include_text_in_target;$/;"	m	str
 index	src/pl_mpeg.h	/^	int16_t index;$/;"	m	struct:__anon6b50db360508	typeref:typename:int16_t
 index	src/pl_mpeg.h	/^	int16_t index;$/;"	m	struct:__anon6b50db360608	typeref:typename:int16_t
 init_text_list_default	src/text.cpp	/^void init_text_list_default(Text_List *list, char *speaker, char *text_string, Text_List *next) /;"	f	typeref:typename:void
-initial_load	src/movie.h	/^    bool    initial_load;$/;"	m	struct:Movie	typeref:typename:bool
 initialize_game_mode	src/main.cpp	/^void initialize_game_mode(Game_Mode mode) {$/;"	f	typeref:typename:void
 input_movement_cont_look_axis	src/keys.cpp	/^Vector2 input_movement_cont_look_axis(float dt) {$/;"	f	typeref:typename:Vector2
 input_movement_look	src/keys.cpp	/^Vector2 input_movement_look(float dt) {$/;"	f	typeref:typename:Vector2

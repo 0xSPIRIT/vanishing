@@ -117,7 +117,7 @@ struct Level_Chapter_5 {
         bool     ticket;
 
         float    black_screen_timer;
-        float    transition_fade;
+        bool     transition_fade;
     };
 
     // Staircase
@@ -550,6 +550,7 @@ void chapter_5_scene_init(Game *game) {
     int scene = level->queued_scene;
 
     level->current_scene = scene;
+    level->transition_fade = false;
 
     if (IsShaderReady(level->shader))
         UnloadShader(level->shader);
@@ -712,6 +713,8 @@ void chapter_5_scene_init(Game *game) {
         } break;
         case CHAPTER_5_SCENE_STAIRCASE: {
             level->camera_height = 1.67f;
+
+            start_fade(game, FADE_IN, 60, nullptr);
 
             game->post_processing.type = POST_PROCESSING_BLOOM;
             game->post_processing.bloom.bloom_intensity = 7;
@@ -1978,6 +1981,8 @@ void chapter_5_init(Game *game) {
     level->models.real_head     = LoadModel(RES_DIR "models/real_head.glb");
     level->models.podium        = LoadModel(RES_DIR "models/podium.glb");
 
+    level->transition_fade = false;
+
     chapter_5_goto_scene(game, CHAPTER_5_SCENE_TRAIN_STATION);
 }
 
@@ -2100,29 +2105,6 @@ void chapter_5_update_train(Game *game, float dt) {
         }
     }
 
-    /*
-    if (train->moving) {
-        train->position.x += direction * train->speed * dt;
-        train->move_timer += dt;
-
-        if (train->move_timer >= train_time) {
-            train->speed -= acceleration * dt;
-
-            if (train->speed < 0) {
-                train->speed = 0;
-
-                train->moving = false;
-                train->door_open_alarm = 2;
-                train->move_timer = 0;
-            }
-        } else {
-            if (train->speed < top_speed) {
-                train->speed += acceleration * dt;
-            }
-        }
-    }
-    */
-
     train->delta_x = train->position.x - prev_x;
 
     if (train->door_open_alarm > 0) {
@@ -2164,11 +2146,22 @@ void chapter_5_update_train(Game *game, float dt) {
     if (level->current_scene == CHAPTER_5_SCENE_TRAIN_STATION &&
         train->moving && train->player_in)
     {
-        level->transition_fade += 0.25f * dt;
+        if (!level->transition_fade) {
+            level->transition_fade = true;
 
-        if (level->transition_fade >= 1) {
-            level->transition_fade = 0;
-            chapter_5_goto_scene(game, CHAPTER_5_SCENE_STAIRCASE);
+            // TODO: Is this valid? Will this cause UB?
+            //       I'm taking the function pointer of a lambda
+            //       and storing it for later out-of-scope use...
+
+            auto fade_out = [](Game *game) -> void {
+                auto chapter_5_goto_staircase = [](Game *game) -> void {
+                    chapter_5_goto_scene(game, CHAPTER_5_SCENE_STAIRCASE);
+                };
+
+                start_fade(game, FADE_OUT, 60, chapter_5_goto_staircase);
+            };
+
+            add_event(game, fade_out, 2);
         }
     }
 
@@ -3120,8 +3113,6 @@ void chapter_5_draw(Game *game) {
                                     WHITE);
                     }
 
-                    DrawRectangle(0, 0, render_width, render_height, {0,0,0,(uint8_t)(level->transition_fade * 255)});
-
                     if (level->clerk.talk_popup) {
                         draw_popup("Talk to the Clerk");
                     }
@@ -3270,6 +3261,12 @@ void chapter_5_draw(Game *game) {
             }
 
             if (level->desert_door_popup) {
+                Color col = {190,190,190,255};
+
+                draw_popup("Drink the Holy Water", col, Middle, +1, +1);
+                draw_popup("Drink the Holy Water", col, Middle, -1, +1);
+                draw_popup("Drink the Holy Water", col, Middle, +1, -1);
+                draw_popup("Drink the Holy Water", col, Middle, -1, -1);
                 draw_popup("Drink the Holy Water", BLACK, Middle, 0, 0);
             }
         } break;

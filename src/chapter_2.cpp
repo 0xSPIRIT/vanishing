@@ -275,6 +275,8 @@ void chapter_2_init(Game *game) {
     game->post_processing.crt.do_scanline_effect = false;
     game->post_processing.crt.do_warp_effect = false;
     game->post_processing.crt.abberation_intensity = 1;
+    game->post_processing.crt.vignette_intensity = 1;
+    game->post_processing.crt.vignette_mix = 0.2f;
 
     Texture2D *textures = atari_assets.textures;
     textures[0]  = load_texture(RES_DIR "art/player.png");
@@ -910,6 +912,10 @@ void chapter_2_init(Game *game) {
 
     array_add(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 5.75*192-24-15, 3*160/4-4));
     array_add(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 5.25*192-24+13+50, 160/4+2));
+
+    add_wall(&game->entities, { 576, 160, 4, 160 });
+    add_wall(&game->entities, { 398, 160, 178, 4 });
+    add_wall(&game->entities, { 195, 160, 175, 4 });
 
     add_wall(&game->entities, { 0, 188, 76, 35 }); // bar
     add_wall(&game->entities, { 64, 133, 19, 123 });

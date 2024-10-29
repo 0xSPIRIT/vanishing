@@ -15,6 +15,15 @@ uniform float vignette_mix;
 
 out vec4 finalColor;
 
+vec2 clamp_vec2(vec2 a, vec2 min, vec2 max) {
+    if (a.x < min.x) a.x = min.x;
+    if (a.y < min.y) a.y = min.y;
+    if (a.x > max.x) a.x = max.x;
+    if (a.y > max.y) a.y = max.y;
+
+    return a;
+}
+
 float rand(vec2 co){
     return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
 }
@@ -85,9 +94,17 @@ void main() {
 
         vec4 abberated = vec4(1.0);
 
-        abberated.r  = texture(texture0, tex_coord + dir * vec2(redOffset)).r;
-        abberated.g  = texture(texture0, tex_coord + dir * vec2(greenOffset)).g;
-        abberated.ba = texture(texture0, tex_coord + dir * vec2(blueOffset)).ba;
+        vec2 r_coord = tex_coord + dir * vec2(redOffset);
+        vec2 g_coord = tex_coord + dir * vec2(greenOffset);
+        vec2 b_coord = tex_coord + dir * vec2(blueOffset);
+
+        r_coord = clamp_vec2(r_coord, vec2(0.0, 0.0), vec2(1.0, 1.0));
+        g_coord = clamp_vec2(g_coord, vec2(0.0, 0.0), vec2(1.0, 1.0));
+        b_coord = clamp_vec2(b_coord, vec2(0.0, 0.0), vec2(1.0, 1.0));
+
+        abberated.r  = texture(texture0, r_coord).r;
+        abberated.g  = texture(texture0, g_coord).g;
+        abberated.ba = texture(texture0, b_coord).ba;
 
         finalColor = mix(texture(texture0, tex_coord), abberated, abberation_intensity);
     } else {

@@ -1,4 +1,4 @@
-#define PROFILE 1
+#define PROFILE 0
 
 void movie_handle_frame(plm_t *mpeg, plm_frame_t *frame, void *user) {
     (void)mpeg;
@@ -72,8 +72,9 @@ void movie_load_video(Movie *movie, const char *movie_file, const char *audio_fi
 
     movie->audio.looping = false;
 
-    movie->last_time = 0;
-    movie->initial_load = true;
+    PlayMusicStream(movie->audio);
+
+    movie->last_time = -1;
 
     Image image = GenImageColor(plm_get_width(movie->plm),
                                 plm_get_height(movie->plm),
@@ -99,25 +100,16 @@ void movie_run(Movie *movie) {
         return;
     }
 
-    if (movie->initial_load && movie->frames > 5) {
-        movie->initial_load = false;
-        plm_seek(movie->plm, 0, 0);
-        SeekMusicStream(movie->audio, 0);
-        PlayMusicStream(movie->audio);
-    }
-
-    if (!movie->initial_load)
-        UpdateMusicStream(movie->audio);
+    UpdateMusicStream(movie->audio);
 
     ClearBackground(BLACK);
-    if (!movie->initial_load) {
-        Rectangle src = {
-            0, 0,
-            (float)movie->texture.width, (float)movie->texture.height
-        };
-        Rectangle dst = get_screen_rectangle();
-        DrawTexturePro(movie->texture, src, dst, {}, 0, WHITE);
-    }
+
+    Rectangle src = {
+        0, 0,
+        (float)movie->texture.width, (float)movie->texture.height
+    };
+    Rectangle dst = get_screen_rectangle();
+    DrawTexturePro(movie->texture, src, dst, {}, 0, WHITE);
 
     double current_time = GetTime();
 

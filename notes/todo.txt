@@ -1,15 +1,12 @@
 TODO 
 
-x Chapter 4: make the beginning part a bit more structured.
-  x Some nights it's darker....It's just the wind
-x Window fullscreen sprite
-- Chapter 3 road sprites
-- Create proper artwork for the dinner party
-- Add 2 more movies
-  - One right after the dialogue in chapter 6 and before
-    desert. (Make sure you cut to black immediately instead
-    of waiting for the player to press enter on the final
-    dialogue text)
+- Fix up chapter 2 sprites. Make it inspired, and not just making things
+  because it needs to have something there.
+- Add transition between train station and staircase.
+
+TODO (Future)
+
+- Get Tarrandat to make the road sprites.
 
 Movie scenes
 x The emptiness scene basically gives the idea of the young
@@ -17,11 +14,7 @@ x The emptiness scene basically gives the idea of the young
   around to save her from this meaningless death. (Allegory
   to Chase's position).
   (Chapter 6)
-- The hand scene basically gives you the idea of being
-  ok with your situation, and finding meaning in it.
-  "I, Antonious Block, am playing Chess with Death!"
-  (Epilogue, right before talk with penny)
-- The window scene is perfect the way it is.
+x The window scene is perfect the way it is.
   (Chapter 4, when you go to bed)
 
 V1 squad
