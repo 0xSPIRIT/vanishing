@@ -1,21 +1,12 @@
 TODO 
 
-- Fix up chapter 2 sprites. Make it inspired, and not just making things
-  because it needs to have something there.
-- Add transition between train station and staircase.
+- Improve chapter 5 text
+- Add more another old movie to the beginning of Dinner Party.
 
 TODO (Future)
 
 - Get Tarrandat to make the road sprites.
-
-Movie scenes
-x The emptiness scene basically gives the idea of the young
-  girl being punished for no reason, and that no God is
-  around to save her from this meaningless death. (Allegory
-  to Chase's position).
-  (Chapter 6)
-x The window scene is perfect the way it is.
-  (Chapter 4, when you go to bed)
+- Get Aidan to help the dinner party artwork.
 
 V1 squad
   (1/2) Jaydn

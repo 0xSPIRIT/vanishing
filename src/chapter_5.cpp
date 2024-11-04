@@ -155,6 +155,16 @@ struct Level_Chapter_5 {
 
         bool             read_popup;
         bool             desert_door_popup;
+        bool             peer_popup;
+        
+        bool             desert_black;
+        float            desert_black_alpha; // overlay
+
+        Chapter_4_Text   text_handler;
+
+        BoundingBox      jail_bars_bounds;
+        Vector3          jail_bars_pos;
+        bool             jail_bars_opened;
     };
 
     // Gallery
@@ -189,7 +199,8 @@ struct Level_Chapter_5 {
               train,
               train_flipped,
               train_door,
-              podium;
+              podium,
+              jail_bars;
     } models;
 
     int      state;
@@ -250,7 +261,12 @@ void end_chapter_5_after_stop(void *game_ptr) {
 void chapter_5_exit_gallery(void *game_ptr) {
     Game *game = (Game *)game_ptr;
 
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_SEASIDE);
+    auto goto_seaside = [](Game *game) -> void {
+        chapter_5_goto_scene(game, CHAPTER_5_SCENE_SEASIDE);
+        start_fade(game, FADE_IN, 60, nullptr);
+    };
+
+    start_fade(game, FADE_OUT, 60, goto_seaside);
 }
 
 void chapter_5_begin_head_flip(void *game_ptr) {
@@ -413,8 +429,8 @@ void chapter_5_train_station_init_positions(Game *game, bool refresh) {
     level->camera.fovy       = 50;
 
     if (!refresh) {
-        level->camera.position   = { 50, level->camera_height- 1.2585f, 0 };
-        level->camera.target     = { 0, level->camera_height- 1.2585f, 0 };
+        level->camera.position   = { 50, level->camera_height - 1.2585f, 0 };
+        level->camera.target     = { 0, level->camera_height - 1.2585f, 0 };
         level->camera.up         = { 0, 1, 0 };
         level->camera.projection = CAMERA_PERSPECTIVE;
     }
@@ -422,6 +438,26 @@ void chapter_5_train_station_init_positions(Game *game, bool refresh) {
 
 void chapter_5_window_text(bool scroll, Text_List *list, char *line, Color color, Text_List *next) {
     list->font         = &atari_font;
+    list->font_spacing = 1;
+    list->scale        = 0.125;
+    list->scroll_speed = 30;
+    list->color        = color;
+    list->center_text  = true;
+
+    if (scroll)
+        list->scroll_type = LetterByLetter;
+    else
+        list->scroll_type  = EntireLine;
+
+    list->render_type  = Bare;
+    list->location     = Middle;
+    list->take_keyboard_focus = true;
+
+    text_list_init(list, 0, line, next);
+}
+
+void chapter_5_window_text_2(bool scroll, Text_List *list, char *line, Color color, Text_List *next) {
+    list->font         = &dos_font;
     list->font_spacing = 1;
     list->scale        = 0.125;
     list->scroll_speed = 30;
@@ -713,8 +749,6 @@ void chapter_5_scene_init(Game *game) {
         } break;
         case CHAPTER_5_SCENE_STAIRCASE: {
             level->camera_height = 1.67f;
-
-            start_fade(game, FADE_IN, 60, nullptr);
 
             game->post_processing.type = POST_PROCESSING_BLOOM;
             game->post_processing.bloom.bloom_intensity = 7;
@@ -1493,16 +1527,16 @@ void chapter_5_scene_init(Game *game) {
 
             chapter_5_podium_text(&game->text[10],
                                   false,
-                                  "After nineteen years had passed,\nhe stumbled upon a strange place.\rAn art gallery, alone in the desert.",
+                                  "After nineteen years had passed,\nhe stumbled upon a strange sight.\rA well, alone in the desert,\nsurrounded by white bars.",
                                   &game->text[11]);
             chapter_5_podium_text(&game->text[11],
                                   false,
-                                  "He groveled to the building,\rexpecting to learn nothing new.",
+                                  "He groveled to it, surrounded by the Monoliths,\rexpecting to learn nothing new.",
                                   &game->text[12]);
             chapter_5_podium_text(&game->text[12],
                                   true,
                                   "Blisters became the bottoms of my feet.\r"
-                                  "And yet, something compelled me to endure this.\r... I was confused, or fascinated.",
+                                  "And yet, something compelled me to endure this.\r... I was confused,\rand fascinated.",
                                   nullptr);
 
             for (int i = 45; i <= 49; i++) {
@@ -1536,15 +1570,192 @@ void chapter_5_scene_init(Game *game) {
                 level->podiums[level->podium_count++] = podium;
             };
 
-            add_podium(&game->text[0], BlenderPosition2D(-124, 124), 220+rand_int(-10,10));
-            add_podium(&game->text[1], BlenderPosition2D(-118, 114), 220+rand_int(-10,10));
-            add_podium(&game->text[2], BlenderPosition2D(-100, 99),  220+rand_int(-10,10));
-            add_podium(&game->text[3], BlenderPosition2D(-87, 86),   220+rand_int(-10,10));
-            add_podium(&game->text[4], BlenderPosition2D(-76, 65),   220+rand_int(-10,10));
-            add_podium(&game->text[5], BlenderPosition2D(-69, 50),   220+rand_int(-10,10));
-            add_podium(&game->text[7], BlenderPosition2D(-50, 40),   220+rand_int(-10,10));
-            add_podium(&game->text[9], BlenderPosition2D(-24, 25),   220+rand_int(-10,10));
-            add_podium(&game->text[10], BlenderPosition2D(-20, 10),  220+rand_int(-10,10));
+            add_podium(&game->text[0],  BlenderPosition2D(-124, 124), 220+rand_int(-10,10));
+            add_podium(&game->text[1],  BlenderPosition2D(-118, 114), 220+rand_int(-10,10));
+            add_podium(&game->text[2],  BlenderPosition2D(-100, 99),  220+rand_int(-10,10));
+            add_podium(&game->text[3],  BlenderPosition2D(-87, 86),   220+rand_int(-10,10));
+            add_podium(&game->text[4],  BlenderPosition2D(-76, 65),   220+rand_int(-10,10));
+            add_podium(&game->text[5],  BlenderPosition2D(-69, 50),   220+rand_int(-10,10));
+            add_podium(&game->text[7],  BlenderPosition2D(-50, 40),   220+rand_int(-10,10));
+            add_podium(&game->text[9],  BlenderPosition2D(-24, 25),   220+rand_int(-10,10));
+            add_podium(&game->text[10], BlenderPosition2D(-20, 10),   220+rand_int(-10,10));
+
+            chapter_5_text(&game->text[13],
+                           0,
+                           "To continue, you must confront the void.",
+                           30,
+                           nullptr);
+
+            // Monolith text
+
+            Chapter_4_Text *text_handler = &level->text_handler;
+
+            text_handler->alarms[0]    = 8;
+            text_handler->next_list[0] = &game->text[20];
+
+            chapter_5_window_text(true,
+                                  &game->text[20],
+                                  "Chase gazed into the Monolith.",
+                                  WHITE,
+                                  &game->text[21]);
+            chapter_5_window_text(true,
+                                  &game->text[21],
+                                  "It was difficult to describe.\r"
+                                  "The inky void permeated his senses,\n"
+                                  "shocking him to his core.\r"
+                                  "He was enraptured.",
+                                  WHITE,
+                                  nullptr);
+
+            /*
+            game->current = &game->text[20];
+            level->desert_black = true;
+            text_handler->current_index = 1;
+            */
+
+            text_handler->alarms[1]    = 3;
+            text_handler->next_list[1] = &game->text[22];
+
+            chapter_5_window_text(true,
+                                  &game->text[22],
+                                  "...\rMaybe here, she could hear him.\rHear his pleas.\rRemember his face.\rRemember the long-haired boy.",
+                                  WHITE,
+                                  nullptr);
+
+            text_handler->alarms[2]    = 4;
+            text_handler->next_list[2] = &game->text[23];
+
+            chapter_5_window_text(true,
+                                  &game->text[23],
+                                  "\"Hello?\"\r\"Is anyone there?\"\n\r...\rShe didn't respond.",
+                                  WHITE,
+                                  nullptr);
+
+            text_handler->alarms[3]    = 3;
+            text_handler->next_list[3] = &game->text[24];
+
+            chapter_5_window_text(true,
+                                  &game->text[24],
+                                  "\"... I remember how you were.\"",
+                                  WHITE,
+                                  &game->text[25]);
+            chapter_5_window_text(true,
+                                  &game->text[25],
+                                  //"She used to hold the brightest and most\njoyous colours.\r"
+                                  "She held the most vibrant, joyous\npearlescence.\r"
+                                  "Pinks and violets, pastels and neons.\r"
+                                  "Her long hair fluttered in the breeze,\ntrailing a soft perfume.\r"
+                                  "Made him feel safe, made him feel whole.",
+                                  WHITE,
+                                  &game->text[26]);
+            chapter_5_window_text(true,
+                                  &game->text[26],
+                                  "On lazy Saturdays they both laid on\n"
+                                  "the grass fields looking up at the stars\n"
+                                  "laughing in bliss and harmony.\n\n\r"
+                                  "He turned over to her, stared into her eyes\n"
+                                  "and saw Truth.",
+                                  WHITE,
+                                  &game->text[35]);
+
+            chapter_5_window_text(true,
+                                  &game->text[35],
+                                  "Her cute smile infatuated him.\r"
+                                  "The Universe's balance hung delicately\n"
+                                  "on her, because he loved her.",
+                                  WHITE,
+                                  nullptr);
+
+            text_handler->alarms[4]    = 3;
+            text_handler->next_list[4] = &game->text[27];
+
+            chapter_5_window_text(true,
+                                  &game->text[27],
+                                  "But now, he realized what he missed.\r"
+                                  "The vibrancy.\r"
+                                  "The indescribable beauty.",
+                                  WHITE,
+                                  &game->text[28]);
+            chapter_5_window_text(true,
+                                  &game->text[28],
+                                  "Now look at her.\rLook what happened to her.\n\r"
+                                  "Replaced wholesale with        .",
+                                  WHITE,
+                                  nullptr);
+
+            /*
+               game->current = &game->text[28];
+               text_handler->current_index = 5;
+               level->desert_black = true;
+             */
+
+            text_handler->alarms[5]    = 3;
+            text_handler->next_list[5] = &game->text[30];
+
+            /*
+            chapter_5_window_text_2(true,
+                                    &game->text[29],
+                                    "*****************************************\n"
+                                    "FATAL ERROR, ATTEMPT TO REFERENCE ADDRESS\n"
+                                    "    0x0000000000000000 (NULL POINTER).\n"
+                                    "*****************************************\n",
+                                    WHITE,
+                                    &game->text[30]);
+                                    */
+            chapter_5_window_text(true,
+                                  &game->text[30],
+                                  "It couldn't be helped, I tell you!\r"
+                                  "It couldn't be helped, please!\r"
+                                  "Trust me, I tried!",
+                                  WHITE,
+                                  nullptr);
+
+            text_handler->alarms[6]    = 4;
+            text_handler->next_list[6] = &game->text[31];
+
+            chapter_5_window_text(true,
+                                  &game->text[31],
+                                  "...\n\rHe waited for an answer.\r"
+                                  "But he knew it was not in Her nature.",
+                                  WHITE,
+                                  nullptr);
+
+            text_handler->alarms[7]    = 6;
+            text_handler->next_list[7] = &game->text[32];
+
+            chapter_5_window_text(false,
+                                  &game->text[32],
+                                  "THE MONOLITHS TOWER OVER ALL.\n\r"
+                                  "AND THEY WILL REMAIN.\n\r"
+                                  "UNTIL THE RIVERS RUN DRY,\n"
+                                  "AND THE PILLARS OF CREATION\n"
+                                  "CRUMBLE TO DUST.",
+                                  WHITE,
+                                  nullptr);
+
+            auto finish_monolith_text = [](void *game_ptr) -> void {
+                Game *game = (Game *)game_ptr;
+
+                auto finish = [](Game *game) -> void {
+                    Level_Chapter_5 *level = (Level_Chapter_5 *)game->level;
+                    level->desert_black = false;
+                    level->jail_bars_opened = true;
+
+                    level->camera.position = {7.085911f, 2.572061f, 24.110819f};
+                    level->camera.target = {113.660233f, 92.182884f, -121.212395f};
+                };
+
+                add_event(game, finish, 3);
+            };
+
+            game->text[32].callbacks[0] = finish_monolith_text;
+
+            //game->current = &game->text[20];
+
+            level->jail_bars_pos = BlenderPosition3D(10.27f, -9.243f, 3.764f);
+
+            //level->desert_black = false;
+            level->jail_bars_opened = false;
         } break;
         case CHAPTER_5_SCENE_GALLERY: {
             level->camera_height = 1.8f;
@@ -1752,6 +1963,8 @@ void chapter_5_scene_init(Game *game) {
         } break;
         case CHAPTER_5_SCENE_SEASIDE: {
             level->camera_height = 1.8f;
+
+            game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
 
             level->scenes[6] = LoadModel(RES_DIR "models/balcony.glb");
 
@@ -1981,9 +2194,15 @@ void chapter_5_init(Game *game) {
     level->models.real_head     = LoadModel(RES_DIR "models/real_head.glb");
     level->models.podium        = LoadModel(RES_DIR "models/podium.glb");
 
+    level->models.jail_bars     = LoadModel(RES_DIR "models/jail_bars.glb");
+
+    level->jail_bars_bounds = GetModelBoundingBox(level->models.jail_bars);
+
+    level->text_handler.start_timer = 0;
+
     level->transition_fade = false;
 
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_TRAIN_STATION);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_DESERT);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {
@@ -2156,6 +2375,7 @@ void chapter_5_update_train(Game *game, float dt) {
             auto fade_out = [](Game *game) -> void {
                 auto chapter_5_goto_staircase = [](Game *game) -> void {
                     chapter_5_goto_scene(game, CHAPTER_5_SCENE_STAIRCASE);
+                    start_fade(game, FADE_IN, 60, nullptr);
                 };
 
                 start_fade(game, FADE_OUT, 60, chapter_5_goto_staircase);
@@ -2708,13 +2928,6 @@ void gallery_check_quotes(Game *game, float dt) {
         }
     } else if (game->current == 0) {
         level->camera.fovy = FOV_DEFAULT;
-
-        /*
-        if (IsKeyDown(KEY_F))
-            level->camera.fovy = FOV_DEFAULT/2;
-        else
-            level->camera.fovy = FOV_DEFAULT;
-            */
     }
 }
 
@@ -2727,6 +2940,14 @@ void chapter_5_update_player_desert(Game *game, float dt) {
     if (level->current_quote == 0) {
         Vector3 stored_camera_pos = level->camera.position;
         update_camera_3d(&level->camera, 4, true, dt);
+
+        // Special case for the jail bars
+        if (level->current_scene == CHAPTER_5_SCENE_DESERT) {
+            BoundingBox jail = BoundingBoxMove(level->jail_bars_bounds, level->jail_bars_pos);
+            if (Vector3InBoundingBox(level->camera.position, jail)) {
+                level->camera.position = stored_camera_pos;
+            }
+        }
 
         Vector3 velocity = Vector3Subtract(level->camera.position, stored_camera_pos);
         level->camera.position = stored_camera_pos;
@@ -2959,13 +3180,28 @@ void chapter_5_update(Game *game, float dt) {
             }
         } break;
         case CHAPTER_5_SCENE_DESERT: {
-            chapter_5_update_player_desert(game, dt);
+            if (level->desert_black) {
+                level->desert_black_alpha += 20 * dt;
+
+                if (level->desert_black_alpha >= 255)
+                    level->desert_black_alpha = 255;
+
+                chapter_4_update_text(&game->current, &level->text_handler, dt);
+            } else {
+                chapter_5_update_player_desert(game, dt);
+            }
+
+            if (level->jail_bars_opened) {
+                level->jail_bars_pos.y -= 0.5 * dt;
+            }
 
             level->read_popup = false;
 
             Vector2 player = {level->camera.position.x, level->camera.position.z};
 
-            if (game->current == 0) {
+            level->peer_popup = false;
+
+            if (!level->desert_black && game->current == 0) {
                 for (int i = 0; i < level->podium_count; i++) {
                     Vector3 pos = level->podiums[i].position;
 
@@ -2984,11 +3220,39 @@ void chapter_5_update(Game *game, float dt) {
                         }
                     }
                 }
+
+                if (!level->jail_bars_opened) {
+                    Vector2 monoliths[] = {
+                        BlenderPosition2D(+96.77f, -12.44f),
+                        BlenderPosition2D(+167.7f, +112.3f),
+                        BlenderPosition2D(+36.5f,  +105.4f),
+                        BlenderPosition2D(-97.18f, -28.59f),
+                        BlenderPosition2D(-14.26f, -99.25f),
+                        BlenderPosition2D(+105.5f, -119.3f),
+                        BlenderPosition2D(-23.97f, -185.4f),
+                        BlenderPosition2D(+75.98f, -254.3f),
+                    };
+
+                    for (int i = 0; i < StaticArraySize(monoliths); i++) {
+                        Vector2 curr = monoliths[i];
+
+                        if (Vector2Distance(player, curr) < 35) {
+                            level->peer_popup = true;
+
+                            if (is_action_pressed()) {
+                                level->desert_black = true;
+                            }
+                        }
+                    }
+                }
             }
 
-            level->desert_door_popup = (Vector2Distance({10.49f, 9.14f}, player) < 3);
+            level->desert_door_popup = game->current==0 && (Vector2Distance({10.49f, 9.14f}, player) < 4);
             if (level->desert_door_popup && is_action_pressed() && game->fader.direction == FADE_INVALID) {
-                start_fade(game, FADE_OUT, chapter_5_goto_gallery);
+                if (level->jail_bars_opened)
+                    start_fade(game, FADE_OUT, chapter_5_goto_gallery);
+                else
+                    game->current = &game->text[13];
             }
         } break;
         case CHAPTER_5_SCENE_GALLERY: {
@@ -2996,7 +3260,7 @@ void chapter_5_update(Game *game, float dt) {
 
             gallery_check_quotes(game, dt);
 
-            level->gallery_door_popup = Vector2Distance(level->door_position, {level->camera.position.x, level->camera.position.z}) < 3;
+            level->gallery_door_popup = game->fader.direction == FADE_INVALID && Vector2Distance(level->door_position, {level->camera.position.x, level->camera.position.z}) < 3;
 
             if (level->gallery_door_popup && is_action_pressed()) {
                 game->current = &game->text[100];
@@ -3095,14 +3359,6 @@ void chapter_5_draw(Game *game) {
                     chapter_5_draw_train(level, &level->train);
 
                     EndShaderMode();
-
-#if 0
-                    if (level->train.moving && level->train.player_in) {
-                        for (int i = 0; i < StaticArraySize(level->stars); i++) {
-                            DrawSphere(level->stars[i], 1, WHITE);
-                        }
-                    }
-#endif
 
                     EndMode3D();
 
@@ -3237,10 +3493,11 @@ void chapter_5_draw(Game *game) {
                            SHADER_UNIFORM_FLOAT);
 
             /*
-            if (IsKeyPressed(KEY_K)) {
-                UnloadShader(level->shader);
-                level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/desert.fs");
-                model_set_shader(&level->scenes[4], level->shader);
+            if (colors_equal(BLACK, level->desert_overlay_col) &&
+                level->desert_black)
+            {
+                ClearBackground(BLACK);
+                break;
             }
             */
 
@@ -3251,8 +3508,13 @@ void chapter_5_draw(Game *game) {
             DrawModel(level->scenes[4], {}, 1, WHITE);
 
             for (int i = 0; i < level->podium_count; i++) {
-                DrawModelEx(level->models.podium, level->podiums[i].position, {0,1,0}, level->podiums[i].rotation, {1.3f, 1.3f, 1.3f}, WHITE);
+                DrawModelEx(level->models.podium, level->podiums[i].position, {0,1,0}, level->podiums[i].rotation, {1.1f, 1.1f, 1.1f}, WHITE);
             }
+
+            DrawModel(level->models.jail_bars,
+                      level->jail_bars_pos,
+                      1,
+                      WHITE);
 
             EndMode3D();
 
@@ -3261,14 +3523,32 @@ void chapter_5_draw(Game *game) {
             }
 
             if (level->desert_door_popup) {
-                Color col = {190,190,190,255};
+                auto popup = [](char *text, Color col) -> void {
+                    draw_popup(text, col, Middle, +1, +1);
+                    draw_popup(text, col, Middle, -1, +1);
+                    draw_popup(text, col, Middle, +1, -1);
+                    draw_popup(text, col, Middle, -1, -1);
+                    draw_popup(text, BLACK, Middle, 0, 0);
+                };
 
-                draw_popup("Drink the Holy Water", col, Middle, +1, +1);
-                draw_popup("Drink the Holy Water", col, Middle, -1, +1);
-                draw_popup("Drink the Holy Water", col, Middle, +1, -1);
-                draw_popup("Drink the Holy Water", col, Middle, -1, -1);
-                draw_popup("Drink the Holy Water", BLACK, Middle, 0, 0);
+                if (level->jail_bars_opened) {
+                    Color col = {190,190,190,255};
+                    popup("Drink the Holy Water", col);
+                } else {
+                    Color col = {190,190,190,255};
+                    popup("Inspect the Bars", col);
+                }
             }
+
+            if (level->peer_popup) {
+                draw_popup("Peer Inside the Monolith?", BLACK, Middle);
+            }
+
+            if (level->desert_black) {
+                DrawRectangle(0, 0, render_width, render_height,
+                              {0,0,0,(uint8_t)level->desert_black_alpha});
+            }
+
         } break;
         case CHAPTER_5_SCENE_GALLERY: {
             ClearBackground(SKYBLUE);

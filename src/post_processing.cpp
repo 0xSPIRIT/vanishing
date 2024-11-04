@@ -76,47 +76,52 @@ void post_process_init(Post_Processing *post) {
 
     post->type = POST_PROCESSING_PASSTHROUGH;
 
-    post->vhs.u_time                 = GetShaderLocation(post->vhs.shader, "time");
-    post->vhs.u_scan_intensity       = GetShaderLocation(post->vhs.shader, "scan_intensity");
-    post->vhs.u_noise_intensity      = GetShaderLocation(post->vhs.shader, "noise_intensity");
-    post->vhs.u_abberation_intensity = GetShaderLocation(post->vhs.shader, "abberation_intensity");
-    post->vhs.u_mix_factor           = GetShaderLocation(post->vhs.shader, "mix_factor");
-    post->vhs.u_vignette_intensity   = GetShaderLocation(post->vhs.shader, "vignette_intensity");
-    post->vhs.u_vignette_mix         = GetShaderLocation(post->vhs.shader, "vignette_mix");
+    Post_Processing_Vhs *vhs = &post->vhs;
 
-    post->vhs.scan_intensity = 1;
-    post->vhs.noise_intensity = 1;
-    post->vhs.abberation_intensity = 1;
-    post->vhs.mix_factor = 1;
-    post->vhs.vignette_intensity = 0;
-    post->vhs.vignette_mix = 1;
+    vhs->u_time                 = GetShaderLocation(vhs->shader, "time");
+    vhs->u_scan_intensity       = GetShaderLocation(vhs->shader, "scan_intensity");
+    vhs->u_noise_intensity      = GetShaderLocation(vhs->shader, "noise_intensity");
+    vhs->u_abberation_intensity = GetShaderLocation(vhs->shader, "abberation_intensity");
+    vhs->u_mix_factor           = GetShaderLocation(vhs->shader, "mix_factor");
+    vhs->u_vignette_intensity   = GetShaderLocation(vhs->shader, "vignette_intensity");
+    vhs->u_vignette_mix         = GetShaderLocation(vhs->shader, "vignette_mix");
 
-    post->crt.do_scanline_effect = 1;
-    post->crt.abberation_intensity = 1;
-    post->crt.vignette_intensity = 1;
-    post->crt.scanline_alpha = 0.25;
-    post->crt.vignette_mix = 1;
+    vhs->scan_intensity = 1;
+    vhs->noise_intensity = 1;
+    vhs->abberation_intensity = 1;
+    vhs->mix_factor = 1;
+    vhs->vignette_intensity = 0;
+    vhs->vignette_mix = 1;
 
-    post->crt.shader                 = LoadShader(0, RES_DIR "shaders/crt.fs");
-    post->crt.u_time                 = GetShaderLocation(post->crt.shader, "time");
-    post->crt.u_do_scanline_effect   = GetShaderLocation(post->crt.shader, "do_scanline_effect");
-    post->crt.u_do_warp_effect       = GetShaderLocation(post->crt.shader, "do_warp_effect");
-    post->crt.u_abberation_intensity = GetShaderLocation(post->crt.shader, "abberation_intensity");
-    post->crt.u_vignette_intensity   = GetShaderLocation(post->crt.shader, "vignette_intensity");
-    post->crt.u_scanline_alpha       = GetShaderLocation(post->crt.shader, "scanline_alpha");
-    post->crt.u_vignette_mix         = GetShaderLocation(post->crt.shader, "vignette_mix");
 
-    //post->bloom.bloom_intensity   = 5;
-    //post->bloom.vignette_mix      = 1;
+    Post_Processing_Crt *crt = &post->crt;
 
-    post->bloom.bloom_intensity = 4;
-    post->bloom.vignette_mix = 0.35f;
+    crt->do_scanline_effect = 1;
+    crt->abberation_intensity = 1;
+    crt->vignette_intensity = 1;
+    crt->scanline_alpha = 0.25;
+    crt->vignette_mix = 1;
 
-    post->bloom.shader            = LoadShader(0, RES_DIR "shaders/bloom.fs");
-    post->bloom.u_time            = GetShaderLocation(post->bloom.shader, "time");
-    post->bloom.u_bloom_intensity = GetShaderLocation(post->bloom.shader, "bloom_intensity");
-    post->bloom.u_vignette_mix    = GetShaderLocation(post->bloom.shader, "vignette_mix");
-    post->bloom.u_window_size     = GetShaderLocation(post->bloom.shader, "window_size");
+    crt->shader                 = LoadShader(0, RES_DIR "shaders/crt.fs");
+    crt->u_time                 = GetShaderLocation(crt->shader, "time");
+    crt->u_do_scanline_effect   = GetShaderLocation(crt->shader, "do_scanline_effect");
+    crt->u_do_warp_effect       = GetShaderLocation(crt->shader, "do_warp_effect");
+    crt->u_abberation_intensity = GetShaderLocation(crt->shader, "abberation_intensity");
+    crt->u_vignette_intensity   = GetShaderLocation(crt->shader, "vignette_intensity");
+    crt->u_scanline_alpha       = GetShaderLocation(crt->shader, "scanline_alpha");
+    crt->u_vignette_mix         = GetShaderLocation(crt->shader, "vignette_mix");
+
+
+    Post_Processing_Bloom *bloom = &post->bloom;
+
+    bloom->bloom_intensity = 4;
+    bloom->vignette_mix = 0.35f;
+
+    bloom->shader            = LoadShader(0, RES_DIR "shaders/bloom.fs");
+    bloom->u_time            = GetShaderLocation(bloom->shader, "time");
+    bloom->u_bloom_intensity = GetShaderLocation(bloom->shader, "bloom_intensity");
+    bloom->u_vignette_mix    = GetShaderLocation(bloom->shader, "vignette_mix");
+    bloom->u_window_size     = GetShaderLocation(bloom->shader, "window_size");
 }
 
 void post_process_vhs_set_intensity(Post_Processing_Vhs *vhs, Vhs_Intensity intensity) {
@@ -146,13 +151,16 @@ void post_process_vhs_set_intensity(Post_Processing_Vhs *vhs, Vhs_Intensity inte
 
 void post_process_vhs_uniforms(Post_Processing_Vhs *vhs) {
     float curtime = GetTime();
-    SetShaderValue(vhs->shader, vhs->u_time, &curtime, SHADER_UNIFORM_FLOAT);
-    SetShaderValue(vhs->shader, vhs->u_scan_intensity, &vhs->scan_intensity, SHADER_UNIFORM_FLOAT);
-    SetShaderValue(vhs->shader, vhs->u_noise_intensity, &vhs->noise_intensity, SHADER_UNIFORM_FLOAT);
-    SetShaderValue(vhs->shader, vhs->u_abberation_intensity, &vhs->abberation_intensity, SHADER_UNIFORM_FLOAT);
-    SetShaderValue(vhs->shader, vhs->u_mix_factor, &vhs->mix_factor, SHADER_UNIFORM_FLOAT);
-    SetShaderValue(vhs->shader, vhs->u_vignette_intensity, &vhs->vignette_intensity, SHADER_UNIFORM_FLOAT);
-    SetShaderValue(vhs->shader, vhs->u_vignette_mix, &vhs->vignette_mix, SHADER_UNIFORM_FLOAT);
+
+    Shader shader = vhs->shader;
+
+    SetShaderValue(shader, vhs->u_time, &curtime, SHADER_UNIFORM_FLOAT);
+    SetShaderValue(shader, vhs->u_scan_intensity, &vhs->scan_intensity, SHADER_UNIFORM_FLOAT);
+    SetShaderValue(shader, vhs->u_noise_intensity, &vhs->noise_intensity, SHADER_UNIFORM_FLOAT);
+    SetShaderValue(shader, vhs->u_abberation_intensity, &vhs->abberation_intensity, SHADER_UNIFORM_FLOAT);
+    SetShaderValue(shader, vhs->u_mix_factor, &vhs->mix_factor, SHADER_UNIFORM_FLOAT);
+    SetShaderValue(shader, vhs->u_vignette_intensity, &vhs->vignette_intensity, SHADER_UNIFORM_FLOAT);
+    SetShaderValue(shader, vhs->u_vignette_mix, &vhs->vignette_mix, SHADER_UNIFORM_FLOAT);
 }
 
 void post_process_crt_uniforms(Post_Processing_Crt *crt) {

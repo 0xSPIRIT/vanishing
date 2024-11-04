@@ -42,8 +42,8 @@
 #define DIM_ATARI_WIDTH  192
 #define DIM_ATARI_HEIGHT 160
 
-#define DIM_3D_WIDTH  (320)
-#define DIM_3D_HEIGHT (240)
+#define DIM_3D_WIDTH     320
+#define DIM_3D_HEIGHT    240
 
 #define PLAYER_SPEED_3D 3
 
@@ -65,7 +65,7 @@ Game_Mode game_mode = GAME_MODE_INVALID;
 
 int chapter = 5;
 
-Font global_font, atari_font, comic_sans, italics_font, bold_font, bold_2_font, mono_font, bold_font_big, atari_small_font, titlescreen_font, titlescreen_minor_font;
+Font global_font, atari_font, comic_sans, italics_font, bold_font, bold_2_font, mono_font, bold_font_big, atari_small_font, titlescreen_font, titlescreen_minor_font, dos_font;
 
 bool toggled_fullscreen_past_second = false;
 float fullscreen_timer = 0;
@@ -114,11 +114,12 @@ void initialize_game_mode(Game_Mode mode);
 #include "util.cpp"
 
 #include "keys.cpp"
+#include "audio.cpp"
+
 #include "text.cpp"
 
 #include "post_processing.cpp"
 
-// The chapter_n.cpp files are included in game.cpp.
 #include "chapter_1.h"
 #include "chapter_2.h"
 #include "chapter_3.h"
@@ -126,6 +127,7 @@ void initialize_game_mode(Game_Mode mode);
 
 #include "movie.h"
 
+// The chapter_n.cpp files are included in game.cpp.
 #include "game.cpp"
 #include "intro.cpp"
 
@@ -205,6 +207,9 @@ MainFunction() {
     mono_font     = LoadFontEx(RES_DIR "art/cour.ttf",      8, 0, 0);
     titlescreen_font = LoadFontEx(RES_DIR "art/cambriaz.ttf", 48, 0, 0);
     titlescreen_minor_font = LoadFontEx(RES_DIR "art/cambriaz.ttf", 24, 0, 0);
+    dos_font = LoadFontEx(RES_DIR "art/dos.ttf", 11, 0, 0);
+
+    game_audio_init();
 
     DisableCursor();
 
@@ -235,7 +240,16 @@ MainFunction() {
             image.mipmaps = 1;
             image.format  = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8;
 
-            ExportImage(image, "screenshots/screenshot.png");
+            int i = 0;
+
+            while (true) {
+                const char *file = TextFormat("screenshots/screenshot%d.png", i++);
+
+                if (!FileExists(file)) {
+                    ExportImage(image, file);
+                    break;
+                }
+            }
         }
 
         if (fullscreen && !IsWindowFocused()) {
@@ -245,6 +259,8 @@ MainFunction() {
         if ((IsKeyPressed(KEY_F4) && IsKeyDown(KEY_LEFT_ALT))) {
             exit(0);
         }
+
+        game_audio_update();
 
         Game_Mode previous_game_mode = game_mode;
 

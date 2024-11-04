@@ -290,7 +290,7 @@ void chapter_2_init(Game *game) {
     //textures[8]  = load_texture(RES_DIR "art/fullscreen_1.png");
     //textures[9]  = load_texture(RES_DIR "art/fullscreen_2.png");
     textures[10] = load_texture(RES_DIR "art/bathroom.png");
-    textures[11] = load_texture(RES_DIR "art/open_window.png");
+    textures[11] = load_texture(RES_DIR "art/open_window_chap_2.png");
     textures[12] = load_texture(RES_DIR "art/djinn1.png");
     textures[13] = load_texture(RES_DIR "art/djinn2.png");
     textures[14] = load_texture(RES_DIR "art/djinn3.png");
@@ -813,9 +813,6 @@ void chapter_2_init(Game *game) {
                          speed,
                          nullptr);
 
-    // he looks into the void, trying to find God
-    // or Penny, or Meaning.
-    //
     // her is meaning
     // her is penny
     // her is god

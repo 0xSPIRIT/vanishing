@@ -223,7 +223,7 @@ void print_rectangle(Rectangle rect) {
 }
 
 void print_vec2(Vector2 vec) {
-    printf("%f, %f\n", vec.x, vec.y);
+    printf("%f, %f", vec.x, vec.y);
 }
 
 void print_vec3(Vector3 vec) {
@@ -246,6 +246,27 @@ void seconds_to_minutes_and_seconds(float time, char *output) {
     int seconds = time - minutes * 60;
 
     sprintf(output, "%d:%02d", minutes, seconds);
+}
+
+BoundingBox BoundingBoxMove(BoundingBox box, Vector3 offset) {
+    BoundingBox result;
+
+    result.min = Vector3Add(box.min, offset);
+    result.max = Vector3Add(box.max, offset);
+
+    return result;
+}
+
+bool Vector3InBoundingBox(Vector3 point, BoundingBox box) {
+    Vector3 min = box.min;
+    Vector3 max = box.max;
+
+    return (point.x >= min.x &&
+            point.y >= min.y &&
+            point.z >= min.z &&
+            point.x <= max.x &&
+            point.y <= max.y &&
+            point.z <= max.z);
 }
 
 Texture2D load_texture(const char *filename) {

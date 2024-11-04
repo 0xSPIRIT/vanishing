@@ -1,7 +1,7 @@
 FileVersion = 1
 LastConfig = "Debug"
 LastPlatform = "Win64"
-RecentFilesList = ["c:\\dev\\vanishing\\src\\movie.cpp", "c:\\dev\\vanishing\\src\\pl_mpeg.h", "c:\\dev\\vanishing\\src\\chapter_6.cpp", "c:\\dev\\vanishing\\src\\chapter_epilogue.cpp", "Disassembly", "c:\\dev\\vanishing\\src\\chapter_4.cpp", "c:\\dev\\vanishing\\src\\main.cpp", "c:\\dev\\vanishing\\src\\game.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\abort.cpp", "d:\\a\\_work\\1\\s\\src\\vctools\\crt\\vcruntime\\src\\string\\amd64\\memset.asm", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strncpy.asm", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\assert.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strlen.asm", "c:\\dev\\vanishing\\chapter_5.cpp", "c:\\dev\\vanishing\\game.cpp", "c:\\dev\\vanishing\\main.cpp", "c:\\dev\\vanishing\\util.cpp"]
+RecentFilesList = ["c:\\dev\\vanishing\\src\\main.cpp", "c:\\dev\\vanishing\\src\\game.cpp", "c:\\dev\\vanishing\\src\\chapter_5.cpp", "c:\\dev\\vanishing\\src\\movie.cpp", "c:\\dev\\vanishing\\src\\pl_mpeg.h", "c:\\dev\\vanishing\\src\\chapter_6.cpp", "c:\\dev\\vanishing\\src\\chapter_epilogue.cpp", "Disassembly", "c:\\dev\\vanishing\\src\\chapter_4.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\abort.cpp", "d:\\a\\_work\\1\\s\\src\\vctools\\crt\\vcruntime\\src\\string\\amd64\\memset.asm", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strncpy.asm", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\assert.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strlen.asm", "c:\\dev\\vanishing\\chapter_5.cpp", "c:\\dev\\vanishing\\game.cpp", "c:\\dev\\vanishing\\main.cpp", "c:\\dev\\vanishing\\util.cpp"]
 
 [MainWindow]
 X = 362
@@ -24,13 +24,21 @@ DefaultDocumentsTabbedView = true
 Type = "TabbedView"
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
+TabLabel = "chapter_5.cpp"
+TabWidth = 108.1915
+TabIsPinned = false
+Type = "SourceViewPanel"
+FilePath = "c:\\dev\\vanishing\\src\\chapter_5.cpp"
+CursorPos = 111622
+VertPos = 80388.0
+
+[[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "chapter_epilogue.cpp"
-TabWidth = 161.1702
+TabWidth = 151.2766
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\chapter_epilogue.cpp"
 CursorPos = 1997
-VertPos = 1848.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "chapter_6.cpp"
@@ -39,15 +47,16 @@ TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\chapter_6.cpp"
 CursorPos = 24897
-VertPos = 18704.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
+Active = true
 TabLabel = "main.cpp"
 TabWidth = 81.59574
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\main.cpp"
-CursorPos = 572
+CursorPos = 3902
+VertPos = 4592.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "game.cpp"
@@ -55,7 +64,7 @@ TabWidth = 85.31915
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\game.cpp"
-CursorPos = 21391
+CursorPos = 3159
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "chapter_4.cpp"
@@ -78,17 +87,14 @@ TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\pl_mpeg.h"
 CursorPos = 34412
-VertPos = 31472.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
-Active = true
 TabLabel = "movie.cpp"
 TabWidth = 88.51064
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\movie.cpp"
 CursorPos = 3503
-VertPos = 3275.3
 
 [[MainDockingFrame.DockedWidgets]]
 RequestedWidth = 625.0
@@ -117,7 +123,7 @@ TabWidth = 85.10638
 TabIsPinned = false
 Type = "WatchPanel"
 Columns = [{Width = 336.0}, {Width = 972.0001}, {Width = 211.0}]
-Items = ["movie", "game_movie", "video_target_time", "self.video_decoder.time", "tick", ""]
+Items = ["game.fader", "done", ""]
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 TabLabel = "Auto"
@@ -162,6 +168,11 @@ TabLabel = "Breakpoints"
 TabWidth = 116.4894
 TabIsPinned = false
 Type = "BreakpointPanel"
+
+[[Breakpoints]]
+File = "c:\\dev\\vanishing\\src\\game.cpp"
+Line = 259
+Column = 12
 
 [[BookmarkFolders]]
 Title = ""

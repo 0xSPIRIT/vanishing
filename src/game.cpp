@@ -132,7 +132,7 @@ struct Event {
 
 enum Fade_Direction {
     FADE_IN = -1,
-    FADE_INVALID = 0,
+    FADE_INVALID = 0, // no fade currently happening
     FADE_OUT = 1,
 };
 
@@ -234,7 +234,7 @@ void start_fade(Game *game, Fade_Direction dir, float speed, void (*action)(Game
 
     switch (dir) {
         case FADE_IN:  f.alpha = 255; break;
-        case FADE_OUT: f.alpha = 0; break;
+        case FADE_OUT: f.alpha = 0;   break;
     }
 
     game->fader = f;
@@ -521,8 +521,7 @@ bool can_open_dialogue(Game *game, Entity *e, Entity *player) {
         if (current == player)      continue;
         if (!current->has_dialogue) continue;
 
-        float distance_to_player = Vector2Length(Vector2Subtract(player->pos,
-                                                                 current->pos));
+        float distance_to_player = Vector2Length(Vector2Subtract(player->pos, current->pos));
 
         if (distance_to_player < closest_distance) {
             closest = current;
@@ -925,12 +924,12 @@ void game_atari_run(Game *game) {
 
     if (!game_movie.movie) {
         switch (chapter) {
-            case 1: chapter_1_update(game, dt); break;
-            case 2: chapter_2_update(game, dt); break;
-            case 3: chapter_3_update(game, dt); break;
-            case 4: chapter_4_update(game, dt); break;
-            case 5: chapter_5_update(game, dt); break;
-            case 6: chapter_6_update(game, dt); break;
+            case 1: chapter_1_update(game, dt);        break;
+            case 2: chapter_2_update(game, dt);        break;
+            case 3: chapter_3_update(game, dt);        break;
+            case 4: chapter_4_update(game, dt);        break;
+            case 5: chapter_5_update(game, dt);        break;
+            case 6: chapter_6_update(game, dt);        break;
             case 7: chapter_epilogue_update(game, dt); break;
         }
 
@@ -954,13 +953,13 @@ void game_atari_run(Game *game) {
         BeginTextureMode(*target);
 
         switch (chapter) {
-            case 1: chapter_1_draw(game); break;
+            case 1: chapter_1_draw(game);         break;
             case 2: chapter_2_draw(game, target); break;
-            case 3: chapter_3_draw(game, dt); break;
-            case 4: chapter_4_draw(game, dt); break;
-            case 5: chapter_5_draw(game); break;
-            case 6: chapter_6_draw(game); break;
-            case 7: chapter_epilogue_draw(game); break;
+            case 3: chapter_3_draw(game, dt);     break;
+            case 4: chapter_4_draw(game, dt);     break;
+            case 5: chapter_5_draw(game);         break;
+            case 6: chapter_6_draw(game);         break;
+            case 7: chapter_epilogue_draw(game);  break;
         }
 
         update_and_draw_fade(game, &game->fader, dt);

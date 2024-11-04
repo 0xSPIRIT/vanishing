@@ -74,12 +74,6 @@ void epilogue_start_final_conversation_delayed(Game *game) {
     add_event(game, epilogue_start_final_conversation, 5);
 }
 
-void epilogue_start_movie(Game *game) {
-    (void)game;
-    movie_init(&game_movie, MOVIE_SEVENTH);
-    game_movie.end_movie_callback = epilogue_start_final_conversation_delayed;
-}
-
 void epilogue_goto_credits(void *game_ptr) {
     Game *game = (Game *)game_ptr;
     add_event(game, atari_queue_deinit_and_goto_intro, 5);
@@ -913,7 +907,6 @@ void chapter_epilogue_update(Game *game, float dt) {
     if (game->current == nullptr && level->transition_timer == 0) {
         if (level->current_node) {
             if (level->state == EPILOGUE_STATE_FOURTH) {
-                //add_event(game, epilogue_start_movie, 5);
                 add_event(game, epilogue_start_final_conversation, 5);
                 level->is_transitioning = true;
             } else {
@@ -1142,6 +1135,9 @@ void chapter_epilogue_draw(Game *game) {
 
         if (level->state == EPILOGUE_STATE_THIRD)
             color = BLACK;
+
+        if (level->state == EPILOGUE_STATE_FOURTH)
+            color = PINK;
 
         DrawModel(level->node, node->position, 2, color);
     }

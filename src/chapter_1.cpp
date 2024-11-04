@@ -625,10 +625,6 @@ void chapter_1_init(Game *game) {
     Entity *e = chapter_1_make_entity(ENTITY_WINDOW, render_width/2 - 16, render_height/5);
     array_add(&game->entities, e);
 
-    /*
-    level->prayer_mat = chapter_1_make_entity(ENTITY_PRAYER_MAT, render_width/2 - 16, 3*render_height/5);
-    array_add(&game->entities, level->prayer_mat);
-    */
     level->prayer_mat = 0;
 }
 
@@ -1179,12 +1175,6 @@ void chapter_1_update(Game *game, float dt) {
     {
         game->current = game->current->next[0];
     }
-
-    /*
-    if (level->state == LEVEL_CHAPTER_1_STATE_FOREST) {
-        level->background_color = FOREST_COLOR;
-    }
-    */
 
     float diff = level->prayer_fader_to - level->prayer_fader;
 

@@ -16,11 +16,13 @@ struct Chapter_4_Text {
     Text_List *next_list[20];
 
     int        current_index;
+
+    float      start_timer;
 };
 
 struct Level_Chapter_4 {
     Chapter_4_State state;
-    float text_start_timer, end_timer;
+    float end_timer;
 
     bool black;
 
@@ -56,6 +58,7 @@ void chapter_4_set_state_atari(void *game_ptr) {
     Game *game = (Game *)game_ptr;
     Level_Chapter_4 *level = (Level_Chapter_4 *)game->level;
 
+    game->post_processing.crt.vignette_mix = 1;
     level->state = CHAPTER_4_STATE_ATARI;
 }
 
@@ -120,7 +123,7 @@ void chapter_4_3d_init(Game *game) {
 
     level->state = CHAPTER_4_STATE_3D;
 
-    level->text_start_timer = 3;
+    level->text_handler.start_timer = 3;
     game->render_state = RENDER_STATE_3D;
 
     DisableCursor();
@@ -522,18 +525,15 @@ void chapter_4_3d_update_camera(Level_Chapter_4 *level, Camera3D *camera) {
     }
 }
 
-void chapter_4_update_text(Game *game, float dt) {
-    Level_Chapter_4 *level = (Level_Chapter_4 *)game->level;
-    Chapter_4_Text  *text_handler = &level->text_handler;
-
-    if (level->text_start_timer > 0 || game->current || text_handler->alarms[text_handler->current_index] < 0) return;
+void chapter_4_update_text(Text_List **game_current, Chapter_4_Text *text_handler, float dt) {
+    if (text_handler->start_timer > 0 || *game_current || text_handler->alarms[text_handler->current_index] < 0) return;
 
     text_handler->alarms[text_handler->current_index] -= dt;
 
     if (text_handler->alarms[text_handler->current_index] <= 0) {
-        game->current = text_handler->next_list[text_handler->current_index];
+        *game_current = text_handler->next_list[text_handler->current_index];
 
-        if (game->current && text_handler->current_index < StaticArraySize(text_handler->alarms) - 1) {
+        if (*game_current && text_handler->current_index < StaticArraySize(text_handler->alarms) - 1) {
             text_handler->current_index++;
         }
     }
@@ -558,9 +558,9 @@ void chapter_4_update(Game *game, float dt) {
             return;
         }
     }
-    if (level->text_start_timer > 0) {
-        level->text_start_timer -= dt;
-        if (level->text_start_timer <= 0) {
+    if (level->text_handler.start_timer > 0) {
+        level->text_handler.start_timer -= dt;
+        if (level->text_handler.start_timer <= 0) {
             game->current = &game->text[0];
         }
     }
@@ -585,7 +585,7 @@ void chapter_4_update(Game *game, float dt) {
         case CHAPTER_4_STATE_3D: {
             chapter_4_3d_update_camera(level, &level->camera);
 
-            chapter_4_update_text(game, dt);
+            chapter_4_update_text(&game->current, &level->text_handler, dt);
 
             /*
             if (IsKeyDown(KEY_MINUS)) {
@@ -823,6 +823,9 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
                 if (is_action_pressed()) {
                     if (level->check_window_popup) {
                         level->state = CHAPTER_4_STATE_WINDOW;
+
+                        game->post_processing.crt.vignette_mix = 0.4f;
+
                         add_event(game, chapter_4_look_outside_text, 1.5);
                         level->checked_window = true;
                     }

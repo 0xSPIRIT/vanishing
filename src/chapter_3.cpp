@@ -184,7 +184,6 @@ void chapter_3_goto_road(Game *game) {
     crt->scanline_alpha = 0.25;
     crt->abberation_intensity = 0.75f;
     crt->vignette_intensity = 1;
-    crt->vignette_mix = 1;
     crt->vignette_mix = 0.1f;
     //post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_LOW);
 
@@ -233,12 +232,12 @@ Chapter_3_Job_Minigame chapter_3_make_job_minigame(Arena *level_arena,
 
     result.active = false;
 
-    result.font_color = BLACK;
+    result.font_color      = BLACK;
     result.window_bg_color = WHITE;
-    result.window_alpha = 255;
+    result.window_alpha    = 255;
     result.draw_background = true;
 
-    result.document_count = document_count;
+    result.document_count   = document_count;
     result.current_document = 0;//(int)document_count - 1;//0;
 
     for (int i = 0; i < document_count; i++) {
@@ -379,7 +378,7 @@ void chapter_3_goto_home_outside(Game *game) {
     crt->do_warp_effect = true;
     crt->abberation_intensity = 0.75;
     crt->vignette_intensity = 1;
-    crt->vignette_mix = 1;
+    crt->vignette_mix = 0.8f;
     crt->scanline_alpha = 0.1f;
     //post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_LOW);
 
@@ -645,8 +644,6 @@ void chapter_3_job_init(Game *game, int which_document_list) {
                 "\"Don't throw away your suffering. Touch your suffering. Face it directly, and your joy will become deeper. You know that suffering and joy are both impermanent.\"";
                 // But remember, "This work was strictly voluntary, but any animal who absented himself from it would have his rations reduced by half." (George Orwell, Animal Farm)
 
-            // A joy of life: a true passion that burns in your soul is one that can never be put out.
-
             level->minigame = chapter_3_make_job_minigame(&game->level_arena, documents, count);
 
             Document *d0 = &level->minigame.document_list[0];
@@ -716,29 +713,29 @@ void chapter_3_job_init(Game *game, int which_document_list) {
             level->minigame = chapter_3_make_job_minigame(&game->level_arena, documents, count);
 
             Document *d0 = &level->minigame.document_list[0];
-            document_register_error_first_occurrence(d0, "enojyed", "enjoyed");
-            document_register_error_first_occurrence(d0, "employes", "employees");
+            document_register_error_first_occurrence(d0, "enojyed",   "enjoyed");
+            document_register_error_first_occurrence(d0, "employes",  "employees");
             document_register_error_first_occurrence(d0, "themselfs", "themselves");
 
             Document *d1 = &level->minigame.document_list[1];
-            document_register_error_first_occurrence(d1, "great.", "amazing.");
-            document_register_error_first_occurrence(d1, "Regards,", "Love,");
+            document_register_error_first_occurrence(d1, "great.",    "amazing.");
+            document_register_error_first_occurrence(d1, "Regards,",  "Love,");
 
             Document *d2 = &level->minigame.document_list[2];
-            document_register_error_first_occurrence(d2, "Dear", "\"One");
-            document_register_error_first_occurrence(d2, "Team,", "does");
-            document_register_error_first_occurrence(d2, "It's", "not");
-            document_register_error_first_occurrence(d2, "assumed", "discover");
-            document_register_error_first_occurrence(d2, "that", "the");
-            document_register_error_first_occurrence(d2, "you", "absurd");
-            document_register_error_first_occurrence(d2, "all", "without");
-            document_register_error_first_occurrence(d2, "are", "being");
-            document_register_error_first_occurrence(d2, "aware", "tempted");
-            document_register_error_first_occurrence(d2, "of", "to");
-            document_register_error_first_occurrence(d2, "the", "write");
-            document_register_error_first_occurrence(d2, "new", "a");
-            document_register_error_first_occurrence(d2, "policy", "manual");
-            document_register_error_first_occurrence(d2, "on", "of");
+            document_register_error_first_occurrence(d2, "Dear",         "\"One");
+            document_register_error_first_occurrence(d2, "Team,",        "does");
+            document_register_error_first_occurrence(d2, "It's",         "not");
+            document_register_error_first_occurrence(d2, "assumed",      "discover");
+            document_register_error_first_occurrence(d2, "that",         "the");
+            document_register_error_first_occurrence(d2, "you",          "absurd");
+            document_register_error_first_occurrence(d2, "all",          "without");
+            document_register_error_first_occurrence(d2, "are",          "being");
+            document_register_error_first_occurrence(d2, "aware",        "tempted");
+            document_register_error_first_occurrence(d2, "of",           "to");
+            document_register_error_first_occurrence(d2, "the",          "write");
+            document_register_error_first_occurrence(d2, "new",          "a");
+            document_register_error_first_occurrence(d2, "policy",       "manual");
+            document_register_error_first_occurrence(d2, "on",           "of");
             document_register_error_first_occurrence(d2, "bathrooms...", "happiness.\" [2]");
         } break;
         case 3: {
@@ -760,9 +757,10 @@ void chapter_3_job_init(Game *game, int which_document_list) {
                 "Chase drove home that afternoon, shook.\n\nThe mere weeks of working at that place was enough to sicken him.";
 
             level->minigame = chapter_3_make_job_minigame(&game->level_arena, documents, count);
+
             level->minigame.draw_background = false;
-            level->minigame.window_alpha = 64;
-            level->minigame.font_color = WHITE;
+            level->minigame.window_alpha    = 64;
+            level->minigame.font_color      = WHITE;
 
             Document *d4 = &level->minigame.document_list[4];
             document_register_error_nth_occurrence(d4, 1, "inferior",        "superior");
@@ -1292,9 +1290,9 @@ void chapter_3_init(Game *game) {
 
     //chapter_3_init_outside(game);
     //chapter_3_goto_home_inside(game);
-    chapter_3_goto_home_outside(game);
+    //chapter_3_goto_home_outside(game);
 
-    //chapter_3_goto_road(game);
+    chapter_3_goto_road(game);
 }
 
 void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,

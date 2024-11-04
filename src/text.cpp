@@ -1,7 +1,7 @@
 #define min(a, b) (((a) < (b)) ? (a) : (b))
 #define max(a, b) (((a) > (b)) ? (a) : (b))
 
-#define STRING_SIZE    1024
+#define STRING_SIZE    1024 // We just store everything fixed size lol
 #define TEXT_LIST_SIZE 32
 #define TEXT_LINE_MAX  32
 #define CHOICE_MAX     12
@@ -209,7 +209,18 @@ bool text_update_and_draw(Text *text, Vector2 offset, float dt) {
                 size_t line_length = text->lines[text->current_line].length;
 
                 if (text->scroll_index < line_length-1) {
+                    int prev = text->scroll_index;
                     text->scroll_index += text->scroll_speed * dt;
+
+                    if ((int)text->scroll_index != prev) {
+                        // we have scrolled one character, play the sound.
+                        if (!isspace(text->lines[text->current_line].text[(int)text->scroll_index]) &&
+                            !is_sound_playing(SOUND_TEXT_SCROLL))
+                        {
+                            play_sound(SOUND_TEXT_SCROLL);
+                        }
+                    }
+
                     if (text->scroll_index >= line_length-1) {
                         text->scroll_index = (float)line_length-1;
                     }

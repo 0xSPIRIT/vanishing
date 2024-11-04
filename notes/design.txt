@@ -135,6 +135,102 @@ Text Appears:
 - You're in a modern-style minimalist house similar to houses in
   The Beginner's Guide.
 
+-------
+
+Peer Inside the Monolith?
+
+-> Chase gazed into the structure.
+   His entire vision filled with it.
+   It was difficult to describe.
+   Blacker than the deepest black imaginable.
+   No, no... This wasn't black...
+
+   It was just Nothing.
+
+   "Hello again," he said.
+
+   She didn't respond.
+
+   "... I remember how you were before."
+
+   // This next part is like childhood
+   // innocence-- joy and happiness.
+   // Seeing the good in the world.
+   // ... Replaced with nihil.
+   //
+   // It also refers to having true meaning with
+   // something or someone and it going away.
+   //
+   // I liken it to a lover.
+   //
+   // Her == Meaning.
+
+   She used to hold the brightest and most
+   joyous colours. Pinks and blues, pastels
+   and neons. The most unique patterns that // find synonym for most
+   had enticed him, made him feel safe, made
+   him feel whole.
+
+   On lazy Saturdays they both laid on the
+   grass fields looking up at the stars in
+   bliss and harmony.
+
+   He turned over to her, stared into her eyes
+   and saw Truth. Her little smile infatuated
+   him. The Universe's balance hung delicately
+   on her, because he loved her.
+
+   // The saw truth line means that She
+   // is meaning-- he found a purpose in that
+   // moment.
+
+   But now, he realized what he missed. The
+   vibrancy. The indescribable beauty.
+
+   Now look at her.
+   Look what happened to her.
+
+   Replaced wholesale with nihil.
+
+   But there MUS
+   [RED BACKGROUND HERE, BLACK TEXT FROM NOW ON]
+   *******************************************
+   FATAL ERROR, ATTEMPT TO DEREFERENCE ADDRESS
+       0x0000000000000000 (NULL POINTER).
+   *******************************************
+   // She is stored as a pointer and
+   // he's trying to access an invalid pointer
+   // with the value 0.
+   //
+   // It stops me mid sentence because I'm
+   // trying to remember her. "There must be
+   // a way out of this!", or something like that
+
+   It couldn't be helped, I tell you!
+   It couldn't be helped, please!
+   Trust me, I tried!
+
+   ...
+
+   He waited for an answer from Her.
+   But he knew it was not in her nature. // Meaning must be created. It is not given.
+
+   ---
+   (BLACK TEXT AGAIN)
+
+   THE MONOLITHS TOWER OVER ALL.
+
+   AND THEY WILL REMAIN.
+
+   UNTIL THE RIVERS RUN DRY,
+   AND THE PILLARS OF CREATION
+   CRUMBLE TO DUST.
+
+   (The background slowly fades back into desert.
+    The text fades slower than the bg.)
+
+  -------
+
   Here, you play a minigame where you look through various
   schools of thought on meaning in life, and we utilize
   the 3D environment to see literally different perspectives
@@ -380,7 +476,7 @@ things easily.
   meaninglessness / depression for very long, if at all.
 - The guy on the phone is the future you- someone who's in
   a happier place and cannot understand this version
-  of you. It seems simple for him!
+  of you. It seems simple for him! He is Hunter.
 - Chase sees the "water", sure, but it's not water to him.
   It's painful. He tries to drink them, but it doesn't work
   like it does for others.
