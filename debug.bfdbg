@@ -1,7 +1,7 @@
 FileVersion = 1
 LastConfig = "Debug"
 LastPlatform = "Win64"
-RecentFilesList = ["c:\\dev\\vanishing\\src\\main.cpp", "c:\\dev\\vanishing\\src\\game.cpp", "c:\\dev\\vanishing\\src\\chapter_5.cpp", "c:\\dev\\vanishing\\src\\movie.cpp", "c:\\dev\\vanishing\\src\\pl_mpeg.h", "c:\\dev\\vanishing\\src\\chapter_6.cpp", "c:\\dev\\vanishing\\src\\chapter_epilogue.cpp", "Disassembly", "c:\\dev\\vanishing\\src\\chapter_4.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\abort.cpp", "d:\\a\\_work\\1\\s\\src\\vctools\\crt\\vcruntime\\src\\string\\amd64\\memset.asm", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strncpy.asm", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\assert.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strlen.asm", "c:\\dev\\vanishing\\chapter_5.cpp", "c:\\dev\\vanishing\\game.cpp", "c:\\dev\\vanishing\\main.cpp", "c:\\dev\\vanishing\\util.cpp"]
+RecentFilesList = ["c:\\dev\\vanishing\\src\\chapter_5.cpp", "c:\\dev\\vanishing\\src\\main.cpp", "c:\\dev\\vanishing\\src\\game.cpp", "c:\\dev\\vanishing\\src\\movie.cpp", "c:\\dev\\vanishing\\src\\pl_mpeg.h", "c:\\dev\\vanishing\\src\\chapter_6.cpp", "c:\\dev\\vanishing\\src\\chapter_epilogue.cpp", "Disassembly", "c:\\dev\\vanishing\\src\\chapter_4.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\abort.cpp", "d:\\a\\_work\\1\\s\\src\\vctools\\crt\\vcruntime\\src\\string\\amd64\\memset.asm", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strncpy.asm", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\assert.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strlen.asm", "c:\\dev\\vanishing\\chapter_5.cpp", "c:\\dev\\vanishing\\game.cpp", "c:\\dev\\vanishing\\main.cpp", "c:\\dev\\vanishing\\util.cpp"]
 
 [MainWindow]
 X = 362
@@ -24,13 +24,14 @@ DefaultDocumentsTabbedView = true
 Type = "TabbedView"
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
+Active = true
 TabLabel = "chapter_5.cpp"
 TabWidth = 108.1915
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\chapter_5.cpp"
-CursorPos = 111622
-VertPos = 80388.0
+CursorPos = 118703
+VertPos = 48328.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "chapter_epilogue.cpp"
@@ -49,7 +50,6 @@ FilePath = "c:\\dev\\vanishing\\src\\chapter_6.cpp"
 CursorPos = 24897
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
-Active = true
 TabLabel = "main.cpp"
 TabWidth = 81.59574
 TabIsPinned = false
@@ -123,7 +123,7 @@ TabWidth = 85.10638
 TabIsPinned = false
 Type = "WatchPanel"
 Columns = [{Width = 336.0}, {Width = 972.0001}, {Width = 211.0}]
-Items = ["game.fader", "done", ""]
+Items = ["level.desert_black", ""]
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 TabLabel = "Auto"

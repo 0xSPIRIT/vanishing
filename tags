@@ -293,8 +293,6 @@ MOVIE_DRACULA	src/movie.h	/^    MOVIE_DRACULA,$/;"	e	enum:__anondf04acb20103
 MOVIE_EMPTINESS	src/movie.h	/^    MOVIE_EMPTINESS$/;"	e	enum:__anondf04acb20103
 MOVIE_OFF	src/movie.h	/^    MOVIE_OFF,$/;"	e	enum:__anondf04acb20103
 MOVIE_SEVENTH	src/movie.h	/^    MOVIE_SEVENTH,$/;"	e	enum:__anondf04acb20103
-MUSIC_COUNT	src/audio.cpp	/^    MUSIC_COUNT$/;"	e	enum:__anon5db4fb7f0103	file:
-MUSIC_VHS_STATIC_1	src/audio.cpp	/^    MUSIC_VHS_STATIC_1,$/;"	e	enum:__anon5db4fb7f0103	file:
 MainFunction	src/main.cpp	/^  #define MainFunction /;"	d	file:
 MainFunction	src/main.cpp	/^MainFunction() {$/;"	f
 Megabytes	src/util.cpp	/^#define Megabytes(/;"	d	file:
@@ -422,6 +420,7 @@ Render_Type	src/text.cpp	/^enum Render_Type {$/;"	g	file:
 SCROLL_SPEED	src/text.cpp	/^#define SCROLL_SPEED /;"	d	file:
 SOUND_COUNT	src/audio.cpp	/^    SOUND_COUNT$/;"	e	enum:Sound_ID	file:
 SOUND_TEXT_SCROLL	src/audio.cpp	/^    SOUND_TEXT_SCROLL,$/;"	e	enum:Sound_ID	file:
+SOUND_VHS	src/audio.cpp	/^    SOUND_VHS,$/;"	e	enum:Sound_ID	file:
 STRING_SIZE	src/text.cpp	/^#define STRING_SIZE /;"	d	file:
 Scroll_Type	src/text.cpp	/^enum Scroll_Type {$/;"	g	file:
 ShadowBackdrop	src/text.cpp	/^    ShadowBackdrop,$/;"	e	enum:Render_Type	file:
@@ -450,7 +449,6 @@ _CRT_SECURE_NO_WARNINGS	src/main.cpp	/^#define _CRT_SECURE_NO_WARNINGS$/;"	d	fil
 _GLAD_IS_SOME_NEW_VERSION	src/glad/glad.c	/^#define _GLAD_IS_SOME_NEW_VERSION /;"	d	file:
 _LARGE_INTEGER	src/util.cpp	/^    typedef union _LARGE_INTEGER {$/;"	u	file:
 __anon38f4ce720102	src/text.cpp	/^    auto finish_target = [&]() {$/;"	f	function:text_list_update_and_draw	file:
-__anon5db4fb7f0103	src/audio.cpp	/^enum {$/;"	g	file:
 __anon6b50db360108	src/pl_mpeg.h	/^typedef struct {$/;"	s
 __anon6b50db360208	src/pl_mpeg.h	/^typedef struct {$/;"	s
 __anon6b50db360308	src/pl_mpeg.h	/^typedef struct {$/;"	s
@@ -562,6 +560,7 @@ bed_popup	src/chapter_4.cpp	/^    bool bed_popup;$/;"	m	struct:Level_Chapter_4	t
 before_first_text	src/chapter_1.cpp	/^    bool before_first_text;$/;"	m	struct:Level_Chapter_1	typeref:typename:bool	file:
 bg_color	src/text.cpp	/^    Color bg_color          = BLACK;$/;"	m	struct:Text_List	typeref:typename:Color	file:
 bg_color	src/text.cpp	/^    Color color, bg_color, backdrop_color;$/;"	m	struct:Text	typeref:typename:Color	file:
+bg_music	src/audio.cpp	/^    Sound_ID bg_music;$/;"	m	struct:Game_Audio	typeref:typename:Sound_ID	file:
 bit_index	src/pl_mpeg.h	/^	size_t bit_index;$/;"	m	struct:plm_buffer_t	typeref:typename:size_t
 bitrate_index	src/pl_mpeg.h	/^	int bitrate_index;$/;"	m	struct:plm_audio_t	typeref:typename:int
 bits	src/pl_mpeg.h	/^	unsigned char bits;$/;"	m	struct:plm_quantizer_spec_t	typeref:typename:unsigned char
@@ -615,6 +614,7 @@ center_text	src/text.cpp	/^    bool center_text;$/;"	m	struct:Text_List	typeref:
 chair	src/chapter_5.cpp	/^              chair,$/;"	m	struct:Level_Chapter_5::Models	typeref:typename:Model	file:
 chairs	src/chapter_5.cpp	/^    Chapter_5_Chair chairs[16];$/;"	m	struct:Chapter_5_Table	typeref:typename:Chapter_5_Chair[16]	file:
 channel	src/audio.cpp	/^    Channel channel;$/;"	m	struct:Game_Sound	typeref:typename:Channel	file:
+channel_volumes	src/audio.cpp	/^float channel_volumes[] = {$/;"	v	typeref:typename:float[]
 chap_1_node	src/game.cpp	/^        Chapter_1_Node    chap_1_node;$/;"	m	union:Entity::__anoneafbdd87010a	typeref:typename:Chapter_1_Node	file:
 chap_1_phone	src/game.cpp	/^        Chapter_1_Phone   chap_1_phone;$/;"	m	union:Entity::__anoneafbdd87010a	typeref:typename:Chapter_1_Phone	file:
 chap_1_player	src/game.cpp	/^        Chapter_1_Player  chap_1_player;$/;"	m	union:Entity::__anoneafbdd87010a	typeref:typename:Chapter_1_Player	file:
@@ -810,7 +810,6 @@ current_packet	src/pl_mpeg.h	/^	plm_packet_t current_packet;$/;"	m	struct:plm_de
 current_quote	src/chapter_5.cpp	/^        Chapter_5_Quote *current_quote;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80608	typeref:typename:Chapter_5_Quote *	file:
 current_quote_time	src/chapter_5.cpp	/^        float            current_quote_time;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80608	typeref:typename:float	file:
 current_scene	src/chapter_5.cpp	/^    int      current_scene;$/;"	m	struct:Level_Chapter_5	typeref:typename:int	file:
-current_track	src/audio.cpp	/^    int   current_track;$/;"	m	struct:Game_Audio	typeref:typename:int	file:
 data	src/pl_mpeg.h	/^	uint8_t *data;$/;"	m	struct:__anon6b50db360108	typeref:typename:uint8_t *
 data	src/pl_mpeg.h	/^	uint8_t *data;$/;"	m	struct:__anon6b50db360208	typeref:typename:uint8_t *
 data	src/util.cpp	/^    T *data;$/;"	m	struct:Array	typeref:typename:T *	file:
@@ -943,6 +942,7 @@ game_atari	src/main.cpp	/^Game        game_atari;$/;"	v	typeref:typename:Game
 game_atari_run	src/game.cpp	/^void game_atari_run(Game *game) {$/;"	f	typeref:typename:void
 game_audio	src/audio.cpp	/^Game_Audio game_audio;$/;"	v	typeref:typename:Game_Audio
 game_audio_init	src/audio.cpp	/^void game_audio_init() {$/;"	f	typeref:typename:void
+game_audio_update	src/audio.cpp	/^void game_audio_update() {$/;"	f	typeref:typename:void
 game_init	src/game.cpp	/^void game_init(Game *game) {$/;"	f	typeref:typename:void
 game_intro	src/main.cpp	/^Game_Intro  game_intro;$/;"	v	typeref:typename:Game_Intro
 game_intro_init	src/intro.cpp	/^void game_intro_init(Game_Intro *game) {$/;"	f	typeref:typename:void
@@ -1401,6 +1401,7 @@ is_mesh_collider	src/chapter_5.cpp	/^bool is_mesh_collider(Model *model, int mes
 is_newline	src/text.cpp	/^bool is_newline(char c) {$/;"	f	typeref:typename:bool
 is_player_close_to_entity	src/game.cpp	/^bool is_player_close_to_entity(Entity *player, Entity *e, int closeness) {$/;"	f	typeref:typename:bool
 is_set	src/pl_mpeg.h	/^	int is_set;$/;"	m	struct:__anon6b50db360708	typeref:typename:int
+is_sound_playing	src/audio.cpp	/^bool is_sound_playing(Sound_ID sound_id) {$/;"	f	typeref:typename:bool
 is_text_at_end	src/text.cpp	/^bool is_text_at_end(Text *text) {$/;"	f	typeref:typename:bool
 is_text_list_at_end	src/text.cpp	/^bool is_text_list_at_end(Text_List *list) {$/;"	f	typeref:typename:bool
 is_transitioning	src/chapter_epilogue.cpp	/^    bool           is_transitioning;$/;"	m	struct:Level_Chapter_Epilogue	typeref:typename:bool	file:
@@ -1543,7 +1544,9 @@ phone	src/chapter_3.cpp	/^    Chapter_3_Phone        phone;$/;"	m	struct:Level_C
 picture_type	src/pl_mpeg.h	/^	int picture_type;$/;"	m	struct:plm_video_t	typeref:typename:int
 pink_dot	src/chapter_epilogue.cpp	/^    Texture        pink_dot, orange_dot, black_texture;$/;"	m	struct:Level_Chapter_Epilogue	typeref:typename:Texture	file:
 pixel_aspect_ratio	src/pl_mpeg.h	/^	double pixel_aspect_ratio;$/;"	m	struct:plm_video_t	typeref:typename:double
+play_sound	src/audio.cpp	/^void play_sound(Sound_ID sound_id) {$/;"	f	typeref:typename:void
 play_sound	src/audio.cpp	/^void play_sound(Sound_ID sound_id, Channel channel_override, bool looping) {$/;"	f	typeref:typename:void
+play_sound	src/audio.cpp	/^void play_sound(Sound_ID sound_id, bool looping) {$/;"	f	typeref:typename:void
 player	src/chapter_1.cpp	/^    Entity *player, *prayer_mat;$/;"	m	struct:Level_Chapter_1	typeref:typename:Entity *	file:
 player	src/chapter_2.cpp	/^    Entity *player; \/\/ quick access to the player$/;"	m	struct:Level_Chapter_2	typeref:typename:Entity *	file:
 player	src/chapter_3.cpp	/^    Entity *player;$/;"	m	struct:Level_Chapter_3	typeref:typename:Entity *	file:
@@ -1911,7 +1914,6 @@ titlescreen_update_and_draw	src/titlescreen.cpp	/^void titlescreen_update_and_dr
 toggle_fullscreen	src/main.cpp	/^void toggle_fullscreen() {$/;"	f	typeref:typename:void
 toggled_fullscreen_past_second	src/main.cpp	/^bool toggled_fullscreen_past_second = false;$/;"	v	typeref:typename:bool
 total_size	src/pl_mpeg.h	/^	size_t total_size;$/;"	m	struct:plm_buffer_t	typeref:typename:size_t
-tracks	src/audio.cpp	/^    Music      tracks[MUSIC_COUNT];$/;"	m	struct:Game_Audio	typeref:typename:Music[]	file:
 train	src/chapter_5.cpp	/^              train,$/;"	m	struct:Level_Chapter_5::Models	typeref:typename:Model	file:
 train	src/chapter_5.cpp	/^        Chapter_5_Train train;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80208	typeref:typename:Chapter_5_Train	file:
 train_door	src/chapter_5.cpp	/^              train_door,$/;"	m	struct:Level_Chapter_5::Models	typeref:typename:Model	file:

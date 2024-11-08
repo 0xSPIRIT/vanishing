@@ -1692,16 +1692,6 @@ void chapter_5_scene_init(Game *game) {
             text_handler->alarms[5]    = 3;
             text_handler->next_list[5] = &game->text[30];
 
-            /*
-            chapter_5_window_text_2(true,
-                                    &game->text[29],
-                                    "*****************************************\n"
-                                    "FATAL ERROR, ATTEMPT TO REFERENCE ADDRESS\n"
-                                    "    0x0000000000000000 (NULL POINTER).\n"
-                                    "*****************************************\n",
-                                    WHITE,
-                                    &game->text[30]);
-                                    */
             chapter_5_window_text(true,
                                   &game->text[30],
                                   "It couldn't be helped, I tell you!\r"

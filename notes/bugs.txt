@@ -1,2 +1,0 @@
-- Fix the issue with the camera moving on the train.
-- Bug with movie not playing in chapter 4, it skips to 3d.

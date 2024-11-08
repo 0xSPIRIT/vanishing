@@ -34,7 +34,7 @@ vec4 vignette(vec2 tex_coord, vec4 col) {
     if (vignette_intensity == 0) return col;
 
     float dist = 1;
-    dist = length(tex_coord.xy - vec2(0.5, 0.5));
+    dist = length(tex_coord.xy - vec2(0.5, 0.5)) + 0.05 * rand(tex_coord + vec2(time,time));
     dist *= 2;
 
     dist = 1-dist;
