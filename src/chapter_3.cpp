@@ -813,6 +813,7 @@ void chapter_3_init(Game *game) {
     game->post_processing.crt.abberation_intensity = 0.5f;
     game->post_processing.crt.vignette_intensity = 1;
     game->post_processing.crt.vignette_mix = 0.75f;
+    game->post_processing.crt.noise_intensity = 0.2f;
 
     //level->state = CHAPTER_3_STATE_HOME_INSIDE;
     //level->state = CHAPTER_3_STATE_ROAD;
@@ -1289,11 +1290,11 @@ void chapter_3_init(Game *game) {
     //chapter_3_goto_window_text(game);
     //level->minigame.active = true;
 
-    chapter_3_init_outside(game);
+    //chapter_3_init_outside(game);
     //chapter_3_goto_home_inside(game);
     //chapter_3_goto_home_outside(game);
 
-    //chapter_3_goto_road(game);
+    chapter_3_goto_road(game);
 }
 
 void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,

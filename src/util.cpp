@@ -152,6 +152,17 @@ void array_print(Array<T> array, const char *t_format_specifier) {
 
 // Misc
 
+Rectangle enlarge_rectangle(Rectangle a, float amount) {
+    Rectangle result = a;
+
+    result.x -= amount;
+    result.y -= amount;
+    result.width += amount * 2;
+    result.height += amount * 2;
+
+    return result;
+}
+
 void print_cam(Camera3D *cam) {
     printf("position = {%ff, %ff, %ff}\ntarget = {%ff, %ff, %ff}\n\n",
            cam->position.x,

@@ -33,6 +33,8 @@ struct Level_Chapter_1 {
 
     Entity *player, *prayer_mat;
 
+    float music_volume;
+
     float timer;
     int crawling_text_state;
     int screens_scrolled;

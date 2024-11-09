@@ -294,6 +294,7 @@ MOVIE_OFF	src/movie.h	/^    MOVIE_OFF,$/;"	e	enum:__anondf04acb20103
 MOVIE_SEVENTH	src/movie.h	/^    MOVIE_SEVENTH,$/;"	e	enum:__anondf04acb20103
 MUSIC_COUNT	src/audio.cpp	/^    MUSIC_COUNT$/;"	e	enum:Music_ID	file:
 MUSIC_DESERT_AMBIENCE	src/audio.cpp	/^    MUSIC_DESERT_AMBIENCE,$/;"	e	enum:Music_ID	file:
+MUSIC_VHS_BAD	src/audio.cpp	/^    MUSIC_VHS_BAD,$/;"	e	enum:Music_ID	file:
 MainFunction	src/main.cpp	/^  #define MainFunction /;"	d	file:
 MainFunction	src/main.cpp	/^MainFunction() {$/;"	f
 Megabytes	src/util.cpp	/^#define Megabytes(/;"	d	file:
@@ -422,6 +423,8 @@ Render_Type	src/text.cpp	/^enum Render_Type {$/;"	g	file:
 SCROLL_SPEED	src/text.cpp	/^#define SCROLL_SPEED /;"	d	file:
 SOUND_ATARI_BASS_EFFECT	src/audio.cpp	/^    SOUND_ATARI_BASS_EFFECT,$/;"	e	enum:Sound_ID	file:
 SOUND_COUNT	src/audio.cpp	/^    SOUND_COUNT$/;"	e	enum:Sound_ID	file:
+SOUND_EXHALE	src/audio.cpp	/^    SOUND_EXHALE,$/;"	e	enum:Sound_ID	file:
+SOUND_INVALID	src/audio.cpp	/^    SOUND_INVALID = 0,$/;"	e	enum:Sound_ID	file:
 SOUND_SAND_FOOTSTEP_1	src/audio.cpp	/^    SOUND_SAND_FOOTSTEP_1,$/;"	e	enum:Sound_ID	file:
 SOUND_SAND_FOOTSTEP_2	src/audio.cpp	/^    SOUND_SAND_FOOTSTEP_2,$/;"	e	enum:Sound_ID	file:
 SOUND_SAND_FOOTSTEP_3	src/audio.cpp	/^    SOUND_SAND_FOOTSTEP_3,$/;"	e	enum:Sound_ID	file:
@@ -810,7 +813,7 @@ current_document	src/chapter_3.cpp	/^    int current_document;$/;"	m	struct:Chap
 current_index	src/chapter_4.cpp	/^    int        current_index;$/;"	m	struct:Chapter_4_Text	typeref:typename:int	file:
 current_line	src/text.cpp	/^    int current_line;$/;"	m	struct:Text	typeref:typename:int	file:
 current_lunch_text	src/chapter_3.cpp	/^    Chapter_3_Lunch_Text current_lunch_text;$/;"	m	struct:Level_Chapter_3	typeref:typename:Chapter_3_Lunch_Text	file:
-current_music	src/audio.cpp	/^    int        current_music;$/;"	m	struct:Game_Audio	typeref:typename:int	file:
+current_music	src/audio.cpp	/^    int        current_music, secondary_music;$/;"	m	struct:Game_Audio	typeref:typename:int	file:
 current_music	src/audio.cpp	/^inline Music current_music() {$/;"	f	typeref:typename:Music
 current_node	src/chapter_epilogue.cpp	/^    Epilogue_Node *current_node;$/;"	m	struct:Level_Chapter_Epilogue	typeref:typename:Epilogue_Node *	file:
 current_packet	src/pl_mpeg.h	/^	plm_packet_t current_packet;$/;"	m	struct:plm_demux_t	typeref:typename:plm_packet_t
@@ -875,7 +878,7 @@ end_index	src/util.cpp	/^    int end_index;$/;"	m	struct:Find_Word_Result	typere
 end_movie_callback	src/movie.h	/^    void (*end_movie_callback)(struct Game *game);$/;"	m	struct:Movie	typeref:typename:void (*)(struct Game * game)
 end_steps	src/chapter_3.cpp	/^    float end_steps;$/;"	m	struct:Level_Chapter_3	typeref:typename:float	file:
 end_timer	src/chapter_4.cpp	/^    float end_timer;$/;"	m	struct:Level_Chapter_4	typeref:typename:float	file:
-enlarge_rectangle	src/text.cpp	/^Rectangle enlarge_rectangle(Rectangle a, float amount) {$/;"	f	typeref:typename:Rectangle
+enlarge_rectangle	src/util.cpp	/^Rectangle enlarge_rectangle(Rectangle a, float amount) {$/;"	f	typeref:typename:Rectangle
 entities	src/game.cpp	/^    Array<Entity*> entities;$/;"	m	struct:Game	typeref:typename:Array<Entity * >	file:
 entities_find_from_type	src/game.cpp	/^Entity *entities_find_from_type(Array<Entity*> *entities, Entity_Type search) {$/;"	f	typeref:typename:Entity *
 entities_get_player	src/game.cpp	/^Entity *entities_get_player(Array<Entity*> *entities) {$/;"	f	typeref:typename:Entity *
@@ -1510,6 +1513,7 @@ movie_run	src/movie.cpp	/^void movie_run(Movie *movie) {$/;"	f	typeref:typename:
 moving	src/chapter_5.cpp	/^    bool        moving;$/;"	m	struct:Chapter_5_Train	typeref:typename:bool	file:
 moving_down	src/chapter_epilogue.cpp	/^    bool moving_up, moving_down;$/;"	m	struct:Epilogue_Node	typeref:typename:bool	file:
 moving_up	src/chapter_epilogue.cpp	/^    bool moving_up, moving_down;$/;"	m	struct:Epilogue_Node	typeref:typename:bool	file:
+music_volume	src/chapter_1.cpp	/^    float music_volume;$/;"	m	struct:Level_Chapter_1	typeref:typename:float	file:
 musics	src/audio.cpp	/^    Music      musics[MUSIC_COUNT];$/;"	m	struct:Game_Audio	typeref:typename:Music[]	file:
 next	src/text.cpp	/^    Text_List *next[CHOICE_MAX];$/;"	m	struct:Text_List	typeref:typename:Text_List * []	file:
 next_frame_data_size	src/pl_mpeg.h	/^	int next_frame_data_size;$/;"	m	struct:plm_audio_t	typeref:typename:int
@@ -1797,6 +1801,7 @@ screens_scrolled	src/chapter_1.cpp	/^    int screens_scrolled;$/;"	m	struct:Leve
 screens_scrolled	src/chapter_3.cpp	/^    int screens_scrolled;$/;"	m	struct:Level_Chapter_3	typeref:typename:int	file:
 screens_scrolled_while_crawling	src/chapter_1.cpp	/^    int screens_scrolled_while_crawling;$/;"	m	struct:Level_Chapter_1	typeref:typename:int	file:
 scroll_index	src/text.cpp	/^    float scroll_index;$/;"	m	struct:Text	typeref:typename:float	file:
+scroll_sound	src/text.cpp	/^    Sound_ID scroll_sound = SOUND_INVALID; \/\/ gets set to a default in text_init if not specif/;"	m	struct:Text	typeref:typename:Sound_ID	file:
 scroll_speed	src/text.cpp	/^    float scroll_speed = SCROLL_SPEED; \/\/ characters\/second$/;"	m	struct:Text	typeref:typename:float	file:
 scroll_speed	src/text.cpp	/^    float scroll_speed = SCROLL_SPEED;$/;"	m	struct:Text_List	typeref:typename:float	file:
 scroll_type	src/text.cpp	/^    Scroll_Type scroll_type = Scroll_Type::LetterByLetter;$/;"	m	struct:Text_List	typeref:typename:Scroll_Type	file:
@@ -1805,6 +1810,7 @@ scroll_y	src/chapter_3.cpp	/^    float scroll_y, scroll_y_to;$/;"	m	struct:Chapt
 scroll_y	src/chapter_3.cpp	/^    float scroll_y;$/;"	m	struct:Chapter_3_Job_Minigame	typeref:typename:float	file:
 scroll_y_to	src/chapter_3.cpp	/^    float scroll_y, scroll_y_to;$/;"	m	struct:Chapter_3_Phone	typeref:typename:float	file:
 seaside_ending	src/chapter_5.cpp	/^        bool seaside_ending; \/\/ a little hang time before cutting to the next chapter.$/;"	m	struct:Level_Chapter_5::__anoneccee5e80708	typeref:typename:bool	file:
+secondary_music	src/audio.cpp	/^    int        current_music, secondary_music;$/;"	m	struct:Game_Audio	typeref:typename:int	file:
 seconds_to_minutes_and_seconds	src/util.cpp	/^void seconds_to_minutes_and_seconds(float time, char *output) {$/;"	f	typeref:typename:void
 set_game_mode	src/main.cpp	/^void set_game_mode(Game_Mode mode) {$/;"	f	typeref:typename:void
 set_global_system_timer_frequency	src/util.cpp	/^inline void set_global_system_timer_frequency() {$/;"	f	typeref:typename:void

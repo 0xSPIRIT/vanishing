@@ -22,6 +22,8 @@ struct String {
 struct Text {
     Scroll_Type scroll_type;
 
+    Sound_ID scroll_sound = SOUND_INVALID; // gets set to a default in text_init if not specified.
+
     bool center_text;
     bool disallow_skipping;
 
@@ -106,17 +108,6 @@ struct Text_List {
     bool choice;
 };
 
-Rectangle enlarge_rectangle(Rectangle a, float amount) {
-    Rectangle result = a;
-
-    result.x -= amount;
-    result.y -= amount;
-    result.width += amount * 2;
-    result.height += amount * 2;
-
-    return result;
-}
-
 void string_concatenate(String *dest, char ch) {
     if (dest->length+1 >= STRING_SIZE) return;
 
@@ -147,6 +138,13 @@ void text_init(Text *text, Scroll_Type scroll_type, Vector2 pos, const char *lin
 
     text->scroll_type = scroll_type;
     text->position = pos;
+
+    if (text->scroll_sound == SOUND_INVALID) {
+        if (scroll_type == LetterByLetter)
+            text->scroll_sound = SOUND_TEXT_SCROLL;
+        else
+            text->scroll_sound = SOUND_EXHALE;
+    }
 
     size_t line_length = strlen(line);
     String current_line = {};
@@ -217,7 +215,7 @@ bool text_update_and_draw(Text *text, Vector2 offset, float dt) {
                         if (!isspace(text->lines[text->current_line].text[(int)text->scroll_index]) &&
                             !is_sound_playing(SOUND_TEXT_SCROLL))
                         {
-                            play_sound(SOUND_TEXT_SCROLL);
+                            play_sound(text->scroll_sound);
                         }
                     }
 
@@ -235,6 +233,11 @@ bool text_update_and_draw(Text *text, Vector2 offset, float dt) {
             } while (is_newline(text->lines[text->current_line].text[(int)text->scroll_index]));
         } break;
         case Scroll_Type::EntireLine: {
+            if (text->alpha == 0) {
+                SetSoundPitch(game_audio.sounds[SOUND_EXHALE].sound, rand_range(0.5f, 0.7f));
+                play_sound(text->scroll_sound);
+            }
+
             text->alpha += text->alpha_speed * dt;
             text->alpha = min(text->alpha, 1);
         } break;
@@ -580,11 +583,15 @@ Text_List *text_list_update_and_draw(RenderTexture2D *output_target, RenderTextu
                 list->choice_index++;
                 if (list->choice_index >= list->choice_count)
                     list->choice_index = 0;
+
+                play_sound(SOUND_TEXT_SCROLL);
             }
             if (key_up_pressed()) {
                 list->choice_index--;
                 if (list->choice_index < 0)
                     list->choice_index = list->choice_count-1;
+
+                play_sound(SOUND_TEXT_SCROLL);
             }
             if (is_action_pressed() && list->choice_index != -1) {
                 list->finished = true;
@@ -599,6 +606,8 @@ Text_List *text_list_update_and_draw(RenderTexture2D *output_target, RenderTextu
                 if (hook) {
                     hook(user_data);
                 }
+
+                play_sound(SOUND_TEXT_CONFIRM);
             }
 
             Vector2 pos = {};
@@ -697,11 +706,11 @@ Text_List *text_list_update_and_draw(RenderTexture2D *output_target, RenderTextu
 
         DrawTriangle(v1, v2, v3, list->color);
     }
+    /*
 
     if (list->first_frame && list->text[0].scroll_type == EntireLine) {
-        SetSoundPitch(game_audio.sounds[SOUND_EXHALE].sound, rand_range(0.5f, 0.7f));
-        play_sound(SOUND_EXHALE);
     }
+    */
 
     list->first_frame = false;
 

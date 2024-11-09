@@ -464,10 +464,10 @@ void chapter_6_entity_update(Entity *entity, Game *game, float dt) {
                 array_add(&game->entities, footstep);
             }
 
-            if (entity->pos.x >= render_width)
-                entity->pos.x -= render_width + entity_texture_width(entity);
-            if (entity->pos.x < -entity_texture_width(entity))
-                entity->pos.x += render_width + entity_texture_width(entity);
+            if (entity->pos.x >= render_width/2+16)
+                entity->pos.x = render_width/2+16;
+            if (entity->pos.x <= render_width/2-16)
+                entity->pos.x = render_width/2-16;
             if (entity->pos.y >= render_height - entity_texture_height(entity))
                 entity->pos.y = render_height - entity_texture_height(entity);
             if (entity->pos.y < 0)

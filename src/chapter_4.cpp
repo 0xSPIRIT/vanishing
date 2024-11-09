@@ -2,6 +2,7 @@
 #define GOD_COLOR_BACKDROP {100,0,0,255}
 
 enum Chapter_4_State {
+    CHAPTER_4_STATE_INITIAL_BLACK,
     CHAPTER_4_STATE_ATARI,
     CHAPTER_4_STATE_BED_1,
     CHAPTER_4_STATE_3D,
@@ -59,6 +60,10 @@ void chapter_4_set_state_atari(void *game_ptr) {
     Level_Chapter_4 *level = (Level_Chapter_4 *)game->level;
 
     game->post_processing.crt.vignette_mix = 1;
+    game->post_processing.crt.do_scanline_effect = true;
+
+    set_music_volume(MUSIC_GLITCH, 1);
+
     level->state = CHAPTER_4_STATE_ATARI;
 }
 
@@ -67,10 +72,6 @@ void chapter_4_start_text(Game *game) {
     Level_Chapter_4 *level = (Level_Chapter_4 *)game->level;
 
     level->yield_control = false;
-}
-
-void chapter_4_look_outside_text(Game *game) {
-    game->current = &game->text[21];
 }
 
 void chapter_4_window_text(bool scroll, Text_List *list, char *line,
@@ -178,7 +179,8 @@ void chapter_4_init(Game *game) {
 
     level->yield_control = true;
 
-    level->state = CHAPTER_4_STATE_ATARI;
+    //level->state = CHAPTER_4_STATE_ATARI;
+    level->state = CHAPTER_4_STATE_INITIAL_BLACK;
 
     game->textbox_alpha = 255;
 
@@ -193,13 +195,6 @@ void chapter_4_init(Game *game) {
     textures[1] = load_texture(RES_DIR "art/player.png");
     textures[2] = load_texture(RES_DIR "art/window_opened.png");
     textures[3] = load_texture(RES_DIR "art/window_closed.png");
-
-    /*
-    textures[4] = load_texture(RES_DIR "art/chap4_scene_1.png");
-    textures[5] = load_texture(RES_DIR "art/chap4_scene_2.png");
-    textures[6] = load_texture(RES_DIR "art/chap4_scene_3.png");
-    textures[7] = load_texture(RES_DIR "art/chap4_scene_4.png");
-    */
 
     textures[8] = load_texture(RES_DIR "art/tv_back.png");
 
@@ -441,7 +436,12 @@ void chapter_4_init(Game *game) {
                          30,
                          nullptr);
 
-    game->text[24].callbacks[0] = chapter_4_set_state_atari;
+    auto chapter_4_close_window = [](void *game_ptr) -> void {
+        (void)game_ptr;
+        play_sound(SOUND_CLOSE_WINDOW);
+    };
+
+    game->text[24].callbacks[0] = chapter_4_close_window;
 
     atari_text_list_init(&game->text[22],
                          "Chase",
@@ -456,6 +456,78 @@ void chapter_4_init(Game *game) {
                          nullptr);
 
     //chapter_4_3d_init(game);
+
+    atari_text_list_init(&game->text[30],
+                         0,
+                         "On nights like these, he\n"
+                         "yearned for the\nintangible.",
+                         30,
+                         &game->text[31]);
+    atari_text_list_init(&game->text[31],
+                         0,
+                         "A thing only seen in\n"
+                         "mirages at the horizon.",
+                         30,
+                         &game->text[32]);
+    atari_text_list_init(&game->text[32],
+                         0,
+                         "Visions of the warmth of\n"
+                         "her hand pressed on\n"
+                         "his cheek,",
+                         30,
+                         &game->text[33]);
+    atari_text_list_init(&game->text[33],
+                         0,
+                         "shattering this great\nveil of his.\r"
+                         "Yet completely abstract.",
+                         30,
+                         &game->text[34]);
+    atari_text_list_init(&game->text[34],
+                         0,
+                         "A welling of emotion\nstirred in his throat\nand hands.",
+                         30,
+                         &game->text[35]);
+    atari_text_list_init(&game->text[35],
+                         0,
+                         "His hollow gaze clung\nto the ceiling.",
+                         30,
+                         &game->text[36]);
+
+    atari_text_list_init(&game->text[36],
+                         0,
+                         "And yet, th--",
+                         30,
+                         nullptr);
+
+    auto goto_37_delay = [](void *game_ptr) -> void {
+        play_sound(SOUND_KNOCKING_WEIRD);
+
+        Game *game = (Game *)game_ptr;
+        auto goto_37 = [](Game *game) -> void {
+            game->current = &game->text[37];
+        };
+
+        add_event(game, goto_37, 4);
+    };
+
+    game->text[36].callbacks[0] = goto_37_delay;
+
+    atari_text_list_init(&game->text[37],
+                         0,
+                         "...\rDid you hear that?",
+                         30,
+                         &game->text[38]);
+    atari_text_list_init(&game->text[38],
+                         0,
+                         "...",
+                         30,
+                         nullptr);
+
+    auto goto_movie_delay = [](void *game_ptr) -> void {
+        Game *game = (Game *)game_ptr;
+        add_event(game, chapter_4_goto_movie, 5);
+    };
+    game->text[38].callbacks[0] = goto_movie_delay;
 }
 
 void chapter_4_3d_update_camera(Level_Chapter_4 *level, Camera3D *camera) {
@@ -545,12 +617,6 @@ void chapter_4_update(Game *game, float dt) {
     if (level->black)
         return;
 
-    static bool first = true;
-    if (first) {
-        add_event(game, chapter_4_start_text, 1);
-        first = false;
-    }
-
     if (level->end_timer > 0) {
         level->end_timer -= dt;
         if (level->end_timer <= 0) {
@@ -566,7 +632,39 @@ void chapter_4_update(Game *game, float dt) {
     }
 
     switch (level->state) {
+        case CHAPTER_4_STATE_INITIAL_BLACK: {
+            static bool first = true;
+
+            if (first) {
+                auto play_knocking_1 = [](Game *game) -> void {
+                    (void)game;
+                    play_sound(SOUND_KNOCKING_2);
+                };
+                auto play_knocking_2 = [](Game *game) -> void {
+                    (void)game;
+                    play_sound(SOUND_KNOCKING_1);
+                };
+
+                auto goto_atari = [](Game *game) -> void {
+                    Level_Chapter_4 *level = (Level_Chapter_4 *)game->level;
+                    level->state = CHAPTER_4_STATE_ATARI;
+                };
+
+                add_event(game, play_knocking_1, 5);
+                add_event(game, play_knocking_2, 9);
+                add_event(game, goto_atari, 12);
+                first = false;
+            }
+        } break;
         case CHAPTER_4_STATE_ATARI: {
+            static bool first = true;
+
+            if (first) {
+                add_event(game, chapter_4_start_text, 1);
+                play_music(MUSIC_GLITCH, false);
+                first = false;
+            }
+
             for (int i = 0; i < game->entities.length; i++) {
                 Entity *e = game->entities.data[i];
                 chapter_4_entity_update(e, game, dt);
@@ -598,6 +696,24 @@ void chapter_4_update(Game *game, float dt) {
  
             if (game->current && !is_text_list_at_end(game->current) && colors_equal(game->current->color, GOD_COLOR)) {
                 level->camera.fovy -= 1.25 * dt;
+            }
+        } break;
+        case CHAPTER_4_STATE_WINDOW: {
+            static bool first = true;
+            
+            if (first) {
+                play_sound(SOUND_OPEN_WINDOW);
+                first = false;
+            }
+
+            static bool can_end = false;
+
+            if (is_sound_playing(SOUND_CLOSE_WINDOW)) {
+                can_end = true;
+            }
+
+            if (can_end && !is_sound_playing(SOUND_CLOSE_WINDOW)) {
+                chapter_4_set_state_atari(game);
             }
         } break;
     }
@@ -659,6 +775,7 @@ void chapter_4_draw(Game *game, float dt) {
 
                     if (is_action_pressed()) {
                         level->state = CHAPTER_4_STATE_BED_1;
+                        stop_music();
                     }
                 } else {
                     draw_popup("Ensure the windows\n     are closed.");
@@ -672,7 +789,14 @@ void chapter_4_draw(Game *game, float dt) {
 
             if (first) {
                 //add_event(game, chapter_4_3d_init, 5);
-                add_event(game, chapter_4_goto_movie, 5);
+                //add_event(game, chapter_4_goto_movie, 5);
+                game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
+
+                auto yearning = [](Game *game) -> void {
+                    game->current = &game->text[30];
+                };
+
+                add_event(game, yearning, 5);
                 game_movie.end_movie_callback = chapter_4_3d_init_after_delay;
                 first = false;
             }
@@ -707,10 +831,17 @@ void chapter_4_draw(Game *game, float dt) {
         case CHAPTER_4_STATE_WINDOW: {
             ClearBackground(BLACK);
 
-            DrawTexture(atari_assets.textures[14],
-                        0,
-                        0,
-                        WHITE);
+            // hack lmao
+            static bool first_frame = true;
+
+            if (!first_frame && !is_sound_playing(SOUND_OPEN_WINDOW) && !is_sound_playing(SOUND_CLOSE_WINDOW)) {
+                DrawTexture(atari_assets.textures[14],
+                            0,
+                            0,
+                            WHITE);
+            }
+
+            first_frame = false;
         } break;
     }
 }
@@ -799,6 +930,8 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
                         level->wait_devil = true;
                         first = false;
 
+                        set_music_volume(MUSIC_GLITCH, 0);
+
                         level->djinn = chapter_4_make_entity(ENTITY_CHAP_4_DEVIL, -400, 145);
                         array_add(&game->entities, level->djinn);
                     }
@@ -824,9 +957,16 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
                     if (level->check_window_popup) {
                         level->state = CHAPTER_4_STATE_WINDOW;
 
-                        game->post_processing.crt.vignette_mix = 0.4f;
+                        set_music_volume(MUSIC_GLITCH, 0);
 
-                        add_event(game, chapter_4_look_outside_text, 1.5);
+                        game->post_processing.crt.vignette_mix = 0.4f;
+                        game->post_processing.crt.do_scanline_effect = false;
+
+                        auto look_outside_text = [](Game *game) -> void{
+                            game->current = &game->text[21];
+                        };
+
+                        add_event(game, look_outside_text, 5);
                         level->checked_window = true;
                     }
 
@@ -856,8 +996,10 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
 
                 if (entity->chap_4_window.closed) {
                     entity->texture_id = 12;
+                    play_sound(SOUND_CLOSE_WINDOW);
                 } else {
                     entity->texture_id = 13;
+                    play_sound(SOUND_OPEN_WINDOW);
                 }
             }
         } break;
@@ -871,6 +1013,8 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
                 entity->pos.x = 0;
                 entity->pos.y = 0;
                 level->wait_devil = false;
+
+                set_music_volume(MUSIC_GLITCH, 1);
             }
 
             entity->chap_4_devil.time += dt;
