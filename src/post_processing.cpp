@@ -52,6 +52,7 @@ struct Post_Processing_Crt {
     int    u_vignette_intensity;
     int    u_scanline_alpha;
     int    u_vignette_mix;
+    int    u_noise_intensity;
 
     int    do_scanline_effect;
     int    do_warp_effect;
@@ -59,6 +60,7 @@ struct Post_Processing_Crt {
     float  vignette_intensity;
     float  scanline_alpha;
     float  vignette_mix;
+    float  noise_intensity;
 };
 
 struct Post_Processing {
@@ -101,6 +103,7 @@ void post_process_init(Post_Processing *post) {
     crt->vignette_intensity = 1;
     crt->scanline_alpha = 0.25;
     crt->vignette_mix = 1;
+    crt->noise_intensity = 0.25;
 
     crt->shader                 = LoadShader(0, RES_DIR "shaders/crt.fs");
     crt->u_time                 = GetShaderLocation(crt->shader, "time");
@@ -110,7 +113,7 @@ void post_process_init(Post_Processing *post) {
     crt->u_vignette_intensity   = GetShaderLocation(crt->shader, "vignette_intensity");
     crt->u_scanline_alpha       = GetShaderLocation(crt->shader, "scanline_alpha");
     crt->u_vignette_mix         = GetShaderLocation(crt->shader, "vignette_mix");
-
+    crt->u_noise_intensity      = GetShaderLocation(crt->shader, "noise_intensity");
 
     Post_Processing_Bloom *bloom = &post->bloom;
 
@@ -172,6 +175,7 @@ void post_process_crt_uniforms(Post_Processing_Crt *crt) {
     SetShaderValue(crt->shader, crt->u_vignette_intensity, &crt->vignette_intensity, SHADER_UNIFORM_FLOAT);
     SetShaderValue(crt->shader, crt->u_scanline_alpha, &crt->scanline_alpha, SHADER_UNIFORM_FLOAT);
     SetShaderValue(crt->shader, crt->u_vignette_mix, &crt->vignette_mix, SHADER_UNIFORM_FLOAT);
+    SetShaderValue(crt->shader, crt->u_noise_intensity, &crt->noise_intensity, SHADER_UNIFORM_FLOAT);
 }
 
 void post_process_bloom_uniforms(Post_Processing_Bloom *bloom) {

@@ -140,6 +140,7 @@ void chapter_3_goto_home_inside(Game *game) {
     game->post_processing.crt.do_scanline_effect = true;
     game->post_processing.crt.do_warp_effect = false;
     game->post_processing.crt.abberation_intensity = 1;
+    game->post_processing.crt.noise_intensity = 0.2f;
 
     level->player = chapter_3_make_entity(ENTITY_PLAYER, 50, 50);
 
@@ -1288,11 +1289,11 @@ void chapter_3_init(Game *game) {
     //chapter_3_goto_window_text(game);
     //level->minigame.active = true;
 
-    //chapter_3_init_outside(game);
+    chapter_3_init_outside(game);
     //chapter_3_goto_home_inside(game);
     //chapter_3_goto_home_outside(game);
 
-    chapter_3_goto_road(game);
+    //chapter_3_goto_road(game);
 }
 
 void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,

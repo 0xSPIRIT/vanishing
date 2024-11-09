@@ -260,7 +260,7 @@ MainFunction() {
             exit(0);
         }
 
-        game_audio_update();
+        game_audio_update(GetFrameTime());
 
         Game_Mode previous_game_mode = game_mode;
 

@@ -12,6 +12,7 @@ uniform int do_warp_effect;
 uniform float abberation_intensity;
 uniform float vignette_intensity;
 uniform float vignette_mix;
+uniform float noise_intensity;
 
 out vec4 finalColor;
 
@@ -61,7 +62,6 @@ void main() {
     vec2 tex_coord = fragTexCoord;
 
     float scan_intensity = 0.5;
-    float noise_intensity = 0.25;
 
     const float pi = 3.14159265f;
 

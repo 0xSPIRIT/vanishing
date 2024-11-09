@@ -161,6 +161,7 @@ void chapter_1_activate_node(void *ptr_game) {
             e->texture_id = 11;
 
             player->chap_1_player.is_hurt = true;
+            play_sound(SOUND_ATARI_BASS_EFFECT);
             player->alarm[0] = 2; // seconds
 
             Entity *footstep = chapter_1_make_entity(ENTITY_BLOOD,
@@ -246,6 +247,9 @@ void chapter_1_init(Game *game) {
     post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_MEDIUM);
     game->post_processing.vhs.vignette_mix = 0.5f;
     game->post_processing.vhs.vignette_intensity = 1;
+
+    //play_sound(MUSIC_DESERT_AMBIENCE);
+    play_music(MUSIC_DESERT_AMBIENCE);
 
     Texture2D *textures = atari_assets.textures;
 
@@ -412,30 +416,6 @@ void chapter_1_init(Game *game) {
                          nullptr);
 
     speed = 10;
-
-    /*
-    atari_mid_text_list_init(&game->text[24],
-                             "I do not know what\nI see,\rbecause there is\nnothing visible.",
-                             &game->text[25]);
-    atari_mid_text_list_init(&game->text[25],
-                             "I do not know how to\nname you,\rbecause I don't know\nwhat you are.",
-                             &game->text[26]);
-    atari_mid_text_list_init(&game->text[26],
-                             "Should anyone tell me\nyou are named by\nthis or that name,\rI know it must not\nbe,",
-                             &game->text[27]);
-    atari_mid_text_list_init(&game->text[27],
-                             "For the veil beyond\nwhich you are succeeds\nthe boundary of names\nitself.",
-                             &game->text[28]);
-    atari_mid_text_list_init(&game->text[28],
-                             "This veil stands firm,\rmade of diamond bars.\rInsurmountable.",
-                             &game->text[29]);
-    atari_mid_text_list_init(&game->text[29],
-                             "I try to peek through\nthe gaps.\rTo quench my thirst.",
-                             &game->text[30]);
-    atari_mid_text_list_init(&game->text[30],
-                             "I see the others\rsmiling.\n\rAre you even there?",
-                             0);
-                             */
 
     atari_mid_text_list_init(&game->text[24],
                              "the insurmountable veil\nstands firm, made of\ndiamond bars.",
@@ -626,6 +606,8 @@ void chapter_1_init(Game *game) {
     array_add(&game->entities, e);
 
     level->prayer_mat = 0;
+
+//    level->state = LEVEL_CHAPTER_1_STATE_CRAWLING;
 }
 
 void chapter_1_deinit(Game *game) {
@@ -783,12 +765,20 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
 #endif
 
             Vector2 velocity = { dir_x * player_speed * dt, dir_y * player_speed * dt };
+            /*
+            velocity = Vector2Normalize(velocity);
+
+            print_vec2(velocity);
+            printf("\n");
+            */
 
             apply_velocity(e, velocity, &game->entities);
 
             if (level->state == LEVEL_CHAPTER_1_STATE_FOREST) {
                 if (e->pos.y < 95) {
                     level->state = LEVEL_CHAPTER_1_STATE_APARTMENT;
+                    stop_music();
+
                     e->chap_1_player.walking_state = PLAYER_WALKING_STATE_SLOWED_1;
                     //game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
 
@@ -817,7 +807,14 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
             }
 
             if (dir_x != 0 || dir_y != 0) {
-                if (level->state != LEVEL_CHAPTER_1_STATE_APARTMENT && Vector2Length(Vector2Subtract(e->pos, e->chap_1_player.stored_pos)) >= 12) {
+                float length = Vector2Length(Vector2Subtract(e->pos, e->chap_1_player.stored_pos));
+                float required_distance = 12;
+
+                if (abs(dir_x) == abs(dir_y)) { // diagnoal
+                    required_distance *= sqrtf(2);
+                }
+
+                if (level->state != LEVEL_CHAPTER_1_STATE_APARTMENT && length >= required_distance) {
                     e->chap_1_player.stored_pos = e->pos;
 
                     Entity_Type type = ENTITY_FOOTSTEPS;
@@ -842,6 +839,8 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                                                              e->pos.x,
                                                              e->pos.y + entity_texture_height(e) - 3);
                     array_add(&game->entities, footstep);
+
+                    play_sound((Sound_ID)(SOUND_SAND_FOOTSTEP_1 + rand()%4));
                 }
             }
 
@@ -895,6 +894,14 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                 if (only_allow_up_scroll) {
                     e->pos.x = Clamp(e->pos.x, 0, render_width - width);
                     if (e->pos.y >= render_height - height) e->pos.y = render_height - height;
+                }
+
+                if (dir != DIRECTION_INVALID) {
+                    // reset the stored_pos which stores the last
+                    // position of a footstep. if i dont do this
+                    // then a footstep is made every time the screen
+                    // has scrolled.
+                    e->chap_1_player.stored_pos = e->pos;
                 }
 
                 if (!(only_allow_up_scroll && !scrolled_up) && (stored_x != e->pos.x || stored_y != e->pos.y)) {
@@ -978,6 +985,8 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                     {
                         level->state = LEVEL_CHAPTER_1_STATE_FOREST;
                         e->pos.x = render_width/2 - entity_texture_width(e) / 2;
+
+                        play_music(MUSIC_VHS_BAD, false);
 
                         post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_HIGH);
                         game->post_processing.vhs.vignette_intensity = 1;

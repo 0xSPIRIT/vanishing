@@ -698,6 +698,11 @@ Text_List *text_list_update_and_draw(RenderTexture2D *output_target, RenderTextu
         DrawTriangle(v1, v2, v3, list->color);
     }
 
+    if (list->first_frame && list->text[0].scroll_type == EntireLine) {
+        SetSoundPitch(game_audio.sounds[SOUND_EXHALE].sound, rand_range(0.5f, 0.7f));
+        play_sound(SOUND_EXHALE);
+    }
+
     list->first_frame = false;
 
     if (result != list) {

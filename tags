@@ -70,7 +70,6 @@ CHAIR_HAS_FEMALE	src/chapter_5.cpp	/^    CHAIR_HAS_FEMALE,$/;"	e	enum:Chair_Stat
 CHAIR_HAS_MALE	src/chapter_5.cpp	/^    CHAIR_HAS_MALE,$/;"	e	enum:Chair_State	file:
 CHAIR_HAS_PENNY	src/chapter_5.cpp	/^    CHAIR_HAS_PENNY,$/;"	e	enum:Chair_State	file:
 CHANNEL_GUI	src/audio.cpp	/^    CHANNEL_GUI,$/;"	e	enum:Channel	file:
-CHANNEL_MUSIC	src/audio.cpp	/^    CHANNEL_MUSIC,$/;"	e	enum:Channel	file:
 CHANNEL_WORLD	src/audio.cpp	/^    CHANNEL_WORLD,$/;"	e	enum:Channel	file:
 CHAPTER_2_AREA_BATHROOM	src/chapter_2.cpp	/^    CHAPTER_2_AREA_BATHROOM,$/;"	e	enum:Chapter_2_Area	file:
 CHAPTER_2_AREA_HYATT_1	src/chapter_2.cpp	/^    CHAPTER_2_AREA_HYATT_1,$/;"	e	enum:Chapter_2_Area	file:
@@ -293,12 +292,15 @@ MOVIE_DRACULA	src/movie.h	/^    MOVIE_DRACULA,$/;"	e	enum:__anondf04acb20103
 MOVIE_EMPTINESS	src/movie.h	/^    MOVIE_EMPTINESS$/;"	e	enum:__anondf04acb20103
 MOVIE_OFF	src/movie.h	/^    MOVIE_OFF,$/;"	e	enum:__anondf04acb20103
 MOVIE_SEVENTH	src/movie.h	/^    MOVIE_SEVENTH,$/;"	e	enum:__anondf04acb20103
+MUSIC_COUNT	src/audio.cpp	/^    MUSIC_COUNT$/;"	e	enum:Music_ID	file:
+MUSIC_DESERT_AMBIENCE	src/audio.cpp	/^    MUSIC_DESERT_AMBIENCE,$/;"	e	enum:Music_ID	file:
 MainFunction	src/main.cpp	/^  #define MainFunction /;"	d	file:
 MainFunction	src/main.cpp	/^MainFunction() {$/;"	f
 Megabytes	src/util.cpp	/^#define Megabytes(/;"	d	file:
 Middle	src/text.cpp	/^    Middle,$/;"	e	enum:Location	file:
 Models	src/chapter_5.cpp	/^    struct Models {$/;"	s	struct:Level_Chapter_5	file:
 Movie	src/movie.h	/^struct Movie {$/;"	s
+Music_ID	src/audio.cpp	/^enum Music_ID {$/;"	g	file:
 NDEBUG	src/main.cpp	/^  #define NDEBUG$/;"	d	file:
 NODE_FIRST	src/chapter_1.h	/^    NODE_FIRST,$/;"	e	enum:Node_Type
 NODE_INVALID	src/chapter_1.h	/^    NODE_INVALID,$/;"	e	enum:Node_Type
@@ -418,9 +420,13 @@ Radians	src/util.cpp	/^#define Radians(/;"	d	file:
 Render_State	src/game.cpp	/^enum Render_State {$/;"	g	file:
 Render_Type	src/text.cpp	/^enum Render_Type {$/;"	g	file:
 SCROLL_SPEED	src/text.cpp	/^#define SCROLL_SPEED /;"	d	file:
+SOUND_ATARI_BASS_EFFECT	src/audio.cpp	/^    SOUND_ATARI_BASS_EFFECT,$/;"	e	enum:Sound_ID	file:
 SOUND_COUNT	src/audio.cpp	/^    SOUND_COUNT$/;"	e	enum:Sound_ID	file:
+SOUND_SAND_FOOTSTEP_1	src/audio.cpp	/^    SOUND_SAND_FOOTSTEP_1,$/;"	e	enum:Sound_ID	file:
+SOUND_SAND_FOOTSTEP_2	src/audio.cpp	/^    SOUND_SAND_FOOTSTEP_2,$/;"	e	enum:Sound_ID	file:
+SOUND_SAND_FOOTSTEP_3	src/audio.cpp	/^    SOUND_SAND_FOOTSTEP_3,$/;"	e	enum:Sound_ID	file:
+SOUND_SAND_FOOTSTEP_4	src/audio.cpp	/^    SOUND_SAND_FOOTSTEP_4,$/;"	e	enum:Sound_ID	file:
 SOUND_TEXT_SCROLL	src/audio.cpp	/^    SOUND_TEXT_SCROLL,$/;"	e	enum:Sound_ID	file:
-SOUND_VHS	src/audio.cpp	/^    SOUND_VHS,$/;"	e	enum:Sound_ID	file:
 STRING_SIZE	src/text.cpp	/^#define STRING_SIZE /;"	d	file:
 Scroll_Type	src/text.cpp	/^enum Scroll_Type {$/;"	g	file:
 ShadowBackdrop	src/text.cpp	/^    ShadowBackdrop,$/;"	e	enum:Render_Type	file:
@@ -560,7 +566,6 @@ bed_popup	src/chapter_4.cpp	/^    bool bed_popup;$/;"	m	struct:Level_Chapter_4	t
 before_first_text	src/chapter_1.cpp	/^    bool before_first_text;$/;"	m	struct:Level_Chapter_1	typeref:typename:bool	file:
 bg_color	src/text.cpp	/^    Color bg_color          = BLACK;$/;"	m	struct:Text_List	typeref:typename:Color	file:
 bg_color	src/text.cpp	/^    Color color, bg_color, backdrop_color;$/;"	m	struct:Text	typeref:typename:Color	file:
-bg_music	src/audio.cpp	/^    Sound_ID bg_music;$/;"	m	struct:Game_Audio	typeref:typename:Sound_ID	file:
 bit_index	src/pl_mpeg.h	/^	size_t bit_index;$/;"	m	struct:plm_buffer_t	typeref:typename:size_t
 bitrate_index	src/pl_mpeg.h	/^	int bitrate_index;$/;"	m	struct:plm_audio_t	typeref:typename:int
 bits	src/pl_mpeg.h	/^	unsigned char bits;$/;"	m	struct:plm_quantizer_spec_t	typeref:typename:unsigned char
@@ -805,6 +810,8 @@ current_document	src/chapter_3.cpp	/^    int current_document;$/;"	m	struct:Chap
 current_index	src/chapter_4.cpp	/^    int        current_index;$/;"	m	struct:Chapter_4_Text	typeref:typename:int	file:
 current_line	src/text.cpp	/^    int current_line;$/;"	m	struct:Text	typeref:typename:int	file:
 current_lunch_text	src/chapter_3.cpp	/^    Chapter_3_Lunch_Text current_lunch_text;$/;"	m	struct:Level_Chapter_3	typeref:typename:Chapter_3_Lunch_Text	file:
+current_music	src/audio.cpp	/^    int        current_music;$/;"	m	struct:Game_Audio	typeref:typename:int	file:
+current_music	src/audio.cpp	/^inline Music current_music() {$/;"	f	typeref:typename:Music
 current_node	src/chapter_epilogue.cpp	/^    Epilogue_Node *current_node;$/;"	m	struct:Level_Chapter_Epilogue	typeref:typename:Epilogue_Node *	file:
 current_packet	src/pl_mpeg.h	/^	plm_packet_t current_packet;$/;"	m	struct:plm_demux_t	typeref:typename:plm_packet_t
 current_quote	src/chapter_5.cpp	/^        Chapter_5_Quote *current_quote;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80608	typeref:typename:Chapter_5_Quote *	file:
@@ -942,14 +949,13 @@ game_atari	src/main.cpp	/^Game        game_atari;$/;"	v	typeref:typename:Game
 game_atari_run	src/game.cpp	/^void game_atari_run(Game *game) {$/;"	f	typeref:typename:void
 game_audio	src/audio.cpp	/^Game_Audio game_audio;$/;"	v	typeref:typename:Game_Audio
 game_audio_init	src/audio.cpp	/^void game_audio_init() {$/;"	f	typeref:typename:void
-game_audio_update	src/audio.cpp	/^void game_audio_update() {$/;"	f	typeref:typename:void
+game_audio_update	src/audio.cpp	/^void game_audio_update(float dt) {$/;"	f	typeref:typename:void
 game_init	src/game.cpp	/^void game_init(Game *game) {$/;"	f	typeref:typename:void
 game_intro	src/main.cpp	/^Game_Intro  game_intro;$/;"	v	typeref:typename:Game_Intro
 game_intro_init	src/intro.cpp	/^void game_intro_init(Game_Intro *game) {$/;"	f	typeref:typename:void
 game_intro_run	src/intro.cpp	/^void game_intro_run(Game_Intro *game) {$/;"	f	typeref:typename:void
 game_mode	src/main.cpp	/^Game_Mode game_mode = GAME_MODE_INVALID;$/;"	v	typeref:typename:Game_Mode
 game_movie	src/movie.h	/^Movie game_movie;$/;"	v	typeref:typename:Movie
-game_sound	src/audio.cpp	/^Game_Sound game_sound(Channel channel, const char *file) {$/;"	f	typeref:typename:Game_Sound
 game_target	src/post_processing.cpp	/^    RenderTexture2D          game_target; \/\/ This is the internal resolution.$/;"	m	struct:Post_Processing	typeref:typename:RenderTexture2D	file:
 game_titlescreen	src/main.cpp	/^Titlescreen game_titlescreen;$/;"	v	typeref:typename:Titlescreen
 gamepad_movement_angle	src/keys.cpp	/^float gamepad_movement_angle(float dt) {$/;"	f	typeref:typename:float
@@ -1456,13 +1462,14 @@ load_GL_VERSION_3_2	src/glad/glad.c	/^static void load_GL_VERSION_3_2(GLADloadpr
 load_GL_VERSION_3_3	src/glad/glad.c	/^static void load_GL_VERSION_3_3(GLADloadproc load) {$/;"	f	typeref:typename:void	file:
 load_callback	src/pl_mpeg.h	/^	plm_buffer_load_callback load_callback;$/;"	m	struct:plm_buffer_t	typeref:typename:plm_buffer_load_callback
 load_callback_user_data	src/pl_mpeg.h	/^	void *load_callback_user_data;$/;"	m	struct:plm_buffer_t	typeref:typename:void *
+load_music	src/audio.cpp	/^Music load_music(const char *file) {$/;"	f	typeref:typename:Music
+load_sound	src/audio.cpp	/^Game_Sound load_sound(Channel channel, const char *file, float volume=1) {$/;"	f	typeref:typename:Game_Sound
 load_texture	src/util.cpp	/^Texture2D load_texture(const char *filename) {$/;"	f	typeref:typename:Texture2D
 location	src/text.cpp	/^    Location location       = Location::Bottom;$/;"	m	struct:Text_List	typeref:typename:Location	file:
 look_angle	src/chapter_5.cpp	/^    float look_angle;$/;"	m	struct:Chapter_5_Chair	typeref:typename:float	file:
 look_timer	src/chapter_5.cpp	/^    float look_timer;$/;"	m	struct:Chapter_5_Chair	typeref:typename:float	file:
 looking_at	src/chapter_5.cpp	/^    Chapter_5_Chair *looking_at; \/\/ null for looking at the camera$/;"	m	struct:Chapter_5_Chair	typeref:typename:Chapter_5_Chair *	file:
 loop	src/pl_mpeg.h	/^	int loop;$/;"	m	struct:plm_t	typeref:typename:int
-looping	src/audio.cpp	/^    bool    looping;$/;"	m	struct:Game_Sound	typeref:typename:bool	file:
 luma_height	src/pl_mpeg.h	/^	int luma_height;$/;"	m	struct:plm_video_t	typeref:typename:int
 luma_width	src/pl_mpeg.h	/^	int luma_width;$/;"	m	struct:plm_video_t	typeref:typename:int
 lunch_devil_effect	src/chapter_3.cpp	/^    bool lunch_devil_effect;$/;"	m	struct:Level_Chapter_3	typeref:typename:bool	file:
@@ -1503,6 +1510,7 @@ movie_run	src/movie.cpp	/^void movie_run(Movie *movie) {$/;"	f	typeref:typename:
 moving	src/chapter_5.cpp	/^    bool        moving;$/;"	m	struct:Chapter_5_Train	typeref:typename:bool	file:
 moving_down	src/chapter_epilogue.cpp	/^    bool moving_up, moving_down;$/;"	m	struct:Epilogue_Node	typeref:typename:bool	file:
 moving_up	src/chapter_epilogue.cpp	/^    bool moving_up, moving_down;$/;"	m	struct:Epilogue_Node	typeref:typename:bool	file:
+musics	src/audio.cpp	/^    Music      musics[MUSIC_COUNT];$/;"	m	struct:Game_Audio	typeref:typename:Music[]	file:
 next	src/text.cpp	/^    Text_List *next[CHOICE_MAX];$/;"	m	struct:Text_List	typeref:typename:Text_List * []	file:
 next_frame_data_size	src/pl_mpeg.h	/^	int next_frame_data_size;$/;"	m	struct:plm_audio_t	typeref:typename:int
 next_free	src/game.cpp	/^    Entity     *next_free;$/;"	m	struct:Entity	typeref:typename:Entity *	file:
@@ -1514,6 +1522,7 @@ node_popup	src/chapter_epilogue.cpp	/^    bool           node_popup;$/;"	m	struc
 node_timer	src/chapter_epilogue.cpp	/^    float          node_timer, node_timer_max;$/;"	m	struct:Level_Chapter_Epilogue	typeref:typename:float	file:
 node_timer_max	src/chapter_epilogue.cpp	/^    float          node_timer, node_timer_max;$/;"	m	struct:Level_Chapter_Epilogue	typeref:typename:float	file:
 nodes	src/chapter_epilogue.cpp	/^    Epilogue_Node  nodes[EPILOGUE_NODE_MAX];$/;"	m	struct:Level_Chapter_Epilogue	typeref:typename:Epilogue_Node[]	file:
+noise_intensity	src/post_processing.cpp	/^    float  noise_intensity;$/;"	m	struct:Post_Processing_Crt	typeref:typename:float	file:
 noise_intensity	src/post_processing.cpp	/^    float  noise_intensity;$/;"	m	struct:Post_Processing_Vhs	typeref:typename:float	file:
 non_intra_quant_matrix	src/pl_mpeg.h	/^	uint8_t non_intra_quant_matrix[64];$/;"	m	struct:plm_video_t	typeref:typename:uint8_t[64]
 not_first_frame	src/text.cpp	/^    bool finished, not_first_frame;$/;"	m	struct:Text	typeref:typename:bool	file:
@@ -1544,9 +1553,9 @@ phone	src/chapter_3.cpp	/^    Chapter_3_Phone        phone;$/;"	m	struct:Level_C
 picture_type	src/pl_mpeg.h	/^	int picture_type;$/;"	m	struct:plm_video_t	typeref:typename:int
 pink_dot	src/chapter_epilogue.cpp	/^    Texture        pink_dot, orange_dot, black_texture;$/;"	m	struct:Level_Chapter_Epilogue	typeref:typename:Texture	file:
 pixel_aspect_ratio	src/pl_mpeg.h	/^	double pixel_aspect_ratio;$/;"	m	struct:plm_video_t	typeref:typename:double
+play_music	src/audio.cpp	/^void play_music(Music_ID music, bool crossfade = false) {$/;"	f	typeref:typename:void
 play_sound	src/audio.cpp	/^void play_sound(Sound_ID sound_id) {$/;"	f	typeref:typename:void
-play_sound	src/audio.cpp	/^void play_sound(Sound_ID sound_id, Channel channel_override, bool looping) {$/;"	f	typeref:typename:void
-play_sound	src/audio.cpp	/^void play_sound(Sound_ID sound_id, bool looping) {$/;"	f	typeref:typename:void
+play_sound	src/audio.cpp	/^void play_sound(Sound_ID sound_id, Channel channel_override) {$/;"	f	typeref:typename:void
 player	src/chapter_1.cpp	/^    Entity *player, *prayer_mat;$/;"	m	struct:Level_Chapter_1	typeref:typename:Entity *	file:
 player	src/chapter_2.cpp	/^    Entity *player; \/\/ quick access to the player$/;"	m	struct:Level_Chapter_2	typeref:typename:Entity *	file:
 player	src/chapter_3.cpp	/^    Entity *player;$/;"	m	struct:Level_Chapter_3	typeref:typename:Entity *	file:
@@ -1843,6 +1852,7 @@ state	src/chapter_5.cpp	/^    Chair_State state;$/;"	m	struct:Chapter_5_Chair	ty
 state	src/chapter_5.cpp	/^    int      state;$/;"	m	struct:Level_Chapter_5	typeref:typename:int	file:
 state	src/chapter_6.cpp	/^    Chapter_6_State state;$/;"	m	struct:Level_Chapter_6	typeref:typename:Chapter_6_State	file:
 state	src/chapter_epilogue.cpp	/^    Epilogue_State state;$/;"	m	struct:Level_Chapter_Epilogue	typeref:typename:Epilogue_State	file:
+stop_music	src/audio.cpp	/^void stop_music() {$/;"	f	typeref:typename:void
 stored_pos	src/chapter_1.h	/^    Vector2 stored_pos;$/;"	m	struct:Chapter_1_Player	typeref:typename:Vector2
 string	src/chapter_3.cpp	/^    char   *string; \/\/ Recalculate length because it can be changed when correcting words$/;"	m	struct:Document	typeref:typename:char *	file:
 string_compare	src/util.cpp	/^bool string_compare(const char *major, const char *minor) {$/;"	f	typeref:typename:bool
@@ -1932,6 +1942,7 @@ u_bloom_intensity	src/post_processing.cpp	/^    int    u_bloom_intensity;$/;"	m	
 u_do_scanline_effect	src/post_processing.cpp	/^    int    u_do_scanline_effect;$/;"	m	struct:Post_Processing_Crt	typeref:typename:int	file:
 u_do_warp_effect	src/post_processing.cpp	/^    int    u_do_warp_effect;$/;"	m	struct:Post_Processing_Crt	typeref:typename:int	file:
 u_mix_factor	src/post_processing.cpp	/^    int    u_mix_factor;$/;"	m	struct:Post_Processing_Vhs	typeref:typename:int	file:
+u_noise_intensity	src/post_processing.cpp	/^    int    u_noise_intensity;$/;"	m	struct:Post_Processing_Crt	typeref:typename:int	file:
 u_noise_intensity	src/post_processing.cpp	/^    int    u_noise_intensity;$/;"	m	struct:Post_Processing_Vhs	typeref:typename:int	file:
 u_scan_intensity	src/post_processing.cpp	/^    int    u_scan_intensity;$/;"	m	struct:Post_Processing_Vhs	typeref:typename:int	file:
 u_scanline_alpha	src/post_processing.cpp	/^    int    u_scanline_alpha;$/;"	m	struct:Post_Processing_Crt	typeref:typename:int	file:
@@ -1967,6 +1978,9 @@ vignette_mix	src/post_processing.cpp	/^    float  vignette_mix;$/;"	m	struct:Pos
 vignette_mix	src/post_processing.cpp	/^    float  vignette_mix;$/;"	m	struct:Post_Processing_Vhs	typeref:typename:float	file:
 virtual_mouse	src/chapter_3.cpp	/^    Virtual_Mouse virtual_mouse;$/;"	m	struct:Level_Chapter_3	typeref:typename:Virtual_Mouse	file:
 visible	src/chapter_5.cpp	/^    bool        visible;$/;"	m	struct:Chapter_5_Train	typeref:typename:bool	file:
+volume	src/audio.cpp	/^    float   volume;$/;"	m	struct:Game_Sound	typeref:typename:float	file:
+volume_a	src/audio.cpp	/^    float      volume_a, volume_b;$/;"	m	struct:Game_Audio	typeref:typename:float	file:
+volume_b	src/audio.cpp	/^    float      volume_a, volume_b;$/;"	m	struct:Game_Audio	typeref:typename:float	file:
 wait_devil	src/chapter_4.cpp	/^    bool wait_devil;$/;"	m	struct:Level_Chapter_4	typeref:typename:bool	file:
 walking_state	src/chapter_1.h	/^    Player_Walking_State walking_state;$/;"	m	struct:Chapter_1_Player	typeref:typename:Player_Walking_State
 white_fade_alpha	src/chapter_6.cpp	/^    float white_fade_alpha;$/;"	m	struct:Level_Chapter_6	typeref:typename:float	file:

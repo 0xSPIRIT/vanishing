@@ -365,63 +365,6 @@ void chapter_6_init(Game *game) {
                sizeof(hooks[0]) * choice_count);
     };
 
-    // Begin the chapter with a rotoscoped animation of
-    // a die being cast (the camera is close to the table,
-    // and the die is thrown until it's large in the camera's
-    // perspective)
-    //
-    // You have these people Aria, Tyrell and Noah talking
-    // about something that you don't care about (their other
-    // friends, and some girl Sonja breaking up and Noah
-    // likes her because she's white indian, skinny, has
-    // long straight hair and glasses)
-    //
-    // Tyrell and Aria are giving offhanded remarks
-    // about you being nerdy or silent, looking depressed.
-    //
-    // A kind of joking manner in which they speak to you
-    // where you're being belittled.
-    //
-    // Your friends here have social wealth as opposed to you
-    // Mention how much friends they have, and also portray
-    // that you don't know any of them.
-    //
-    // Portray that you feel inferior to them as was discussed
-    // in the ending of chapter 2.
-    // Portray it as like a form of torture.
-    // Portray the fact that whenever you ask a question it
-    // goes unanswered, like they do not respect you as an equal
-    // in the conversation (almost like they're pitying you
-    // by having you here)
-    //
-    // In this die game you have to hold the up direction to
-    // hrow a die and whoever gets the highest number wins,
-    // on the last time you have to do it, it instantly transitions
-    // into the desert part, so Chase is now moving upwards
-    // automatically because of the match-cut.
-    //
-    // The card game itself increases in creepiness over time,
-    // vhs effect, etc. At the end everyone has pyramid heads,
-    // and are staring down at you, saying weird stuff.
-    //
-    // The last line of dialogue before the cut is something like
-    //
-    //    Tyrell: "C'mon nerd, why can't you just have fun?"
-    //    Chase: "Why the hell would you say th-"
-    //
-    // The node at the end represents you being socially accepted,
-    // being normal, and finding meaning... But you never get it.
-    // Surely with this throw of the die everything will work out.
-    // You slow down as you approach it.
-    //
-    // Then, God appears telling you how you need his help more
-    // than ever before, and how you didn't complete the task
-    // that he asked... The rest is the same, ending with the
-    // satanic 666, and we fade into Epilogue.
-
-    // Actually we'll just do a dialogue thing instead.
-    // The only rotoscope thing we'll leave is the die being cast at the start.
-
     support_text(0, "It was a bright cold day in April, and\nthe clocks were striking thirteen.\rChase took a meditative breath.", false);
     support_text(0, "He found himself sitting despondently\nat a table with three of his friends.", false);
     support_text(0, "Although earlier that day he felt some\nsemblance of understanding of his\nsituation,", false);

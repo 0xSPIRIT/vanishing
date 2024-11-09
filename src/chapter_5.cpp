@@ -2192,7 +2192,7 @@ void chapter_5_init(Game *game) {
 
     level->transition_fade = false;
 
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_DESERT);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_TRAIN_STATION);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {

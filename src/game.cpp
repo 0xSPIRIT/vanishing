@@ -749,7 +749,7 @@ void atari_mid_text_list_init(Text_List *list, char *line,
     list->scale        = 0.125;
     list->scroll_speed = 15;
     if (chapter == 1) 
-        list->alpha_speed  = 0.5;
+        list->alpha_speed  = 1;
     else
         list->alpha_speed = 1;
 
