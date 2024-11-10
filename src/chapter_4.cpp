@@ -62,7 +62,7 @@ void chapter_4_set_state_atari(void *game_ptr) {
     game->post_processing.crt.vignette_mix = 1;
     game->post_processing.crt.do_scanline_effect = true;
 
-    set_music_volume(MUSIC_GLITCH, 1);
+    //set_music_volume(MUSIC_GLITCH, 1);
 
     level->state = CHAPTER_4_STATE_ATARI;
 }
@@ -429,7 +429,19 @@ void chapter_4_init(Game *game) {
                          0,
                          "The night is still.\r...\r...",
                          30,
-                         &game->text[24]);
+                         0);
+
+    auto goto_text_24 = [](void *game_ptr) -> void {
+        Game *game = (Game *)game_ptr;
+
+        auto text_event = [](Game *game) -> void {
+            game->current = &game->text[24];
+        };
+
+        add_event(game, text_event, 3);
+    };
+
+    game->text[21].callbacks[0] = goto_text_24;
     atari_text_list_init(&game->text[24],
                          "Chase",
                          "Something feels strange.\rI should go to bed.",
@@ -957,7 +969,7 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
                     if (level->check_window_popup) {
                         level->state = CHAPTER_4_STATE_WINDOW;
 
-                        set_music_volume(MUSIC_GLITCH, 0);
+                        //set_music_volume(MUSIC_GLITCH, 0);
 
                         game->post_processing.crt.vignette_mix = 0.4f;
                         game->post_processing.crt.do_scanline_effect = false;

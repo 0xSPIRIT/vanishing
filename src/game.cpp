@@ -157,7 +157,7 @@ struct Game {
     Arena frame_arena; // 32k scratch space
     Array<Entity*> entities;
 
-    Text_List  text[128];
+    Text_List  text[256];
     Text_List *current;
 
     Event events[64];

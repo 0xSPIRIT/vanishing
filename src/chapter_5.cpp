@@ -1641,7 +1641,6 @@ void chapter_5_scene_init(Game *game) {
                                   &game->text[25]);
             chapter_5_window_text(true,
                                   &game->text[25],
-                                  //"She used to hold the brightest and most\njoyous colours.\r"
                                   "She held the most vibrant, joyous\npearlescence.\r"
                                   "Pinks and violets, pastels and neons.\r"
                                   "Her long hair fluttered in the breeze,\ntrailing a soft perfume.\r"
