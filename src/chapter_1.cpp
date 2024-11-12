@@ -33,7 +33,7 @@ struct Level_Chapter_1 {
 
     Entity *player, *prayer_mat;
 
-    float music_volume;
+    float music_pitch;
 
     float timer;
     int crawling_text_state;
@@ -239,6 +239,8 @@ void chapter_1_call_text(Text_List *list, char *speaker,
 
 void chapter_1_init(Game *game) {
     Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
+
+    level->music_pitch = 1;
 
     level->intro = true;
     level->god_scroll = chapter_1_god_text_y[0];
@@ -915,6 +917,7 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
 
                     if (player->chap_1_player.walking_state == PLAYER_WALKING_STATE_CRAWLING) {
                         level->state = LEVEL_CHAPTER_1_STATE_CRAWLING;
+                        level->music_pitch = 0.5;
                     }
 
                     if (level->state == LEVEL_CHAPTER_1_STATE_PHONE_WAS_CALLED) {
@@ -988,7 +991,7 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                         level->state = LEVEL_CHAPTER_1_STATE_FOREST;
                         e->pos.x = render_width/2 - entity_texture_width(e) / 2;
 
-                        play_music(MUSIC_VHS_BAD, false);
+                        level->music_pitch = 0.25;
 
                         post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_HIGH);
                         game->post_processing.vhs.vignette_intensity = 1;
@@ -1115,6 +1118,8 @@ void chapter_1_entity_draw(Entity *e, Game *game) {
 
 void chapter_1_update(Game *game, float dt) {
     Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
+
+    SetMusicPitch(game_audio.musics[MUSIC_DESERT_AMBIENCE], level->music_pitch);
 
     if (level->state == LEVEL_CHAPTER_1_PHONE_CALL || (level->intro && level->god_index == -1) || level->before_first_text) {
         return;

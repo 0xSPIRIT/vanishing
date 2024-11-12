@@ -87,6 +87,8 @@ struct Text_List {
     bool center_text;
     float scale = 1;
 
+    Sound_ID scroll_sound = SOUND_INVALID; // gets set to a default in text_init if not specified.
+
     float scroll_speed = SCROLL_SPEED;
 
     float padding;
@@ -212,7 +214,8 @@ bool text_update_and_draw(Text *text, Vector2 offset, float dt) {
 
                     if ((int)text->scroll_index != prev) {
                         // we have scrolled one character, play the sound.
-                        if (!isspace(text->lines[text->current_line].text[(int)text->scroll_index]) &&
+                        if (text->scroll_sound != SOUND_EMPTY &&
+                            !isspace(text->lines[text->current_line].text[(int)text->scroll_index]) &&
                             !is_sound_playing(SOUND_TEXT_SCROLL))
                         {
                             play_sound(text->scroll_sound);
@@ -233,7 +236,9 @@ bool text_update_and_draw(Text *text, Vector2 offset, float dt) {
             } while (is_newline(text->lines[text->current_line].text[(int)text->scroll_index]));
         } break;
         case Scroll_Type::EntireLine: {
-            if (text->alpha == 0) {
+            if (text->scroll_sound != SOUND_EMPTY &&
+                text->alpha == 0)
+            {
                 SetSoundPitch(game_audio.sounds[SOUND_EXHALE].sound, rand_range(0.5f, 0.7f));
                 play_sound(text->scroll_sound);
             }
@@ -348,6 +353,7 @@ void text_list_init(Text_List *list, char *speaker, char *text_string,
             text.scroll_speed   = list->scroll_speed;
             text.alpha_speed    = list->alpha_speed;
             text.background     = list->background;
+            text.scroll_sound   = list->scroll_sound;
             text.disallow_skipping = list->disallow_skipping;
 
             Vector2 pos = { list->padding, list->padding + cum };

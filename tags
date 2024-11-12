@@ -94,6 +94,7 @@ CHAPTER_3_STATE_WINDOW	src/chapter_3.cpp	/^    CHAPTER_3_STATE_WINDOW,$/;"	e	enu
 CHAPTER_4_STATE_3D	src/chapter_4.cpp	/^    CHAPTER_4_STATE_3D,$/;"	e	enum:Chapter_4_State	file:
 CHAPTER_4_STATE_ATARI	src/chapter_4.cpp	/^    CHAPTER_4_STATE_ATARI,$/;"	e	enum:Chapter_4_State	file:
 CHAPTER_4_STATE_BED_1	src/chapter_4.cpp	/^    CHAPTER_4_STATE_BED_1,$/;"	e	enum:Chapter_4_State	file:
+CHAPTER_4_STATE_INITIAL_BLACK	src/chapter_4.cpp	/^    CHAPTER_4_STATE_INITIAL_BLACK,$/;"	e	enum:Chapter_4_State	file:
 CHAPTER_4_STATE_WINDOW	src/chapter_4.cpp	/^    CHAPTER_4_STATE_WINDOW$/;"	e	enum:Chapter_4_State	file:
 CHAPTER_5_SCENE_DESERT	src/chapter_5.cpp	/^    CHAPTER_5_SCENE_DESERT,$/;"	e	enum:Chapter_5_Scene	file:
 CHAPTER_5_SCENE_DINNER_PARTY	src/chapter_5.cpp	/^    CHAPTER_5_SCENE_DINNER_PARTY,$/;"	e	enum:Chapter_5_Scene	file:
@@ -294,6 +295,8 @@ MOVIE_OFF	src/movie.h	/^    MOVIE_OFF,$/;"	e	enum:__anondf04acb20103
 MOVIE_SEVENTH	src/movie.h	/^    MOVIE_SEVENTH,$/;"	e	enum:__anondf04acb20103
 MUSIC_COUNT	src/audio.cpp	/^    MUSIC_COUNT$/;"	e	enum:Music_ID	file:
 MUSIC_DESERT_AMBIENCE	src/audio.cpp	/^    MUSIC_DESERT_AMBIENCE,$/;"	e	enum:Music_ID	file:
+MUSIC_GLITCH	src/audio.cpp	/^    MUSIC_GLITCH,$/;"	e	enum:Music_ID	file:
+MUSIC_NOISE	src/audio.cpp	/^    MUSIC_NOISE,$/;"	e	enum:Music_ID	file:
 MUSIC_VHS_BAD	src/audio.cpp	/^    MUSIC_VHS_BAD,$/;"	e	enum:Music_ID	file:
 MainFunction	src/main.cpp	/^  #define MainFunction /;"	d	file:
 MainFunction	src/main.cpp	/^MainFunction() {$/;"	f
@@ -422,13 +425,22 @@ Render_State	src/game.cpp	/^enum Render_State {$/;"	g	file:
 Render_Type	src/text.cpp	/^enum Render_Type {$/;"	g	file:
 SCROLL_SPEED	src/text.cpp	/^#define SCROLL_SPEED /;"	d	file:
 SOUND_ATARI_BASS_EFFECT	src/audio.cpp	/^    SOUND_ATARI_BASS_EFFECT,$/;"	e	enum:Sound_ID	file:
+SOUND_CLOSE_WINDOW	src/audio.cpp	/^    SOUND_CLOSE_WINDOW,$/;"	e	enum:Sound_ID	file:
 SOUND_COUNT	src/audio.cpp	/^    SOUND_COUNT$/;"	e	enum:Sound_ID	file:
+SOUND_EMPTY	src/audio.cpp	/^    SOUND_EMPTY,$/;"	e	enum:Sound_ID	file:
 SOUND_EXHALE	src/audio.cpp	/^    SOUND_EXHALE,$/;"	e	enum:Sound_ID	file:
-SOUND_INVALID	src/audio.cpp	/^    SOUND_INVALID = 0,$/;"	e	enum:Sound_ID	file:
+SOUND_INVALID	src/audio.cpp	/^    SOUND_INVALID = -1,$/;"	e	enum:Sound_ID	file:
+SOUND_KNOCKING_1	src/audio.cpp	/^    SOUND_KNOCKING_1,$/;"	e	enum:Sound_ID	file:
+SOUND_KNOCKING_2	src/audio.cpp	/^    SOUND_KNOCKING_2,$/;"	e	enum:Sound_ID	file:
+SOUND_KNOCKING_3	src/audio.cpp	/^    SOUND_KNOCKING_3,$/;"	e	enum:Sound_ID	file:
+SOUND_KNOCKING_4	src/audio.cpp	/^    SOUND_KNOCKING_4,$/;"	e	enum:Sound_ID	file:
+SOUND_KNOCKING_WEIRD	src/audio.cpp	/^    SOUND_KNOCKING_WEIRD,$/;"	e	enum:Sound_ID	file:
+SOUND_OPEN_WINDOW	src/audio.cpp	/^    SOUND_OPEN_WINDOW,$/;"	e	enum:Sound_ID	file:
 SOUND_SAND_FOOTSTEP_1	src/audio.cpp	/^    SOUND_SAND_FOOTSTEP_1,$/;"	e	enum:Sound_ID	file:
 SOUND_SAND_FOOTSTEP_2	src/audio.cpp	/^    SOUND_SAND_FOOTSTEP_2,$/;"	e	enum:Sound_ID	file:
 SOUND_SAND_FOOTSTEP_3	src/audio.cpp	/^    SOUND_SAND_FOOTSTEP_3,$/;"	e	enum:Sound_ID	file:
 SOUND_SAND_FOOTSTEP_4	src/audio.cpp	/^    SOUND_SAND_FOOTSTEP_4,$/;"	e	enum:Sound_ID	file:
+SOUND_TEXT_CONFIRM	src/audio.cpp	/^    SOUND_TEXT_CONFIRM,$/;"	e	enum:Sound_ID	file:
 SOUND_TEXT_SCROLL	src/audio.cpp	/^    SOUND_TEXT_SCROLL,$/;"	e	enum:Sound_ID	file:
 STRING_SIZE	src/text.cpp	/^#define STRING_SIZE /;"	d	file:
 Scroll_Type	src/text.cpp	/^enum Scroll_Type {$/;"	g	file:
@@ -470,13 +482,26 @@ __anon84520d2b0208	src/util.cpp	/^        struct {$/;"	s	union:_LARGE_INTEGER	fi
 __anon9cf613ef0102	src/titlescreen.cpp	/^            auto text = [&](int off, Color a) {$/;"	f	function:titlescreen_update_and_draw	file:
 __anon9cf613ef0202	src/titlescreen.cpp	/^            auto text = [&](int i, char *message, bool selected, Color c, float offset) {$/;"	f	function:titlescreen_update_and_draw	file:
 __anonb290d74d0102	src/chapter_epilogue.cpp	/^    auto node_text = [&](int index, int yes_index) {$/;"	f	function:chapter_epilogue_init	file:
-__anonb290d74d0202	src/chapter_epilogue.cpp	/^        auto draw_bars = [&](float scale) {$/;"	f	function:chapter_epilogue_draw	file:
+__anonb290d74d0202	src/chapter_epilogue.cpp	/^    auto start_next_text = [](void *game_ptr) -> void {$/;"	f	function:chapter_epilogue_init	typeref:typename:void	file:
+__anonb290d74d0302	src/chapter_epilogue.cpp	/^        auto start_101 = [](Game *game) -> void {$/;"	f	function:chapter_epilogue_init::__anonb290d74d0202	typeref:typename:void	file:
+__anonb290d74d0402	src/chapter_epilogue.cpp	/^        auto draw_bars = [&](float scale) {$/;"	f	function:chapter_epilogue_draw	file:
 __anondf04acb20103	src/movie.h	/^enum {$/;"	g
 __anoneafbdd87010a	src/game.cpp	/^    union {$/;"	u	struct:Entity	file:
 __anoneafbdd870202	src/game.cpp	/^    auto selection_sort = [&](size_t start, size_t end) {$/;"	f	function:sort_entities	file:
 __anonecaab4e60102	src/chapter_3.cpp	/^    auto add_line = [&]() -> void {$/;"	f	function:job_minigame_run	typeref:typename:void	file:
 __anonecaab4e60202	src/chapter_3.cpp	/^    auto set_word_up = [&]() {$/;"	f	function:job_minigame_run	file:
 __anonecaab4e60302	src/chapter_3.cpp	/^    auto click_next = [&]() -> void {$/;"	f	function:job_minigame_run	typeref:typename:void	file:
+__anonecbccd670102	src/chapter_4.cpp	/^    auto goto_text_24 = [](void *game_ptr) -> void {$/;"	f	function:chapter_4_init	typeref:typename:void	file:
+__anonecbccd670202	src/chapter_4.cpp	/^        auto text_event = [](Game *game) -> void {$/;"	f	function:chapter_4_init::__anonecbccd670102	typeref:typename:void	file:
+__anonecbccd670302	src/chapter_4.cpp	/^    auto chapter_4_close_window = [](void *game_ptr) -> void {$/;"	f	function:chapter_4_init	typeref:typename:void	file:
+__anonecbccd670402	src/chapter_4.cpp	/^    auto goto_37_delay = [](void *game_ptr) -> void {$/;"	f	function:chapter_4_init	typeref:typename:void	file:
+__anonecbccd670502	src/chapter_4.cpp	/^        auto goto_37 = [](Game *game) -> void {$/;"	f	function:chapter_4_init::__anonecbccd670402	typeref:typename:void	file:
+__anonecbccd670602	src/chapter_4.cpp	/^    auto goto_movie_delay = [](void *game_ptr) -> void {$/;"	f	function:chapter_4_init	typeref:typename:void	file:
+__anonecbccd670702	src/chapter_4.cpp	/^                auto play_knocking_1 = [](Game *game) -> void {$/;"	f	function:chapter_4_update	typeref:typename:void	file:
+__anonecbccd670802	src/chapter_4.cpp	/^                auto play_knocking_2 = [](Game *game) -> void {$/;"	f	function:chapter_4_update	typeref:typename:void	file:
+__anonecbccd670902	src/chapter_4.cpp	/^                auto goto_atari = [](Game *game) -> void {$/;"	f	function:chapter_4_update	typeref:typename:void	file:
+__anonecbccd670a02	src/chapter_4.cpp	/^                auto yearning = [](Game *game) -> void {$/;"	f	function:chapter_4_draw	typeref:typename:void	file:
+__anonecbccd670b02	src/chapter_4.cpp	/^                        auto look_outside_text = [](Game *game) -> void{$/;"	f	function:chapter_4_entity_update	typeref:typename:void	file:
 __anoneccee5e80103	src/chapter_5.cpp	/^enum {$/;"	g	file:
 __anoneccee5e80208	src/chapter_5.cpp	/^    struct {$/;"	s	struct:Level_Chapter_5	file:
 __anoneccee5e80308	src/chapter_5.cpp	/^    struct {$/;"	s	struct:Level_Chapter_5	file:
@@ -698,7 +723,6 @@ chapter_4_entity_draw	src/chapter_4.cpp	/^void chapter_4_entity_draw(Entity *ent
 chapter_4_entity_update	src/chapter_4.cpp	/^void chapter_4_entity_update(Entity *entity, Game *game, float dt) {$/;"	f	typeref:typename:void
 chapter_4_goto_movie	src/chapter_4.cpp	/^void chapter_4_goto_movie(Game *game) {$/;"	f	typeref:typename:void
 chapter_4_init	src/chapter_4.cpp	/^void chapter_4_init(Game *game) {$/;"	f	typeref:typename:void
-chapter_4_look_outside_text	src/chapter_4.cpp	/^void chapter_4_look_outside_text(Game *game) {$/;"	f	typeref:typename:void
 chapter_4_make_entity	src/chapter_4.cpp	/^Entity *chapter_4_make_entity(Entity_Type type, float x, float y) {$/;"	f	typeref:typename:Entity *
 chapter_4_set_state_atari	src/chapter_4.cpp	/^void chapter_4_set_state_atari(void *game_ptr) {$/;"	f	typeref:typename:void
 chapter_4_start_end_timer	src/chapter_4.cpp	/^void chapter_4_start_end_timer(void *game_ptr) {$/;"	f	typeref:typename:void
@@ -1802,6 +1826,7 @@ screens_scrolled	src/chapter_3.cpp	/^    int screens_scrolled;$/;"	m	struct:Leve
 screens_scrolled_while_crawling	src/chapter_1.cpp	/^    int screens_scrolled_while_crawling;$/;"	m	struct:Level_Chapter_1	typeref:typename:int	file:
 scroll_index	src/text.cpp	/^    float scroll_index;$/;"	m	struct:Text	typeref:typename:float	file:
 scroll_sound	src/text.cpp	/^    Sound_ID scroll_sound = SOUND_INVALID; \/\/ gets set to a default in text_init if not specif/;"	m	struct:Text	typeref:typename:Sound_ID	file:
+scroll_sound	src/text.cpp	/^    Sound_ID scroll_sound = SOUND_INVALID; \/\/ gets set to a default in text_init if not specif/;"	m	struct:Text_List	typeref:typename:Sound_ID	file:
 scroll_speed	src/text.cpp	/^    float scroll_speed = SCROLL_SPEED; \/\/ characters\/second$/;"	m	struct:Text	typeref:typename:float	file:
 scroll_speed	src/text.cpp	/^    float scroll_speed = SCROLL_SPEED;$/;"	m	struct:Text_List	typeref:typename:float	file:
 scroll_type	src/text.cpp	/^    Scroll_Type scroll_type = Scroll_Type::LetterByLetter;$/;"	m	struct:Text_List	typeref:typename:Scroll_Type	file:
@@ -1814,6 +1839,7 @@ secondary_music	src/audio.cpp	/^    int        current_music, secondary_music;$/
 seconds_to_minutes_and_seconds	src/util.cpp	/^void seconds_to_minutes_and_seconds(float time, char *output) {$/;"	f	typeref:typename:void
 set_game_mode	src/main.cpp	/^void set_game_mode(Game_Mode mode) {$/;"	f	typeref:typename:void
 set_global_system_timer_frequency	src/util.cpp	/^inline void set_global_system_timer_frequency() {$/;"	f	typeref:typename:void
+set_music_volume	src/audio.cpp	/^void set_music_volume(Music_ID music, float volume) {$/;"	f	typeref:typename:void
 set_player_alarm	src/chapter_1.cpp	/^void set_player_alarm(void *game_ptr) {$/;"	f	typeref:typename:void
 setoff_timer	src/chapter_5.cpp	/^    float       setoff_timer;$/;"	m	struct:Chapter_5_Train	typeref:typename:float	file:
 shader	src/chapter_4.cpp	/^    Shader shader;$/;"	m	struct:Level_Chapter_4	typeref:typename:Shader	file:

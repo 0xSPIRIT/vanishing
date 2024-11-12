@@ -470,7 +470,8 @@ void chapter_epilogue_init(Game *game) {
         add_event(game, start_101, 5);
     };
 
-    game->text[64].callbacks[0] = start_next_text;
+    //game->text[64].callbacks[0] = start_next_text;
+    game->text[64].callbacks[0] = epilogue_raise_node_last_scene;
 
     atari_text_list_init(&game->text[101],
                          0,
@@ -531,7 +532,7 @@ void chapter_epilogue_init(Game *game) {
     atari_text_list_init(&game->text[111],
                          "Chase",
                          "Please, tell me,\r"
-                         "why must we suffer so?",
+                         "why must the universe suffer us?",
                          speed,
                          &game->text[112]);
 
@@ -567,12 +568,12 @@ void chapter_epilogue_init(Game *game) {
                           &game->text[118]);
     chapter_5_window_text(true,
                           &game->text[118],
-                          "She remains neutral.",
+                          "The universe does not care about you.\rSo you have to care about yourself.",
                           WHITE,
                           &game->text[119]);
     chapter_5_window_text(true,
                           &game->text[119],
-                          "The universe does not care about you,\rso you have to care about yourself.",
+                          "She remains neutral.",
                           WHITE,
                           &game->text[120]);
     chapter_5_window_text(true,

@@ -31,6 +31,9 @@ struct Level_Chapter_4 {
 
     bool wait_devil;
 
+    float music_volume;
+    float music_volume_desired;
+
     Entity *player;
     Entity *window;
     Entity *djinn;
@@ -85,8 +88,9 @@ void chapter_4_window_text(bool scroll, Text_List *list, char *line,
     list->color        = color;
     list->center_text  = true;
     list->disallow_skipping = true;
-
+    
     if (colors_equal(color, GOD_COLOR)) {
+        list->scroll_sound = SOUND_EMPTY;
         list->backdrop_color = GOD_COLOR_BACKDROP;
         list->background = true;
     }
@@ -129,6 +133,8 @@ void chapter_4_3d_init(Game *game) {
 
     DisableCursor();
 
+    play_music(MUSIC_VHS_BAD);
+
     render_width  = DIM_3D_WIDTH;
     render_height = DIM_3D_HEIGHT;
 
@@ -163,6 +169,8 @@ void chapter_4_3d_init(Game *game) {
 
     game->post_processing.type = POST_PROCESSING_VHS;
     post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_MEDIUM);
+    game->post_processing.vhs.scan_intensity = 0;
+
     game->post_processing.vhs.vignette_mix = 1;
 }
 
@@ -171,7 +179,13 @@ void chapter_4_3d_init_after_delay(Game *game) {
 
     level->black = true;
 
-    add_event(game, chapter_4_3d_init, 5);
+    auto play_open_window = [](Game *game) -> void {
+        (void)game;
+        play_sound(SOUND_OPEN_WINDOW);
+    };
+
+    add_event(game, play_open_window, 4);
+    add_event(game, chapter_4_3d_init, 10);
 }
 
 void chapter_4_init(Game *game) {
@@ -179,10 +193,12 @@ void chapter_4_init(Game *game) {
 
     level->yield_control = true;
 
-    //level->state = CHAPTER_4_STATE_ATARI;
-    level->state = CHAPTER_4_STATE_INITIAL_BLACK;
+    level->state = CHAPTER_4_STATE_ATARI;
+    //level->state = CHAPTER_4_STATE_INITIAL_BLACK;
 
     game->textbox_alpha = 255;
+
+    level->music_volume = level->music_volume_desired = 1;
 
     game->post_processing.type = POST_PROCESSING_CRT;
     game->post_processing.crt.do_scanline_effect = true;
@@ -345,6 +361,7 @@ void chapter_4_init(Game *game) {
        because you have not withheld from me your son, your only son.
      */
 
+    game->text[9].scroll_sound = SOUND_EMPTY;
     text_list_init(&game->text[9],
                    nullptr,
                    "39205768656E20746865792072656163\n"
@@ -369,6 +386,7 @@ void chapter_4_init(Game *game) {
                    "6176656E2C20224162726168616D2120",
                    &game->text[100]);
 
+    game->text[100].scroll_sound = SOUND_EMPTY;
     text_list_init(&game->text[100],
                    nullptr,
                    "4162726168616D212220224865726520\n"
@@ -428,7 +446,7 @@ void chapter_4_init(Game *game) {
     atari_text_list_init(&game->text[21],
                          0,
                          "The night is still.\r...\r...",
-                         30,
+                         10,
                          0);
 
     auto goto_text_24 = [](void *game_ptr) -> void {
@@ -445,7 +463,7 @@ void chapter_4_init(Game *game) {
     atari_text_list_init(&game->text[24],
                          "Chase",
                          "Something feels strange.\rI should go to bed.",
-                         30,
+                         10,
                          nullptr);
 
     auto chapter_4_close_window = [](void *game_ptr) -> void {
@@ -496,7 +514,7 @@ void chapter_4_init(Game *game) {
                          &game->text[34]);
     atari_text_list_init(&game->text[34],
                          0,
-                         "A welling of emotion\nstirred in his throat\nand hands.",
+                         "A welling of emotion\nstirred in his throat\nand his hands.",
                          30,
                          &game->text[35]);
     atari_text_list_init(&game->text[35],
@@ -632,6 +650,7 @@ void chapter_4_update(Game *game, float dt) {
     if (level->end_timer > 0) {
         level->end_timer -= dt;
         if (level->end_timer <= 0) {
+            stop_music();
             atari_queue_deinit_and_goto_intro(game);
             return;
         }
@@ -697,17 +716,14 @@ void chapter_4_update(Game *game, float dt) {
 
             chapter_4_update_text(&game->current, &level->text_handler, dt);
 
-            /*
-            if (IsKeyDown(KEY_MINUS)) {
-                level->camera.fovy += 5 * dt;
-            }
-            if (IsKeyDown(KEY_EQUAL)) {
-                level->camera.fovy -= 5 * dt;
-            }
-            */
- 
-            if (game->current && !is_text_list_at_end(game->current) && colors_equal(game->current->color, GOD_COLOR)) {
-                level->camera.fovy -= 1.25 * dt;
+            if (game->current && colors_equal(game->current->color, GOD_COLOR)) {
+                if (!is_text_list_at_end(game->current)) {
+                    level->camera.fovy -= 1.25 * dt;
+                }
+
+                level->music_volume = level->music_volume_desired = 0;
+            } else {
+                level->music_volume = level->music_volume_desired = 1;
             }
         } break;
         case CHAPTER_4_STATE_WINDOW: {
@@ -729,6 +745,11 @@ void chapter_4_update(Game *game, float dt) {
             }
         } break;
     }
+
+    level->music_volume = go_to(level->music_volume,
+                                level->music_volume_desired,
+                                dt);
+    set_music_volume((Music_ID)game_audio.current_music, level->music_volume);
 }
 
 void chapter_4_draw(Game *game, float dt) {
@@ -907,7 +928,7 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
             if (game->current || level->yield_control)
                 dir_x = dir_y = 0;
 
-            if (entity->pos.x > render_width+entity_texture_width(entity) && level->wait_devil)
+            if (entity->pos.x > render_width && level->wait_devil)
                 dir_x = dir_y = 0;
 
             float speed = 30;
@@ -921,7 +942,7 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
             {
                 static bool first = true;
 
-                int x = (int)entity->pos.x + entity_texture_width(entity)/2;
+                int x = (int)entity->pos.x;// + entity_texture_width(entity)/2;
                 int y = (int)entity->pos.y + entity_texture_height(entity)/2;
 
                 if (!level->checked_window) {
@@ -939,12 +960,14 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
                     level->camera_2d.offset.x == 0)
                 {
                     if (first) {
+                        level->yield_control = true;
                         level->wait_devil = true;
                         first = false;
 
-                        set_music_volume(MUSIC_GLITCH, 0);
+                        //set_music_volume(MUSIC_GLITCH, 0);
+                        level->music_volume_desired = 0;
 
-                        level->djinn = chapter_4_make_entity(ENTITY_CHAP_4_DEVIL, -400, 145);
+                        level->djinn = chapter_4_make_entity(ENTITY_CHAP_4_DEVIL, -10, 145);
                         array_add(&game->entities, level->djinn);
                     }
                 }
@@ -972,7 +995,7 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
                         //set_music_volume(MUSIC_GLITCH, 0);
 
                         game->post_processing.crt.vignette_mix = 0.4f;
-                        game->post_processing.crt.do_scanline_effect = false;
+                        //game->post_processing.crt.do_scanline_effect = false;
 
                         auto look_outside_text = [](Game *game) -> void{
                             game->current = &game->text[21];
@@ -1018,15 +1041,18 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
         case ENTITY_CHAP_4_DEVIL: {
             if (!level->wait_devil) break;
 
-            entity->pos.x += 1 * (180 + sin(25 * entity->chap_4_devil.time) * 120) * dt;
-            entity->pos.y += sin(12 * entity->chap_4_devil.time) * 30 * dt;
+            entity->pos.x += 0.075f * (180 + sin(25 * entity->chap_4_devil.time) * 120) * dt;
+            entity->pos.y += sin(0.25f*entity->pos.x) * 5 * dt;
 
-            if (entity->pos.x > render_width * 3) {
+            if (entity->pos.x > render_width / 3) {
                 entity->pos.x = 0;
                 entity->pos.y = 0;
-                level->wait_devil = false;
 
-                set_music_volume(MUSIC_GLITCH, 1);
+                level->wait_devil = false;
+                level->yield_control = false;
+
+                //set_music_volume(MUSIC_GLITCH, 1);
+                level->music_volume = level->music_volume_desired = 1;
             }
 
             entity->chap_4_devil.time += dt;
@@ -1047,12 +1073,14 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
 
 void chapter_4_entity_draw(Entity *entity, Game *game) {
     (void)game;
+    /*
     if (entity->type == ENTITY_CHAP_4_DEVIL) {
         Texture2D *texture = entity_get_texture(entity);
         if (texture) {
             DrawTexture(*texture, entity->pos.x, entity->pos.y, {200,200,200,255});
         }
     } else {
+    */
         default_entity_draw(entity);
-    }
+    //}
 }

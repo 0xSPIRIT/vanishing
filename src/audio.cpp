@@ -4,7 +4,7 @@ enum Channel {
 };
 
 float channel_volumes[] = {
-    0.75f, // CHANNEL_GUI
+    1.f, // CHANNEL_GUI
     1.f, // CHANNEL_WORLD
 };
 
@@ -17,7 +17,8 @@ enum Music_ID {
 };
 
 enum Sound_ID {
-    SOUND_INVALID = 0,
+    SOUND_INVALID = -1,
+    SOUND_EMPTY,
 
     SOUND_TEXT_SCROLL,
     SOUND_TEXT_CONFIRM,
@@ -151,7 +152,7 @@ void game_audio_init() {
     SetMusicVolume(audio->musics[MUSIC_NOISE], 0.2f);
     SetMusicVolume(audio->musics[MUSIC_GLITCH], 1);
 
-    audio->sounds[SOUND_TEXT_SCROLL]     = load_sound(CHANNEL_GUI,   "textscroll1.ogg");
+    audio->sounds[SOUND_TEXT_SCROLL]     = load_sound(CHANNEL_GUI,   "textblip.wav", 0.5);
     audio->sounds[SOUND_TEXT_CONFIRM]    = load_sound(CHANNEL_GUI,   "confirm.ogg");
 
     float footstep_volume = 0.12f;

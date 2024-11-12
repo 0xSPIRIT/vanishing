@@ -443,6 +443,7 @@ void chapter_5_window_text(bool scroll, Text_List *list, char *line, Color color
     list->scroll_speed = 30;
     list->color        = color;
     list->center_text  = true;
+    list->scroll_sound = SOUND_INVALID;
 
     if (scroll)
         list->scroll_type = LetterByLetter;
@@ -512,6 +513,8 @@ void chapter_5_podium_text(Text_List *list, bool italics, char *line, Text_List 
     list->color = WHITE;
     list->bg_color = BLACK;
 
+    list->scroll_sound = SOUND_EMPTY;
+
     text_list_init(list, 0, line, next);
 }
 
@@ -533,6 +536,8 @@ void chapter_5_podium_text_red(Text_List *list, bool italics, char *line, Text_L
     list->color = RED;
     //list->backdrop_color = GOD_COLOR_BACKDROP;
     list->bg_color = BLACK;
+
+    list->scroll_sound = SOUND_EMPTY;
 
     text_list_init(list, 0, line, next);
 }
@@ -779,7 +784,7 @@ void chapter_5_scene_init(Game *game) {
 
             memset(train, 0, sizeof(*train));
 
-            train->visible = true;
+            train->visible      = true;
             train->flipped      = true;
             train->position     = { train_distance, 0, 0 };
             train->position_to  = { 1.75f, 0, 0 };
@@ -2191,7 +2196,7 @@ void chapter_5_init(Game *game) {
 
     level->transition_fade = false;
 
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_TRAIN_STATION);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_DESERT);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {
@@ -3497,7 +3502,7 @@ void chapter_5_draw(Game *game) {
             DrawModel(level->scenes[4], {}, 1, WHITE);
 
             for (int i = 0; i < level->podium_count; i++) {
-                DrawModelEx(level->models.podium, level->podiums[i].position, {0,1,0}, level->podiums[i].rotation, {1.1f, 1.1f, 1.1f}, WHITE);
+                DrawModelEx(level->models.podium, level->podiums[i].position, {0,1,0}, level->podiums[i].rotation, {1.2f, 1.2f, 1.2f}, WHITE);
             }
 
             DrawModel(level->models.jail_bars,
