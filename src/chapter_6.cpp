@@ -38,6 +38,8 @@ void chapter_6_goto_desert(Game *game) {
     post_process_vhs_set_intensity(&game->post_processing.vhs,
                                    VHS_INTENSITY_MEDIUM);
     game->post_processing.vhs.vignette_mix = 0.8f;
+
+    play_music(MUSIC_VHS_BAD);
 }
 
 void chapter_6_delayed_goto_desert(void *game_ptr) {
@@ -66,6 +68,7 @@ void chapter_6_start_godtext(Game *game) {
 void chapter_6_queue_godtext(void *game_ptr) {
     Game *game = (Game *)game_ptr;
     add_event(game, chapter_6_start_godtext, 2);
+    stop_music();
 }
 
 void chapter_6_support_text(Text_List *list, Font *font, char *speaker, char *line, Text_List *next) {
@@ -128,9 +131,11 @@ void chapter_6_text(bool scroll, bool chase, Text_List *list, char *line,
 
     if (chase) {
         list->color = WHITE;
+        list->scroll_sound = SOUND_TEXT_SCROLL_LOW;
     } else {
         list->color = {255,0,0,255};
         list->backdrop_color = {100,0,0,255};
+        list->scroll_sound = SOUND_TEXT_SCROLL_BAD;
     }
 
     list->center_text = true;
@@ -426,10 +431,10 @@ void chapter_6_init(Game *game) {
 
     game->text[13].callbacks[0] = chapter_6_queue_godtext;
 
-    //chapter_6_goto_desert(game);
+    chapter_6_goto_desert(game);
 
-    movie_init(&game_movie, MOVIE_EMPTINESS);
-    game_movie.end_movie_callback = chapter_6_start_text_delayed;
+    //movie_init(&game_movie, MOVIE_EMPTINESS);
+    //game_movie.end_movie_callback = chapter_6_start_text_delayed;
 }
 
 void chapter_6_entity_update(Entity *entity, Game *game, float dt) {

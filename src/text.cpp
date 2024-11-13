@@ -270,8 +270,10 @@ bool text_update_and_draw(Text *text, Vector2 offset, float dt) {
         }
 
         if (text->backdrop_color.a > 0) {
-            if (text->background)
+            if (text->background) {
                 DrawRectangle(pos.x, pos.y, size.x+1, size.y+1, BLACK);
+                //DrawRectangleLines(pos.x-1, pos.y-1, size.x+3, size.y+3, text->color);
+            }
 
             Color backdrop = text->backdrop_color;
             backdrop.a *= text->alpha;

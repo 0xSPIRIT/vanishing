@@ -993,19 +993,59 @@ void chapter_5_scene_init(Game *game) {
                            30,
                            &game->text[31]);
             chapter_5_text(&game->text[31],
-                           "Mark",
-                           "What's your problem?",
+                           "Chase",
+                           "Hey Jenny, how's everyone going?\rHow's everything with Jess?",
+                           30,
+                           &game->text[108]);
+            chapter_5_text(&game->text[108],
+                           "Jenny",
+                           "Um, what?\rSorry man, we're not that close...\rIt's really none of your business.",
+                           30,
+                           &game->text[109]);
+            chapter_5_text(&game->text[109],
+                           "Chase",
+                           "Oh.",
                            30,
                            nullptr);
 
             chapter_5_text(&game->text[32],
                            "Kate",
-                           "We didn't think you'd come.",
+                           "Oh, it's you.",
                            30,
                            &game->text[33]);
             chapter_5_text(&game->text[33],
                            "Chase",
-                           "What's that supposed to mean?",
+                           "Hey, Kate!\rI saw the pictures you posted with Eleanor\nand Siphor.\rIt seems you guys had a lot of fun.",
+                           30,
+                           &game->text[112]);
+            chapter_5_text(&game->text[112],
+                           "Kate",
+                           "Oh.\rUm, yeah, cool.",
+                           30,
+                           &game->text[113]);
+            chapter_5_text(&game->text[113],
+                           "Chase",
+                           "...\r...\r... So how come I didn't--",
+                           30,
+                           &game->text[114]);
+            chapter_5_text(&game->text[114],
+                           "Kate",
+                           "OH!\rHah, YOU?\rWhy would we want to hang with you?",
+                           30,
+                           &game->text[115]);
+            chapter_5_text(&game->text[115],
+                           "Kate",
+                           "You don't seem like a hang out-able person\nif you get what I mean hahah.",
+                           30,
+                           &game->text[116]);
+            chapter_5_text(&game->text[116],
+                           "Chase",
+                           "Oh.",
+                           30,
+                           &game->text[117]);
+            chapter_5_text(&game->text[117],
+                           "Kate",
+                           "Am I wrong?\rObviously you didn't actually want to go,\nsooo...",
                            30,
                            nullptr);
 
@@ -2196,7 +2236,7 @@ void chapter_5_init(Game *game) {
 
     level->transition_fade = false;
 
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_DESERT);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_DINNER_PARTY);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {
@@ -2952,6 +2992,25 @@ void chapter_5_update_player_desert(Game *game, float dt) {
             apply_3d_velocity(&level->camera, level->camera_height, level->scenes[6], velocity, false);
         else
             apply_3d_velocity(&level->camera, level->camera_height, level->scenes[4], velocity, false);
+
+        static float timer = 0;
+
+        if (velocity.x == 0 && velocity.y == 0 && velocity.z == 0)
+            timer = 0;
+
+        if (vector3_same(level->camera.position, stored_camera_pos) == false) {
+            timer -= dt;
+
+            if (timer <= 0) {
+                int i = SOUND_REAL_SAND_STEP_1 + rand()%6;
+                while (i <= SOUND_REAL_SAND_STEP_6 && is_sound_playing((Sound_ID)i)) i++;
+
+                if (i <= SOUND_REAL_SAND_STEP_6) {
+                    play_sound((Sound_ID)i);
+                    timer = 0.5;
+                }
+            }
+        }
 
         update_camera_look(&level->camera, dt);
     }

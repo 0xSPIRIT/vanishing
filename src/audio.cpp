@@ -21,12 +21,23 @@ enum Sound_ID {
     SOUND_EMPTY,
 
     SOUND_TEXT_SCROLL,
+    SOUND_TEXT_SCROLL_LOW,
+    SOUND_TEXT_SCROLL_BAD,
     SOUND_TEXT_CONFIRM,
 
+    // bitcrushed (chapter 1)
     SOUND_SAND_FOOTSTEP_1,
     SOUND_SAND_FOOTSTEP_2,
     SOUND_SAND_FOOTSTEP_3,
     SOUND_SAND_FOOTSTEP_4,
+
+    // non bitcrushed (chapter 5)
+    SOUND_REAL_SAND_STEP_1,
+    SOUND_REAL_SAND_STEP_2,
+    SOUND_REAL_SAND_STEP_3,
+    SOUND_REAL_SAND_STEP_4,
+    SOUND_REAL_SAND_STEP_5,
+    SOUND_REAL_SAND_STEP_6,
 
     SOUND_KNOCKING_1,
     SOUND_KNOCKING_2,
@@ -36,6 +47,7 @@ enum Sound_ID {
 
     SOUND_OPEN_WINDOW,
     SOUND_CLOSE_WINDOW,
+    SOUND_CREAKING,
 
     SOUND_ATARI_BASS_EFFECT,
 
@@ -80,6 +92,10 @@ inline Music current_music() {
 
 void set_music_volume(Music_ID music, float volume) {
     SetMusicVolume(game_audio.musics[music], volume);
+}
+
+void set_music_pitch(Music_ID music, float pitch) {
+    SetMusicPitch(game_audio.musics[music], pitch);
 }
 
 void play_music(Music_ID music, bool crossfade = false) {
@@ -152,14 +168,21 @@ void game_audio_init() {
     SetMusicVolume(audio->musics[MUSIC_NOISE], 0.2f);
     SetMusicVolume(audio->musics[MUSIC_GLITCH], 1);
 
-    audio->sounds[SOUND_TEXT_SCROLL]     = load_sound(CHANNEL_GUI,   "textblip.wav", 0.5);
+    audio->sounds[SOUND_TEXT_SCROLL]     = load_sound(CHANNEL_GUI,   "textblip.wav", 0.25);
+    audio->sounds[SOUND_TEXT_SCROLL_LOW] = load_sound(CHANNEL_GUI,   "textblip_low.wav");
+    audio->sounds[SOUND_TEXT_SCROLL_BAD] = load_sound(CHANNEL_GUI,   "textblip_bad.wav");
     audio->sounds[SOUND_TEXT_CONFIRM]    = load_sound(CHANNEL_GUI,   "confirm.ogg");
 
-    float footstep_volume = 0.12f;
+    float footstep_volume = 0.2f;
     audio->sounds[SOUND_SAND_FOOTSTEP_1] = load_sound(CHANNEL_WORLD, "footstep1.ogg", footstep_volume);
     audio->sounds[SOUND_SAND_FOOTSTEP_2] = load_sound(CHANNEL_WORLD, "footstep2.ogg", footstep_volume);
     audio->sounds[SOUND_SAND_FOOTSTEP_3] = load_sound(CHANNEL_WORLD, "footstep3.ogg", footstep_volume);
     audio->sounds[SOUND_SAND_FOOTSTEP_4] = load_sound(CHANNEL_WORLD, "footstep4.ogg", footstep_volume);
+
+    for (int i = 1; i <= 6; i++) {
+        int index = SOUND_REAL_SAND_STEP_1 - 1 + i;
+        audio->sounds[index] = load_sound(CHANNEL_WORLD, TextFormat("sand_%d.ogg", i), footstep_volume);
+    }
 
     audio->sounds[SOUND_ATARI_BASS_EFFECT] = load_sound(CHANNEL_WORLD, "atari_effect.ogg");
 
@@ -173,6 +196,7 @@ void game_audio_init() {
 
     audio->sounds[SOUND_OPEN_WINDOW]  = load_sound(CHANNEL_WORLD, "open_window.ogg");
     audio->sounds[SOUND_CLOSE_WINDOW] = load_sound(CHANNEL_WORLD, "close_window.ogg");
+    audio->sounds[SOUND_CREAKING]     = load_sound(CHANNEL_WORLD, "creaking.ogg");
 
     audio->current_music = -1;
     audio->volume_a = audio->volume_b = -1;

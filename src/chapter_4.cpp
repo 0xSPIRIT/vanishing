@@ -31,6 +31,7 @@ struct Level_Chapter_4 {
 
     bool wait_devil;
 
+    float music_pitch;
     float music_volume;
     float music_volume_desired;
 
@@ -93,6 +94,11 @@ void chapter_4_window_text(bool scroll, Text_List *list, char *line,
         list->scroll_sound = SOUND_EMPTY;
         list->backdrop_color = GOD_COLOR_BACKDROP;
         list->background = true;
+        list->scroll_sound = SOUND_TEXT_SCROLL_BAD;
+    } else {
+        list->scroll_sound = SOUND_TEXT_SCROLL_LOW;
+        list->background = true;
+        list->backdrop_color.a = 255;
     }
 
     if (scroll)
@@ -181,7 +187,7 @@ void chapter_4_3d_init_after_delay(Game *game) {
 
     auto play_open_window = [](Game *game) -> void {
         (void)game;
-        play_sound(SOUND_OPEN_WINDOW);
+        play_sound(SOUND_CREAKING);
     };
 
     add_event(game, play_open_window, 4);
@@ -199,6 +205,7 @@ void chapter_4_init(Game *game) {
     game->textbox_alpha = 255;
 
     level->music_volume = level->music_volume_desired = 1;
+    level->music_pitch = 1;
 
     game->post_processing.type = POST_PROCESSING_CRT;
     game->post_processing.crt.do_scanline_effect = true;
@@ -721,9 +728,11 @@ void chapter_4_update(Game *game, float dt) {
                     level->camera.fovy -= 1.25 * dt;
                 }
 
-                level->music_volume = level->music_volume_desired = 0;
+                //level->music_volume = level->music_volume_desired = 0;
+                level->music_pitch = 0.5;
             } else {
-                level->music_volume = level->music_volume_desired = 1;
+                //level->music_volume = level->music_volume_desired = 1;
+                level->music_pitch = 1;
             }
         } break;
         case CHAPTER_4_STATE_WINDOW: {
@@ -748,8 +757,9 @@ void chapter_4_update(Game *game, float dt) {
 
     level->music_volume = go_to(level->music_volume,
                                 level->music_volume_desired,
-                                dt);
+                                0.25 * dt);
     set_music_volume((Music_ID)game_audio.current_music, level->music_volume);
+    set_music_pitch((Music_ID)game_audio.current_music,  level->music_pitch);
 }
 
 void chapter_4_draw(Game *game, float dt) {
@@ -967,7 +977,7 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
                         //set_music_volume(MUSIC_GLITCH, 0);
                         level->music_volume_desired = 0;
 
-                        level->djinn = chapter_4_make_entity(ENTITY_CHAP_4_DEVIL, -10, 145);
+                        level->djinn = chapter_4_make_entity(ENTITY_CHAP_4_DEVIL, -30, 145);
                         array_add(&game->entities, level->djinn);
                     }
                 }
@@ -983,7 +993,7 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
                 player.x += level->player->pos.x;
                 player.y += level->player->pos.y;
 
-                level->check_window_popup = CheckCollisionRecs(player, {50, 199, 60, 10});
+                level->check_window_popup = !level->checked_window && CheckCollisionRecs(player, {50, 199, 60, 10});
                 
                 bool pictures = CheckCollisionRecs(player, {128, 266, 11, 39});
                 bool tv = CheckCollisionRecs(player, {44, 287, 58, 25});

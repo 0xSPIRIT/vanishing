@@ -221,6 +221,12 @@ bool compare_colors(Color a, Color b) {
     return (a.r == b.r && a.g == b.g && a.b && b.b);
 }
 
+bool vector3_same(Vector3 a, Vector3 b) {
+    if (a.x == b.x && a.y == b.y && a.z == b.z)
+        return true;
+    return false;
+}
+
 Color ColorScale(Color a, float b) {
     a.r *= b;
     a.g *= b;

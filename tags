@@ -436,12 +436,19 @@ SOUND_KNOCKING_3	src/audio.cpp	/^    SOUND_KNOCKING_3,$/;"	e	enum:Sound_ID	file:
 SOUND_KNOCKING_4	src/audio.cpp	/^    SOUND_KNOCKING_4,$/;"	e	enum:Sound_ID	file:
 SOUND_KNOCKING_WEIRD	src/audio.cpp	/^    SOUND_KNOCKING_WEIRD,$/;"	e	enum:Sound_ID	file:
 SOUND_OPEN_WINDOW	src/audio.cpp	/^    SOUND_OPEN_WINDOW,$/;"	e	enum:Sound_ID	file:
+SOUND_REAL_SAND_STEP_1	src/audio.cpp	/^    SOUND_REAL_SAND_STEP_1,$/;"	e	enum:Sound_ID	file:
+SOUND_REAL_SAND_STEP_2	src/audio.cpp	/^    SOUND_REAL_SAND_STEP_2,$/;"	e	enum:Sound_ID	file:
+SOUND_REAL_SAND_STEP_3	src/audio.cpp	/^    SOUND_REAL_SAND_STEP_3,$/;"	e	enum:Sound_ID	file:
+SOUND_REAL_SAND_STEP_4	src/audio.cpp	/^    SOUND_REAL_SAND_STEP_4,$/;"	e	enum:Sound_ID	file:
+SOUND_REAL_SAND_STEP_5	src/audio.cpp	/^    SOUND_REAL_SAND_STEP_5,$/;"	e	enum:Sound_ID	file:
+SOUND_REAL_SAND_STEP_6	src/audio.cpp	/^    SOUND_REAL_SAND_STEP_6,$/;"	e	enum:Sound_ID	file:
 SOUND_SAND_FOOTSTEP_1	src/audio.cpp	/^    SOUND_SAND_FOOTSTEP_1,$/;"	e	enum:Sound_ID	file:
 SOUND_SAND_FOOTSTEP_2	src/audio.cpp	/^    SOUND_SAND_FOOTSTEP_2,$/;"	e	enum:Sound_ID	file:
 SOUND_SAND_FOOTSTEP_3	src/audio.cpp	/^    SOUND_SAND_FOOTSTEP_3,$/;"	e	enum:Sound_ID	file:
 SOUND_SAND_FOOTSTEP_4	src/audio.cpp	/^    SOUND_SAND_FOOTSTEP_4,$/;"	e	enum:Sound_ID	file:
 SOUND_TEXT_CONFIRM	src/audio.cpp	/^    SOUND_TEXT_CONFIRM,$/;"	e	enum:Sound_ID	file:
 SOUND_TEXT_SCROLL	src/audio.cpp	/^    SOUND_TEXT_SCROLL,$/;"	e	enum:Sound_ID	file:
+SOUND_TEXT_SCROLL_LOW	src/audio.cpp	/^    SOUND_TEXT_SCROLL_LOW,$/;"	e	enum:Sound_ID	file:
 STRING_SIZE	src/text.cpp	/^#define STRING_SIZE /;"	d	file:
 Scroll_Type	src/text.cpp	/^enum Scroll_Type {$/;"	g	file:
 ShadowBackdrop	src/text.cpp	/^    ShadowBackdrop,$/;"	e	enum:Render_Type	file:
@@ -491,17 +498,18 @@ __anoneafbdd870202	src/game.cpp	/^    auto selection_sort = [&](size_t start, si
 __anonecaab4e60102	src/chapter_3.cpp	/^    auto add_line = [&]() -> void {$/;"	f	function:job_minigame_run	typeref:typename:void	file:
 __anonecaab4e60202	src/chapter_3.cpp	/^    auto set_word_up = [&]() {$/;"	f	function:job_minigame_run	file:
 __anonecaab4e60302	src/chapter_3.cpp	/^    auto click_next = [&]() -> void {$/;"	f	function:job_minigame_run	typeref:typename:void	file:
-__anonecbccd670102	src/chapter_4.cpp	/^    auto goto_text_24 = [](void *game_ptr) -> void {$/;"	f	function:chapter_4_init	typeref:typename:void	file:
-__anonecbccd670202	src/chapter_4.cpp	/^        auto text_event = [](Game *game) -> void {$/;"	f	function:chapter_4_init::__anonecbccd670102	typeref:typename:void	file:
-__anonecbccd670302	src/chapter_4.cpp	/^    auto chapter_4_close_window = [](void *game_ptr) -> void {$/;"	f	function:chapter_4_init	typeref:typename:void	file:
-__anonecbccd670402	src/chapter_4.cpp	/^    auto goto_37_delay = [](void *game_ptr) -> void {$/;"	f	function:chapter_4_init	typeref:typename:void	file:
-__anonecbccd670502	src/chapter_4.cpp	/^        auto goto_37 = [](Game *game) -> void {$/;"	f	function:chapter_4_init::__anonecbccd670402	typeref:typename:void	file:
-__anonecbccd670602	src/chapter_4.cpp	/^    auto goto_movie_delay = [](void *game_ptr) -> void {$/;"	f	function:chapter_4_init	typeref:typename:void	file:
-__anonecbccd670702	src/chapter_4.cpp	/^                auto play_knocking_1 = [](Game *game) -> void {$/;"	f	function:chapter_4_update	typeref:typename:void	file:
-__anonecbccd670802	src/chapter_4.cpp	/^                auto play_knocking_2 = [](Game *game) -> void {$/;"	f	function:chapter_4_update	typeref:typename:void	file:
-__anonecbccd670902	src/chapter_4.cpp	/^                auto goto_atari = [](Game *game) -> void {$/;"	f	function:chapter_4_update	typeref:typename:void	file:
-__anonecbccd670a02	src/chapter_4.cpp	/^                auto yearning = [](Game *game) -> void {$/;"	f	function:chapter_4_draw	typeref:typename:void	file:
-__anonecbccd670b02	src/chapter_4.cpp	/^                        auto look_outside_text = [](Game *game) -> void{$/;"	f	function:chapter_4_entity_update	typeref:typename:void	file:
+__anonecbccd670102	src/chapter_4.cpp	/^    auto play_open_window = [](Game *game) -> void {$/;"	f	function:chapter_4_3d_init_after_delay	typeref:typename:void	file:
+__anonecbccd670202	src/chapter_4.cpp	/^    auto goto_text_24 = [](void *game_ptr) -> void {$/;"	f	function:chapter_4_init	typeref:typename:void	file:
+__anonecbccd670302	src/chapter_4.cpp	/^        auto text_event = [](Game *game) -> void {$/;"	f	function:chapter_4_init::__anonecbccd670202	typeref:typename:void	file:
+__anonecbccd670402	src/chapter_4.cpp	/^    auto chapter_4_close_window = [](void *game_ptr) -> void {$/;"	f	function:chapter_4_init	typeref:typename:void	file:
+__anonecbccd670502	src/chapter_4.cpp	/^    auto goto_37_delay = [](void *game_ptr) -> void {$/;"	f	function:chapter_4_init	typeref:typename:void	file:
+__anonecbccd670602	src/chapter_4.cpp	/^        auto goto_37 = [](Game *game) -> void {$/;"	f	function:chapter_4_init::__anonecbccd670502	typeref:typename:void	file:
+__anonecbccd670702	src/chapter_4.cpp	/^    auto goto_movie_delay = [](void *game_ptr) -> void {$/;"	f	function:chapter_4_init	typeref:typename:void	file:
+__anonecbccd670802	src/chapter_4.cpp	/^                auto play_knocking_1 = [](Game *game) -> void {$/;"	f	function:chapter_4_update	typeref:typename:void	file:
+__anonecbccd670902	src/chapter_4.cpp	/^                auto play_knocking_2 = [](Game *game) -> void {$/;"	f	function:chapter_4_update	typeref:typename:void	file:
+__anonecbccd670a02	src/chapter_4.cpp	/^                auto goto_atari = [](Game *game) -> void {$/;"	f	function:chapter_4_update	typeref:typename:void	file:
+__anonecbccd670b02	src/chapter_4.cpp	/^                auto yearning = [](Game *game) -> void {$/;"	f	function:chapter_4_draw	typeref:typename:void	file:
+__anonecbccd670c02	src/chapter_4.cpp	/^                        auto look_outside_text = [](Game *game) -> void{$/;"	f	function:chapter_4_entity_update	typeref:typename:void	file:
 __anoneccee5e80103	src/chapter_5.cpp	/^enum {$/;"	g	file:
 __anoneccee5e80208	src/chapter_5.cpp	/^    struct {$/;"	s	struct:Level_Chapter_5	file:
 __anoneccee5e80308	src/chapter_5.cpp	/^    struct {$/;"	s	struct:Level_Chapter_5	file:
@@ -1537,7 +1545,10 @@ movie_run	src/movie.cpp	/^void movie_run(Movie *movie) {$/;"	f	typeref:typename:
 moving	src/chapter_5.cpp	/^    bool        moving;$/;"	m	struct:Chapter_5_Train	typeref:typename:bool	file:
 moving_down	src/chapter_epilogue.cpp	/^    bool moving_up, moving_down;$/;"	m	struct:Epilogue_Node	typeref:typename:bool	file:
 moving_up	src/chapter_epilogue.cpp	/^    bool moving_up, moving_down;$/;"	m	struct:Epilogue_Node	typeref:typename:bool	file:
-music_volume	src/chapter_1.cpp	/^    float music_volume;$/;"	m	struct:Level_Chapter_1	typeref:typename:float	file:
+music_pitch	src/chapter_1.cpp	/^    float music_pitch;$/;"	m	struct:Level_Chapter_1	typeref:typename:float	file:
+music_pitch	src/chapter_4.cpp	/^    float music_pitch;$/;"	m	struct:Level_Chapter_4	typeref:typename:float	file:
+music_volume	src/chapter_4.cpp	/^    float music_volume;$/;"	m	struct:Level_Chapter_4	typeref:typename:float	file:
+music_volume_desired	src/chapter_4.cpp	/^    float music_volume_desired;$/;"	m	struct:Level_Chapter_4	typeref:typename:float	file:
 musics	src/audio.cpp	/^    Music      musics[MUSIC_COUNT];$/;"	m	struct:Game_Audio	typeref:typename:Music[]	file:
 next	src/text.cpp	/^    Text_List *next[CHOICE_MAX];$/;"	m	struct:Text_List	typeref:typename:Text_List * []	file:
 next_frame_data_size	src/pl_mpeg.h	/^	int next_frame_data_size;$/;"	m	struct:plm_audio_t	typeref:typename:int
@@ -1839,6 +1850,7 @@ secondary_music	src/audio.cpp	/^    int        current_music, secondary_music;$/
 seconds_to_minutes_and_seconds	src/util.cpp	/^void seconds_to_minutes_and_seconds(float time, char *output) {$/;"	f	typeref:typename:void
 set_game_mode	src/main.cpp	/^void set_game_mode(Game_Mode mode) {$/;"	f	typeref:typename:void
 set_global_system_timer_frequency	src/util.cpp	/^inline void set_global_system_timer_frequency() {$/;"	f	typeref:typename:void
+set_music_pitch	src/audio.cpp	/^void set_music_pitch(Music_ID music, float pitch) {$/;"	f	typeref:typename:void
 set_music_volume	src/audio.cpp	/^void set_music_volume(Music_ID music, float volume) {$/;"	f	typeref:typename:void
 set_player_alarm	src/chapter_1.cpp	/^void set_player_alarm(void *game_ptr) {$/;"	f	typeref:typename:void
 setoff_timer	src/chapter_5.cpp	/^    float       setoff_timer;$/;"	m	struct:Chapter_5_Train	typeref:typename:float	file:
@@ -1995,6 +2007,7 @@ v	src/pl_mpeg.h	/^	int v;$/;"	m	struct:__anon6b50db360708	typeref:typename:int
 v_pos	src/pl_mpeg.h	/^	int v_pos;$/;"	m	struct:plm_audio_t	typeref:typename:int
 value	src/pl_mpeg.h	/^	int16_t value;$/;"	m	struct:__anon6b50db360508	typeref:typename:int16_t
 value	src/pl_mpeg.h	/^	uint16_t value;$/;"	m	struct:__anon6b50db360608	typeref:typename:uint16_t
+vector3_same	src/util.cpp	/^bool vector3_same(Vector3 a, Vector3 b) {$/;"	f	typeref:typename:bool
 version	src/pl_mpeg.h	/^	int version;$/;"	m	struct:plm_audio_t	typeref:typename:int
 vhs	src/post_processing.cpp	/^    Post_Processing_Vhs   vhs;$/;"	m	struct:Post_Processing	typeref:typename:Post_Processing_Vhs	file:
 video_buffer	src/pl_mpeg.h	/^	plm_buffer_t *video_buffer;$/;"	m	struct:plm_t	typeref:typename:plm_buffer_t *
