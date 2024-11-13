@@ -14,6 +14,8 @@ struct Level_Chapter_6 {
     float red_fade_time; // 0.0 to 1.0
     bool  started_text;
 
+    Text_List *final_support_text;
+
     float god_scroll;
 
     int godtext;
@@ -425,16 +427,18 @@ void chapter_6_init(Game *game) {
     support_text("Chase",  "... Well I-", 0);
     support_text("Tyrell", "How about you actually contribute to\nthe conversation?", 0);
     support_text("Tyrell", "Why can't you just have fun?", 0);
-    support_text("Chase",  "... Why would you say tha-", 1);
+    support_text("Chase",  "...\rWhat?\rWhy would you say that to m-", 1);
 
-    game->text[i-1].callbacks[0] = chapter_6_delayed_goto_desert;
+    //game->text[i-1].callbacks[0] = chapter_6_delayed_goto_desert;
+
+    level->final_support_text = &game->text[i-1];
 
     game->text[13].callbacks[0] = chapter_6_queue_godtext;
 
-    chapter_6_goto_desert(game);
+    //chapter_6_goto_desert(game);
 
-    //movie_init(&game_movie, MOVIE_EMPTINESS);
-    //game_movie.end_movie_callback = chapter_6_start_text_delayed;
+    movie_init(&game_movie, MOVIE_EMPTINESS);
+    game_movie.end_movie_callback = chapter_6_start_text_delayed;
 }
 
 void chapter_6_entity_update(Entity *entity, Game *game, float dt) {
@@ -529,6 +533,12 @@ void chapter_6_update(Game *game, float dt) {
 
     switch (level->state) {
         case CHAPTER_6_STATE_SUPPORT_GROUP: {
+            if (game->current == level->final_support_text &&
+                is_text_list_at_end(game->current))
+            {
+                game->current = 0;
+                chapter_6_delayed_goto_desert(game);
+            }
         } break;
         case CHAPTER_6_STATE_DESERT: {
             for (int i = 0; i < game->entities.length; i++) {

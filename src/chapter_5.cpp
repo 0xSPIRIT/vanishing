@@ -1681,13 +1681,12 @@ void chapter_5_scene_init(Game *game) {
 
             chapter_5_window_text(true,
                                   &game->text[24],
-                                  "\"... I remember how you were.\"",
+                                  "I see you still as you were in life,\nbefore death laid claim to your warmth.",
                                   WHITE,
                                   &game->text[25]);
             chapter_5_window_text(true,
                                   &game->text[25],
                                   "She held the most vibrant, joyous\npearlescence.\r"
-                                  "Pinks and violets, pastels and neons.\r"
                                   "Her long hair fluttered in the breeze,\ntrailing a soft perfume.\r"
                                   "Made him feel safe, made him feel whole.",
                                   WHITE,
@@ -1716,8 +1715,8 @@ void chapter_5_scene_init(Game *game) {
             chapter_5_window_text(true,
                                   &game->text[27],
                                   "But now, he realized what he missed.\r"
-                                  "The vibrancy.\r"
-                                  "The indescribable beauty.",
+                                  "Her elegance.\r"
+                                  "Beyond words in splendor.",
                                   WHITE,
                                   &game->text[28]);
             chapter_5_window_text(true,
@@ -2236,7 +2235,7 @@ void chapter_5_init(Game *game) {
 
     level->transition_fade = false;
 
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_DINNER_PARTY);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_DESERT);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {
