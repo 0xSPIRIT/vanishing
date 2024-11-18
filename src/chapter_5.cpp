@@ -387,6 +387,7 @@ void chapter_5_dinner_goto_black(Game *game) {
 }
 
 void chapter_5_finish_dinner_party(Game *game) {
+    movie_init(&game_movie, MOVIE_PICNIC);
     chapter_5_goto_scene(game, CHAPTER_5_SCENE_DESERT);
 }
 
@@ -1646,7 +1647,7 @@ void chapter_5_scene_init(Game *game) {
             chapter_5_window_text(true,
                                   &game->text[21],
                                   "It was difficult to describe.\r"
-                                  "The inky void permeated his senses,\n"
+                                  "The darkness permeated his senses,\n"
                                   "shocking him to his core.\r"
                                   "He was enraptured.",
                                   WHITE,
@@ -1681,12 +1682,12 @@ void chapter_5_scene_init(Game *game) {
 
             chapter_5_window_text(true,
                                   &game->text[24],
-                                  "I see you still as you were in life,\nbefore death laid claim to your warmth.",
+                                  "He remembered her as she was.",
                                   WHITE,
                                   &game->text[25]);
             chapter_5_window_text(true,
                                   &game->text[25],
-                                  "She held the most vibrant, joyous\npearlescence.\r"
+                                  "She held the most vibrant pearlescence.\r"
                                   "Her long hair fluttered in the breeze,\ntrailing a soft perfume.\r"
                                   "Made him feel safe, made him feel whole.",
                                   WHITE,
@@ -1715,7 +1716,6 @@ void chapter_5_scene_init(Game *game) {
             chapter_5_window_text(true,
                                   &game->text[27],
                                   "But now, he realized what he missed.\r"
-                                  "Her elegance.\r"
                                   "Beyond words in splendor.",
                                   WHITE,
                                   &game->text[28]);
@@ -1725,12 +1725,6 @@ void chapter_5_scene_init(Game *game) {
                                   "Replaced wholesale with        .",
                                   WHITE,
                                   nullptr);
-
-            /*
-               game->current = &game->text[28];
-               text_handler->current_index = 5;
-               level->desert_black = true;
-             */
 
             text_handler->alarms[5]    = 3;
             text_handler->next_list[5] = &game->text[30];
@@ -2235,7 +2229,8 @@ void chapter_5_init(Game *game) {
 
     level->transition_fade = false;
 
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_DESERT);
+    level->good = true;
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_DINNER_PARTY);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {

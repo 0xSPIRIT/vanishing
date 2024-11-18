@@ -213,12 +213,10 @@ MainFunction() {
 
     DisableCursor();
 
-    //movie_init(&game_movie, MOVIE_SEVENTH);
-
     if (show_titlescreen)
         set_game_mode(GAME_MODE_TITLESCREEN);
     else
-        set_game_mode(GAME_MODE_INTRO);
+        set_game_mode(GAME_MODE_ATARI);
 
     initialize_game_mode(game_mode);
 
@@ -272,7 +270,7 @@ MainFunction() {
                 game_intro_run(&game_intro);
             } break;
             case GAME_MODE_ATARI: {
-                game_atari_run(&game_atari);
+                game_run(&game_atari);
             } break;
             case GAME_MODE_INVALID: assert(false);
         }

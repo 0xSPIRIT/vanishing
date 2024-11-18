@@ -427,6 +427,7 @@ SCROLL_SPEED	src/text.cpp	/^#define SCROLL_SPEED /;"	d	file:
 SOUND_ATARI_BASS_EFFECT	src/audio.cpp	/^    SOUND_ATARI_BASS_EFFECT,$/;"	e	enum:Sound_ID	file:
 SOUND_CLOSE_WINDOW	src/audio.cpp	/^    SOUND_CLOSE_WINDOW,$/;"	e	enum:Sound_ID	file:
 SOUND_COUNT	src/audio.cpp	/^    SOUND_COUNT$/;"	e	enum:Sound_ID	file:
+SOUND_CREAKING	src/audio.cpp	/^    SOUND_CREAKING,$/;"	e	enum:Sound_ID	file:
 SOUND_EMPTY	src/audio.cpp	/^    SOUND_EMPTY,$/;"	e	enum:Sound_ID	file:
 SOUND_EXHALE	src/audio.cpp	/^    SOUND_EXHALE,$/;"	e	enum:Sound_ID	file:
 SOUND_INVALID	src/audio.cpp	/^    SOUND_INVALID = -1,$/;"	e	enum:Sound_ID	file:
@@ -448,6 +449,7 @@ SOUND_SAND_FOOTSTEP_3	src/audio.cpp	/^    SOUND_SAND_FOOTSTEP_3,$/;"	e	enum:Soun
 SOUND_SAND_FOOTSTEP_4	src/audio.cpp	/^    SOUND_SAND_FOOTSTEP_4,$/;"	e	enum:Sound_ID	file:
 SOUND_TEXT_CONFIRM	src/audio.cpp	/^    SOUND_TEXT_CONFIRM,$/;"	e	enum:Sound_ID	file:
 SOUND_TEXT_SCROLL	src/audio.cpp	/^    SOUND_TEXT_SCROLL,$/;"	e	enum:Sound_ID	file:
+SOUND_TEXT_SCROLL_BAD	src/audio.cpp	/^    SOUND_TEXT_SCROLL_BAD,$/;"	e	enum:Sound_ID	file:
 SOUND_TEXT_SCROLL_LOW	src/audio.cpp	/^    SOUND_TEXT_SCROLL_LOW,$/;"	e	enum:Sound_ID	file:
 STRING_SIZE	src/text.cpp	/^#define STRING_SIZE /;"	d	file:
 Scroll_Type	src/text.cpp	/^enum Scroll_Type {$/;"	g	file:
@@ -937,6 +939,7 @@ fader	src/game.cpp	/^    Fader fader;$/;"	m	struct:Game	typeref:typename:Fader	f
 fader	src/intro.cpp	/^    float fader; \/\/ 0.0 is 0 alpha, 1.0 is 255 alpha, 2.0 is 0 alpha.$/;"	m	struct:Game_Intro	typeref:typename:float	file:
 fh	src/pl_mpeg.h	/^	FILE *fh;$/;"	m	struct:plm_buffer_t	typeref:typename:FILE *
 final_dialogue_alarm	src/chapter_2.cpp	/^    float final_dialogue_alarm;$/;"	m	struct:Level_Chapter_2	typeref:typename:float	file:
+final_support_text	src/chapter_6.cpp	/^    Text_List *final_support_text;$/;"	m	struct:Level_Chapter_6	typeref:typename:Text_List *	file:
 final_text	src/chapter_1.cpp	/^    bool final_text;$/;"	m	struct:Level_Chapter_1	typeref:typename:bool	file:
 final_text	src/chapter_2.h	/^    bool final_text;$/;"	m	struct:Chapter_2_Penny	typeref:typename:bool
 final_text_is_done	src/chapter_1.cpp	/^    bool final_text_is_done; \/\/ the final part when you're crawling- when this is true you get/;"	m	struct:Level_Chapter_1	typeref:typename:bool	file:

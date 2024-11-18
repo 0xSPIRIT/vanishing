@@ -83,6 +83,14 @@ void movie_load_video(Movie *movie, const char *movie_file, const char *audio_fi
     UnloadImage(image);
 }
 
+void movie_free(Movie *movie) {
+    if (movie->plm == nullptr)
+        return;
+
+    plm_destroy(movie->plm);
+    movie->movie = MOVIE_OFF;
+}
+
 void movie_run(Movie *movie) {
     movie->frames++;
 
@@ -133,6 +141,10 @@ void movie_run(Movie *movie) {
     // Sync audio and video
     if (fabs(plm_get_time(movie->plm) - GetMusicTimePlayed(movie->audio)) > 0.05)
         SeekMusicStream(movie->audio, plm_get_time(movie->plm));
+
+    if (movie->movie == MOVIE_OFF) {
+        movie_free(movie);
+    }
 }
 
 void movie_init(Movie *movie, int which_movie) {
@@ -142,7 +154,7 @@ void movie_init(Movie *movie, int which_movie) {
 
     switch (movie->movie) {
         case MOVIE_DRACULA:   movie_name = "dracula"; break;
-        case MOVIE_SEVENTH:   movie_name = "seventh"; break;
+        case MOVIE_PICNIC:    movie_name = "picnic";  break;
         case MOVIE_EMPTINESS: movie_name = "empty";   break;
     }
 

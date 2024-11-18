@@ -154,7 +154,7 @@ struct Game {
     Post_Processing post_processing;
 
     Arena level_arena;
-    Arena frame_arena; // 32k scratch space
+    //Arena frame_arena; // 32k scratch space
     Array<Entity*> entities;
 
     Text_List  text[128];
@@ -908,17 +908,11 @@ void atari_deinit(Game *game) {
     game->level = nullptr;
 }
 
-void game_atari_run(Game *game) {
+void game_run(Game *game) {
     float dt = get_frame_time_clamped();
 
     if (dt < 1.0f/144.0f) dt = 1.0f/144.0f;
     if (dt > 1.0f/30.0f)  dt = 1.0f/30.0f;
-
-    if (game->frame_arena.buffer == nullptr) {
-        game->frame_arena = make_arena(16 * 1024);
-    } else {
-        arena_reset(&game->frame_arena);
-    }
 
     tick_events(game, dt);
 

@@ -1,7 +1,7 @@
 enum {
     MOVIE_OFF,
     MOVIE_DRACULA,
-    MOVIE_SEVENTH,
+    MOVIE_PICNIC,
     MOVIE_EMPTINESS
 };
 

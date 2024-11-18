@@ -1,7 +1,7 @@
 FileVersion = 1
 LastConfig = "Debug"
 LastPlatform = "Win64"
-RecentFilesList = ["c:\\dev\\vanishing\\src\\chapter_5.cpp", "c:\\dev\\vanishing\\src\\main.cpp", "c:\\dev\\vanishing\\src\\game.cpp", "c:\\dev\\vanishing\\src\\movie.cpp", "c:\\dev\\vanishing\\src\\pl_mpeg.h", "c:\\dev\\vanishing\\src\\chapter_6.cpp", "c:\\dev\\vanishing\\src\\chapter_epilogue.cpp", "Disassembly", "c:\\dev\\vanishing\\src\\chapter_4.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\abort.cpp", "d:\\a\\_work\\1\\s\\src\\vctools\\crt\\vcruntime\\src\\string\\amd64\\memset.asm", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strncpy.asm", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\assert.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strlen.asm", "c:\\dev\\vanishing\\chapter_5.cpp", "c:\\dev\\vanishing\\game.cpp", "c:\\dev\\vanishing\\main.cpp", "c:\\dev\\vanishing\\util.cpp"]
+RecentFilesList = ["c:\\dev\\vanishing\\src\\chapter_5.cpp", "c:\\dev\\vanishing\\src\\game.cpp", "c:\\dev\\vanishing\\src\\main.cpp", "c:\\dev\\vanishing\\src\\movie.cpp", "c:\\dev\\vanishing\\src\\pl_mpeg.h", "c:\\dev\\vanishing\\src\\chapter_6.cpp", "c:\\dev\\vanishing\\src\\chapter_epilogue.cpp", "Disassembly", "c:\\dev\\vanishing\\src\\chapter_4.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\abort.cpp", "d:\\a\\_work\\1\\s\\src\\vctools\\crt\\vcruntime\\src\\string\\amd64\\memset.asm", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strncpy.asm", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\assert.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strlen.asm", "c:\\dev\\vanishing\\chapter_5.cpp", "c:\\dev\\vanishing\\game.cpp", "c:\\dev\\vanishing\\main.cpp", "c:\\dev\\vanishing\\util.cpp"]
 
 [MainWindow]
 X = 362
@@ -30,8 +30,8 @@ TabWidth = 108.1915
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\chapter_5.cpp"
-CursorPos = 118703
-VertPos = 48328.0
+CursorPos = 87066
+VertPos = 87500.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "chapter_epilogue.cpp"
@@ -47,7 +47,7 @@ TabWidth = 108.1915
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\chapter_6.cpp"
-CursorPos = 24897
+CursorPos = 24308
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "main.cpp"
@@ -56,7 +56,6 @@ TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\main.cpp"
 CursorPos = 3902
-VertPos = 4592.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "game.cpp"
@@ -64,7 +63,8 @@ TabWidth = 85.31915
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\game.cpp"
-CursorPos = 3159
+CursorPos = 24365
+VertPos = 25340.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "chapter_4.cpp"
