@@ -65,6 +65,7 @@ void chapter_6_begin_text(Game *game) {
 void chapter_6_start_godtext(Game *game) {
     Level_Chapter_6 *level = (Level_Chapter_6 *)game->level;
     level->state = CHAPTER_6_STATE_TEXT;
+    play_music(MUSIC_VHS_BAD_2);
 }
 
 void chapter_6_queue_godtext(void *game_ptr) {
@@ -86,41 +87,9 @@ void chapter_6_support_text(Text_List *list, Font *font, char *speaker, char *li
     list->location = Top;
     list->take_keyboard_focus = true;
 
+    setup_text_scroll_sound(list, speaker);
+
     text_list_init(list, speaker, line, next);
-}
-
-void chapter_6_choice_text(Text_List *list,
-                           Font *font,
-                           char *speaker,
-                           char *line,
-                           String choices[],
-                           Text_List *next[],
-                           void (*hooks[])(void*),
-                           int choice_count)
-{
-    list->font = font;
-    list->font_spacing = 0;
-    list->scale = 0.125;
-    list->scroll_speed = 30;
-
-    list->color = WHITE;
-    list->bg_color = BLACK;
-
-    list->choice = true;
-    list->choice_count = choice_count;
-    list->choice_index = -1;
-
-    text_list_init(list, speaker, line, 0);
-
-    memcpy(list->choices,
-           choices,
-           sizeof(choices[0]) * choice_count);
-    memcpy(list->next,
-           next,
-           sizeof(next[0]) * choice_count);
-    memcpy(list->callbacks,
-           hooks,
-           sizeof(hooks[0]) * choice_count);
 }
 
 void chapter_6_text(bool scroll, bool chase, Text_List *list, char *line,
@@ -196,7 +165,11 @@ void chapter_6_start_text(Game *game) {
 }
 
 void chapter_6_start_text_delayed(Game *game) {
+#ifdef DEBUG
+    add_event(game, chapter_6_start_text, 1);
+#else
     add_event(game, chapter_6_start_text, 10);
+#endif
 }
 
 void chapter_6_init(Game *game) {
@@ -288,6 +261,11 @@ void chapter_6_init(Game *game) {
                    false,
                    &game->text[10],
                    "Fool.\rI am the ALMIGHTY!\nYOU SHOULD BE BOWING\nTO MY PRESENCE.",
+                   &game->text[14]);
+    chapter_6_text(true,
+                   true,
+                   &game->text[14],
+                   "You said that already.",
                    &game->text[11]);
     chapter_6_text(true,
                    false,
@@ -355,6 +333,8 @@ void chapter_6_init(Game *game) {
         curr->scale = 0.125;
         curr->scroll_speed = 30;
         curr->font_spacing = 0;
+
+        setup_text_scroll_sound(curr, speaker);
 
         text_list_init(curr, speaker, text_string, 0);
         curr->choice = true;
@@ -427,7 +407,7 @@ void chapter_6_init(Game *game) {
     support_text("Chase",  "... Well I-", 0);
     support_text("Tyrell", "How about you actually contribute to\nthe conversation?", 0);
     support_text("Tyrell", "Why can't you just have fun?", 0);
-    support_text("Chase",  "...\rWhat?\rWhy would you say that to m-", 1);
+    support_text("Chase",  "...\rWhat?\rWhy would you say that to m", 1);
 
     //game->text[i-1].callbacks[0] = chapter_6_delayed_goto_desert;
 
@@ -534,7 +514,7 @@ void chapter_6_update(Game *game, float dt) {
     switch (level->state) {
         case CHAPTER_6_STATE_SUPPORT_GROUP: {
             if (game->current == level->final_support_text &&
-                is_text_list_at_end(game->current))
+                (is_text_list_at_end(game->current) || IsKeyDown(KEY_M)))
             {
                 game->current = 0;
                 chapter_6_delayed_goto_desert(game);
@@ -593,6 +573,13 @@ void chapter_6_update(Game *game, float dt) {
                             level->god_scroll = 36;
                         else
                             level->god_scroll = 0;
+
+                        if (level->godtext == 1) {
+                            play_music(MUSIC_VHS_BAD_3);
+                        }
+                        if (level->godtext == 2) {
+                            set_music_pitch(MUSIC_VHS_BAD_3, 0.6f);
+                        }
                     }
                 } else {
 #ifdef DEBUG

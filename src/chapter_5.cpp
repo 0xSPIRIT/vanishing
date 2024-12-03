@@ -441,7 +441,7 @@ void chapter_5_window_text(bool scroll, Text_List *list, char *line, Color color
     list->font         = &atari_font;
     list->font_spacing = 1;
     list->scale        = 0.125;
-    list->scroll_speed = 30;
+    list->scroll_speed = 20;
     list->color        = color;
     list->center_text  = true;
     list->scroll_sound = SOUND_INVALID;
@@ -462,7 +462,7 @@ void chapter_5_window_text_2(bool scroll, Text_List *list, char *line, Color col
     list->font         = &dos_font;
     list->font_spacing = 1;
     list->scale        = 0.125;
-    list->scroll_speed = 30;
+    list->scroll_speed = 20;
     list->color        = color;
     list->center_text  = true;
 
@@ -483,6 +483,8 @@ void chapter_5_text(Text_List *list, char *speaker, char *line, float scroll_spe
     list->font_spacing = 1;
     list->scale = 0.125;
     list->scroll_speed = scroll_speed;
+
+    list->scroll_sound = SOUND_TEXT_SCROLL;
 
     list->color = WHITE;
     list->bg_color = BLACK;
@@ -1781,8 +1783,13 @@ void chapter_5_scene_init(Game *game) {
 
             level->jail_bars_pos = BlenderPosition3D(10.27f, -9.243f, 3.764f);
 
-            //level->desert_black = false;
             level->jail_bars_opened = false;
+#if 0
+            level->jail_bars_opened = true;
+            level->jail_bars_pos.y = -100;
+#endif
+
+            //level->desert_black = false;
         } break;
         case CHAPTER_5_SCENE_GALLERY: {
             level->camera_height = 1.8f;

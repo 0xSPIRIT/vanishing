@@ -48,6 +48,8 @@ struct Text {
 
     float scroll_speed = SCROLL_SPEED; // characters/second
 
+    bool textscroll_sound_queued;
+
     bool finished, not_first_frame;
 };
 
@@ -212,13 +214,15 @@ bool text_update_and_draw(Text *text, Vector2 offset, float dt) {
                     int prev = text->scroll_index;
                     text->scroll_index += text->scroll_speed * dt;
 
-                    if ((int)text->scroll_index != prev) {
+                    if (text->textscroll_sound_queued || (int)text->scroll_index != prev) {
                         // we have scrolled one character, play the sound.
-                        if (text->scroll_sound != SOUND_EMPTY &&
-                            !isspace(text->lines[text->current_line].text[(int)text->scroll_index]) &&
-                            !is_sound_playing(SOUND_TEXT_SCROLL))
-                        {
-                            play_sound(text->scroll_sound);
+                        if (text->scroll_sound != SOUND_EMPTY && !isspace(text->lines[text->current_line].text[(int)text->scroll_index])) {
+                            if (!is_sound_playing(text->scroll_sound)) {
+                                play_sound(text->scroll_sound);
+                                text->textscroll_sound_queued = false;
+                            } else {
+                                text->textscroll_sound_queued = true;
+                            }
                         }
                     }
 

@@ -234,6 +234,8 @@ void chapter_1_call_text(Text_List *list, char *speaker,
     list->bg_color = BLACK;
     list->center_text  = false;
 
+    setup_text_scroll_sound(list, speaker);
+
     text_list_init(list, speaker, line, next);
 }
 
@@ -354,8 +356,13 @@ void chapter_1_init(Game *game) {
     }
 
     atari_text_list_init(&game->text[11],
+                         0,
+                         "*ring ring*\r*ring ring*\r*click*",
+                         speed,
+                         &game->text[99]);
+    atari_text_list_init(&game->text[99],
                          "Chase",
-                         "*ring ring*\r*click*\rH... he- hello?",
+                         "H... he- hello?",
                          speed,
                          &game->text[12]);
     atari_text_list_init(&game->text[12],

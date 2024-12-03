@@ -59,6 +59,17 @@ enum Entity_Type {
     ENTITY_CHAP_2_BARTENDER,
     ENTITY_CHAP_2_PENNY,
 
+    ENTITY_CHAP_2_GIRL1,
+    ENTITY_CHAP_2_BOY1,
+    ENTITY_CHAP_2_GIRL2,
+    ENTITY_CHAP_2_GIRL3,
+    ENTITY_CHAP_2_COFFEE_TABLE,
+    ENTITY_CHAP_2_COUPLE_1,
+    ENTITY_CHAP_2_SINGLE_1,
+    ENTITY_CHAP_2_COUPLE_2,
+    ENTITY_CHAP_2_TABLEY_1,
+    ENTITY_CHAP_2_TABLEY_2,
+
     ENTITY_CHAP_3_CUBICLE_TOP,
     ENTITY_CHAP_3_CUBICLE_VERTICAL,
     ENTITY_CHAP_3_CUBICLE_CHAIR,
@@ -688,6 +699,43 @@ void atari_update_and_draw_textbox(Game *game, float dt) {
 
 }
 
+void setup_text_scroll_sound(Text_List *list, char *speaker) {
+    if (speaker) {
+        const char *male_names[] = {
+            "Bartender", "Guard",
+            "Noah", "Mike", "Voice",
+            "Tyrell"
+        };
+
+        const char *female_names[] = {
+            "Eleanor", "Saira",
+            "Jessica", "Amy",
+            "Clarice", "Sherane",
+            "Joanne", "Melody",
+            "Aria"
+        };
+
+        if (strcmp(speaker, "Chase") == 0) {
+            list->scroll_sound = SOUND_TEXT_SCROLL_CHASE;
+            return;
+        }
+
+        for (int i = 0; i < StaticArraySize(male_names); i++) {
+            if (strcmp(speaker, male_names[i]) == 0) {
+                list->scroll_sound = SOUND_TEXT_SCROLL_MALE;
+                return;
+            }
+        }
+
+        for (int i = 0; i < StaticArraySize(female_names); i++) {
+            if (strcmp(speaker, female_names[i]) == 0) {
+                list->scroll_sound = SOUND_TEXT_SCROLL_FEMALE;
+                return;
+            }
+        }
+    }
+}
+
 void atari_text_list_init(Text_List *list, char *speaker,
                           char *line, float scroll_speed,
                           Text_List *next)
@@ -697,6 +745,8 @@ void atari_text_list_init(Text_List *list, char *speaker,
     list->scale        = 0.125;
     list->scroll_speed = scroll_speed;
 
+    setup_text_scroll_sound(list, speaker);
+
     switch (chapter) {
         case 1: {
             list->color    = {68,40,0,255};
@@ -704,7 +754,7 @@ void atari_text_list_init(Text_List *list, char *speaker,
         } break;
         case 2: {
             list->color    = WHITE;
-            list->bg_color = {27, 36, 41, 255};
+            list->bg_color = {50, 0, 0, 127};
         } break;
         default: {
             list->color = WHITE;
@@ -724,6 +774,8 @@ void atari_choice_text_list_init(Text_List *list,
                                  void (*hooks[])(void*),
                                  int choice_count)
 {
+    list->scroll_sound = SOUND_TEXT_SCROLL;
+
     atari_text_list_init(list, speaker, text_string, 30, 0);
 
     list->choice = true;

@@ -14,6 +14,10 @@ uniform float vignette_intensity;
 uniform float vignette_mix;
 uniform float noise_intensity;
 
+uniform float redOffset, greenOffset, blueOffset;
+uniform int do_spin;
+uniform int do_wiggle;
+
 out vec4 finalColor;
 
 vec2 clamp_vec2(vec2 a, vec2 min, vec2 max) {
@@ -35,7 +39,7 @@ vec4 vignette(vec2 tex_coord, vec4 col) {
     if (vignette_intensity == 0) return col;
 
     float dist = 1;
-    dist = length(tex_coord.xy - vec2(0.5, 0.5)) + 0.05 * rand(tex_coord + vec2(time,time));
+    dist = length(tex_coord.xy - vec2(0.5, 0.5)) + 0.05 * rand(tex_coord + vec2(time,time)) * noise_intensity;
     dist *= 2;
 
     dist = 1-dist;
@@ -61,6 +65,17 @@ vec4 vignette(vec2 tex_coord, vec4 col) {
 void main() {
     vec2 tex_coord = fragTexCoord;
 
+    if (do_wiggle == 1) {
+        float f = time * 30;
+        tex_coord.y += 0.001 * sin(2 * f) * (1 - sin(f/10));
+    }
+
+    if (do_spin == 1) {
+        tex_coord.y += mod(time * 3, 1);
+    }
+
+    tex_coord.y = mod(tex_coord.y, 1);
+
     float scan_intensity = 0.5;
 
     const float pi = 3.14159265f;
@@ -84,19 +99,23 @@ void main() {
         tex_coord.x += scanline_amplitude * tan(t * scanline_speed + scanline_frequency * tex_coord.y);
     }
 
-    if (abberation_intensity > 0) {
-        float redOffset   = -0.009;
-        float greenOffset =  0.006;
-        float blueOffset  = -0.006;
+    bool not_at_edges = gl_FragCoord.x > 1 && gl_FragCoord.y > 1 &&
+                        gl_FragCoord.x < 191 && gl_FragCoord.y < 159;
 
-        vec2 dir = vec2(0.32,0.32);
+    if (not_at_edges && abberation_intensity > 0) {
+        float rOff   = redOffset;
+        float gOff   = greenOffset;
+        float bOff   = blueOffset;
+
+        vec2 dir = vec2(0.32, 0.32);
+
         //dir *= abberation_intensity;
 
         vec4 abberated = vec4(1.0);
 
-        vec2 r_coord = tex_coord + dir * vec2(redOffset);
-        vec2 g_coord = tex_coord + dir * vec2(greenOffset);
-        vec2 b_coord = tex_coord + dir * vec2(blueOffset);
+        vec2 r_coord = tex_coord + dir * vec2(rOff);
+        vec2 g_coord = tex_coord + dir * vec2(gOff);
+        vec2 b_coord = tex_coord + dir * vec2(bOff);
 
         r_coord = clamp_vec2(r_coord, vec2(0.0, 0.0), vec2(1.0, 1.0));
         g_coord = clamp_vec2(g_coord, vec2(0.0, 0.0), vec2(1.0, 1.0));

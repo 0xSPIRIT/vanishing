@@ -79,7 +79,7 @@ void chapter_4_start_text(Game *game) {
 }
 
 void chapter_4_window_text(bool scroll, Text_List *list, char *line,
-                           Color color, Text_List *next)
+                           Color color, Text_List *next, bool sound = true)
 {
     list->font         = &atari_font;
     list->font_spacing = 1;
@@ -106,10 +106,13 @@ void chapter_4_window_text(bool scroll, Text_List *list, char *line,
     else
         list->scroll_type  = EntireLine;
 
-
     list->render_type  = Bare;
     list->location     = Middle;
     list->take_keyboard_focus = true;
+
+    if (!sound) {
+        list->scroll_sound = SOUND_EMPTY;
+    }
 
     text_list_init(list, 0, line, next);
 }
@@ -208,10 +211,19 @@ void chapter_4_init(Game *game) {
     level->music_pitch = 1;
 
     game->post_processing.type = POST_PROCESSING_CRT;
-    game->post_processing.crt.do_scanline_effect = true;
-    game->post_processing.crt.do_warp_effect = false;
-    game->post_processing.crt.abberation_intensity = 1;
-    game->post_processing.crt.vignette_intensity = 2;
+
+    Post_Processing_Crt *crt = &game->post_processing.crt;
+
+    crt->do_scanline_effect = true;
+    crt->do_warp_effect = false;
+    crt->abberation_intensity = 1;
+    crt->vignette_intensity = 2;
+
+    crt->red_offset   = 0.006f;
+    crt->green_offset = 0.009f;
+    crt->blue_offset  = 0.01f;
+
+    crt->should_spin_randomly = true;
 
     Texture2D *textures = atari_assets.textures;
     textures[0] = load_texture(RES_DIR "art/apartment_test.png");
@@ -411,7 +423,6 @@ void chapter_4_init(Game *game) {
                    "6C7920736F6E2E2\n\n47656E657369732032323A392D3132\n204E4956",
                    nullptr);
 
-
     level->text_handler.alarms[5]    = 2;
     level->text_handler.next_list[5] = &game->text[10];
 
@@ -419,7 +430,7 @@ void chapter_4_init(Game *game) {
                           &game->text[10],
                           "DO YOU UNDERSTAND?",
                           GOD_COLOR,
-                          &game->text[11]);
+                          &game->text[11], false);
 
     chapter_4_window_text(true,
                           &game->text[11],
@@ -431,7 +442,7 @@ void chapter_4_init(Game *game) {
                           &game->text[12],
                           "DO YOU UNDERSTAND?",
                           GOD_COLOR,
-                          nullptr);
+                          nullptr, false);
 
     level->text_handler.alarms[6]    = 4;
     level->text_handler.next_list[6] = &game->text[13];
@@ -447,7 +458,7 @@ void chapter_4_init(Game *game) {
     atari_text_list_init(&game->text[20],
                          "Chase",
                          "... Did that noise come from\noutside?",
-                         30,
+                         20,
                          nullptr);
 
     atari_text_list_init(&game->text[21],
@@ -480,16 +491,18 @@ void chapter_4_init(Game *game) {
 
     game->text[24].callbacks[0] = chapter_4_close_window;
 
+    int speed = 20;
+
     atari_text_list_init(&game->text[22],
                          "Chase",
                          "Family.",
-                         30,
+                         speed,
                          nullptr);
 
     atari_text_list_init(&game->text[23],
                          "Chase",
                          "There's nothing to watch.",
-                         30,
+                         speed,
                          nullptr);
 
     //chapter_4_3d_init(game);
@@ -498,42 +511,42 @@ void chapter_4_init(Game *game) {
                          0,
                          "On nights like these, he\n"
                          "yearned for the\nintangible.",
-                         30,
+                         speed,
                          &game->text[31]);
     atari_text_list_init(&game->text[31],
                          0,
                          "A thing only seen in\n"
                          "mirages at the horizon.",
-                         30,
+                         speed,
                          &game->text[32]);
     atari_text_list_init(&game->text[32],
                          0,
                          "Visions of the warmth of\n"
                          "her hand pressed on\n"
                          "his cheek,",
-                         30,
+                         speed,
                          &game->text[33]);
     atari_text_list_init(&game->text[33],
                          0,
                          "shattering this great\nveil of his.\r"
                          "Yet completely abstract.",
-                         30,
+                         speed,
                          &game->text[34]);
     atari_text_list_init(&game->text[34],
                          0,
                          "A welling of emotion\nstirred in his throat\nand his hands.",
-                         30,
+                         speed,
                          &game->text[35]);
     atari_text_list_init(&game->text[35],
                          0,
                          "His hollow gaze clung\nto the ceiling.",
-                         30,
+                         speed,
                          &game->text[36]);
 
     atari_text_list_init(&game->text[36],
                          0,
                          "And yet, th--",
-                         30,
+                         20,
                          nullptr);
 
     auto goto_37_delay = [](void *game_ptr) -> void {
@@ -552,12 +565,12 @@ void chapter_4_init(Game *game) {
     atari_text_list_init(&game->text[37],
                          0,
                          "...\rDid you hear that?",
-                         30,
+                         speed,
                          &game->text[38]);
     atari_text_list_init(&game->text[38],
                          0,
                          "...",
-                         30,
+                         speed,
                          nullptr);
 
     auto goto_movie_delay = [](void *game_ptr) -> void {
@@ -651,13 +664,14 @@ void chapter_4_update_text(Text_List **game_current, Chapter_4_Text *text_handle
 void chapter_4_update(Game *game, float dt) {
     Level_Chapter_4 *level = (Level_Chapter_4 *)game->level;
 
+    if (IsKeyPressed(KEY_L)) play_sound(SOUND_TEXT_SCROLL_CHASE);
+
     if (level->black)
         return;
 
     if (level->end_timer > 0) {
         level->end_timer -= dt;
         if (level->end_timer <= 0) {
-            stop_music();
             atari_queue_deinit_and_goto_intro(game);
             return;
         }
@@ -722,6 +736,10 @@ void chapter_4_update(Game *game, float dt) {
             chapter_4_3d_update_camera(level, &level->camera);
 
             chapter_4_update_text(&game->current, &level->text_handler, dt);
+
+            if (is_music_playing(MUSIC_VHS_BAD) && level->text_handler.current_index == 6) {
+                stop_music();
+            }
 
             if (game->current && colors_equal(game->current->color, GOD_COLOR)) {
                 if (!is_text_list_at_end(game->current)) {
@@ -977,7 +995,7 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
                         //set_music_volume(MUSIC_GLITCH, 0);
                         level->music_volume_desired = 0;
 
-                        level->djinn = chapter_4_make_entity(ENTITY_CHAP_4_DEVIL, -30, 145);
+                        level->djinn = chapter_4_make_entity(ENTITY_CHAP_4_DEVIL, -55, 145);
                         array_add(&game->entities, level->djinn);
                     }
                 }

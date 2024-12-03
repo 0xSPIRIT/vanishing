@@ -140,7 +140,7 @@ void chapter_3_goto_home_inside(Game *game) {
     game->post_processing.crt.do_scanline_effect = true;
     game->post_processing.crt.do_warp_effect = false;
     game->post_processing.crt.abberation_intensity = 1;
-    game->post_processing.crt.noise_intensity = 0.2f;
+    game->post_processing.crt.noise_intensity = 0.6f;
 
     level->player = chapter_3_make_entity(ENTITY_PLAYER, 50, 50);
 
@@ -183,7 +183,7 @@ void chapter_3_goto_road(Game *game) {
     crt->do_scanline_effect = true;
     crt->do_warp_effect = true;
     crt->scanline_alpha = 0.25;
-    crt->abberation_intensity = 0.75f;
+    crt->abberation_intensity = 1;
     crt->vignette_intensity = 1;
     crt->vignette_mix = 0.1f;
     //post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_LOW);
@@ -377,7 +377,7 @@ void chapter_3_goto_home_outside(Game *game) {
 
     crt->do_scanline_effect = true;
     crt->do_warp_effect = true;
-    crt->abberation_intensity = 0.75;
+    crt->abberation_intensity = 1;
     crt->vignette_intensity = 1;
     crt->vignette_mix = 0.8f;
     crt->scanline_alpha = 0.1f;
@@ -523,12 +523,19 @@ void chapter_3_goto_lunch_room(Game *game, Chapter_3_Lunch_Text lunch_text) {
 
     level->current_lunch_text = lunch_text;
 
+    Post_Processing_Crt *crt = &game->post_processing.crt;
+
     game->post_processing.type = POST_PROCESSING_CRT;
-    game->post_processing.crt.do_scanline_effect = false;
-    game->post_processing.crt.do_warp_effect = false;
-    game->post_processing.crt.abberation_intensity = 0.5f;
-    game->post_processing.crt.vignette_intensity = 1;
-    game->post_processing.crt.vignette_mix = 0.5f;
+
+    crt->do_scanline_effect = false;
+    crt->do_warp_effect = false;
+    crt->abberation_intensity = 1;
+    crt->vignette_intensity = 1;
+    crt->vignette_mix = 0.5f;
+
+    if (lunch_text == CHAPTER_3_LUNCH_TEXT_3) {
+        crt->abberation_intensity = 0;
+    }
 
     level->state = CHAPTER_3_STATE_LUNCH;
     level->minigame.active = false;
@@ -642,8 +649,8 @@ void chapter_3_job_init(Game *game, int which_document_list) {
             documents[count++] =
                 "Email\n-------\n\nDear Peggy,\n  I received your email, and I'm delighted to hear that you're excited about a collaboration between our two branches. I'm free for lunch on Saturday June 8th, so we can discuss a proposal. Is that fine with your schedule?\n\nRegards,\nHunter (Business Development Manager, Nebraska)";
             documents[count++] = 
-                "\"Don't throw away your suffering. Touch your suffering. Face it directly, and your joy will become deeper. You know that suffering and joy are both impermanent.\"";
-                // But remember, "This work was strictly voluntary, but any animal who absented himself from it would have his rations reduced by half." (George Orwell, Animal Farm)
+                "...Such a person's situated in transcendence and is self-controlled. He sees everything-- whether it be pebbles, stones, gold-- as equals.";
+                // "This work was strictly voluntary, but any animal who absented himself from it would have his rations reduced by half."
 
             level->minigame = chapter_3_make_job_minigame(&game->level_arena, documents, count);
 
@@ -674,34 +681,29 @@ void chapter_3_job_init(Game *game, int which_document_list) {
             document_register_error_first_occurrence(d3, "Love,", "Bye,");
 
             Document *d5 = &level->minigame.document_list[5];
-            document_register_error_nth_occurrence(d5, 1, "\"Don't",    "But");
-            document_register_error_nth_occurrence(d5, 1, "throw",      "remember,");
-            document_register_error_nth_occurrence(d5, 1, "away",       "\"This");
-            document_register_error_nth_occurrence(d5, 1, "your",       "work");
-            document_register_error_nth_occurrence(d5, 1, "suffering.", "was,");
 
-            document_register_error_nth_occurrence(d5, 1, "Touch",      "strictly");
-            document_register_error_nth_occurrence(d5, 2, "your",       "voluntary,");
-            document_register_error_nth_occurrence(d5, 2, "suffering.", "but");
+            char *corrections[] = {
+                "\"This", "work",
+                "was", "strictly",
+                "voluntary, ",
+                "but", "any",
+                "animal", "who",
+                "absented", "himself",
+                "from", "it",
+                "would", "have",
+                "his", "rations",
+                "reduced", "by",
+                "half.\""
+            };
 
-            document_register_error_nth_occurrence(d5, 1, "Face",       "any");
-            document_register_error_nth_occurrence(d5, 1, "it",         "animal");
-            document_register_error_nth_occurrence(d5, 1, "directly,",  "who");
-            document_register_error_nth_occurrence(d5, 1, "and",        "absented");
-            document_register_error_nth_occurrence(d5, 3, "your",    "himself");
-            document_register_error_nth_occurrence(d5, 1, "joy",        "from");
-            document_register_error_nth_occurrence(d5, 1, "will",       "it");
-            document_register_error_nth_occurrence(d5, 1, "become",     "would");
-            document_register_error_nth_occurrence(d5, 1, "deeper.",    "have");
-            document_register_error_nth_occurrence(d5, 1, "You",        "his");
-            document_register_error_nth_occurrence(d5, 1, "know",       "rations");
-            document_register_error_nth_occurrence(d5, 1, "that",       "reduced");
-            document_register_error_nth_occurrence(d5, 1, "suffering",  "by");
-            document_register_error_nth_occurrence(d5, 2, "and",        "half.\"");
-            document_register_error_nth_occurrence(d5, 2, "joy",        "(George");
-            document_register_error_nth_occurrence(d5, 1, "are",        "Orwell,");
-            document_register_error_nth_occurrence(d5, 1, "both",       "Animal");
-            document_register_error_nth_occurrence(d5, 1, "impermanent.\"", "Farm)");
+            auto error_n = [&](int i, char *correction) -> void {
+                Word word = d5->words[i];
+                document_register_error(d5, word.start_index, word.end_index, correction);
+            };
+
+            for (int i = 0; i < StaticArraySize(corrections); i++) {
+                error_n(i, corrections[i]);
+            }
         } break;
         case 2: {
             documents[count++] =
@@ -745,7 +747,7 @@ void chapter_3_job_init(Game *game, int which_document_list) {
             documents[count++] =
                 "Although his eyes were fixated on an insignificant patch of grass outside, his mind wandered someplace else.";
             documents[count++] =
-                "\"How is it that these people are so happy?\", he thought.";
+                "\"How is it that these people are so 6861707079?\", he thought.";
             documents[count++] =
                 "\"How can they find meaning in something so meaningless?\"";
             documents[count++] =
@@ -810,10 +812,11 @@ void chapter_3_init(Game *game) {
     game->post_processing.crt.do_scanline_effect = false;
     game->post_processing.crt.scanline_alpha = 0.07f;
     game->post_processing.crt.do_warp_effect = false;
-    game->post_processing.crt.abberation_intensity = 0.5f;
+    game->post_processing.crt.do_wiggle = false;
+    game->post_processing.crt.abberation_intensity = 1;
     game->post_processing.crt.vignette_intensity = 1;
     game->post_processing.crt.vignette_mix = 0.75f;
-    game->post_processing.crt.noise_intensity = 0.2f;
+    game->post_processing.crt.noise_intensity = 0.6f;
 
     //level->state = CHAPTER_3_STATE_HOME_INSIDE;
     //level->state = CHAPTER_3_STATE_ROAD;
@@ -1290,11 +1293,11 @@ void chapter_3_init(Game *game) {
     //chapter_3_goto_window_text(game);
     //level->minigame.active = true;
 
-    //chapter_3_init_outside(game);
+    chapter_3_init_outside(game);
     //chapter_3_goto_home_inside(game);
     //chapter_3_goto_home_outside(game);
 
-    chapter_3_goto_road(game);
+    //chapter_3_goto_road(game);
 }
 
 void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,

@@ -123,6 +123,47 @@ Entity *chapter_2_make_entity(Entity_Type type, float x, float y) {
             result->texture_id = 3;
             result->has_dialogue = true;
         } break;
+
+        case ENTITY_CHAP_2_GIRL1: {
+            result->texture_id = 16;
+            break;
+        }
+        case ENTITY_CHAP_2_BOY1: {
+            result->texture_id = 17;
+            break;
+        }
+        case ENTITY_CHAP_2_GIRL2: {
+            result->texture_id = 18;
+            break;
+        }
+        case ENTITY_CHAP_2_GIRL3: {
+            result->texture_id = 19;
+            break;
+        }
+        case ENTITY_CHAP_2_COFFEE_TABLE: {
+            result->texture_id = 20;
+            break;
+        }
+        case ENTITY_CHAP_2_COUPLE_1: {
+            result->texture_id = 21;
+            break;
+        }
+        case ENTITY_CHAP_2_SINGLE_1: {
+            result->texture_id = 22;
+            break;
+        }
+        case ENTITY_CHAP_2_COUPLE_2: {
+            result->texture_id = 23;
+            break;
+        }
+        case ENTITY_CHAP_2_TABLEY_1: {
+            result->texture_id = 24;
+            break;
+        }
+        case ENTITY_CHAP_2_TABLEY_2: {
+            result->texture_id = 25;
+            break;
+        }
         default: {
             result->texture_id = -1;
         } break;
@@ -131,7 +172,14 @@ Entity *chapter_2_make_entity(Entity_Type type, float x, float y) {
     float texture_width  = entity_texture_width(result);
     float texture_height = entity_texture_height(result);
 
-    if (type == ENTITY_CHAP_2_TABLE) {
+    if (type >= ENTITY_CHAP_2_GIRL1 &&
+        type <= ENTITY_CHAP_2_TABLEY_2)
+    {
+        result->base_collider.x = 0;
+        result->base_collider.y = texture_height / 3;
+        result->base_collider.width = texture_width;
+        result->base_collider.height = texture_height - result->base_collider.y;
+    } else if (type == ENTITY_CHAP_2_TABLE) {
         result->base_collider = {
             0,
             texture_height / 3,
@@ -211,7 +259,7 @@ void chapter_2_end_eleanor_second_text(void *game_ptr) {
     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
 
     level->penny_state = CHAPTER_2_PENNY_STATE_WALKING;
-    game->post_processing.crt.abberation_intensity = 0;
+    //game->post_processing.crt.abberation_intensity = 0;
 
     level->penny = chapter_2_make_entity(ENTITY_CHAP_2_PENNY, 620, 70);
     level->penny->alarm[0] = 1;
@@ -272,14 +320,23 @@ void chapter_2_init(Game *game) {
 
     game->post_processing.type = POST_PROCESSING_CRT;
 
-    game->post_processing.crt.do_scanline_effect = false;
-    game->post_processing.crt.do_warp_effect = false;
-    game->post_processing.crt.abberation_intensity = 1;
-    game->post_processing.crt.vignette_intensity = 1;
-    game->post_processing.crt.vignette_mix = 0.2f;
+    Post_Processing_Crt *crt = &game->post_processing.crt;
+
+    crt->do_scanline_effect   = true;
+    crt->scanline_alpha       = 0.1f;
+    crt->do_warp_effect       = false;
+    crt->abberation_intensity = 1;
+    crt->vignette_intensity   = 2;
+    crt->vignette_mix         = 0.4f;
+
+    crt->red_offset   = 0.006f;
+    crt->green_offset = 0.009f;
+    crt->blue_offset  = 0.01f;
+
+    crt->do_wiggle = 0;
 
     Texture2D *textures = atari_assets.textures;
-    textures[0]  = load_texture(RES_DIR "art/player.png");
+    textures[0]  = load_texture(RES_DIR "art/player_white.png");
     textures[1]  = load_texture(RES_DIR "art/hyatt_1.png");
     textures[2]  = load_texture(RES_DIR "art/guy.png");
     textures[3]  = load_texture(RES_DIR "art/bartender.png");
@@ -294,6 +351,22 @@ void chapter_2_init(Game *game) {
     textures[12] = load_texture(RES_DIR "art/djinn1.png");
     textures[13] = load_texture(RES_DIR "art/djinn2.png");
     textures[14] = load_texture(RES_DIR "art/djinn3.png");
+    textures[15] = load_texture(RES_DIR "art/hyatt_railing.png");
+
+    //---
+
+    textures[16] = load_texture(RES_DIR "art/dinner/girl1.png");
+    textures[17] = load_texture(RES_DIR "art/dinner/boy1.png");
+    textures[18] = load_texture(RES_DIR "art/dinner/girl2.png");
+    textures[19] = load_texture(RES_DIR "art/dinner/girl3.png");
+
+    textures[20] = load_texture(RES_DIR "art/dinner/coffeetable.png");
+
+    textures[21] = load_texture(RES_DIR "art/dinner/couple1.png");
+    textures[22] = load_texture(RES_DIR "art/dinner/single1.png");
+    textures[23] = load_texture(RES_DIR "art/dinner/couple2.png");
+    textures[24] = load_texture(RES_DIR "art/dinner/tabley1.png");
+    textures[25] = load_texture(RES_DIR "art/dinner/tabley2.png");
 
     game->entities = make_array<Entity*>(20);
 
@@ -386,9 +459,9 @@ void chapter_2_init(Game *game) {
                          speed,
                          nullptr);
 
-    // Jake and Erica
+    // Noah and Saira
     atari_text_list_init(&game->text[14],
-                         "Jake",
+                         "Noah",
                          "Chase, we didn't think\nyou'd come!",
                          speed,
                          &game->text[15]);
@@ -398,8 +471,8 @@ void chapter_2_init(Game *game) {
                          speed,
                          &game->text[16]);
     atari_text_list_init(&game->text[16],
-                         "Jake",
-                         "Oh, I don't think you\nmet Erica before.",
+                         "Noah",
+                         "Oh, I don't think you\nmet Saira before.",
                          speed,
                          &game->text[17]);
     atari_text_list_init(&game->text[17],
@@ -408,7 +481,7 @@ void chapter_2_init(Game *game) {
                          speed,
                          &game->text[18]);
     atari_text_list_init(&game->text[18],
-                         "Erica",
+                         "Saira",
                          "You too.",
                          speed,
                          &game->text[19]);
@@ -418,7 +491,7 @@ void chapter_2_init(Game *game) {
                          speed,
                          &game->text[20]);
     atari_text_list_init(&game->text[20],
-                         "Erica",
+                         "Saira",
                          "...\r...",
                          speed,
                          &game->text[21]);
@@ -428,7 +501,7 @@ void chapter_2_init(Game *game) {
                          speed,
                          &game->text[22]);
     atari_text_list_init(&game->text[22],
-                         "Jake",
+                         "Noah",
                          "They're over there\non the right.",
                          speed,
                          &game->text[23]);
@@ -438,7 +511,7 @@ void chapter_2_init(Game *game) {
                          speed,
                          &game->text[24]);
     atari_text_list_init(&game->text[24],
-                         "Jake",
+                         "Noah",
                          "We'll make sure to keep\nan eye out for you.",
                          speed,
                          &game->text[25]);
@@ -448,14 +521,14 @@ void chapter_2_init(Game *game) {
                          speed,
                          nullptr);
 
-    // Erica
+    // Saira
     atari_text_list_init(&game->text[26],
                          "Chase",
                          "Hi, I don't think we've\nmet before.",
                          speed,
                          &game->text[27]);
     atari_text_list_init(&game->text[27],
-                         "Erica",
+                         "Saira",
                          "...",
                          speed,
                          nullptr);
@@ -588,6 +661,8 @@ void chapter_2_init(Game *game) {
             nullptr
         };
 
+        game->text[52].arrow_color = WHITE;
+
         atari_choice_text_list_init(&game->text[52],
                                     "Eleanor",
                                     "You wanna have a seat\nhere?",
@@ -633,7 +708,7 @@ void chapter_2_init(Game *game) {
                          speed,
                          &game->text[66]);
     atari_text_list_init(&game->text[66],
-                         "Eleanor",
+                         "Chase",
                          "Damn, nice...\rMoving up in the\nworld.",
                          speed,
                          &game->text[67]);
@@ -864,75 +939,102 @@ void chapter_2_init(Game *game) {
                          20,
                          nullptr);
 
-    Entity *jake    = chapter_2_make_entity(ENTITY_CHAP_2_JAKE,    638,  30);
-    Entity *erica   = chapter_2_make_entity(ENTITY_CHAP_2_ERICA,   618,  14);
-    Entity *mike    = chapter_2_make_entity(ENTITY_CHAP_2_MIKE,    705,  90);
-    Entity *jessica = chapter_2_make_entity(ENTITY_CHAP_2_JESSICA, 705,  115);
-    Entity *amelia  = chapter_2_make_entity(ENTITY_CHAP_2_AMELIA,  814,  22);
-    Entity *guy     = chapter_2_make_entity(ENTITY_CHAP_2_RANDOM_GUY, 834,  42);
-    Entity *amelia_1= chapter_2_make_entity(ENTITY_CHAP_2_LUNA,    192+828+50,  24);
-    Entity *amelia_2= chapter_2_make_entity(ENTITY_CHAP_2_ISABELLE,192+800+50,  28);
-    Entity *amelia_3= chapter_2_make_entity(ENTITY_CHAP_2_CAMILA,  192+814+50,  42);
-    Entity *amelia_4= chapter_2_make_entity(ENTITY_CHAP_2_OLIVIA,  192+830+50,  42);
-    Entity *amelia_5= chapter_2_make_entity(ENTITY_CHAP_2_AVA,     192+845+50,  30);
-    Entity *eleanor = chapter_2_make_entity(ENTITY_CHAP_2_ELEANOR, 886,  100);
+    Entity *jake     = chapter_2_make_entity(ENTITY_CHAP_2_JAKE,    638,  30);
+    Entity *erica    = chapter_2_make_entity(ENTITY_CHAP_2_ERICA,   618,  14);
+    Entity *mike     = chapter_2_make_entity(ENTITY_CHAP_2_MIKE,    705,  90);
+    Entity *jessica  = chapter_2_make_entity(ENTITY_CHAP_2_JESSICA, 705,  115);
+    Entity *amelia   = chapter_2_make_entity(ENTITY_CHAP_2_AMELIA,  814,  22);
+    Entity *guy      = chapter_2_make_entity(ENTITY_CHAP_2_RANDOM_GUY, 834,  42);
+    Entity *amelia_1 = chapter_2_make_entity(ENTITY_CHAP_2_LUNA,    192+828+50,  24);
+    Entity *amelia_2 = chapter_2_make_entity(ENTITY_CHAP_2_ISABELLE,192+800+50,  28);
+    Entity *amelia_3 = chapter_2_make_entity(ENTITY_CHAP_2_CAMILA,  192+814+50,  42);
+    Entity *amelia_4 = chapter_2_make_entity(ENTITY_CHAP_2_OLIVIA,  192+830+50,  42);
+    Entity *amelia_5 = chapter_2_make_entity(ENTITY_CHAP_2_AVA,     192+845+50,  30);
+    Entity *eleanor  = chapter_2_make_entity(ENTITY_CHAP_2_ELEANOR, 886,  100);
     //Entity *paulie  = chapter_2_make_entity(ENTITY_CHAP_2_PAULIE,  192+880,  95);
 
-    Entity *bartender  = chapter_2_make_entity(ENTITY_CHAP_2_BARTENDER, 21, 190);
+    Entity *bartender  = chapter_2_make_entity(ENTITY_CHAP_2_BARTENDER, 31, 190);
 
     Entity *bouncer = chapter_2_make_entity(ENTITY_CHAP_2_BOUNCER, 553, 80);
 
     level->player   = chapter_2_make_entity(ENTITY_PLAYER, 496, 232);
     //level->player   = chapter_2_make_entity(ENTITY_PLAYER, 600, 80); // skip to table section
 
-    array_add(&game->entities, level->player);
-    array_add(&game->entities, jake);
-    array_add(&game->entities, erica);
-    array_add(&game->entities, bartender);
-    array_add(&game->entities, bouncer);
-    array_add(&game->entities, mike);
-    array_add(&game->entities, jessica);
-    array_add(&game->entities, amelia);
-    array_add(&game->entities, guy);
-    array_add(&game->entities, amelia_1);
-    array_add(&game->entities, amelia_2);
-    array_add(&game->entities, amelia_3);
-    array_add(&game->entities, amelia_4);
-    array_add(&game->entities, amelia_5);
-    array_add(&game->entities, eleanor);
+    auto entity = [&](Entity *e) -> void {
+        array_add(&game->entities, e);
+    };
 
-    array_add(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 3.75*192-24-10, 3*160/4-9));
-    array_add(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 3.25*192-24+10, 160/4-9));
+    entity(level->player);
+    entity(jake);
+    entity(erica);
+    entity(bartender);
+    entity(bouncer);
+    entity(mike);
+    entity(jessica);
+    entity(amelia);
+    entity(guy);
+    entity(amelia_1);
+    entity(amelia_2);
+    entity(amelia_3);
+    entity(amelia_4);
+    entity(amelia_5);
+    entity(eleanor);
 
-    array_add(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 4.75*192-24-15, 3*160/4-4));
-    array_add(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 4.25*192-24+13, 160/4+2));
+    entity(chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 3.75*192-24-10, 3*160/4-9));
+    entity(chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 3.25*192-24+10, 160/4-9));
 
-    array_add(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 5.75*192-24-15, 3*160/4-4));
-    array_add(&game->entities, chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 5.25*192-24+13+50, 160/4+2));
+    entity(chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 4.75*192-24-15, 3*160/4-4));
+    entity(chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 4.25*192-24+13, 160/4+2));
 
-    add_wall(&game->entities, { 576, 160, 4, 160 });
-    add_wall(&game->entities, { 398, 160, 178, 4 });
-    add_wall(&game->entities, { 195, 160, 175, 4 });
+    entity(chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 5.75*192-24-15, 3*160/4-4));
+    entity(chapter_2_make_entity(ENTITY_CHAP_2_TABLE, 5.25*192-24+13+50, 160/4+2));
 
-    add_wall(&game->entities, { 0, 188, 76, 35 }); // bar
-    add_wall(&game->entities, { 64, 133, 19, 123 });
-    add_wall(&game->entities, { 173, 133, 19, 123 });
-    add_wall(&game->entities, { 189, 160, 6, 110 });
-    add_wall(&game->entities, { 0, 133, 78, 10 });
-    add_wall(&game->entities, { 192, 0, 192*2 + 7, 47 });
-    add_wall(&game->entities, { 0, 0, 105, 22 });
-    add_wall(&game->entities, { 192, 133, 192*2 + 7, 27 });
-    add_wall(&game->entities, { 0, 22, 6, 132 });
-    add_wall(&game->entities, { 569, 47, 14, 31});
-    add_wall(&game->entities, { 569, 103, 14, 30});
-    add_wall(&game->entities, { 576, 160-3, 192*3, 8});
+    Vector2 positions[] = {
+        {210, 167}, // ENTITY_CHAP_2_GIRL1
+        {246, 169},
+        {212, 202},
+        {248, 205},
+        {230, 204},
+        {321, 177},
+        {313, 279},
+        {216, 272},
+        {110, 280},
+        { 25, 279}  // ENTITY_CHAP_2_TABLEY_2
+    };
 
-    add_wall(&game->entities, { 928, 0, 119, 63 });
+    for (int i = ENTITY_CHAP_2_GIRL1; i <= ENTITY_CHAP_2_TABLEY_2; i++) {
+        Entity_Type type = (Entity_Type)i;
 
-    add_wall(&game->entities, { 370, 160, 28, 68 });
-    add_wall(&game->entities, { 370, 253, 28, 67 });
+        Vector2 pos = positions[i - ENTITY_CHAP_2_GIRL1];
 
-    add_door(&game->entities, { 569, 78, 7, 25 });
+        entity(chapter_2_make_entity(type, pos.x, pos.y));
+    }
+
+    Array<Entity*> *ents = &game->entities;
+
+    add_wall(ents, { 576, 160, 4, 160 });
+    add_wall(ents, { 398, 160, 178, 4 });
+    add_wall(ents, { 195, 160, 175, 4 });
+
+    add_wall(ents, { 0, 188, 76, 35 }); // bar
+    add_wall(ents, { 64, 133, 19, 123 });
+    add_wall(ents, { 173, 133, 19, 123 });
+    add_wall(ents, { 189, 160, 6, 110 });
+    add_wall(ents, { 0, 133, 78, 10 });
+    add_wall(ents, { 192, 0, 192*2 + 7, 47 });
+    add_wall(ents, { 0, 0, 105, 22 });
+    add_wall(ents, { 192, 133, 192*2 + 7, 27 });
+    add_wall(ents, { 0, 22, 6, 132 });
+    add_wall(ents, { 569, 47, 14, 31});
+    add_wall(ents, { 569, 103, 14, 30});
+    add_wall(ents, { 576, 160-3, 192*3, 8});
+
+    add_wall(ents, { 928, 0, 119, 63 });
+
+    add_wall(ents, { 370, 160, 28, 68 });
+    add_wall(ents, { 370, 253, 28, 67 });
+
+    add_door(ents, { 569, 78, 7, 25 });
     
     //level->current_area = CHAPTER_2_AREA_BATHROOM;
     //chapter_2_setup_bathroom_walls(game);
@@ -1324,6 +1426,11 @@ void chapter_2_draw(Game *game, RenderTexture2D *target) {
         for (int i = 0; i < entity_count; i++) {
             Entity *e = game->entities.data[i];
             chapter_2_entity_draw(e, game);
+        }
+
+        if (level->current_area == CHAPTER_2_AREA_HYATT_1) {
+            Texture *railing_texture = &atari_assets.textures[15];
+            DrawTexture(*railing_texture, 0, 125, WHITE);
         }
 
         EndMode2D();

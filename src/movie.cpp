@@ -8,19 +8,6 @@ void movie_handle_frame(plm_t *mpeg, plm_frame_t *frame, void *user) {
     uint64_t start = get_system_time();
 #endif
 
-#define FIRST_WAY false
-
-#if FIRST_WAY
-    uint8_t *buffer = (uint8_t*)malloc(frame->width * frame->height * 4);
-    plm_frame_to_rgba(frame, buffer, 4 * frame->width);
-
-    for (size_t i = 0; i < frame->width * frame->height; i++) {
-        buffer[i*4+3] = 255;
-    }
-
-    UpdateTexture(movie->texture, buffer);
-    free(buffer);
-#else
     Image image = GenImageColor(frame->width, frame->height, BLACK);
     
     plm_frame_to_rgba(frame, (uint8_t*)image.data, 4 * frame->width);
@@ -30,9 +17,9 @@ void movie_handle_frame(plm_t *mpeg, plm_frame_t *frame, void *user) {
     movie->texture = LoadTextureFromImage(image);
 
     UnloadImage(image);
-#endif
 
-    SetTextureFilter(movie->texture, TEXTURE_FILTER_BILINEAR);
+    //SetTextureFilter(movie->texture, TEXTURE_FILTER_BILINEAR);
+    SetTextureFilter(movie->texture, TEXTURE_FILTER_POINT);
 
 #if PROFILE
     uint64_t end = get_system_time();
@@ -40,7 +27,7 @@ void movie_handle_frame(plm_t *mpeg, plm_frame_t *frame, void *user) {
     double time = end - start;
     time /= global_system_timer_frequency;
 
-    printf("Texture took %fms\n", time * 1000);
+    printf("Frame took %fms\n", time * 1000);
 #endif
 }
 
@@ -89,6 +76,8 @@ void movie_free(Movie *movie) {
 
     plm_destroy(movie->plm);
     movie->movie = MOVIE_OFF;
+
+    movie->end_movie_callback = 0;
 }
 
 void movie_run(Movie *movie) {

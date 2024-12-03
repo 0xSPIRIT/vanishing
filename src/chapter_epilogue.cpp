@@ -93,6 +93,8 @@ void epilogue_raise_node_last_scene(void *game_ptr) {
 void chapter_epilogue_init(Game *game) {
     Level_Chapter_Epilogue *level = (Level_Chapter_Epilogue*)game->level;
 
+    stop_music();
+
     render_width  = DIM_3D_WIDTH;
     render_height = DIM_3D_HEIGHT;
 
@@ -158,7 +160,7 @@ void chapter_epilogue_init(Game *game) {
 
     //SetTextureFilter(level->timer_texture.texture, TEXTURE_FILTER_BILINEAR);
 
-    float speed = 30;
+    float speed = 20;
 
     atari_text_list_init(&game->text[0],
                          0,
@@ -464,88 +466,15 @@ void chapter_epilogue_init(Game *game) {
         Game *game = (Game *)game_ptr;
 
         auto start_101 = [](Game *game) -> void {
-            game->current = &game->text[101];
+            game->current = &game->text[114];
         };
 
         add_event(game, start_101, 5);
     };
 
-    //game->text[64].callbacks[0] = start_next_text;
-    game->text[64].callbacks[0] = epilogue_raise_node_last_scene;
+    game->text[64].callbacks[0] = start_next_text;
+    //game->text[64].callbacks[0] = epilogue_raise_node_last_scene;
 
-    atari_text_list_init(&game->text[101],
-                         0,
-                         "*ring ring*\r*ring ring*\r*click*",
-                         speed,
-                         &game->text[102]);
-    atari_text_list_init(&game->text[102],
-                         "Chase",
-                         "Hello?\rIs this you again?",
-                         speed,
-                         &game->text[103]);
-    atari_text_list_init(&game->text[103],
-                         "     ",
-                         "...\r...\r...",
-                         speed,
-                         &game->text[104]);
-    atari_text_list_init(&game->text[104],
-                         "Chase",
-                         "May I ask you a question?",
-                         speed,
-                         &game->text[105]);
-    atari_text_list_init(&game->text[105],
-                         "     ",
-                         "What makes you think my word will mean\nsomething?",
-                         speed,
-                         &game->text[106]);
-    atari_text_list_init(&game->text[106],
-                         "Chase",
-                         "I don't know.",
-                         speed,
-                         &game->text[107]);
-    atari_text_list_init(&game->text[107],
-                         "     ",
-                         "...\r... Fair enough.\rWhat's the question?",
-                         speed,
-                         &game->text[108]);
-    atari_text_list_init(&game->text[108],
-                         "Chase",
-                         "...\rI have seen to the edges of the divine.",
-                         speed,
-                         &game->text[109]);
-    atari_text_list_init(&game->text[109],
-                         "Chase",
-                         "From the desert, to the dinner, to the cubicles,\n"
-                         "to the nights of terror.\r"
-                         "I've seen the endless staircase, the path to\n"
-                         "Nirvana.",
-                         speed,
-                         &game->text[110]);
-    atari_text_list_init(&game->text[110],
-                         "Chase",
-                         "I've seen the Monoliths tower over,\r"
-                         "immovable and infinite.\r"
-                         "I've seen every golden hour yield to the\n"
-                         "darkest nights.",
-                         speed,
-                         &game->text[111]);
-    atari_text_list_init(&game->text[111],
-                         "Chase",
-                         "Please, tell me,\r"
-                         "why must the universe suffer us?",
-                         speed,
-                         &game->text[112]);
-
-    chapter_5_window_text(true,
-                          &game->text[112],
-                          "...\n\rThe universe does not answer \"why\" questions.",
-                          WHITE,
-                          &game->text[113]);
-    chapter_5_window_text(true,
-                          &game->text[113],
-                          "\"Why\" is a human construction, Chase.",
-                          WHITE,
-                          &game->text[114]);
     chapter_5_window_text(true,
                           &game->text[114],
                           "But, you know that you suffer.\rAnd it is painful.\rBut that is okay.",
