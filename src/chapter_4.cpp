@@ -137,12 +137,12 @@ void chapter_4_3d_init(Game *game) {
 
     level->state = CHAPTER_4_STATE_3D;
 
-    level->text_handler.start_timer = 3;
+    level->text_handler.start_timer = -1;
     game->render_state = RENDER_STATE_3D;
 
     DisableCursor();
 
-    play_music(MUSIC_VHS_BAD);
+    //play_music(MUSIC_VHS_BAD);
 
     render_width  = DIM_3D_WIDTH;
     render_height = DIM_3D_HEIGHT;
@@ -155,13 +155,14 @@ void chapter_4_3d_init(Game *game) {
 
     //float height = 0.9f;
 
-    level->camera.position = {2.880000f, 0.900000f, -1.500000f};
-    level->camera.target = {2.470594f, 1.091905f, -2.412352f};
+    level->camera.position = {2.88f, 1.f, -1.5f};
+    //level->camera.target = {2.470594f, 1.091905f, -2.412352f};
+    level->camera.target = {1.88f, 1, -1.5f};
     level->camera.up       = { 0, 1, 0 };
     level->camera.fovy     = FOV_DEFAULT;
     level->camera.projection = CAMERA_PERSPECTIVE;
 
-    level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/chapter_4.fs");
+    level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/desert.fs");
 
     level->shader.locs[SHADER_LOC_MATRIX_MODEL] = GetShaderLocation(level->shader, "matModel");
     level->shader.locs[SHADER_LOC_VECTOR_VIEW]  = GetShaderLocation(level->shader, "viewPos");
@@ -170,17 +171,13 @@ void chapter_4_3d_init(Game *game) {
         level->scene.materials[i].shader = level->shader;
     }
 
-    int ambientLoc = GetShaderLocation(level->shader, "ambient");
-    float data[4] = { 0.2f, 0.2f, 0.2f, 1 };
-    SetShaderValue(level->shader, ambientLoc, data, SHADER_UNIFORM_VEC4);
-
-    CreateLight(LIGHT_POINT, { 0, 2, 0 }, Vector3Zero(), ORANGE, level->shader);
-
+    /*
     game->post_processing.type = POST_PROCESSING_VHS;
     post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_MEDIUM);
     game->post_processing.vhs.scan_intensity = 0;
-
     game->post_processing.vhs.vignette_mix = 1;
+    */
+    game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
 }
 
 void chapter_4_3d_init_after_delay(Game *game) {
@@ -224,6 +221,7 @@ void chapter_4_init(Game *game) {
     crt->blue_offset  = 0.01f;
 
     crt->should_spin_randomly = true;
+    crt->do_wiggle = false;
 
     Texture2D *textures = atari_assets.textures;
     textures[0] = load_texture(RES_DIR "art/apartment_test.png");
@@ -505,7 +503,7 @@ void chapter_4_init(Game *game) {
                          speed,
                          nullptr);
 
-    //chapter_4_3d_init(game);
+    chapter_4_3d_init(game);
 
     atari_text_list_init(&game->text[30],
                          0,
@@ -580,25 +578,25 @@ void chapter_4_init(Game *game) {
     game->text[38].callbacks[0] = goto_movie_delay;
 }
 
-void chapter_4_3d_update_camera(Level_Chapter_4 *level, Camera3D *camera) {
+void chapter_4_3d_update_camera(Level_Chapter_4 *level, Camera3D *camera, float dt) {
     (void)level;
 
-    Vector2 mouse = get_mouse_delta();
+    Vector2 input = input_movement_look(dt);
 
-    const float sensitivity = 0.0025f;
-
-    mouse.x *= sensitivity;
-    mouse.y *= sensitivity;
+    // make it less sensitive here
+    input.x *= 0.5;
+    input.y *= 0.5;
 
     //CameraYaw(camera, -mouse.x, false);
     //CameraPitch(camera, -mouse.y, true, false, false);
 
     // Pitch Camera
     {
-        float pitch_angle = -mouse.y;
+        float pitch_angle = -input.y;
         Vector3 up = GetCameraUp(camera);
         Vector3 target_position = Vector3Subtract(camera->target, camera->position);
 
+        /*
         // clamp up
         float max_angle_up = Vector3Angle(up, target_position) - PI/2.5;
         max_angle_up -= 0.001f; // avoid numerical errors
@@ -611,6 +609,7 @@ void chapter_4_3d_update_camera(Level_Chapter_4 *level, Camera3D *camera) {
         max_angle_down += 0.001f; // avoid numerical errors
         if (pitch_angle < max_angle_down)
             pitch_angle = max_angle_down;
+            */
 
         // Rotation axis
         Vector3 right = GetCameraRight(camera);
@@ -621,7 +620,7 @@ void chapter_4_3d_update_camera(Level_Chapter_4 *level, Camera3D *camera) {
 
     // Yaw Camera
     {
-        float yaw_angle = -mouse.x;
+        float yaw_angle = -input.x;
 
         Vector3 up = GetCameraUp(camera);
         Vector3 right = GetCameraRight(camera);
@@ -629,6 +628,7 @@ void chapter_4_3d_update_camera(Level_Chapter_4 *level, Camera3D *camera) {
         Vector3 target_position = Vector3Subtract(camera->target, camera->position);
         target_position = Vector3RotateByAxisAngle(target_position, up, yaw_angle);
 
+        /*
         float angle = atan2f(target_position.z, target_position.x);
 
         float start = -2.34f;
@@ -642,12 +642,16 @@ void chapter_4_3d_update_camera(Level_Chapter_4 *level, Camera3D *camera) {
 
         target_position.x = target_x;
         target_position.z = target_z;
+        */
 
         camera->target = Vector3Add(camera->position, target_position);
     }
 }
 
 void chapter_4_update_text(Text_List **game_current, Chapter_4_Text *text_handler, float dt) {
+    if (text_handler->start_timer == -1)
+        return;
+
     if (text_handler->start_timer > 0 || *game_current || text_handler->alarms[text_handler->current_index] < 0) return;
 
     text_handler->alarms[text_handler->current_index] -= dt;
@@ -665,6 +669,8 @@ void chapter_4_update(Game *game, float dt) {
     Level_Chapter_4 *level = (Level_Chapter_4 *)game->level;
 
     if (IsKeyPressed(KEY_L)) play_sound(SOUND_TEXT_SCROLL_CHASE);
+
+    print_cam(&level->camera);
 
     if (level->black)
         return;
@@ -733,7 +739,7 @@ void chapter_4_update(Game *game, float dt) {
         case CHAPTER_4_STATE_BED_1: {
         } break;
         case CHAPTER_4_STATE_3D: {
-            chapter_4_3d_update_camera(level, &level->camera);
+            chapter_4_3d_update_camera(level, &level->camera, dt);
 
             chapter_4_update_text(&game->current, &level->text_handler, dt);
 

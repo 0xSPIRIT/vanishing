@@ -1495,8 +1495,9 @@ void chapter_5_scene_init(Game *game) {
             //model_set_bilinear(scene_model);
 
             game->post_processing.type = POST_PROCESSING_BLOOM;
-            game->post_processing.bloom.bloom_intensity = 4;
-            game->post_processing.bloom.vignette_mix = 0.35f;
+            Post_Processing_Bloom *bloom = &game->post_processing.bloom;
+            bloom->bloom_intensity = 4;
+            bloom->vignette_mix = 0.35f;
 
             model_set_shader(&level->scenes[4], level->shader);
 

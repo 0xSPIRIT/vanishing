@@ -172,11 +172,9 @@ Entity *chapter_2_make_entity(Entity_Type type, float x, float y) {
     float texture_width  = entity_texture_width(result);
     float texture_height = entity_texture_height(result);
 
-    if (type >= ENTITY_CHAP_2_GIRL1 &&
-        type <= ENTITY_CHAP_2_TABLEY_2)
-    {
+    if (type >= ENTITY_CHAP_2_GIRL1 && type <= ENTITY_CHAP_2_TABLEY_2) {
         result->base_collider.x = 0;
-        result->base_collider.y = texture_height / 3;
+        result->base_collider.y = texture_height / 2;
         result->base_collider.width = texture_width;
         result->base_collider.height = texture_height - result->base_collider.y;
     } else if (type == ENTITY_CHAP_2_TABLE) {
@@ -323,7 +321,7 @@ void chapter_2_init(Game *game) {
     Post_Processing_Crt *crt = &game->post_processing.crt;
 
     crt->do_scanline_effect   = true;
-    crt->scanline_alpha       = 0.1f;
+    crt->scanline_alpha       = 0.15f;
     crt->do_warp_effect       = false;
     crt->abberation_intensity = 1;
     crt->vignette_intensity   = 2;
@@ -333,7 +331,7 @@ void chapter_2_init(Game *game) {
     crt->green_offset = 0.009f;
     crt->blue_offset  = 0.01f;
 
-    crt->do_wiggle = 0;
+    crt->do_wiggle = false;
 
     Texture2D *textures = atari_assets.textures;
     textures[0]  = load_texture(RES_DIR "art/player_white.png");

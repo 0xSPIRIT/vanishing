@@ -193,7 +193,7 @@ void game_audio_init() {
     audio->sounds[SOUND_TEXT_SCROLL_FEMALE] = load_sound(CHANNEL_GUI, "textscroll_female.wav", volume * 2);
     audio->sounds[SOUND_TEXT_SCROLL_MALE]   = load_sound(CHANNEL_GUI, "textscroll_guy.wav",    volume * 2);
 
-    audio->sounds[SOUND_TEXT_SCROLL_LOW] = load_sound(CHANNEL_GUI,   "textblip_low.wav");
+    audio->sounds[SOUND_TEXT_SCROLL_LOW] = load_sound(CHANNEL_GUI,   "textblip_low.wav", volume);
     audio->sounds[SOUND_TEXT_SCROLL_BAD] = load_sound(CHANNEL_GUI,   "textblip_bad.wav");
     audio->sounds[SOUND_TEXT_CONFIRM]    = load_sound(CHANNEL_GUI,   "confirm.ogg");
 

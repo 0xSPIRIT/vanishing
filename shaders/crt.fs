@@ -138,7 +138,8 @@ void main() {
 
     // Actual scanlines
     if (do_scanline_effect == 1) {
-        float y = tex_coord.y + time * 0.25;
+        float speed = 0.125;
+        float y = tex_coord.y + time * speed;
         int scanline_count = 80;
         int y_i = int(round(y * scanline_count * 1));
 

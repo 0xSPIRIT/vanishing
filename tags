@@ -428,7 +428,6 @@ RCAMERA_IMPLEMENTATION	src/main.cpp	/^#define RCAMERA_IMPLEMENTATION$/;"	d	file:
 RENDER_STATE_3D	src/game.cpp	/^    RENDER_STATE_3D$/;"	e	enum:Render_State	file:
 RENDER_STATE_ATARI	src/game.cpp	/^    RENDER_STATE_ATARI,$/;"	e	enum:Render_State	file:
 RES_DIR	src/main.cpp	/^  #define RES_DIR /;"	d	file:
-RLIGHTS_IMPLEMENTATION	src/main.cpp	/^#define RLIGHTS_IMPLEMENTATION$/;"	d	file:
 RL_CULL_DISTANCE_FAR	src/main.cpp	/^#define RL_CULL_DISTANCE_FAR /;"	d	file:
 RL_CULL_DISTANCE_NEAR	src/main.cpp	/^#define RL_CULL_DISTANCE_NEAR /;"	d	file:
 Radians	src/util.cpp	/^#define Radians(/;"	d	file:
@@ -512,9 +511,10 @@ __anondf04acb20103	src/movie.h	/^enum {$/;"	g
 __anoneafbdd87010a	src/game.cpp	/^    union {$/;"	u	struct:Entity	file:
 __anoneafbdd870202	src/game.cpp	/^    auto selection_sort = [&](size_t start, size_t end) {$/;"	f	function:sort_entities	file:
 __anonec989c650102	src/chapter_2.cpp	/^    auto entity = [&](Entity *e) -> void {$/;"	f	function:chapter_2_init	typeref:typename:void	file:
-__anonecaab4e60102	src/chapter_3.cpp	/^    auto add_line = [&]() -> void {$/;"	f	function:job_minigame_run	typeref:typename:void	file:
-__anonecaab4e60202	src/chapter_3.cpp	/^    auto set_word_up = [&]() {$/;"	f	function:job_minigame_run	file:
-__anonecaab4e60302	src/chapter_3.cpp	/^    auto click_next = [&]() -> void {$/;"	f	function:job_minigame_run	typeref:typename:void	file:
+__anonecaab4e60102	src/chapter_3.cpp	/^            auto error_n = [&](int i, char *correction) -> void {$/;"	f	function:chapter_3_job_init	typeref:typename:void	file:
+__anonecaab4e60202	src/chapter_3.cpp	/^    auto add_line = [&]() -> void {$/;"	f	function:job_minigame_run	typeref:typename:void	file:
+__anonecaab4e60302	src/chapter_3.cpp	/^    auto set_word_up = [&]() {$/;"	f	function:job_minigame_run	file:
+__anonecaab4e60402	src/chapter_3.cpp	/^    auto click_next = [&]() -> void {$/;"	f	function:job_minigame_run	typeref:typename:void	file:
 __anonecbccd670102	src/chapter_4.cpp	/^    auto play_open_window = [](Game *game) -> void {$/;"	f	function:chapter_4_3d_init_after_delay	typeref:typename:void	file:
 __anonecbccd670202	src/chapter_4.cpp	/^    auto goto_text_24 = [](void *game_ptr) -> void {$/;"	f	function:chapter_4_init	typeref:typename:void	file:
 __anonecbccd670302	src/chapter_4.cpp	/^        auto text_event = [](Game *game) -> void {$/;"	f	function:chapter_4_init::__anonecbccd670202	typeref:typename:void	file:
@@ -743,7 +743,7 @@ chapter_3_set_apartment_end_text	src/chapter_3.cpp	/^void chapter_3_set_apartmen
 chapter_3_update	src/chapter_3.cpp	/^void chapter_3_update(Game *game, float dt) {$/;"	f	typeref:typename:void
 chapter_4_3d_init	src/chapter_4.cpp	/^void chapter_4_3d_init(Game *game) {$/;"	f	typeref:typename:void
 chapter_4_3d_init_after_delay	src/chapter_4.cpp	/^void chapter_4_3d_init_after_delay(Game *game) {$/;"	f	typeref:typename:void
-chapter_4_3d_update_camera	src/chapter_4.cpp	/^void chapter_4_3d_update_camera(Level_Chapter_4 *level, Camera3D *camera) {$/;"	f	typeref:typename:void
+chapter_4_3d_update_camera	src/chapter_4.cpp	/^void chapter_4_3d_update_camera(Level_Chapter_4 *level, Camera3D *camera, float dt) {$/;"	f	typeref:typename:void
 chapter_4_draw	src/chapter_4.cpp	/^void chapter_4_draw(Game *game, float dt) {$/;"	f	typeref:typename:void
 chapter_4_entity_draw	src/chapter_4.cpp	/^void chapter_4_entity_draw(Entity *entity, Game *game) {$/;"	f	typeref:typename:void
 chapter_4_entity_update	src/chapter_4.cpp	/^void chapter_4_entity_update(Entity *entity, Game *game, float dt) {$/;"	f	typeref:typename:void

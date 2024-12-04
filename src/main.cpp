@@ -16,8 +16,8 @@
 
 #include <rlgl.h>
 #include <raymath.h>
-#define RLIGHTS_IMPLEMENTATION
-#include <rlights.h>
+//#define RLIGHTS_IMPLEMENTATION
+//#include <rlights.h>
 #define RCAMERA_IMPLEMENTATION
 #include <rcamera.h>
 #include <assert.h>
