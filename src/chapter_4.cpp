@@ -9,6 +9,12 @@ enum Chapter_4_State {
     CHAPTER_4_STATE_WINDOW
 };
 
+enum Chapter_4_Camera_Limit {
+    CHAPTER_4_CAMERA_LIMIT_NONE,
+    CHAPTER_4_CAMERA_LIMIT_BED_FOOT,
+    CHAPTER_4_CAMERA_LIMIT_WINDOW
+};
+
 struct Chapter_4_Text {
     // Each alarm corresponds to a rest in the text, denoted by when
     // the current Text_List's next pointer is null. After alarm[current_index],
@@ -29,7 +35,14 @@ struct Level_Chapter_4 {
 
     Chapter_4_Text text_handler;
 
+    Chapter_4_Camera_Limit camera_limit;
+
     bool wait_devil;
+    bool lock_looking;
+    bool look_at_window;
+
+    float camera_move_time;
+    Vector3 camera_target_saved;
 
     float music_pitch;
     float music_volume;
@@ -130,6 +143,31 @@ void chapter_4_goto_movie(Game *game) {
     movie_init(&game_movie, MOVIE_DRACULA);
 }
 
+void chapter_4_start_look_towards_window(Game *game) {
+    Level_Chapter_4 *level = (Level_Chapter_4*)game->level;
+
+    auto start_looking = [](Game *game) -> void {
+        Level_Chapter_4 *level = (Level_Chapter_4*)game->level;
+
+        level->camera_target_saved = level->camera.target;
+        level->look_at_window = true;
+        level->camera_move_time = 0;
+    };
+
+    level->lock_looking = true;
+
+    play_music(MUSIC_VHS_BAD);
+    level->music_volume = 0.5;
+    level->music_volume_desired = 0.5;
+
+    game->post_processing.type = POST_PROCESSING_VHS;
+    post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_MEDIUM);
+    game->post_processing.vhs.scan_intensity = 0;
+    game->post_processing.vhs.vignette_mix = 0.75;
+
+    add_event(game, start_looking, 3);
+}
+
 void chapter_4_3d_init(Game *game) {
     Level_Chapter_4 *level = (Level_Chapter_4 *)game->level;
 
@@ -142,7 +180,33 @@ void chapter_4_3d_init(Game *game) {
 
     DisableCursor();
 
-    //play_music(MUSIC_VHS_BAD);
+    level->camera_limit = CHAPTER_4_CAMERA_LIMIT_BED_FOOT;
+
+    play_music(MUSIC_NIGHT_AMBIENCE);
+
+    // TODO: Add the sounds: ambience first, then stop the ambience,
+    //                       play a sound by the window, then start
+    //                       vhs.
+
+    auto end_fade = [](Game *game) -> void {
+        Level_Chapter_4 *level = (Level_Chapter_4 *)game->level;
+        level->lock_looking = false;
+        add_event(game, chapter_4_start_look_towards_window, 13.75f);
+
+        auto stop_after = [](Game *game) -> void {
+            stop_music();
+
+            play_sound(SOUND_KNOCKING_4, CHANNEL_WORLD, 0);
+
+            Level_Chapter_4 *level = (Level_Chapter_4 *)game->level;
+            level->lock_looking = true;
+        };
+
+        add_event(game, stop_after, 10);
+    };
+
+    start_fade(game, FADE_IN, 60, end_fade);
+    level->lock_looking = true;
 
     render_width  = DIM_3D_WIDTH;
     render_height = DIM_3D_HEIGHT;
@@ -171,12 +235,6 @@ void chapter_4_3d_init(Game *game) {
         level->scene.materials[i].shader = level->shader;
     }
 
-    /*
-    game->post_processing.type = POST_PROCESSING_VHS;
-    post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_MEDIUM);
-    game->post_processing.vhs.scan_intensity = 0;
-    game->post_processing.vhs.vignette_mix = 1;
-    */
     game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
 }
 
@@ -185,12 +243,14 @@ void chapter_4_3d_init_after_delay(Game *game) {
 
     level->black = true;
 
+    /*
     auto play_open_window = [](Game *game) -> void {
         (void)game;
         play_sound(SOUND_CREAKING);
     };
 
     add_event(game, play_open_window, 4);
+    */
     add_event(game, chapter_4_3d_init, 10);
 }
 
@@ -221,7 +281,7 @@ void chapter_4_init(Game *game) {
     crt->blue_offset  = 0.01f;
 
     crt->should_spin_randomly = true;
-    crt->do_wiggle = false;
+    crt->do_wiggle = true;
 
     Texture2D *textures = atari_assets.textures;
     textures[0] = load_texture(RES_DIR "art/apartment_test.png");
@@ -503,7 +563,7 @@ void chapter_4_init(Game *game) {
                          speed,
                          nullptr);
 
-    chapter_4_3d_init(game);
+    //chapter_4_3d_init(game);
 
     atari_text_list_init(&game->text[30],
                          0,
@@ -581,14 +641,36 @@ void chapter_4_init(Game *game) {
 void chapter_4_3d_update_camera(Level_Chapter_4 *level, Camera3D *camera, float dt) {
     (void)level;
 
+    if (level->lock_looking) {
+        if (level->look_at_window) {
+            const Vector3 target = {2.510594f, 1.131905f, -2.412352f};
+            level->camera_move_time += 0.2f * dt;
+
+            level->camera.target = smoothstep_vector3(level->camera_target_saved,
+                                                      target,
+                                                      min(1, level->camera_move_time));
+            level->camera.fovy = smoothstep(FOV_DEFAULT, 60, min(1, level->camera_move_time));
+
+            if (level->camera_move_time >= 1) {
+                level->camera.target = target;
+                level->look_at_window = false;
+                level->lock_looking   = false;
+                level->camera_limit   = CHAPTER_4_CAMERA_LIMIT_WINDOW;
+
+                // start the window text
+                level->text_handler.start_timer = 3;
+            }
+        }
+        return;
+    }
+
     Vector2 input = input_movement_look(dt);
 
-    // make it less sensitive here
-    input.x *= 0.5;
-    input.y *= 0.5;
+    bool limit = level->camera_limit != CHAPTER_4_CAMERA_LIMIT_NONE;
 
-    //CameraYaw(camera, -mouse.x, false);
-    //CameraPitch(camera, -mouse.y, true, false, false);
+    // make it less sensitive here
+    input.x *= 0.25;
+    input.y *= 0.25;
 
     // Pitch Camera
     {
@@ -596,20 +678,23 @@ void chapter_4_3d_update_camera(Level_Chapter_4 *level, Camera3D *camera, float 
         Vector3 up = GetCameraUp(camera);
         Vector3 target_position = Vector3Subtract(camera->target, camera->position);
 
-        /*
-        // clamp up
-        float max_angle_up = Vector3Angle(up, target_position) - PI/2.5;
-        max_angle_up -= 0.001f; // avoid numerical errors
-        if (pitch_angle > max_angle_up)
-            pitch_angle = max_angle_up;
+        const float max_up = -PI/2.5f;
+        const float max_down = -PI/2.25f;
 
-        // clamp down
-        float max_angle_down = Vector3Angle(Vector3Negate(up), target_position) - PI/2.25;
-        max_angle_down *= -1;
-        max_angle_down += 0.001f; // avoid numerical errors
-        if (pitch_angle < max_angle_down)
-            pitch_angle = max_angle_down;
-            */
+        if (limit) {
+            // clamp up
+            float max_angle_up = Vector3Angle(up, target_position) + max_up;
+            max_angle_up -= 0.001f; // avoid numerical errors
+            if (pitch_angle > max_angle_up)
+                pitch_angle = max_angle_up;
+
+            // clamp down
+            float max_angle_down = Vector3Angle(Vector3Negate(up), target_position) + max_down;
+            max_angle_down *= -1;
+            max_angle_down += 0.001f; // avoid numerical errors
+            if (pitch_angle < max_angle_down)
+                pitch_angle = max_angle_down;
+        }
 
         // Rotation axis
         Vector3 right = GetCameraRight(camera);
@@ -628,21 +713,31 @@ void chapter_4_3d_update_camera(Level_Chapter_4 *level, Camera3D *camera, float 
         Vector3 target_position = Vector3Subtract(camera->target, camera->position);
         target_position = Vector3RotateByAxisAngle(target_position, up, yaw_angle);
 
-        /*
-        float angle = atan2f(target_position.z, target_position.x);
+        if (limit) {
+            float angle = atan2f(target_position.z, target_position.x);
+            
+            switch (level->camera_limit) {
+                case CHAPTER_4_CAMERA_LIMIT_BED_FOOT: {
+                    if (angle > 0 && angle < 2*PI/3)
+                        angle = 2*PI/3;
+                    if (angle < 0 && angle > -31*PI/32)
+                        angle = -31*PI/32;
+                } break;
+                case CHAPTER_4_CAMERA_LIMIT_WINDOW: {
+                    if (angle < -2.3f)
+                        angle = -2.3f;
+                    if (angle > -1.45f)
+                        angle = -1.45f;
+                } break;
+            }
 
-        float start = -2.34f;
-        float end   = -1.50f;
+            // clamped direction
+            float target_x = cos(angle);
+            float target_z = sin(angle);
 
-        angle = Clamp(angle, start, end);
-
-        // clamped direction
-        float target_x = cos(angle);
-        float target_z = sin(angle);
-
-        target_position.x = target_x;
-        target_position.z = target_z;
-        */
+            target_position.x = target_x;
+            target_position.z = target_z;
+        }
 
         camera->target = Vector3Add(camera->position, target_position);
     }
@@ -668,9 +763,7 @@ void chapter_4_update_text(Text_List **game_current, Chapter_4_Text *text_handle
 void chapter_4_update(Game *game, float dt) {
     Level_Chapter_4 *level = (Level_Chapter_4 *)game->level;
 
-    if (IsKeyPressed(KEY_L)) play_sound(SOUND_TEXT_SCROLL_CHASE);
-
-    print_cam(&level->camera);
+    //print_cam(&level->camera);
 
     if (level->black)
         return;
@@ -739,6 +832,12 @@ void chapter_4_update(Game *game, float dt) {
         case CHAPTER_4_STATE_BED_1: {
         } break;
         case CHAPTER_4_STATE_3D: {
+            /*
+            if (IsKeyPressed(KEY_SPACE)) {
+                chapter_4_start_look_towards_window(game);
+            }
+            */
+
             chapter_4_3d_update_camera(level, &level->camera, dt);
 
             chapter_4_update_text(&game->current, &level->text_handler, dt);
@@ -855,15 +954,13 @@ void chapter_4_draw(Game *game, float dt) {
             static bool first = true;
 
             if (first) {
-                //add_event(game, chapter_4_3d_init, 5);
-                //add_event(game, chapter_4_goto_movie, 5);
                 game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
 
                 auto yearning = [](Game *game) -> void {
                     game->current = &game->text[30];
                 };
 
-                add_event(game, yearning, 5);
+                add_event(game, yearning, 8);
                 game_movie.end_movie_callback = chapter_4_3d_init_after_delay;
                 first = false;
             }
@@ -881,7 +978,6 @@ void chapter_4_draw(Game *game, float dt) {
 
             SetShaderValue(level->shader, level->shader.locs[SHADER_LOC_VECTOR_VIEW], &level->camera.position.x, SHADER_UNIFORM_VEC3);
 
-            BeginTextureMode(game->render_target_3d);
             {
                 ClearBackground(BLACK);
 
@@ -893,7 +989,6 @@ void chapter_4_draw(Game *game, float dt) {
 
                 EndMode3D();
             }
-            EndTextureMode();
         } break;
         case CHAPTER_4_STATE_WINDOW: {
             ClearBackground(BLACK);
@@ -1001,6 +1096,12 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
                         //set_music_volume(MUSIC_GLITCH, 0);
                         level->music_volume_desired = 0;
 
+                        Post_Processing_Crt *crt = &game->post_processing.crt;
+
+                        crt->should_spin_randomly = false;
+                        crt->do_wiggle = false;
+                        crt->do_spin = false;
+
                         level->djinn = chapter_4_make_entity(ENTITY_CHAP_4_DEVIL, -55, 145);
                         array_add(&game->entities, level->djinn);
                     }
@@ -1087,6 +1188,12 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
 
                 //set_music_volume(MUSIC_GLITCH, 1);
                 level->music_volume = level->music_volume_desired = 1;
+
+
+                Post_Processing_Crt *crt = &game->post_processing.crt;
+
+                crt->should_spin_randomly = true;
+                crt->do_wiggle = true;
             }
 
             entity->chap_4_devil.time += dt;

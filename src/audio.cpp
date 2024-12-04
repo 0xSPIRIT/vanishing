@@ -15,6 +15,7 @@ enum Music_ID {
     MUSIC_VHS_BAD_3,
     MUSIC_NOISE,
     MUSIC_GLITCH,
+    MUSIC_NIGHT_AMBIENCE,
     MUSIC_COUNT
 };
 
@@ -150,7 +151,7 @@ bool is_music_playing(Music_ID music) {
     return IsMusicStreamPlaying(game_audio.musics[music]);
 }
 
-void play_sound(Sound_ID sound_id, Channel channel_override) {
+void play_sound(Sound_ID sound_id, Channel channel_override, float pan) {
     Game_Sound *sound = game_audio.sounds + sound_id;
 
     sound->channel = channel_override;
@@ -158,11 +159,13 @@ void play_sound(Sound_ID sound_id, Channel channel_override) {
     float volume = sound->volume * channel_volumes[sound->channel];
     SetSoundVolume(sound->sound, volume);
 
+    SetSoundPan(sound->sound, pan);
+
     PlaySound(sound->sound);
 }
 
 void play_sound(Sound_ID sound_id) {
-    play_sound(sound_id, game_audio.sounds[sound_id].channel);
+    play_sound(sound_id, game_audio.sounds[sound_id].channel, 0.5);
 }
 
 bool is_sound_playing(Sound_ID sound_id) {
@@ -183,6 +186,8 @@ void game_audio_init() {
     audio->musics[MUSIC_VHS_BAD_3]       = load_music("vhs_bad_3.ogg");
     audio->musics[MUSIC_NOISE]           = load_music("whitenoise.ogg");
     audio->musics[MUSIC_GLITCH]          = load_music("glitch.ogg");
+    audio->musics[MUSIC_NIGHT_AMBIENCE]  = load_music("nightambience.ogg");
+
     SetMusicVolume(audio->musics[MUSIC_NOISE], 0.2f);
     SetMusicVolume(audio->musics[MUSIC_GLITCH], 1);
 
@@ -193,7 +198,7 @@ void game_audio_init() {
     audio->sounds[SOUND_TEXT_SCROLL_FEMALE] = load_sound(CHANNEL_GUI, "textscroll_female.wav", volume * 2);
     audio->sounds[SOUND_TEXT_SCROLL_MALE]   = load_sound(CHANNEL_GUI, "textscroll_guy.wav",    volume * 2);
 
-    audio->sounds[SOUND_TEXT_SCROLL_LOW] = load_sound(CHANNEL_GUI,   "textblip_low.wav", volume);
+    audio->sounds[SOUND_TEXT_SCROLL_LOW] = load_sound(CHANNEL_GUI,   "textblip_low.wav");
     audio->sounds[SOUND_TEXT_SCROLL_BAD] = load_sound(CHANNEL_GUI,   "textblip_bad.wav");
     audio->sounds[SOUND_TEXT_CONFIRM]    = load_sound(CHANNEL_GUI,   "confirm.ogg");
 

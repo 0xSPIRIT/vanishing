@@ -63,7 +63,7 @@ enum Game_Mode {
 };
 Game_Mode game_mode = GAME_MODE_INVALID;
 
-int chapter = 2;
+int chapter = 4;
 
 Font global_font, atari_font, comic_sans, italics_font, bold_font, bold_2_font, mono_font, bold_font_big, atari_small_font, titlescreen_font, titlescreen_minor_font, dos_font;
 
@@ -216,7 +216,7 @@ MainFunction() {
     if (show_titlescreen)
         set_game_mode(GAME_MODE_TITLESCREEN);
     else
-        set_game_mode(GAME_MODE_ATARI);
+        set_game_mode(GAME_MODE_INTRO);
 
     initialize_game_mode(game_mode);
 

@@ -91,6 +91,9 @@ CHAPTER_3_STATE_OFFICE	src/chapter_3.cpp	/^    CHAPTER_3_STATE_OFFICE,$/;"	e	enu
 CHAPTER_3_STATE_ROAD	src/chapter_3.cpp	/^    CHAPTER_3_STATE_ROAD,$/;"	e	enum:Chapter_3_State	file:
 CHAPTER_3_STATE_TIKTOK	src/chapter_3.cpp	/^    CHAPTER_3_STATE_TIKTOK,$/;"	e	enum:Chapter_3_State	file:
 CHAPTER_3_STATE_WINDOW	src/chapter_3.cpp	/^    CHAPTER_3_STATE_WINDOW,$/;"	e	enum:Chapter_3_State	file:
+CHAPTER_4_CAMERA_LIMIT_BED_FOOT	src/chapter_4.cpp	/^    CHAPTER_4_CAMERA_LIMIT_BED_FOOT,$/;"	e	enum:Chapter_4_Camera_Limit	file:
+CHAPTER_4_CAMERA_LIMIT_NONE	src/chapter_4.cpp	/^    CHAPTER_4_CAMERA_LIMIT_NONE,$/;"	e	enum:Chapter_4_Camera_Limit	file:
+CHAPTER_4_CAMERA_LIMIT_WINDOW	src/chapter_4.cpp	/^    CHAPTER_4_CAMERA_LIMIT_WINDOW$/;"	e	enum:Chapter_4_Camera_Limit	file:
 CHAPTER_4_STATE_3D	src/chapter_4.cpp	/^    CHAPTER_4_STATE_3D,$/;"	e	enum:Chapter_4_State	file:
 CHAPTER_4_STATE_ATARI	src/chapter_4.cpp	/^    CHAPTER_4_STATE_ATARI,$/;"	e	enum:Chapter_4_State	file:
 CHAPTER_4_STATE_BED_1	src/chapter_4.cpp	/^    CHAPTER_4_STATE_BED_1,$/;"	e	enum:Chapter_4_State	file:
@@ -128,6 +131,7 @@ Chapter_3_Job_Minigame	src/chapter_3.cpp	/^struct Chapter_3_Job_Minigame {$/;"	s
 Chapter_3_Lunch_Text	src/chapter_3.cpp	/^enum Chapter_3_Lunch_Text {$/;"	g	file:
 Chapter_3_Phone	src/chapter_3.cpp	/^struct Chapter_3_Phone {$/;"	s	file:
 Chapter_3_State	src/chapter_3.cpp	/^enum Chapter_3_State {$/;"	g	file:
+Chapter_4_Camera_Limit	src/chapter_4.cpp	/^enum Chapter_4_Camera_Limit {$/;"	g	file:
 Chapter_4_Devil	src/chapter_4.h	/^struct Chapter_4_Devil {$/;"	s
 Chapter_4_Microwave	src/chapter_4.h	/^struct Chapter_4_Microwave {$/;"	s
 Chapter_4_State	src/chapter_4.cpp	/^enum Chapter_4_State {$/;"	g	file:
@@ -659,6 +663,7 @@ camera	src/titlescreen.cpp	/^    Camera3D camera;$/;"	m	struct:Titlescreen	typer
 camera_2d	src/chapter_4.cpp	/^    Camera2D camera_2d;$/;"	m	struct:Level_Chapter_4	typeref:typename:Camera2D	file:
 camera_height	src/chapter_5.cpp	/^    float camera_height;$/;"	m	struct:Level_Chapter_5	typeref:typename:float	file:
 camera_height	src/chapter_epilogue.cpp	/^    float          camera_height;$/;"	m	struct:Level_Chapter_Epilogue	typeref:typename:float	file:
+camera_limit	src/chapter_4.cpp	/^    Chapter_4_Camera_Limit camera_limit;$/;"	m	struct:Level_Chapter_4	typeref:typename:Chapter_4_Camera_Limit	file:
 camera_position_saved	src/chapter_5.cpp	/^        Vector3          camera_position_saved;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80608	typeref:typename:Vector3	file:
 camera_target_saved	src/chapter_5.cpp	/^        Vector3          camera_target_saved;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80608	typeref:typename:Vector3	file:
 can_open_dialogue	src/game.cpp	/^bool can_open_dialogue(Game *game, Entity *e, Entity *player) {$/;"	f	typeref:typename:bool
@@ -685,7 +690,7 @@ chap_3_cubicle	src/game.cpp	/^        Chapter_3_Cubicle chap_3_cubicle;$/;"	m	un
 chap_4_devil	src/game.cpp	/^        Chapter_4_Devil     chap_4_devil;$/;"	m	union:Entity::__anoneafbdd87010a	typeref:typename:Chapter_4_Devil	file:
 chap_4_microwave	src/game.cpp	/^        Chapter_4_Microwave chap_4_microwave;$/;"	m	union:Entity::__anoneafbdd87010a	typeref:typename:Chapter_4_Microwave	file:
 chap_4_window	src/game.cpp	/^        Chapter_4_Window    chap_4_window;$/;"	m	union:Entity::__anoneafbdd87010a	typeref:typename:Chapter_4_Window	file:
-chapter	src/main.cpp	/^int chapter = 2;$/;"	v	typeref:typename:int
+chapter	src/main.cpp	/^int chapter = 5;$/;"	v	typeref:typename:int
 chapter_1_activate_node	src/chapter_1.cpp	/^void chapter_1_activate_node(void *ptr_game) {$/;"	f	typeref:typename:void
 chapter_1_apartment_text	src/chapter_1.cpp	/^void chapter_1_apartment_text(Text_List *list, char *line,$/;"	f	typeref:typename:void
 chapter_1_call_text	src/chapter_1.cpp	/^void chapter_1_call_text(Text_List *list, char *speaker,$/;"	f	typeref:typename:void
@@ -1523,7 +1528,9 @@ load_music	src/audio.cpp	/^Music load_music(const char *file) {$/;"	f	typeref:ty
 load_sound	src/audio.cpp	/^Game_Sound load_sound(Channel channel, const char *file, float volume=1) {$/;"	f	typeref:typename:Game_Sound
 load_texture	src/util.cpp	/^Texture2D load_texture(const char *filename) {$/;"	f	typeref:typename:Texture2D
 location	src/text.cpp	/^    Location location       = Location::Bottom;$/;"	m	struct:Text_List	typeref:typename:Location	file:
+lock_looking	src/chapter_4.cpp	/^    bool lock_looking;$/;"	m	struct:Level_Chapter_4	typeref:typename:bool	file:
 look_angle	src/chapter_5.cpp	/^    float look_angle;$/;"	m	struct:Chapter_5_Chair	typeref:typename:float	file:
+look_at_window	src/chapter_4.cpp	/^    bool look_at_window;$/;"	m	struct:Level_Chapter_4	typeref:typename:bool	file:
 look_timer	src/chapter_5.cpp	/^    float look_timer;$/;"	m	struct:Chapter_5_Chair	typeref:typename:float	file:
 looking_at	src/chapter_5.cpp	/^    Chapter_5_Chair *looking_at; \/\/ null for looking at the camera$/;"	m	struct:Chapter_5_Chair	typeref:typename:Chapter_5_Chair *	file:
 loop	src/pl_mpeg.h	/^	int loop;$/;"	m	struct:plm_t	typeref:typename:int

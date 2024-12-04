@@ -2237,7 +2237,7 @@ void chapter_5_init(Game *game) {
 
     level->transition_fade = false;
 
-    level->good = true;
+    level->good = false;
     chapter_5_goto_scene(game, CHAPTER_5_SCENE_DINNER_PARTY);
 }
 
@@ -2942,10 +2942,6 @@ void gallery_check_quotes(Game *game, float dt) {
 
     if (quote) {
         level->current_quote_time += 0.1f * dt;
-        /*
-        if (level->current_quote_time > 0.5)
-            level->current_quote_time = 1;
-            */
 
         level->camera.target = smoothstep_vector3(level->camera_target_saved,
                                                   quote->target,

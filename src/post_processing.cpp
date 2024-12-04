@@ -211,12 +211,12 @@ void post_process_crt_uniforms(Post_Processing_Crt *crt) {
             if (curtime - crt->last_spin_time >= crt->time_to_spin) {
                 crt->do_spin = true;
                 crt->last_spin_time = curtime;
-                crt->spin_duration = rand_range(2.0f/60.0f, 8.0f/60.0f);
+                crt->spin_duration = rand_range(2.0f/60.0f, 20.0f/60.0f);
             }
         } else if (curtime - crt->last_spin_time >= crt->spin_duration) {
             crt->do_spin = false;
             crt->last_spin_time = curtime;
-            crt->time_to_spin = rand_range(0.2f, 6.f);
+            crt->time_to_spin = rand_range(0.2f, 5.f);
         }
     }
     SetShaderValue(crt->shader, crt->u_do_spin, &crt->do_spin, SHADER_UNIFORM_INT);

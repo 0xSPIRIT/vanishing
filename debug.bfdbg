@@ -26,7 +26,7 @@ Type = "TabbedView"
 [[MainDockingFrame.DockedWidgets.Tabs]]
 Active = true
 TabLabel = "chapter_2.cpp"
-TabWidth = 118.0851
+TabWidth = 108.1915
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\chapter_2.cpp"
@@ -40,7 +40,6 @@ TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\audio.cpp"
 CursorPos = 2875
-VertPos = 3388.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "Disassembly"
@@ -62,7 +61,7 @@ TabWidth = 108.1915
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\chapter_4.cpp"
-CursorPos = 21991
+CursorPos = 4836
 
 [[MainDockingFrame.DockedWidgets]]
 RequestedWidth = 825.0

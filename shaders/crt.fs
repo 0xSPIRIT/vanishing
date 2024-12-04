@@ -66,12 +66,17 @@ void main() {
     vec2 tex_coord = fragTexCoord;
 
     if (do_wiggle == 1) {
-        float f = time * 30;
-        tex_coord.y += 0.001 * sin(2 * f) * (1 - sin(f/10));
+        float f = mod(time,30);
+        tex_coord.y += 0.001 * rand(vec2(f, f));
     }
 
     if (do_spin == 1) {
         tex_coord.y += mod(time * 3, 1);
+
+        int sign = 1;
+        //if (mod(time, 2) < 1) sign = -1;
+
+        tex_coord.x += sign * 0.25 * tex_coord.y * tex_coord.y;
     }
 
     tex_coord.y = mod(tex_coord.y, 1);
