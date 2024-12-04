@@ -13,6 +13,9 @@ uniform float mix_factor;
 uniform float vignette_intensity;
 uniform float vignette_mix;
 
+uniform int do_spin;
+uniform int do_wiggle;
+
 out vec4 finalColor;
 
 float rand(vec2 co){
@@ -52,6 +55,23 @@ vec4 vignette(vec2 tex_coord, vec4 col, float intensity) {
 
 void main() {
     vec2 tex_coord = fragTexCoord;
+
+    if (do_wiggle == 1) {
+        float f = mod(time,30);
+        tex_coord.y += 0.001 * rand(vec2(f, f));
+    }
+
+    if (do_spin == 1) {
+        float amount = mod(time*3, 1);
+        amount *= amount * amount;
+
+        tex_coord.y += amount;
+
+        int sign = 1;
+        //if (mod(time, 2) < 1) sign = -1;
+
+        tex_coord.x += sign * 0.25 * tex_coord.y * tex_coord.y;
+    }
 
     vec4 unprocessed_color = texture(texture0, tex_coord);
 
@@ -111,7 +131,7 @@ void main() {
         x_b *= 6;
         y_b *= 7;
     } else if (noise_intensity > 2) {
-        x = mod(fragTexCoord.x * 0.005 + t/2, 100);
+        x = mod(fragTexCoord.x * 0.005 + t/2, 200);
         y = mod(fragTexCoord.y * 0.009 + t*2, 100);
 
         x_r = x;

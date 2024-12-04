@@ -12,6 +12,20 @@ enum Vhs_Intensity {
     VHS_INTENSITY_HIGH
 };
 
+struct Post_Processing_Spin {
+    int    u_do_spin;
+    int    u_do_wiggle;
+
+    int    do_spin;
+    int    do_wiggle;
+
+    bool   should_spin_randomly;
+
+    float  last_spin_time;
+    float  spin_duration;
+    float  time_to_spin;
+};
+
 struct Post_Processing_Bloom {
     Shader shader;
 
@@ -41,6 +55,8 @@ struct Post_Processing_Vhs {
     float  vignette_intensity;
     float  vignette_mix;
     float  mix_factor;
+
+    Post_Processing_Spin spinner;
 };
 
 struct Post_Processing_Crt {
@@ -54,13 +70,9 @@ struct Post_Processing_Crt {
     int    u_vignette_mix;
     int    u_noise_intensity;
     int    u_red_offset, u_green_offset, u_blue_offset;
-    int    u_do_spin;
-    int    u_do_wiggle;
 
     int    do_scanline_effect;
     int    do_warp_effect;
-    int    do_spin;
-    int    do_wiggle;
 
     float  abberation_intensity;
     float  vignette_intensity;
@@ -69,10 +81,7 @@ struct Post_Processing_Crt {
     float  noise_intensity;
     float  red_offset, green_offset, blue_offset; // for chromatic abberation
 
-    bool   should_spin_randomly;
-    float  last_spin_time;
-    float  spin_duration;
-    float  time_to_spin;
+    Post_Processing_Spin spinner;
 };
 
 struct Post_Processing {
@@ -84,6 +93,34 @@ struct Post_Processing {
     Post_Processing_Crt   crt;
     Post_Processing_Bloom bloom;
 };
+
+void post_process_spin_init(Shader shader, Post_Processing_Spin *spinner) {
+    spinner->u_do_spin   = GetShaderLocation(shader, "do_spin");
+    spinner->u_do_wiggle = GetShaderLocation(shader, "do_wiggle");
+
+    spinner->do_wiggle = 1;
+}
+
+void post_process_spin_uniforms(Shader shader, Post_Processing_Spin *spin) {
+    float curtime = GetTime();
+
+    if (spin->should_spin_randomly) {
+        if (!spin->do_spin) {
+            if (curtime - spin->last_spin_time >= spin->time_to_spin) {
+                spin->do_spin = true;
+                spin->last_spin_time = curtime;
+                spin->spin_duration = rand_range(2.0f/60.0f, 20.0f/60.0f);
+            }
+        } else if (curtime - spin->last_spin_time >= spin->spin_duration) {
+            spin->do_spin = false;
+            spin->last_spin_time = curtime;
+            spin->time_to_spin = rand_range(0.2f, 5.f);
+        }
+    }
+
+    SetShaderValue(shader, spin->u_do_wiggle, &spin->do_wiggle, SHADER_UNIFORM_INT);
+    SetShaderValue(shader, spin->u_do_spin,   &spin->do_spin,   SHADER_UNIFORM_INT);
+}
 
 void post_process_init(Post_Processing *post) {
     post->vhs.shader = LoadShader(0, RES_DIR "shaders/vhs.fs");
@@ -100,6 +137,8 @@ void post_process_init(Post_Processing *post) {
     vhs->u_vignette_intensity   = GetShaderLocation(vhs->shader, "vignette_intensity");
     vhs->u_vignette_mix         = GetShaderLocation(vhs->shader, "vignette_mix");
 
+    post_process_spin_init(vhs->shader, &vhs->spinner);
+
     vhs->scan_intensity = 1;
     vhs->noise_intensity = 1;
     vhs->abberation_intensity = 1;
@@ -107,13 +146,11 @@ void post_process_init(Post_Processing *post) {
     vhs->vignette_intensity = 0;
     vhs->vignette_mix = 1;
 
-
     Post_Processing_Crt *crt = &post->crt;
 
     crt->do_scanline_effect = 1;
     crt->abberation_intensity = 1;
     crt->vignette_intensity = 1;
-    crt->do_wiggle = 1;
 
     crt->scanline_alpha = 0.25;
     crt->vignette_mix = 1;
@@ -135,8 +172,8 @@ void post_process_init(Post_Processing *post) {
     crt->u_red_offset           = GetShaderLocation(crt->shader, "redOffset");
     crt->u_green_offset         = GetShaderLocation(crt->shader, "greenOffset");
     crt->u_blue_offset          = GetShaderLocation(crt->shader, "blueOffset");
-    crt->u_do_spin              = GetShaderLocation(crt->shader, "do_spin");
-    crt->u_do_wiggle            = GetShaderLocation(crt->shader, "do_wiggle");
+
+    post_process_spin_init(crt->shader, &crt->spinner);
 
     Post_Processing_Bloom *bloom = &post->bloom;
 
@@ -187,39 +224,29 @@ void post_process_vhs_uniforms(Post_Processing_Vhs *vhs) {
     SetShaderValue(shader, vhs->u_mix_factor, &vhs->mix_factor, SHADER_UNIFORM_FLOAT);
     SetShaderValue(shader, vhs->u_vignette_intensity, &vhs->vignette_intensity, SHADER_UNIFORM_FLOAT);
     SetShaderValue(shader, vhs->u_vignette_mix, &vhs->vignette_mix, SHADER_UNIFORM_FLOAT);
+
+    post_process_spin_uniforms(shader, &vhs->spinner);
 }
 
 void post_process_crt_uniforms(Post_Processing_Crt *crt) {
     float curtime = GetTime();
-    SetShaderValue(crt->shader, crt->u_time, &curtime, SHADER_UNIFORM_FLOAT);
-    SetShaderValue(crt->shader, crt->u_do_scanline_effect, &crt->do_scanline_effect, SHADER_UNIFORM_INT);
-    SetShaderValue(crt->shader, crt->u_do_warp_effect, &crt->do_warp_effect, SHADER_UNIFORM_INT);
-    SetShaderValue(crt->shader, crt->u_abberation_intensity, &crt->abberation_intensity, SHADER_UNIFORM_FLOAT);
-    SetShaderValue(crt->shader, crt->u_vignette_intensity, &crt->vignette_intensity, SHADER_UNIFORM_FLOAT);
-    SetShaderValue(crt->shader, crt->u_scanline_alpha, &crt->scanline_alpha, SHADER_UNIFORM_FLOAT);
-    SetShaderValue(crt->shader, crt->u_vignette_mix, &crt->vignette_mix, SHADER_UNIFORM_FLOAT);
-    SetShaderValue(crt->shader, crt->u_noise_intensity, &crt->noise_intensity, SHADER_UNIFORM_FLOAT);
 
-    SetShaderValue(crt->shader, crt->u_red_offset, &crt->red_offset, SHADER_UNIFORM_FLOAT);
-    SetShaderValue(crt->shader, crt->u_green_offset, &crt->green_offset, SHADER_UNIFORM_FLOAT);
-    SetShaderValue(crt->shader, crt->u_blue_offset, &crt->blue_offset, SHADER_UNIFORM_FLOAT);
+    Shader shader = crt->shader;
 
-    SetShaderValue(crt->shader, crt->u_do_wiggle, &crt->do_wiggle, SHADER_UNIFORM_INT);
+    SetShaderValue(shader, crt->u_time, &curtime, SHADER_UNIFORM_FLOAT);
+    SetShaderValue(shader, crt->u_do_scanline_effect, &crt->do_scanline_effect, SHADER_UNIFORM_INT);
+    SetShaderValue(shader, crt->u_do_warp_effect, &crt->do_warp_effect, SHADER_UNIFORM_INT);
+    SetShaderValue(shader, crt->u_abberation_intensity, &crt->abberation_intensity, SHADER_UNIFORM_FLOAT);
+    SetShaderValue(shader, crt->u_vignette_intensity, &crt->vignette_intensity, SHADER_UNIFORM_FLOAT);
+    SetShaderValue(shader, crt->u_scanline_alpha, &crt->scanline_alpha, SHADER_UNIFORM_FLOAT);
+    SetShaderValue(shader, crt->u_vignette_mix, &crt->vignette_mix, SHADER_UNIFORM_FLOAT);
+    SetShaderValue(shader, crt->u_noise_intensity, &crt->noise_intensity, SHADER_UNIFORM_FLOAT);
 
-    if (crt->should_spin_randomly) {
-        if (!crt->do_spin) {
-            if (curtime - crt->last_spin_time >= crt->time_to_spin) {
-                crt->do_spin = true;
-                crt->last_spin_time = curtime;
-                crt->spin_duration = rand_range(2.0f/60.0f, 20.0f/60.0f);
-            }
-        } else if (curtime - crt->last_spin_time >= crt->spin_duration) {
-            crt->do_spin = false;
-            crt->last_spin_time = curtime;
-            crt->time_to_spin = rand_range(0.2f, 5.f);
-        }
-    }
-    SetShaderValue(crt->shader, crt->u_do_spin, &crt->do_spin, SHADER_UNIFORM_INT);
+    SetShaderValue(shader, crt->u_red_offset, &crt->red_offset, SHADER_UNIFORM_FLOAT);
+    SetShaderValue(shader, crt->u_green_offset, &crt->green_offset, SHADER_UNIFORM_FLOAT);
+    SetShaderValue(shader, crt->u_blue_offset, &crt->blue_offset, SHADER_UNIFORM_FLOAT);
+
+    post_process_spin_uniforms(shader, &crt->spinner);
 }
 
 void post_process_bloom_uniforms(Post_Processing_Bloom *bloom) {

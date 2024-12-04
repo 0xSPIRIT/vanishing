@@ -41,7 +41,7 @@ struct Level_Chapter_4 {
     bool lock_looking;
     bool look_at_window;
 
-    float camera_move_time;
+    double camera_move_time;
     Vector3 camera_target_saved;
 
     float music_pitch;
@@ -76,8 +76,26 @@ void chapter_4_set_state_atari(void *game_ptr) {
     Game *game = (Game *)game_ptr;
     Level_Chapter_4 *level = (Level_Chapter_4 *)game->level;
 
-    game->post_processing.crt.vignette_mix = 1;
-    game->post_processing.crt.do_scanline_effect = true;
+    game->post_processing.type = POST_PROCESSING_CRT;
+
+    Post_Processing_Crt *crt = &game->post_processing.crt;
+
+    crt->do_scanline_effect = true;
+
+    crt->do_scanline_effect = true;
+    crt->do_warp_effect = false;
+    crt->abberation_intensity = 1;
+    crt->vignette_intensity = 2;
+    crt->vignette_mix = 0.95f;
+
+    crt->noise_intensity = 1;
+
+    crt->red_offset   = 0.006f;
+    crt->green_offset = 0.009f;
+    crt->blue_offset  = 0.01f;
+
+    crt->spinner.should_spin_randomly = true;
+    crt->spinner.do_wiggle = true;
 
     //set_music_volume(MUSIC_GLITCH, 1);
 
@@ -156,16 +174,7 @@ void chapter_4_start_look_towards_window(Game *game) {
 
     level->lock_looking = true;
 
-    play_music(MUSIC_VHS_BAD);
-    level->music_volume = 0.5;
-    level->music_volume_desired = 0.5;
-
-    game->post_processing.type = POST_PROCESSING_VHS;
-    post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_MEDIUM);
-    game->post_processing.vhs.scan_intensity = 0;
-    game->post_processing.vhs.vignette_mix = 0.75;
-
-    add_event(game, start_looking, 3);
+    add_event(game, start_looking, 2);
 }
 
 void chapter_4_3d_init(Game *game) {
@@ -191,7 +200,7 @@ void chapter_4_3d_init(Game *game) {
     auto end_fade = [](Game *game) -> void {
         Level_Chapter_4 *level = (Level_Chapter_4 *)game->level;
         level->lock_looking = false;
-        add_event(game, chapter_4_start_look_towards_window, 13.75f);
+        add_event(game, chapter_4_start_look_towards_window, 11);
 
         auto stop_after = [](Game *game) -> void {
             stop_music();
@@ -251,7 +260,7 @@ void chapter_4_3d_init_after_delay(Game *game) {
 
     add_event(game, play_open_window, 4);
     */
-    add_event(game, chapter_4_3d_init, 10);
+    add_event(game, chapter_4_3d_init, 5);
 }
 
 void chapter_4_init(Game *game) {
@@ -259,29 +268,13 @@ void chapter_4_init(Game *game) {
 
     level->yield_control = true;
 
-    level->state = CHAPTER_4_STATE_ATARI;
+    chapter_4_set_state_atari(game);
     //level->state = CHAPTER_4_STATE_INITIAL_BLACK;
 
     game->textbox_alpha = 255;
 
     level->music_volume = level->music_volume_desired = 1;
     level->music_pitch = 1;
-
-    game->post_processing.type = POST_PROCESSING_CRT;
-
-    Post_Processing_Crt *crt = &game->post_processing.crt;
-
-    crt->do_scanline_effect = true;
-    crt->do_warp_effect = false;
-    crt->abberation_intensity = 1;
-    crt->vignette_intensity = 2;
-
-    crt->red_offset   = 0.006f;
-    crt->green_offset = 0.009f;
-    crt->blue_offset  = 0.01f;
-
-    crt->should_spin_randomly = true;
-    crt->do_wiggle = true;
 
     Texture2D *textures = atari_assets.textures;
     textures[0] = load_texture(RES_DIR "art/apartment_test.png");
@@ -326,7 +319,7 @@ void chapter_4_init(Game *game) {
         add_wall(e, {37, 198, 108, 8});
         add_wall(e, {36, 312, 117, 2});
         add_wall(e, {139, 266, 13, 40});
-        add_wall(e, {144, 191, 134, 29});
+        add_wall(e, {144+8, 191, 134, 29});
         add_wall(e, {29, 188, 8, 127});
         add_wall(e, {46, 268, 55, 21});
         add_wall(e, {152, 260, 174, 58});
@@ -638,13 +631,11 @@ void chapter_4_init(Game *game) {
     game->text[38].callbacks[0] = goto_movie_delay;
 }
 
-void chapter_4_3d_update_camera(Level_Chapter_4 *level, Camera3D *camera, float dt) {
-    (void)level;
-
+void chapter_4_3d_update_camera(Game *game, Level_Chapter_4 *level, Camera3D *camera, float dt) {
     if (level->lock_looking) {
         if (level->look_at_window) {
             const Vector3 target = {2.510594f, 1.131905f, -2.412352f};
-            level->camera_move_time += 0.2f * dt;
+            level->camera_move_time += 0.125 * dt;
 
             level->camera.target = smoothstep_vector3(level->camera_target_saved,
                                                       target,
@@ -652,13 +643,39 @@ void chapter_4_3d_update_camera(Level_Chapter_4 *level, Camera3D *camera, float 
             level->camera.fovy = smoothstep(FOV_DEFAULT, 60, min(1, level->camera_move_time));
 
             if (level->camera_move_time >= 1) {
-                level->camera.target = target;
+                //level->camera.target = target;
+                level->camera_move_time = 1; // unnecessary?
+
                 level->look_at_window = false;
-                level->lock_looking   = false;
                 level->camera_limit   = CHAPTER_4_CAMERA_LIMIT_WINDOW;
 
-                // start the window text
-                level->text_handler.start_timer = 3;
+                auto vhs = [](Game *game) -> void {
+                    Level_Chapter_4 *level = (Level_Chapter_4*)game->level;
+
+                    level->music_volume = 1;
+                    level->music_volume_desired = 1;
+                    set_music_volume(MUSIC_VHS_BAD, level->music_volume);
+                    play_music(MUSIC_VHS_BAD);
+
+                    level->lock_looking   = false;
+
+                    play_sound(SOUND_SCREAM);
+
+                    Post_Processing_Vhs *vhs = &game->post_processing.vhs;
+
+                    game->post_processing.type = POST_PROCESSING_VHS;
+
+                    post_process_vhs_set_intensity(vhs, VHS_INTENSITY_MEDIUM);
+                    vhs->scan_intensity = 0;
+                    vhs->vignette_mix = 0.85f;
+                    vhs->spinner.should_spin_randomly = true;
+                    vhs->spinner.do_wiggle = true;
+
+                    // start the window text
+                    level->text_handler.start_timer = 3;
+                };
+
+                add_event(game, vhs, 2);
             }
         }
         return;
@@ -812,9 +829,11 @@ void chapter_4_update(Game *game, float dt) {
 
             if (first) {
                 add_event(game, chapter_4_start_text, 1);
-                play_music(MUSIC_GLITCH, false);
                 first = false;
             }
+
+            if (!is_music_playing(MUSIC_GLITCH))
+                play_music(MUSIC_GLITCH, false);
 
             for (int i = 0; i < game->entities.length; i++) {
                 Entity *e = game->entities.data[i];
@@ -838,7 +857,7 @@ void chapter_4_update(Game *game, float dt) {
             }
             */
 
-            chapter_4_3d_update_camera(level, &level->camera, dt);
+            chapter_4_3d_update_camera(game, level, &level->camera, dt);
 
             chapter_4_update_text(&game->current, &level->text_handler, dt);
 
@@ -921,30 +940,30 @@ void chapter_4_draw(Game *game, float dt) {
 
             if (level->window_popup) {
                 if (level->window->chap_4_window.closed) {
-                    draw_popup("Open windows");
+                    draw_popup("Open windows", WHITE);
                 } else {
-                    draw_popup("Close windows");
+                    draw_popup("Close windows", WHITE);
                 }
             }
 
             if (level->check_window_popup) {
-                draw_popup("Check windows");
+                draw_popup("Check windows", WHITE);
             }
 
             if (level->microwave_popup) {
-                draw_popup("I lost my apetite");
+                draw_popup("I lost my apetite", WHITE);
             }
 
             if (level->bed_popup) {
                 if (level->window->chap_4_window.closed) {
-                    draw_popup("Go to bed.");
+                    draw_popup("Go to bed.", WHITE);
 
                     if (is_action_pressed()) {
                         level->state = CHAPTER_4_STATE_BED_1;
                         stop_music();
                     }
                 } else {
-                    draw_popup("Ensure the windows\n     are closed.");
+                    draw_popup("Ensure the windows\n     are closed.", WHITE);
                 }
             }
         } break;
@@ -1098,9 +1117,9 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
 
                         Post_Processing_Crt *crt = &game->post_processing.crt;
 
-                        crt->should_spin_randomly = false;
-                        crt->do_wiggle = false;
-                        crt->do_spin = false;
+                        crt->spinner.should_spin_randomly = false;
+                        crt->spinner.do_wiggle = false;
+                        crt->spinner.do_spin = false;
 
                         level->djinn = chapter_4_make_entity(ENTITY_CHAP_4_DEVIL, -55, 145);
                         array_add(&game->entities, level->djinn);
@@ -1192,8 +1211,8 @@ void chapter_4_entity_update(Entity *entity, Game *game, float dt) {
 
                 Post_Processing_Crt *crt = &game->post_processing.crt;
 
-                crt->should_spin_randomly = true;
-                crt->do_wiggle = true;
+                crt->spinner.should_spin_randomly = true;
+                crt->spinner.do_wiggle = true;
             }
 
             entity->chap_4_devil.time += dt;

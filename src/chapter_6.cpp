@@ -40,7 +40,10 @@ void chapter_6_goto_desert(Game *game) {
     post_process_vhs_set_intensity(&game->post_processing.vhs,
                                    VHS_INTENSITY_MEDIUM);
     game->post_processing.vhs.vignette_mix = 0.8f;
+    game->post_processing.vhs.spinner.do_wiggle = true;
+    game->post_processing.vhs.spinner.should_spin_randomly = true;
 
+    set_music_volume(MUSIC_VHS_BAD, 0.5f);
     play_music(MUSIC_VHS_BAD);
 }
 
@@ -66,6 +69,7 @@ void chapter_6_start_godtext(Game *game) {
     Level_Chapter_6 *level = (Level_Chapter_6 *)game->level;
     level->state = CHAPTER_6_STATE_TEXT;
     play_music(MUSIC_VHS_BAD_2);
+    game->post_processing.vhs.spinner.should_spin_randomly = false;
 }
 
 void chapter_6_queue_godtext(void *game_ptr) {

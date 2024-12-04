@@ -76,6 +76,8 @@ void chapter_2_window_text(bool scroll, Text_List *list, char *line,
     list->location     = Middle;
     list->take_keyboard_focus = true;
 
+    list->scroll_sound = SOUND_EMPTY;
+
     text_list_init(list, 0, line, next);
 }
 
@@ -314,6 +316,8 @@ void DEBUG_goto_penny_at_table(Game *game) {
 void chapter_2_init(Game *game) {
     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
 
+    game->textbox_alpha = 255;
+
     level->window_target = LoadRenderTexture(90, 17);
 
     game->post_processing.type = POST_PROCESSING_CRT;
@@ -331,7 +335,7 @@ void chapter_2_init(Game *game) {
     crt->green_offset = 0.009f;
     crt->blue_offset  = 0.01f;
 
-    crt->do_wiggle = false;
+    crt->spinner.do_wiggle = false;
 
     Texture2D *textures = atari_assets.textures;
     textures[0]  = load_texture(RES_DIR "art/player_white.png");
@@ -1281,7 +1285,36 @@ void chapter_2_entity_draw(Entity *e, Game *game) {
 
     Texture *texture = entity_get_texture(e);
 
-    if (texture) {
+    if (e->texture_id == 2 || e->texture_id == 4) { // boy/girl
+        DrawTexture(*texture, e->pos.x, e->pos.y, WHITE);
+
+        Level_Chapter_2 *level = (Level_Chapter_2*)game->level;
+        Entity *player = level->player;
+
+        Entity *following = player;
+
+        if (level->penny_state == CHAPTER_2_PENNY_STATE_WALKING || (level->penny_state == CHAPTER_2_PENNY_STATE_STOP && e->type >= ENTITY_CHAP_2_LUNA && e->type <= ENTITY_CHAP_2_AVA))
+        {
+            following = level->penny;
+        }
+
+        float dir_x = 0, dir_y = 0;
+
+        if (following) {
+            int dx = (following->pos.x+entity_texture_width(following)/2)  - (e->pos.x + entity_texture_width(e)/2);
+            int dy = (following->pos.y+entity_texture_height(following)/2) - (e->pos.y + entity_texture_height(e)/2);
+
+            float angle = atan2f(dy, dx);
+
+            dir_x = cos(angle);
+            dir_y = sin(angle);
+
+            if (fabsf(dir_x) > 0.25) dir_x = sign(dir_x);
+            if (fabsf(dir_y) > 0.25) dir_y = sign(dir_y);
+        }
+
+        DrawPixel(e->pos.x+6+dir_x, e->pos.y+9+dir_y, BLACK);
+    } else if (texture) {
         DrawTexture(*texture, e->pos.x, e->pos.y, WHITE);
     } else if (draw_walls) {
         Rectangle rect = {
@@ -1397,13 +1430,10 @@ void chapter_2_draw(Game *game, RenderTexture2D *target) {
 
     ClearBackground(BLACK);
 
-    game->textbox_alpha = 220;
-
     if (level->show_window) {
         Texture2D *texture = 0;
 
         texture = &atari_assets.textures[11];
-        game->textbox_alpha = 255;
 
         assert(texture);
 

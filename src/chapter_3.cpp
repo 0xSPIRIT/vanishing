@@ -812,11 +812,12 @@ void chapter_3_init(Game *game) {
     game->post_processing.crt.do_scanline_effect = false;
     game->post_processing.crt.scanline_alpha = 0.07f;
     game->post_processing.crt.do_warp_effect = false;
-    game->post_processing.crt.do_wiggle = false;
     game->post_processing.crt.abberation_intensity = 1;
     game->post_processing.crt.vignette_intensity = 1;
     game->post_processing.crt.vignette_mix = 0.75f;
     game->post_processing.crt.noise_intensity = 0.6f;
+
+    game->post_processing.crt.spinner.do_wiggle = false;
 
     //level->state = CHAPTER_3_STATE_HOME_INSIDE;
     //level->state = CHAPTER_3_STATE_ROAD;

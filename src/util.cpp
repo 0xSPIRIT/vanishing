@@ -343,11 +343,11 @@ Vector3 GotoSmoothVec3(Vector3 a, Vector3 b, float top_speed_frame, double t) {
 }
 
 // t = (0.0, 1.0)
-float smoothstep(float start, float end, float t) {
+double smoothstep(double start, double end, double t) {
     if (t < 0) t = 0;
     if (t > 1) t = 1;
 
-    float fac = 3 * t * t - 2 * t * t * t;
+    double fac = 3 * t * t - 2 * t * t * t;
 
     return start + (end - start) * fac;
 }
@@ -362,12 +362,12 @@ Vector3 lerp_vector3(Vector3 a, Vector3 b, float t) {
     return result;
 }
 
-Vector3 smoothstep_vector3(Vector3 start, Vector3 end, float t) {
+Vector3 smoothstep_vector3(Vector3 start, Vector3 end, double t) {
     Vector3 result = start;
 
-    result.x = smoothstep(start.x, end.x, t);
-    result.y = smoothstep(start.y, end.y, t);
-    result.z = smoothstep(start.z, end.z, t);
+    result.x = (float)smoothstep((double)start.x, (double)end.x, t);
+    result.y = (float)smoothstep((double)start.y, (double)end.y, t);
+    result.z = (float)smoothstep((double)start.z, (double)end.z, t);
 
     return result;
 }

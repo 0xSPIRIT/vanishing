@@ -12,7 +12,7 @@
 #include <raylib.h>
 
 #define GLSL_VERSION 330
-#include <glad/glad.h>
+//#include <glad/glad.h>
 
 #include <rlgl.h>
 #include <raymath.h>
@@ -189,7 +189,7 @@ MainFunction() {
 
     InitWindow(default_width, default_height, "Veil");
 
-    gladLoadGL();
+    //gladLoadGL();
 
     if (fullscreen)
         toggle_fullscreen();

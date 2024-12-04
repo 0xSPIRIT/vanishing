@@ -31,6 +31,8 @@ enum Sound_ID {
     SOUND_TEXT_SCROLL_FEMALE,
     SOUND_TEXT_SCROLL_CHASE,
 
+    SOUND_SCREAM,
+
     // bitcrushed (chapter 1)
     SOUND_SAND_FOOTSTEP_1,
     SOUND_SAND_FOOTSTEP_2,
@@ -198,7 +200,7 @@ void game_audio_init() {
     audio->sounds[SOUND_TEXT_SCROLL_FEMALE] = load_sound(CHANNEL_GUI, "textscroll_female.wav", volume * 2);
     audio->sounds[SOUND_TEXT_SCROLL_MALE]   = load_sound(CHANNEL_GUI, "textscroll_guy.wav",    volume * 2);
 
-    audio->sounds[SOUND_TEXT_SCROLL_LOW] = load_sound(CHANNEL_GUI,   "textblip_low.wav");
+    audio->sounds[SOUND_TEXT_SCROLL_LOW] = load_sound(CHANNEL_GUI,   "textblip_low.wav", 0.85f);
     audio->sounds[SOUND_TEXT_SCROLL_BAD] = load_sound(CHANNEL_GUI,   "textblip_bad.wav");
     audio->sounds[SOUND_TEXT_CONFIRM]    = load_sound(CHANNEL_GUI,   "confirm.ogg");
 
@@ -226,6 +228,8 @@ void game_audio_init() {
     audio->sounds[SOUND_OPEN_WINDOW]  = load_sound(CHANNEL_WORLD, "open_window.ogg");
     audio->sounds[SOUND_CLOSE_WINDOW] = load_sound(CHANNEL_WORLD, "close_window.ogg");
     audio->sounds[SOUND_CREAKING]     = load_sound(CHANNEL_WORLD, "creaking.ogg", 0.4f);
+
+    audio->sounds[SOUND_SCREAM]       = load_sound(CHANNEL_WORLD, "scream.ogg", 0.6f);
 
     audio->current_music = -1;
     audio->volume_a = audio->volume_b = -1;
