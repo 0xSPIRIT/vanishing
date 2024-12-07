@@ -427,7 +427,7 @@ void chapter_5_train_station_init_positions(Game *game, bool refresh) {
 
     if (refresh) clerk->talked = true;
 
-    level->camera.fovy       = 50;
+    level->camera.fovy = 57;
 
     if (!refresh) {
         level->camera.position   = { 50, level->camera_height - 1.2585f, 0 };
@@ -2238,7 +2238,7 @@ void chapter_5_init(Game *game) {
     level->transition_fade = false;
 
     level->good = false;
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_DINNER_PARTY);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_TRAIN_STATION);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {
@@ -2852,14 +2852,16 @@ void chapter_5_update_player_staircase(Game *game, float dt) {
     Vector3 *camera = &level->camera.position;
 
     bool is_in_door = is_x_in_door_area(train, camera->x);
-
+    
     float curb = 1.f; // + makes you go out of the train more
-
-    //print_cam(&level->camera);
 
     float rel_x = camera->x - train->position.x;
     rel_x = Clamp(rel_x, -53, 30);
     camera->x = rel_x + train->position.x;
+
+    if (camera->z < -curb) {
+        camera->z = -curb;
+    }
 
     if (!train->closed) {
         if (is_in_door) {
