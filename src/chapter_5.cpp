@@ -3088,6 +3088,27 @@ void chapter_5_update_player_dinner_party(Game *game, float dt) {
 
     if (can_move && !level->sitting_at_table) {
         update_camera_3d(&level->camera, PLAYER_SPEED_3D, true, dt);
+
+        const float dist_to_table = 2;
+
+        Vector2 player_pos = {level->camera.position.x, level->camera.position.z};
+
+        for (int i = 0; i < level->num_tables; i++) {
+            Chapter_5_Table *table = &level->tables[i];
+
+            Vector2 table_pos = {table->position.x, table->position.z};
+
+            float distance = Vector2Distance(table_pos, player_pos);
+
+            if (distance < dist_to_table) {
+                Vector2 unit = Vector2Normalize(Vector2Subtract(player_pos, table_pos));
+                
+                player_pos = Vector2Add(table_pos, Vector2Scale(unit, dist_to_table));
+
+                level->camera.position.x = player_pos.x;
+                level->camera.position.z = player_pos.y;
+            }
+        }
     }
 
     Vector3 velocity = Vector3Subtract(level->camera.position, stored_camera_pos);

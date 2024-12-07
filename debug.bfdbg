@@ -1,7 +1,7 @@
 FileVersion = 1
 LastConfig = "Debug"
 LastPlatform = "Win64"
-RecentFilesList = ["c:\\dev\\vanishing\\src\\chapter_2.cpp", "c:\\dev\\vanishing\\src\\audio.cpp", "Disassembly", "c:\\dev\\vanishing\\src\\game.cpp", "c:\\dev\\vanishing\\src\\chapter_4.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\abort.cpp", "d:\\a\\_work\\1\\s\\src\\vctools\\crt\\vcruntime\\src\\string\\amd64\\memset.asm", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strncpy.asm", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\assert.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strlen.asm", "c:\\dev\\vanishing\\chapter_5.cpp", "c:\\dev\\vanishing\\game.cpp", "c:\\dev\\vanishing\\main.cpp", "c:\\dev\\vanishing\\util.cpp"]
+RecentFilesList = ["c:\\dev\\vanishing\\src\\audio.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\abort.cpp", "c:\\dev\\vanishing\\src\\post_processing.cpp", "c:\\dev\\vanishing\\src\\chapter_4.cpp", "c:\\dev\\vanishing\\src\\chapter_2.cpp", "Disassembly", "c:\\dev\\vanishing\\src\\game.cpp", "d:\\a\\_work\\1\\s\\src\\vctools\\crt\\vcruntime\\src\\string\\amd64\\memset.asm", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strncpy.asm", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\assert.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strlen.asm", "c:\\dev\\vanishing\\chapter_5.cpp", "c:\\dev\\vanishing\\game.cpp", "c:\\dev\\vanishing\\main.cpp", "c:\\dev\\vanishing\\util.cpp"]
 
 [MainWindow]
 X = 600
@@ -24,22 +24,39 @@ DefaultDocumentsTabbedView = true
 Type = "TabbedView"
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
-Active = true
+TabLabel = "abort.cpp"
+TabWidth = 93.61702
+TabIsPinned = false
+Type = "SourceViewPanel"
+FilePath = "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\abort.cpp"
+
+[[MainDockingFrame.DockedWidgets.Tabs]]
+TabLabel = "post_processing.cpp"
+TabWidth = 153.7234
+TabIsPinned = false
+Type = "SourceViewPanel"
+FilePath = "c:\\dev\\vanishing\\src\\post_processing.cpp"
+CursorPos = 3089
+VertPos = 2352.0
+
+[[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "chapter_2.cpp"
 TabWidth = 108.1915
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\chapter_2.cpp"
-CursorPos = 8176
+CursorPos = 48185
 VertPos = 7784.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
+Active = true
 TabLabel = "audio.cpp"
 TabWidth = 85.31915
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\audio.cpp"
-CursorPos = 2875
+CursorPos = 2041
+VertPos = 2240.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "Disassembly"
@@ -61,10 +78,11 @@ TabWidth = 108.1915
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\chapter_4.cpp"
-CursorPos = 4836
+CursorPos = 22235
+VertPos = 18048.8
 
 [[MainDockingFrame.DockedWidgets]]
-RequestedWidth = 825.0
+RequestedWidth = 764.0
 RequestedHeight = 250.0
 Type = "DockingFrame"
 SplitType = 2
@@ -90,7 +108,7 @@ TabWidth = 85.10638
 TabIsPinned = false
 Type = "WatchPanel"
 Columns = [{Width = 336.0}, {Width = 972.0001}, {Width = 211.0}]
-Items = ["crt.do_wiggle", ""]
+Items = ["spinner", "shader", ""]
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 TabLabel = "Auto"
