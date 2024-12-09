@@ -596,7 +596,7 @@ void chapter_5_scene_init(Game *game) {
     level->current_scene = scene;
     level->transition_fade = false;
 
-    if (IsShaderReady(level->shader))
+    if (IsShaderValid(level->shader))
         UnloadShader(level->shader);
 
     switch (scene) {
@@ -609,7 +609,7 @@ void chapter_5_scene_init(Game *game) {
 
             level->train.visible = false;
 
-            level->scenes[0] = LoadModel(RES_DIR "models/train_station2.glb");
+            level->scenes[0] = load_model("models/train_station2.glb");
 
             level->state = CHAPTER_5_STATE_INTRO;//CHAPTER_5_STATE_TRAIN_STATION_1;
             level->black_screen_timer = -1;
@@ -628,7 +628,7 @@ void chapter_5_scene_init(Game *game) {
             train->able_to_close = true;
             train->speed         = 0;
 
-            level->shader = LoadShader(0, RES_DIR "shaders/cottage.fs");
+            level->shader = load_shader(0, "shaders/cottage.fs");
 
             //model_set_bilinear(&level->scenes[0]);
 
@@ -762,9 +762,9 @@ void chapter_5_scene_init(Game *game) {
             game->post_processing.bloom.bloom_intensity = 7;
             game->post_processing.bloom.vignette_mix = 0.25;
 
-            level->scenes[1] = LoadModel(RES_DIR "models/staircase.glb");
+            level->scenes[1] = load_model("models/staircase.glb");
 
-            level->shader = LoadShader(0, RES_DIR "shaders/staircase.fs");
+            level->shader = load_shader(0, "shaders/staircase.fs");
 
             float train_distance = -508;
 
@@ -947,15 +947,15 @@ void chapter_5_scene_init(Game *game) {
             game->post_processing.bloom.bloom_intensity = 4.5f;
             game->post_processing.bloom.vignette_mix = 0.25f;
 
-            level->scenes[2] = LoadModel(RES_DIR "models/dinner_party.glb");
-            level->scenes[3] = LoadModel(RES_DIR "models/dinner_party_good.glb");
+            level->scenes[2] = load_model("models/dinner_party.glb");
+            level->scenes[3] = load_model("models/dinner_party_good.glb");
 
             game->textbox_alpha = 220;
 
             if (level->good)
-                level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/fog.fs");
+                level->shader = load_shader("shaders/basic.vs", "shaders/fog.fs");
             else
-                level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/dinner.fs");
+                level->shader = load_shader("shaders/basic.vs", "shaders/dinner.fs");
 
 
             level->shader.locs[SHADER_LOC_VECTOR_VIEW] = GetShaderLocation(level->shader, "viewPos");
@@ -1487,9 +1487,9 @@ void chapter_5_scene_init(Game *game) {
         case CHAPTER_5_SCENE_DESERT: {
             level->camera_height = 1.8f;
 
-            level->scenes[4] = LoadModel(RES_DIR "models/desert.glb");
+            level->scenes[4] = load_model("models/desert.glb");
 
-            level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/desert.fs");
+            level->shader = LoadShader("shaders/basic.vs", "shaders/desert.fs");
 
             //Model *scene_model = &level->scenes[4];
             //model_set_bilinear(scene_model);
@@ -1797,9 +1797,9 @@ void chapter_5_scene_init(Game *game) {
 
             game->textbox_alpha = 255;
 
-            level->scenes[5] = LoadModel(RES_DIR "models/artgallery.glb");
+            level->scenes[5] = load_model("models/artgallery.glb");
 
-            level->shader = LoadShader(0, RES_DIR "shaders/cottage.fs");
+            level->shader = LoadShader(0, "shaders/cottage.fs");
             model_set_shader(&level->scenes[5], level->shader);
 
             game->post_processing.type = POST_PROCESSING_BLOOM;
@@ -2001,7 +2001,7 @@ void chapter_5_scene_init(Game *game) {
 
             game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
 
-            level->scenes[6] = LoadModel(RES_DIR "models/balcony.glb");
+            level->scenes[6] = load_model("models/balcony.glb");
 
             level->camera.position   = { 0, level->camera_height, 0 };
             level->camera.target     = { -2, level->camera_height, 0 };
@@ -2212,24 +2212,24 @@ void chapter_5_init(Game *game) {
     game->textbox_target = LoadRenderTexture(render_width, render_height);
     game->textbox_alpha = 255;
 
-    atari_assets.textures[0]   = load_texture(RES_DIR "art/ticket_pov.png");
+    atari_assets.textures[0]   = load_texture("art/ticket_pov.png");
 
     level->camera_height = 1.8f;
 
-    level->models.train         = LoadModel(RES_DIR "models/train.glb");
-    level->models.train_flipped = LoadModel(RES_DIR "models/train_flipped.glb");
-    level->models.train_door    = LoadModel(RES_DIR "models/train_door.glb");
+    level->models.train         = load_model("models/train.glb");
+    level->models.train_flipped = load_model("models/train_flipped.glb");
+    level->models.train_door    = load_model("models/train_door.glb");
 
-    level->models.body          = LoadModel(RES_DIR "models/guy.glb");
+    level->models.body          = load_model("models/guy.glb");
 
-    level->models.guy_sitting   = LoadModel(RES_DIR "models/guy_sitting.glb");
-    level->models.chair         = LoadModel(RES_DIR "models/chair.glb");
-    level->models.table         = LoadModel(RES_DIR "models/dinner_table.glb");
-    level->models.pyramid_head  = LoadModel(RES_DIR "models/pyramid_head.glb");
-    level->models.real_head     = LoadModel(RES_DIR "models/real_head.glb");
-    level->models.podium        = LoadModel(RES_DIR "models/podium.glb");
+    level->models.guy_sitting   = load_model("models/guy_sitting.glb");
+    level->models.chair         = load_model("models/chair.glb");
+    level->models.table         = load_model("models/dinner_table.glb");
+    level->models.pyramid_head  = load_model("models/pyramid_head.glb");
+    level->models.real_head     = load_model("models/real_head.glb");
+    level->models.podium        = load_model("models/podium.glb");
 
-    level->models.jail_bars     = LoadModel(RES_DIR "models/jail_bars.glb");
+    level->models.jail_bars     = load_model("models/jail_bars.glb");
 
     level->jail_bars_bounds = GetModelBoundingBox(level->models.jail_bars);
 
@@ -2238,7 +2238,7 @@ void chapter_5_init(Game *game) {
     level->transition_fade = false;
 
     level->good = false;
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_TRAIN_STATION);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_STAIRCASE);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {

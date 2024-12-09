@@ -210,7 +210,7 @@ void chapter_1_apartment_text(Text_List *list, char *line,
 
     list->color        = WHITE;
 
-    list->backdrop_color={64,64,64,255};
+    list->backdrop_color = {64,64,64,255};
 
     list->center_text  = true;
     list->scroll_type  = EntireLine;
@@ -259,38 +259,38 @@ void chapter_1_init(Game *game) {
 
     Texture2D *textures = atari_assets.textures;
 
-    textures[0]  = load_texture(RES_DIR "art/player.png");
-    textures[1]  = load_texture(RES_DIR "art/cactus_1.png");
-    textures[2]  = load_texture(RES_DIR "art/cactus_2.png");
-    textures[3]  = load_texture(RES_DIR "art/player_crawl_up.png");
-    textures[4]  = load_texture(RES_DIR "art/footsteps_1.png");
-    textures[5]  = load_texture(RES_DIR "art/footsteps_2.png");
-    textures[6]  = load_texture(RES_DIR "art/footsteps_3.png");
-    textures[7]  = load_texture(RES_DIR "art/blood_1.png");
-    textures[8]  = load_texture(RES_DIR "art/blood_2.png");
-    textures[9]  = load_texture(RES_DIR "art/blood_3.png");
-    textures[10] = load_texture(RES_DIR "art/player_crawl.png");
-    textures[11] = load_texture(RES_DIR "art/node_inactive.png");
-    textures[12] = load_texture(RES_DIR "art/node_active.png");
-    textures[13] = load_texture(RES_DIR "art/phone.png");
-    textures[14] = load_texture(RES_DIR "art/water.png");
-    textures[15] = load_texture(RES_DIR "art/apartment.png");
-    textures[16] = load_texture(RES_DIR "art/player_huff_puff.png");
+    textures[0]  = load_texture("art/player.png");
+    textures[1]  = load_texture("art/cactus_1.png");
+    textures[2]  = load_texture("art/cactus_2.png");
+    textures[3]  = load_texture("art/player_crawl_up.png");
+    textures[4]  = load_texture("art/footsteps_1.png");
+    textures[5]  = load_texture("art/footsteps_2.png");
+    textures[6]  = load_texture("art/footsteps_3.png");
+    textures[7]  = load_texture("art/blood_1.png");
+    textures[8]  = load_texture("art/blood_2.png");
+    textures[9]  = load_texture("art/blood_3.png");
+    textures[10] = load_texture("art/player_crawl.png");
+    textures[11] = load_texture("art/node_inactive.png");
+    textures[12] = load_texture("art/node_active.png");
+    textures[13] = load_texture("art/phone.png");
+    textures[14] = load_texture("art/water.png");
+    textures[15] = load_texture("art/apartment.png");
+    textures[16] = load_texture("art/player_huff_puff.png");
 
-    textures[17] = load_texture(RES_DIR "art/intro1.png");
-    textures[18] = load_texture(RES_DIR "art/intro2.png");
+    textures[17] = load_texture("art/intro1.png");
+    textures[18] = load_texture("art/intro2.png");
 
-    textures[21] = load_texture(RES_DIR "art/window_1.png");
-    textures[22] = load_texture(RES_DIR "art/prayer_mat.png");
-    textures[23] = load_texture(RES_DIR "art/player_white.png");
+    textures[21] = load_texture("art/window_1.png");
+    textures[22] = load_texture("art/prayer_mat.png");
+    textures[23] = load_texture("art/player_white.png");
 
     for (int i = 1; i <= 8; i++) {
-        textures[24+i-1] = load_texture(TextFormat(RES_DIR "art/rock%d.png", i));
+        textures[24+i-1] = load_texture(TextFormat("art/rock%d.png", i));
     }
 
     level->background_color = DESERT_COLOR;
 
-    level->flashing_shader = LoadShader(0, RES_DIR "shaders/flashing.fs");
+    level->flashing_shader = load_shader(0, "shaders/flashing.fs");
 
     game->entities = make_array<Entity*>(2);
 

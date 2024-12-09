@@ -519,9 +519,10 @@ __anoneafbdd87010a	src/game.cpp	/^    union {$/;"	u	struct:Entity	file:
 __anoneafbdd870202	src/game.cpp	/^    auto selection_sort = [&](size_t start, size_t end) {$/;"	f	function:sort_entities	file:
 __anonec989c650102	src/chapter_2.cpp	/^    auto entity = [&](Entity *e) -> void {$/;"	f	function:chapter_2_init	typeref:typename:void	file:
 __anonecaab4e60102	src/chapter_3.cpp	/^            auto error_n = [&](int i, char *correction) -> void {$/;"	f	function:chapter_3_job_init	typeref:typename:void	file:
-__anonecaab4e60202	src/chapter_3.cpp	/^    auto add_line = [&]() -> void {$/;"	f	function:job_minigame_run	typeref:typename:void	file:
-__anonecaab4e60302	src/chapter_3.cpp	/^    auto set_word_up = [&]() {$/;"	f	function:job_minigame_run	file:
-__anonecaab4e60402	src/chapter_3.cpp	/^    auto click_next = [&]() -> void {$/;"	f	function:job_minigame_run	typeref:typename:void	file:
+__anonecaab4e60202	src/chapter_3.cpp	/^    auto final_text = [](Text_List *list, char *string, Text_List *next) -> void {$/;"	f	function:chapter_3_init	typeref:typename:void	file:
+__anonecaab4e60302	src/chapter_3.cpp	/^    auto add_line = [&]() -> void {$/;"	f	function:job_minigame_run	typeref:typename:void	file:
+__anonecaab4e60402	src/chapter_3.cpp	/^    auto set_word_up = [&]() {$/;"	f	function:job_minigame_run	file:
+__anonecaab4e60502	src/chapter_3.cpp	/^    auto click_next = [&]() -> void {$/;"	f	function:job_minigame_run	typeref:typename:void	file:
 __anonecbccd670102	src/chapter_4.cpp	/^    auto start_looking = [](Game *game) -> void {$/;"	f	function:chapter_4_start_look_towards_window	typeref:typename:void	file:
 __anonecbccd670202	src/chapter_4.cpp	/^    auto end_fade = [](Game *game) -> void {$/;"	f	function:chapter_4_3d_init	typeref:typename:void	file:
 __anonecbccd670302	src/chapter_4.cpp	/^        auto stop_after = [](Game *game) -> void {$/;"	f	function:chapter_4_3d_init::__anonecbccd670202	typeref:typename:void	file:
@@ -698,7 +699,7 @@ chap_3_cubicle	src/game.cpp	/^        Chapter_3_Cubicle chap_3_cubicle;$/;"	m	un
 chap_4_devil	src/game.cpp	/^        Chapter_4_Devil     chap_4_devil;$/;"	m	union:Entity::__anoneafbdd87010a	typeref:typename:Chapter_4_Devil	file:
 chap_4_microwave	src/game.cpp	/^        Chapter_4_Microwave chap_4_microwave;$/;"	m	union:Entity::__anoneafbdd87010a	typeref:typename:Chapter_4_Microwave	file:
 chap_4_window	src/game.cpp	/^        Chapter_4_Window    chap_4_window;$/;"	m	union:Entity::__anoneafbdd87010a	typeref:typename:Chapter_4_Window	file:
-chapter	src/main.cpp	/^int chapter = 4;$/;"	v	typeref:typename:int
+chapter	src/main.cpp	/^int chapter = 5;$/;"	v	typeref:typename:int
 chapter_1_activate_node	src/chapter_1.cpp	/^void chapter_1_activate_node(void *ptr_game) {$/;"	f	typeref:typename:void
 chapter_1_apartment_text	src/chapter_1.cpp	/^void chapter_1_apartment_text(Text_List *list, char *line,$/;"	f	typeref:typename:void
 chapter_1_call_text	src/chapter_1.cpp	/^void chapter_1_call_text(Text_List *list, char *speaker,$/;"	f	typeref:typename:void
@@ -1533,7 +1534,10 @@ load_GL_VERSION_3_2	src/glad/glad.c	/^static void load_GL_VERSION_3_2(GLADloadpr
 load_GL_VERSION_3_3	src/glad/glad.c	/^static void load_GL_VERSION_3_3(GLADloadproc load) {$/;"	f	typeref:typename:void	file:
 load_callback	src/pl_mpeg.h	/^	plm_buffer_load_callback load_callback;$/;"	m	struct:plm_buffer_t	typeref:typename:plm_buffer_load_callback
 load_callback_user_data	src/pl_mpeg.h	/^	void *load_callback_user_data;$/;"	m	struct:plm_buffer_t	typeref:typename:void *
+load_font	src/util.cpp	/^Font load_font(const char *filepath, int size = 0) {$/;"	f	typeref:typename:Font
+load_model	src/util.cpp	/^Model load_model(const char *filename) {$/;"	f	typeref:typename:Model
 load_music	src/audio.cpp	/^Music load_music(const char *file) {$/;"	f	typeref:typename:Music
+load_shader	src/util.cpp	/^Shader load_shader(const char *vertex_path, const char *fragment_path) {$/;"	f	typeref:typename:Shader
 load_sound	src/audio.cpp	/^Game_Sound load_sound(Channel channel, const char *file, float volume=1) {$/;"	f	typeref:typename:Game_Sound
 load_texture	src/util.cpp	/^Texture2D load_texture(const char *filename) {$/;"	f	typeref:typename:Texture2D
 location	src/text.cpp	/^    Location location       = Location::Bottom;$/;"	m	struct:Text_List	typeref:typename:Location	file:

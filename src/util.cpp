@@ -290,8 +290,56 @@ Texture2D load_texture(const char *filename) {
     Texture2D result;
 
     assert(filename);
-    result = LoadTexture(filename);
-    assert(IsTextureReady(result));
+    result = LoadTexture(TextFormat("%s%s", RES_DIR, filename));
+    assert(IsTextureValid(result));
+
+    return result;
+}
+
+Model load_model(const char *filename) {
+    Model result;
+
+    assert(filename);
+
+    result = LoadModel(TextFormat("%s%s", RES_DIR, filename));
+
+    assert(IsModelValid(result));
+
+    return result;
+}
+
+Shader load_shader(const char *vertex_path, const char *fragment_path) {
+    Shader result;
+
+    const char *vert = 0, *frag = 0;
+
+    if (vertex_path)
+        vert = TextFormat("%s%s", RES_DIR, vertex_path);
+
+    if (fragment_path)
+        frag = TextFormat("%s%s", RES_DIR, fragment_path);
+
+    result = LoadShader(vert, frag);
+
+    assert(IsShaderValid(result));
+
+    return result;
+}
+
+// 0 uses the regular LoadFont function, other values
+// use the LoadFontEx function.
+Font load_font(const char *filepath, int size = 0) {
+    Font result;
+
+    const char *path = TextFormat("%s%s", RES_DIR, filepath);
+
+    if (size == 0) {
+        result = LoadFont(path);
+    } else {
+        result = LoadFontEx(path, size, 0, 0);
+    }
+
+    assert(IsFontValid(result));
 
     return result;
 }

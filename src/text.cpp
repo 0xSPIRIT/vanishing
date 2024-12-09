@@ -216,7 +216,9 @@ bool text_update_and_draw(Text *text, Vector2 offset, float dt) {
 
                     if (text->textscroll_sound_queued || (int)text->scroll_index != prev) {
                         // we have scrolled one character, play the sound.
-                        if (text->scroll_sound != SOUND_EMPTY && !isspace(text->lines[text->current_line].text[(int)text->scroll_index])) {
+                        bool sound_available = (text->scroll_sound != SOUND_EMPTY && text->scroll_sound != SOUND_INVALID);
+
+                        if (sound_available && !isspace(text->lines[text->current_line].text[(int)text->scroll_index])) {
                             if (!is_sound_playing(text->scroll_sound)) {
                                 play_sound(text->scroll_sound);
                                 text->textscroll_sound_queued = false;

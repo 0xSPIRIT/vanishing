@@ -91,7 +91,7 @@ Game_Sound load_sound(Channel channel, const char *file, float volume=1) {
     result.playing = false;
     result.volume  = volume;
 
-    assert(IsSoundReady(result.sound));
+    assert(IsSoundValid(result.sound));
 
     return result;
 }

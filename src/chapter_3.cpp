@@ -639,17 +639,17 @@ void chapter_3_job_init(Game *game, int which_document_list) {
         } break;
         case 1: {
             documents[count++] =
-                "Memo\n-------\n\nDear Team,\n  Please be noted that the cofee machine is no longer wokring. Joanne brought some instant coffee and left it in the cuboard for anyone whod like.\n\nRegards,\nMichael\n(Project Manager)";
+                "Memo\n-------\n\nHey Team,\n  Please be noted that the cofee machine is no longer wokring. Joanne brought some instant coffee and left it in the cuboard for anyone whod like.\n\nRegards,\nMichael\n(Project Manager)";
             documents[count++] =
                 "Email\n-------\n\nDear Tech Solutions Team,\n  Unfortunately, despite your team's efforts, our data management system still has many of the same issues, rendering our employees extremely inefficient.\n  I request that you return and complete the job that you were paid for.\n\nRegards,\nMichael (Project Manager)";
             documents[count++] =
-                "Memo\n-------\n\nDear Team,\n  Kindly note that the mandatory anonymous employee experience survey is due by July 1st.\n  Please be brutally honest, we'd love the feedback!\n\nRegards,\nMichael (Project Manager)";
+                "Memo\n-------\n\nHey Team,\n  Kindly note that the mandatory anonymous employee experience survey is due by July 1st.\n  Please be brutally honest, we'd love the feedback!\n\nRegards,\nMichael (Project Manager)";
             documents[count++] =
-                "Memo\n-------\n\nDear Team,\n  Over the past three and a half years, we have made great progress as a company under my leadership.\n  Today, we have a foothold on our market in Earth.\n  I know none of this could have been done without you, my trusted employees. It has been an honour to serve as your CEO, but I believe it is in the best interest of thecompany for me to stand down, and focus on the remainder of my position, until August 22nd.\n  Just remember, there's nothing this company can't do!\n\nLove,\nJohn Briden (CEO)";
+                "Memo\n-------\n\nHey Team,\n  Over the past three and a half years, we have made great progress as a company under my leadership.\n  Today, we have a foothold on our market in Earth.\n  I know none of this could have been done without you, my trusted employees. It has been an honour to serve as your CEO, but I believe it is in the best interest of thecompany for me to stand down, and focus on the remainder of my position, until August 22nd.\n  Just remember, there's nothing this company can't do!\n\nLove,\nJohn Briden (CEO)";
             documents[count++] =
                 "Email\n-------\n\nDear Peggy,\n  I received your email, and I'm delighted to hear that you're excited about a collaboration between our two branches. I'm free for lunch on Saturday June 8th, so we can discuss a proposal. Is that fine with your schedule?\n\nRegards,\nHunter (Business Development Manager, Nebraska)";
             documents[count++] = 
-                "...Such a person's situated in transcendence and is self-controlled. He sees everything-- whether it be pebbles, stones, gold-- as equals.";
+                "\"...Such a person's situated in transcendence and is self-controlled. He sees everything-- whether it be pebbles, stones, gold-- as equals.\"";
                 // "This work was strictly voluntary, but any animal who absented himself from it would have his rations reduced by half."
 
             level->minigame = chapter_3_make_job_minigame(&game->level_arena, documents, count);
@@ -823,33 +823,33 @@ void chapter_3_init(Game *game) {
     //level->state = CHAPTER_3_STATE_ROAD;
 
     Texture2D *textures = atari_assets.textures;
-    textures[0]  = load_texture(RES_DIR "art/desktop_wallpaper.png");
-    textures[1]  = load_texture(RES_DIR "art/window_controls.png");
-    textures[2]  = load_texture(RES_DIR "art/window_title.png");
-    textures[3]  = load_texture(RES_DIR "art/player.png");
-    textures[4]  = load_texture(RES_DIR "art/cubicle_vertical_part.png");
-    textures[5]  = load_texture(RES_DIR "art/cubicle_top_part.png");
-    textures[6]  = load_texture(RES_DIR "art/office_chair.png");
-    textures[7]  = load_texture(RES_DIR "art/office_outside.png");
-    textures[8]  = load_texture(RES_DIR "art/office_guy.png");
-    textures[9]  = load_texture(RES_DIR "art/office_girl.png");
-    textures[10] = load_texture(RES_DIR "art/kitchen_table.png");
-    textures[11] = load_texture(RES_DIR "art/lunch_room.png");
-    textures[12] = load_texture(RES_DIR "art/devil_table.png");
-    textures[13] = load_texture(RES_DIR "art/guy_blue.png");
-    textures[14] = load_texture(RES_DIR "art/girl.png");
-    textures[15] = load_texture(RES_DIR "art/player_white.png");
-    textures[16] = load_texture(RES_DIR "art/open_window.png");
-    textures[17] = load_texture(RES_DIR "art/road.png");
-    textures[18] = load_texture(RES_DIR "art/home_outside.png");
-    textures[19] = load_texture(RES_DIR "art/apartment2.png");
-    textures[20] = load_texture(RES_DIR "art/smartphone.png");
-    textures[21] = load_texture(RES_DIR "art/arrow_white.png");
-    textures[22] = load_texture(RES_DIR "art/cursor.png");
-    textures[23] = load_texture(RES_DIR "art/car.png");
-    textures[24] = load_texture(RES_DIR "art/tree1.png");
-    textures[25] = load_texture(RES_DIR "art/tree2.png");
-    textures[26] = load_texture(RES_DIR "art/phone.png");
+    textures[0]  = load_texture("art/desktop_wallpaper.png");
+    textures[1]  = load_texture("art/window_controls.png");
+    textures[2]  = load_texture("art/window_title.png");
+    textures[3]  = load_texture("art/player.png");
+    textures[4]  = load_texture("art/cubicle_vertical_part.png");
+    textures[5]  = load_texture("art/cubicle_top_part.png");
+    textures[6]  = load_texture("art/office_chair.png");
+    textures[7]  = load_texture("art/office_outside.png");
+    textures[8]  = load_texture("art/office_guy.png");
+    textures[9]  = load_texture("art/office_girl.png");
+    textures[10] = load_texture("art/kitchen_table.png");
+    textures[11] = load_texture("art/lunch_room.png");
+    textures[12] = load_texture("art/devil_table.png");
+    textures[13] = load_texture("art/guy_blue.png");
+    textures[14] = load_texture("art/girl.png");
+    textures[15] = load_texture("art/player_white.png");
+    textures[16] = load_texture("art/open_window.png");
+    textures[17] = load_texture("art/road.png");
+    textures[18] = load_texture("art/home_outside.png");
+    textures[19] = load_texture("art/apartment2.png");
+    textures[20] = load_texture("art/smartphone.png");
+    textures[21] = load_texture("art/arrow_white.png");
+    textures[22] = load_texture("art/cursor.png");
+    textures[23] = load_texture("art/car.png");
+    textures[24] = load_texture("art/tree1.png");
+    textures[25] = load_texture("art/tree2.png");
+    textures[26] = load_texture("art/phone.png");
 
     level->car.texture = 23;
     level->car.position = { (float)-textures[23].width, render_height/2.f + 20 };
@@ -1196,22 +1196,22 @@ void chapter_3_init(Game *game) {
                          speed,
                          &game->text[62]);
     atari_text_list_init(&game->text[62],
-                         "Voice",
-"\"The gods had condemned\nSisyphus to ceaselessly\nrolling a rock to the top",//of a mountain, whence",// the stone would fall back of its own weight. They had thought with some reason that there is no more dreadful punishment than futile and hopeless labor",
+                         "Hunter",
+                         "\"The gods had condemned\nSisyphus to ceaselessly\nrolling a rock to the top",
                          speed,
                          &game->text[63]);
     atari_text_list_init(&game->text[63],
-                         "Voice",
+                         "Hunter",
                          "of a mountain, whence the\nstone would fall back of\nits own weight.",
                          speed,
                          &game->text[64]);
     atari_text_list_init(&game->text[64],
-                         "Voice",
+                         "Hunter",
                          "They had thought with\nsome reason that there is\nno more dreadful",
                          speed,
                          &game->text[65]);
     atari_text_list_init(&game->text[65],
-                         "Voice",
+                         "Hunter",
                          "punishment than futile\nand hopeless labour.\"",
                          speed,
                          &game->text[66]);
@@ -1226,18 +1226,18 @@ void chapter_3_init(Game *game) {
                          speed,
                          &game->text[68]);
     atari_text_list_init(&game->text[68],
-                         "Voice",
+                         "Hunter",
                          "\"Sisyphus, proletarian of\nthe gods, powerless and\nrebellious,", 
                          speed,
                          &game->text[69]);
     atari_text_list_init(&game->text[69],
-                         "Voice",
+                         "Hunter",
                          "knows the whole extent\nof his wretched condition:", 
                          speed,
                          &game->text[70]);
     atari_text_list_init(&game->text[70],
-                         "Voice",
-                         "it is what he thinks of\nduring his descent.\"", 
+                         "Hunter",
+                         "it is what he thinks of\nduring his descent.\"",
                          speed,
                          &game->text[71]);
     atari_text_list_init(&game->text[71],
@@ -1258,21 +1258,26 @@ void chapter_3_init(Game *game) {
     // knows, his tragedy begins. Yet at the same moment, blind and desperate, he realizes that the only bond
     // linking him to the world is the cool hand of a girl.
 
-    atari_mid_text_list_init(&game->text[73],
-                             "\"If the descent is thus\nsometimes performed in\nsorrow, it can also take\nplace in joy.\"", 
-                             &game->text[74]);
-    atari_mid_text_list_init(&game->text[74],
-                             "...", 
-                             &game->text[75]);
-    atari_mid_text_list_init(&game->text[75],
-                             "\"These are our nights of\nGethsemane.\rBut crushing truths\nperish from being\nacknowledged.", 
-                             &game->text[76]);
-    atari_mid_text_list_init(&game->text[76],
-                             "Thus, Oedipus at the\noutset obeys fate\nwithout knowing it.\rBut from the moment he\nknows, his tragedy\nbegins.", 
-                             &game->text[77]);
-    atari_mid_text_list_init(&game->text[77],
-                             "Yet at the same moment,\rblind and desperate,\rhe realizes that the\nonly bond linking him\nto the world is the cool\nhand of a girl.\" [2]", 
-                             nullptr);
+    auto final_text = [](Text_List *list, char *string, Text_List *next) -> void {
+        list->scroll_sound = SOUND_EMPTY;
+        atari_mid_text_list_init(list, string, next);
+    };
+
+    final_text(&game->text[73],
+               "\"If the descent is thus\nsometimes performed in\nsorrow, it can also take\nplace in joy.\"", 
+               &game->text[74]);
+    final_text(&game->text[74],
+               "...", 
+               &game->text[75]);
+    final_text(&game->text[75],
+               "\"These are our nights of\nGethsemane.\rBut crushing truths\nperish from being\nacknowledged.", 
+               &game->text[76]);
+    final_text(&game->text[76],
+               "Thus, Oedipus at the\noutset obeys fate\nwithout knowing it.\rBut from the moment he\nknows, his tragedy\nbegins.", 
+               &game->text[77]);
+    final_text(&game->text[77],
+               "Yet at the same moment,\rblind and desperate,\rhe realizes that the\nonly bond linking him\nto the world is the cool\nhand of a girl.\"\rAlbert Camus,\nThe Myth of Sisyphus.", 
+               nullptr);
     game->text[77].callbacks[0] = chapter_3_fade_out_outside_home_delay;
 
     atari_text_list_init(&game->text[80],
@@ -1294,9 +1299,9 @@ void chapter_3_init(Game *game) {
     //chapter_3_goto_window_text(game);
     //level->minigame.active = true;
 
-    chapter_3_init_outside(game);
+    //chapter_3_init_outside(game);
     //chapter_3_goto_home_inside(game);
-    //chapter_3_goto_home_outside(game);
+    chapter_3_goto_home_outside(game);
 
     //chapter_3_goto_road(game);
 }

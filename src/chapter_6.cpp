@@ -192,24 +192,24 @@ void chapter_6_init(Game *game) {
     game->entities = make_array<Entity*>(16);
 
     Texture *textures = atari_assets.textures;
-    textures[0]  = load_texture(RES_DIR "art/player.png");
-    textures[1]  = load_texture(RES_DIR "art/cactus_1.png");
-    textures[2]  = load_texture(RES_DIR "art/cactus_2.png");
-    textures[3]  = load_texture(RES_DIR "art/rock.png");
-    textures[4]  = load_texture(RES_DIR "art/footsteps_1.png");
-    textures[5]  = load_texture(RES_DIR "art/footsteps_2.png");
-    textures[6]  = load_texture(RES_DIR "art/footsteps_3.png");
-    textures[7]  = load_texture(RES_DIR "art/blood_1.png");
-    textures[8]  = load_texture(RES_DIR "art/blood_2.png");
-    textures[9]  = load_texture(RES_DIR "art/blood_3.png");
-    textures[10] = load_texture(RES_DIR "art/player_crawl.png");
-    textures[11] = load_texture(RES_DIR "art/node_inactive.png");
-    textures[12] = load_texture(RES_DIR "art/node_active.png");
-    textures[13] = load_texture(RES_DIR "art/apartment2.png");
-    textures[14] = load_texture(RES_DIR "art/player_white.png");
-    textures[15] = load_texture(RES_DIR "art/godtext.png");
-    textures[16] = load_texture(RES_DIR "art/godtext2.png");
-    textures[17] = load_texture(RES_DIR "art/godtext3.png");
+    textures[0]  = load_texture("art/player.png");
+    textures[1]  = load_texture("art/cactus_1.png");
+    textures[2]  = load_texture("art/cactus_2.png");
+    textures[3]  = load_texture("art/rock.png");
+    textures[4]  = load_texture("art/footsteps_1.png");
+    textures[5]  = load_texture("art/footsteps_2.png");
+    textures[6]  = load_texture("art/footsteps_3.png");
+    textures[7]  = load_texture("art/blood_1.png");
+    textures[8]  = load_texture("art/blood_2.png");
+    textures[9]  = load_texture("art/blood_3.png");
+    textures[10] = load_texture("art/player_crawl.png");
+    textures[11] = load_texture("art/node_inactive.png");
+    textures[12] = load_texture("art/node_active.png");
+    textures[13] = load_texture("art/apartment2.png");
+    textures[14] = load_texture("art/player_white.png");
+    textures[15] = load_texture("art/godtext.png");
+    textures[16] = load_texture("art/godtext2.png");
+    textures[17] = load_texture("art/godtext3.png");
 
     chapter_6_text(true,
                    false,

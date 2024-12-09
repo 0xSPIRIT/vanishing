@@ -42,11 +42,11 @@ void movie_load_video(Movie *movie, const char *movie_file, const char *audio_fi
         exit(1);
     }
 
-    if (IsMusicReady(movie->audio))
+    if (IsMusicValid(movie->audio))
         UnloadMusicStream(movie->audio);
 
     movie->audio = LoadMusicStream(audio_file);
-    if (!IsMusicReady(movie->audio)) {
+    if (!IsMusicValid(movie->audio)) {
         fprintf(stderr, "Couldn't open %s\n", audio_file);
         exit(1);
     }

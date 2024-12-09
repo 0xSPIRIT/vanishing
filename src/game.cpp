@@ -168,7 +168,7 @@ struct Game {
     //Arena frame_arena; // 32k scratch space
     Array<Entity*> entities;
 
-    Text_List  text[128];
+    Text_List  text[200];
     Text_List *current;
 
     Event events[64];
@@ -703,7 +703,7 @@ void setup_text_scroll_sound(Text_List *list, char *speaker) {
     if (speaker) {
         const char *male_names[] = {
             "Bartender", "Guard",
-            "Noah", "Mike", "Voice",
+            "Noah", "Mike", "Hunter",
             "Tyrell"
         };
 
@@ -754,7 +754,7 @@ void atari_text_list_init(Text_List *list, char *speaker,
         } break;
         case 2: {
             list->color    = WHITE;
-            list->bg_color = {50, 0, 0, 127};
+            list->bg_color = {50, 0, 0, 220};
         } break;
         default: {
             list->color = WHITE;

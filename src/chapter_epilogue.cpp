@@ -116,16 +116,16 @@ void chapter_epilogue_init(Game *game) {
     level->camera.fovy       = FOV_DEFAULT;
     level->camera.projection = CAMERA_PERSPECTIVE;
 
-    level->shader      = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/fog.fs");
-    level->scene       = LoadModel(RES_DIR "models/epilogue.glb");
-    level->bars        = LoadModel(RES_DIR "models/epilogue_bars.glb");
-    level->node        = LoadModel(RES_DIR "models/node.glb");
-    level->door        = LoadModel(RES_DIR "models/epilogue_door.glb");
-    level->timer_model = LoadModel(RES_DIR "models/clock.glb");
+    level->shader      = LoadShader("shaders/basic.vs", "shaders/fog.fs");
+    level->scene       = load_model("models/epilogue.glb");
+    level->bars        = load_model("models/epilogue_bars.glb");
+    level->node        = load_model("models/node.glb");
+    level->door        = load_model("models/epilogue_door.glb");
+    level->timer_model = load_model("models/clock.glb");
 
-    level->pink_dot      = LoadTexture(RES_DIR "art/pink_dot.png");
-    level->orange_dot    = LoadTexture(RES_DIR "art/orange_dot.png");
-    level->black_texture = LoadTexture(RES_DIR "art/black.png");
+    level->pink_dot      = load_texture("art/pink_dot.png");
+    level->orange_dot    = load_texture("art/orange_dot.png");
+    level->black_texture = load_texture("art/black.png");
 
     SetTextureFilter(level->pink_dot, TEXTURE_FILTER_BILINEAR);
     SetTextureFilter(level->orange_dot, TEXTURE_FILTER_BILINEAR);

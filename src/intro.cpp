@@ -15,7 +15,7 @@ void game_intro_init(Game_Intro *game) {
 
     switch (chapter) {
         case 1: {
-            game->message = "DYSANIA";
+            game->message = "AGONY IN THE\n\n     GARDEN";
         } break;
         case 2: {
             game->message = "DINNER PARTY";

@@ -224,7 +224,7 @@ void chapter_4_3d_init(Game *game) {
     game->textbox_target = LoadRenderTexture(render_width, render_height);
     game->textbox_alpha = 255;
 
-    level->scene = LoadModel(RES_DIR "models/bedroom.glb");
+    level->scene = load_model("models/bedroom.glb");
 
     //float height = 0.9f;
 
@@ -235,7 +235,7 @@ void chapter_4_3d_init(Game *game) {
     level->camera.fovy     = FOV_DEFAULT;
     level->camera.projection = CAMERA_PERSPECTIVE;
 
-    level->shader = LoadShader(RES_DIR "shaders/basic.vs", RES_DIR "shaders/desert.fs");
+    level->shader = load_shader("shaders/basic.vs", "shaders/desert.fs");
 
     level->shader.locs[SHADER_LOC_MATRIX_MODEL] = GetShaderLocation(level->shader, "matModel");
     level->shader.locs[SHADER_LOC_VECTOR_VIEW]  = GetShaderLocation(level->shader, "viewPos");
@@ -268,8 +268,8 @@ void chapter_4_init(Game *game) {
 
     level->yield_control = true;
 
-    chapter_4_set_state_atari(game);
     //level->state = CHAPTER_4_STATE_INITIAL_BLACK;
+    chapter_4_set_state_atari(game);
 
     game->textbox_alpha = 255;
 
@@ -277,21 +277,21 @@ void chapter_4_init(Game *game) {
     level->music_pitch = 1;
 
     Texture2D *textures = atari_assets.textures;
-    textures[0] = load_texture(RES_DIR "art/apartment_test.png");
-    textures[1] = load_texture(RES_DIR "art/player.png");
-    textures[2] = load_texture(RES_DIR "art/window_opened.png");
-    textures[3] = load_texture(RES_DIR "art/window_closed.png");
+    textures[0] = load_texture("art/apartment_test.png");
+    textures[1] = load_texture("art/player.png");
+    textures[2] = load_texture("art/window_opened.png");
+    textures[3] = load_texture("art/window_closed.png");
 
-    textures[8] = load_texture(RES_DIR "art/tv_back.png");
+    textures[8] = load_texture("art/tv_back.png");
 
-    textures[9] = load_texture(RES_DIR "art/djinn.png");
-    textures[10] = load_texture(RES_DIR "art/microwave_off.png");
-    textures[11] = load_texture(RES_DIR "art/microwave_on.png");
+    textures[9] = load_texture("art/djinn.png");
+    textures[10] = load_texture("art/microwave_off.png");
+    textures[11] = load_texture("art/microwave_on.png");
 
-    textures[12] = load_texture(RES_DIR "art/windows_closed.png");
-    textures[13] = load_texture(RES_DIR "art/windows_open.png");
+    textures[12] = load_texture("art/windows_closed.png");
+    textures[13] = load_texture("art/windows_open.png");
 
-    textures[14] = load_texture(RES_DIR "art/open_window.png");
+    textures[14] = load_texture("art/open_window.png");
 
     level->camera_2d.offset   = {};
     level->camera_2d.target   = {};
@@ -319,7 +319,7 @@ void chapter_4_init(Game *game) {
         add_wall(e, {37, 198, 108, 8});
         add_wall(e, {36, 312, 117, 2});
         add_wall(e, {139, 266, 13, 40});
-        add_wall(e, {144+8, 191, 134, 29});
+        add_wall(e, {144+8, 191, 134-8, 29});
         add_wall(e, {29, 188, 8, 127});
         add_wall(e, {46, 268, 55, 21});
         add_wall(e, {152, 260, 174, 58});
@@ -556,7 +556,7 @@ void chapter_4_init(Game *game) {
                          speed,
                          nullptr);
 
-    //chapter_4_3d_init(game);
+    chapter_4_3d_init(game);
 
     atari_text_list_init(&game->text[30],
                          0,
@@ -640,7 +640,7 @@ void chapter_4_3d_update_camera(Game *game, Level_Chapter_4 *level, Camera3D *ca
             level->camera.target = smoothstep_vector3(level->camera_target_saved,
                                                       target,
                                                       min(1, level->camera_move_time));
-            level->camera.fovy = smoothstep(FOV_DEFAULT, 60, min(1, level->camera_move_time));
+            //level->camera.fovy = smoothstep(FOV_DEFAULT, 60, min(1, level->camera_move_time));
 
             if (level->camera_move_time >= 1) {
                 //level->camera.target = target;
@@ -658,6 +658,8 @@ void chapter_4_3d_update_camera(Game *game, Level_Chapter_4 *level, Camera3D *ca
                     play_music(MUSIC_VHS_BAD);
 
                     level->lock_looking   = false;
+
+                    level->camera.fovy = 60;
 
                     play_sound(SOUND_SCREAM);
 
@@ -814,8 +816,7 @@ void chapter_4_update(Game *game, float dt) {
                 };
 
                 auto goto_atari = [](Game *game) -> void {
-                    Level_Chapter_4 *level = (Level_Chapter_4 *)game->level;
-                    level->state = CHAPTER_4_STATE_ATARI;
+                    chapter_4_set_state_atari(game);
                 };
 
                 add_event(game, play_knocking_1, 5);
@@ -863,6 +864,7 @@ void chapter_4_update(Game *game, float dt) {
 
             if (is_music_playing(MUSIC_VHS_BAD) && level->text_handler.current_index == 6) {
                 stop_music();
+                //game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
             }
 
             if (game->current && colors_equal(game->current->color, GOD_COLOR)) {

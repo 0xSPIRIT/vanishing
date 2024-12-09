@@ -123,7 +123,7 @@ void post_process_spin_uniforms(Shader shader, Post_Processing_Spin *spin) {
 }
 
 void post_process_init(Post_Processing *post) {
-    post->vhs.shader = LoadShader(0, RES_DIR "shaders/vhs.fs");
+    post->vhs.shader = LoadShader(0, "shaders/vhs.fs");
 
     post->type = POST_PROCESSING_PASSTHROUGH;
 
@@ -160,7 +160,7 @@ void post_process_init(Post_Processing *post) {
     crt->green_offset = +0.006f;
     crt->blue_offset  = -0.006f;
 
-    crt->shader                 = LoadShader(0, RES_DIR "shaders/crt.fs");
+    crt->shader                 = LoadShader(0, "shaders/crt.fs");
     crt->u_time                 = GetShaderLocation(crt->shader, "time");
     crt->u_do_scanline_effect   = GetShaderLocation(crt->shader, "do_scanline_effect");
     crt->u_do_warp_effect       = GetShaderLocation(crt->shader, "do_warp_effect");
@@ -180,7 +180,7 @@ void post_process_init(Post_Processing *post) {
     bloom->bloom_intensity = 4;
     bloom->vignette_mix = 0.35f;
 
-    bloom->shader            = LoadShader(0, RES_DIR "shaders/bloom.fs");
+    bloom->shader            = LoadShader(0, "shaders/bloom.fs");
     bloom->u_time            = GetShaderLocation(bloom->shader, "time");
     bloom->u_bloom_intensity = GetShaderLocation(bloom->shader, "bloom_intensity");
     bloom->u_vignette_mix    = GetShaderLocation(bloom->shader, "vignette_mix");
@@ -281,7 +281,7 @@ void post_process(Post_Processing *post, Texture2D *game_texture) {
     if (post->target.texture.width != GetRenderWidth() ||
         post->target.texture.height != GetRenderHeight())
     {
-        if (IsRenderTextureReady(post->target))
+        if (IsRenderTextureValid(post->target))
             UnloadRenderTexture(post->target);
 
         post->target = LoadRenderTexture(GetRenderWidth(), GetRenderHeight());
@@ -290,7 +290,7 @@ void post_process(Post_Processing *post, Texture2D *game_texture) {
     if (post->game_target.texture.width != render_width ||
         post->game_target.texture.height != render_height)
     {
-        if (IsRenderTextureReady(post->game_target))
+        if (IsRenderTextureValid(post->game_target))
             UnloadRenderTexture(post->game_target);
 
         post->game_target = LoadRenderTexture(render_width, render_height);

@@ -6,6 +6,14 @@
   #define RES_DIR "./"
 #endif
 
+#define IsTextureValid IsTextureReady
+#define IsModelValid IsModelReady
+#define IsFontValid IsFontReady
+#define IsSoundValid IsSoundReady
+#define IsRenderTextureValid IsRenderTextureReady
+#define IsShaderValid IsShaderReady
+#define IsMusicValid IsMusicReady
+
 #define RL_CULL_DISTANCE_NEAR 0.1
 #define RL_CULL_DISTANCE_FAR  1000
 
@@ -63,9 +71,9 @@ enum Game_Mode {
 };
 Game_Mode game_mode = GAME_MODE_INVALID;
 
-int chapter = 5;
+int chapter = 2;
 
-Font global_font, atari_font, comic_sans, italics_font, bold_font, bold_2_font, mono_font, bold_font_big, atari_small_font, titlescreen_font, titlescreen_minor_font, dos_font;
+Font global_font, atari_font, comic_sans, italics_font, bold_font, bold_2_font, bold_font_big, atari_small_font, titlescreen_font, titlescreen_minor_font, dos_font;
 
 bool toggled_fullscreen_past_second = false;
 float fullscreen_timer = 0;
@@ -186,6 +194,7 @@ MainFunction() {
     SetTargetFPS(60);
 
     InitAudioDevice();
+    //SetMasterVolume(0);
 
     InitWindow(default_width, default_height, "Veil");
 
@@ -196,18 +205,17 @@ MainFunction() {
 
     SetExitKey(0);
 
-    atari_font    = LoadFont  (RES_DIR "art/romulus.png");
-    atari_small_font = LoadFontEx(RES_DIR "art/cambriaz.ttf",  14, 0, 0);
-    global_font   = LoadFontEx(RES_DIR "art/frabk.ttf",    32, 0, 0);
-    comic_sans    = LoadFontEx(RES_DIR "art/comic.ttf",    16, 0, 0);
-    italics_font  = LoadFontEx(RES_DIR "art/cambriaz.ttf", 16, 0, 0);
-    bold_font     = LoadFontEx(RES_DIR "art/cambriab.ttf", 16, 0, 0);
-    bold_font_big = LoadFontEx(RES_DIR "art/cambriab.ttf", 32, 0, 0);
-    bold_2_font   = LoadFontEx(RES_DIR "art/BOOKOSB.TTF",  32, 0, 0);
-    mono_font     = LoadFontEx(RES_DIR "art/cour.ttf",      8, 0, 0);
-    titlescreen_font = LoadFontEx(RES_DIR "art/cambriaz.ttf", 48, 0, 0);
-    titlescreen_minor_font = LoadFontEx(RES_DIR "art/cambriaz.ttf", 24, 0, 0);
-    dos_font = LoadFontEx(RES_DIR "art/dos.ttf", 11, 0, 0);
+    atari_font             = load_font("art/romulus.png");
+    atari_small_font       = load_font("art/cambriaz.ttf", 14);
+    global_font            = load_font("art/frabk.ttf",    32);
+    comic_sans             = load_font("art/comic.ttf",    16);
+    italics_font           = load_font("art/cambriaz.ttf", 16);
+    bold_font              = load_font("art/cambriab.ttf", 16);
+    bold_font_big          = load_font("art/cambriab.ttf", 32);
+    bold_2_font            = load_font("art/BOOKOSB.TTF",  32);
+    titlescreen_font       = load_font("art/cambriaz.ttf", 48);
+    titlescreen_minor_font = load_font("art/cambriaz.ttf", 24);
+    dos_font               = load_font("art/dos.ttf",      11);
 
     game_audio_init();
 
@@ -216,7 +224,7 @@ MainFunction() {
     if (show_titlescreen)
         set_game_mode(GAME_MODE_TITLESCREEN);
     else
-        set_game_mode(GAME_MODE_ATARI);
+        set_game_mode(GAME_MODE_INTRO);
 
     initialize_game_mode(game_mode);
 
@@ -232,11 +240,11 @@ MainFunction() {
         if (IsKeyPressed(KEY_F10)) {
             Image image   = {};
 
-            image.data    = rlReadScreenPixels(GetRenderWidth(), GetRenderHeight());
             image.width   = GetRenderWidth();
             image.height  = GetRenderHeight();
-            image.mipmaps = 1;
+            image.data    = rlReadScreenPixels(image.width, image.height);
             image.format  = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8;
+            image.mipmaps = 1;
 
             int i = 0;
 

@@ -22,9 +22,9 @@ void titlescreen_init(Titlescreen *tit) {
     render_height = DIM_3D_HEIGHT;
     tit->target = LoadRenderTexture(render_width, render_height);
 
-    tit->scene = LoadModel(RES_DIR "models/train_station2.glb");
-    tit->clerk = LoadModel(RES_DIR "models/guy.glb");
-    tit->head = LoadModel(RES_DIR "models/pyramid_head.glb");
+    tit->scene = load_model("models/train_station2.glb");
+    tit->clerk = load_model("models/guy.glb");
+    tit->head  = load_model("models/pyramid_head.glb");
 
     tit->camera.fovy = 50;
     tit->camera.up = { 0, 1, 0 };

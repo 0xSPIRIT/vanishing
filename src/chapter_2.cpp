@@ -175,6 +175,9 @@ Entity *chapter_2_make_entity(Entity_Type type, float x, float y) {
     float texture_height = entity_texture_height(result);
 
     if (type >= ENTITY_CHAP_2_GIRL1 && type <= ENTITY_CHAP_2_TABLEY_2) {
+        if (type != ENTITY_CHAP_2_TABLEY_1 && type != ENTITY_CHAP_2_TABLEY_2)
+            result->has_dialogue = true;
+
         result->base_collider.x = 0;
         result->base_collider.y = texture_height / 2;
         result->base_collider.width = texture_width;
@@ -338,37 +341,37 @@ void chapter_2_init(Game *game) {
     crt->spinner.do_wiggle = false;
 
     Texture2D *textures = atari_assets.textures;
-    textures[0]  = load_texture(RES_DIR "art/player_white.png");
-    textures[1]  = load_texture(RES_DIR "art/hyatt_1.png");
-    textures[2]  = load_texture(RES_DIR "art/guy.png");
-    textures[3]  = load_texture(RES_DIR "art/bartender.png");
-    textures[4]  = load_texture(RES_DIR "art/girl.png");
-    textures[5]  = load_texture(RES_DIR "art/dinner_table.png");
-    textures[6]  = load_texture(RES_DIR "art/real_girl.png");
-    textures[7]  = load_texture(RES_DIR "art/penny.png");
-    //textures[8]  = load_texture(RES_DIR "art/fullscreen_1.png");
-    //textures[9]  = load_texture(RES_DIR "art/fullscreen_2.png");
-    textures[10] = load_texture(RES_DIR "art/bathroom.png");
-    textures[11] = load_texture(RES_DIR "art/open_window_chap_2.png");
-    textures[12] = load_texture(RES_DIR "art/djinn1.png");
-    textures[13] = load_texture(RES_DIR "art/djinn2.png");
-    textures[14] = load_texture(RES_DIR "art/djinn3.png");
-    textures[15] = load_texture(RES_DIR "art/hyatt_railing.png");
+    textures[0]  = load_texture("art/player_white.png");
+    textures[1]  = load_texture("art/hyatt_1.png");
+    textures[2]  = load_texture("art/guy.png");
+    textures[3]  = load_texture("art/bartender.png");
+    textures[4]  = load_texture("art/girl.png");
+    textures[5]  = load_texture("art/dinner_table.png");
+    textures[6]  = load_texture("art/real_girl.png");
+    textures[7]  = load_texture("art/penny.png");
+    //textures[8]  = load_texture("art/fullscreen_1.png");
+    //textures[9]  = load_texture("art/fullscreen_2.png");
+    textures[10] = load_texture("art/bathroom.png");
+    textures[11] = load_texture("art/open_window_chap_2.png");
+    textures[12] = load_texture("art/djinn1.png");
+    textures[13] = load_texture("art/djinn2.png");
+    textures[14] = load_texture("art/djinn3.png");
+    textures[15] = load_texture("art/hyatt_railing.png");
 
     //---
 
-    textures[16] = load_texture(RES_DIR "art/dinner/girl1.png");
-    textures[17] = load_texture(RES_DIR "art/dinner/boy1.png");
-    textures[18] = load_texture(RES_DIR "art/dinner/girl2.png");
-    textures[19] = load_texture(RES_DIR "art/dinner/girl3.png");
+    textures[16] = load_texture("art/dinner/girl1.png");
+    textures[17] = load_texture("art/dinner/boy1.png");
+    textures[18] = load_texture("art/dinner/girl2.png");
+    textures[19] = load_texture("art/dinner/girl3.png");
 
-    textures[20] = load_texture(RES_DIR "art/dinner/coffeetable.png");
+    textures[20] = load_texture("art/dinner/coffeetable.png");
 
-    textures[21] = load_texture(RES_DIR "art/dinner/couple1.png");
-    textures[22] = load_texture(RES_DIR "art/dinner/single1.png");
-    textures[23] = load_texture(RES_DIR "art/dinner/couple2.png");
-    textures[24] = load_texture(RES_DIR "art/dinner/tabley1.png");
-    textures[25] = load_texture(RES_DIR "art/dinner/tabley2.png");
+    textures[21] = load_texture("art/dinner/couple1.png");
+    textures[22] = load_texture("art/dinner/single1.png");
+    textures[23] = load_texture("art/dinner/couple2.png");
+    textures[24] = load_texture("art/dinner/tabley1.png");
+    textures[25] = load_texture("art/dinner/tabley2.png");
 
     game->entities = make_array<Entity*>(20);
 
@@ -941,6 +944,95 @@ void chapter_2_init(Game *game) {
                          20,
                          nullptr);
 
+    // Guys at the start
+
+    {
+        String choices[] = { const_string("Sure"), const_string("No that's weird") };
+        Text_List *next[] = { &game->text[126], nullptr };
+
+        void (*hooks[2])(void*) = { nullptr, nullptr };
+
+        game->text[125].arrow_color = WHITE;
+
+        atari_choice_text_list_init(&game->text[125],
+                                    0,
+                                    "Eavesdrop?",
+                                    choices,
+                                    next,
+                                    hooks,
+                                    2);
+    }
+    atari_text_list_init(&game->text[126],
+                         "Woman",
+                         "Indubitably.\rI mean, the optics of\nsynergy could never",
+                         speed,
+                         &game->text[127]);
+    atari_text_list_init(&game->text[127],
+                         "Woman",
+                         "outpace the undercurrents\nof the underlying\ndissonance in the market.",
+                         speed,
+                         &game->text[128]);
+    atari_text_list_init(&game->text[128],
+                         "Man",
+                         "Mhm, and when you really\nthink about it, isn't\nevery paradigm shift",
+                         speed,
+                         &game->text[129]);
+    atari_text_list_init(&game->text[129],
+                         "Man",
+                         "just a prelude to the\ninevitable alteration of\nnorms?",
+                         speed,
+                         &game->text[130]);
+    atari_text_list_init(&game->text[130],
+                         "Woman",
+                         "Exactly!\rThe scaffolding of progress\nis always contingent",
+                         speed,
+                         &game->text[131]);
+    atari_text_list_init(&game->text[131],
+                         "Woman",
+                         "on the elasticity of\ncollective buy-in.",
+                         speed,
+                         &game->text[132]);
+    atari_text_list_init(&game->text[132],
+                         "Man",
+                         "Y'know, it kinda makes\nyou wonder, does\ninnovation truly disrupt?",
+                         speed,
+                         &game->text[133]);
+    atari_text_list_init(&game->text[133],
+                         "Man",
+                         "Or does it just accelerate\nthe preordained\ntrajectory?",
+                         speed,
+                         &game->text[134]);
+    atari_text_list_init(&game->text[134],
+                         "Woman",
+                         "Wonderfully said, Josh.\rBut then, aren't these\nfrequencies that underlie",
+                         speed,
+                         &game->text[135]);
+    atari_text_list_init(&game->text[135],
+                         "Woman",
+                         "the ethos of our\nexistence simply constructs,\nbased on an arbitrary",
+                         speed,
+                         &game->text[136]);
+    atari_text_list_init(&game->text[136],
+                         "Woman",
+                         "spectrum we've agreed\nupon?",
+                         speed,
+                         &game->text[137]);
+    atari_text_list_init(&game->text[137],
+                         "Man",
+                         "Possibly.\rBut agreeing is in\nitself an act of placing",
+                         speed,
+                         &game->text[138]);
+    atari_text_list_init(&game->text[138],
+                         "Man",
+                         "your foot into\nthe door of futile\nchaos we call constructs.",
+                         speed,
+                         &game->text[139]);
+    atari_text_list_init(&game->text[139],
+                         "Woman",
+                         "You're so smart!",
+                         speed,
+                         nullptr);
+
     Entity *jake     = chapter_2_make_entity(ENTITY_CHAP_2_JAKE,    638,  30);
     Entity *erica    = chapter_2_make_entity(ENTITY_CHAP_2_ERICA,   618,  14);
     Entity *mike     = chapter_2_make_entity(ENTITY_CHAP_2_MIKE,    705,  90);
@@ -1168,16 +1260,11 @@ void chapter_2_entity_update(Entity *e, Game *game, float dt) {
                 e->dialogue_state++;
             }
         } break;
-        /*
-        case ENTITY_CHAP_2_PAULIE: {
+        case ENTITY_CHAP_2_COUPLE_1: {
             if (open_dialogue) {
-                switch (e->dialogue_state) {
-                    case 0: { game->current = &game->text[53]; } break;
-                }
-                e->dialogue_state++;
+                game->current = &game->text[125];
             }
         } break;
-        */
         case ENTITY_CHAP_2_BOUNCER: {
             if (e->dialogue_state == 0 && open_dialogue) {
                 game->current = &game->text[0];
