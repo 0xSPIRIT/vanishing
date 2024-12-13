@@ -327,12 +327,13 @@ void chapter_2_init(Game *game) {
 
     Post_Processing_Crt *crt = &game->post_processing.crt;
 
-    crt->do_scanline_effect   = true;
+    crt->do_scanline_effect   = false;
     crt->scanline_alpha       = 0.15f;
     crt->do_warp_effect       = false;
     crt->abberation_intensity = 1;
     crt->vignette_intensity   = 2;
     crt->vignette_mix         = 0.4f;
+    crt->noise_intensity      = 1.5f;
 
     crt->red_offset   = 0.006f;
     crt->green_offset = 0.009f;

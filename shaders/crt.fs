@@ -6,9 +6,9 @@ in vec2 fragTexCoord;
 uniform sampler2D texture0;
 uniform float time;
 
-uniform int do_scanline_effect;
+uniform int   do_scanline_effect;
 uniform float scanline_alpha;
-uniform int do_warp_effect;
+uniform int   do_warp_effect;
 uniform float abberation_intensity;
 uniform float vignette_intensity;
 uniform float vignette_mix;

@@ -846,7 +846,7 @@ void chapter_5_scene_init(Game *game) {
                                       nullptr);
             chapter_5_podium_text_red(&game->text[7],
                                       true,
-                                      "If found, please return to owner:\r(xxx-xxxx-xxx)\rLast seen: 2 years ago.",
+                                      "If found, please return to owner.",
                                       nullptr);
 
             void chapter_5_text(Text_List *list, char *speaker, char *line, float scroll_speed, Text_List *next);
@@ -1656,18 +1656,23 @@ void chapter_5_scene_init(Game *game) {
                                   WHITE,
                                   nullptr);
 
-            /*
+            // skip to monolith text
+#if 0
             game->current = &game->text[20];
             level->desert_black = true;
             text_handler->current_index = 1;
-            */
+#endif
 
             text_handler->alarms[1]    = 3;
             text_handler->next_list[1] = &game->text[22];
 
             chapter_5_window_text(true,
                                   &game->text[22],
-                                  "...\rMaybe here, she could hear him.\rHear his pleas.\rRemember his face.\rRemember the long-haired boy.",
+                                  "...\r"
+                                  "Maybe here, she could hear him.\r"
+                                  "Hear his pleas.\r"
+                                  "Remember his face.\r"
+                                  "Remember the long-haired boy.",
                                   WHITE,
                                   nullptr);
 
@@ -1676,41 +1681,49 @@ void chapter_5_scene_init(Game *game) {
 
             chapter_5_window_text(true,
                                   &game->text[23],
-                                  "\"Hello?\"\r\"Is anyone there?\"\n\r...\rShe didn't respond.",
+                                  "\"Hello?\"\r"
+                                  "\"Is anyone there?\"\n\r"
+                                  "...\rShe didn't respond.",
                                   WHITE,
                                   nullptr);
 
             text_handler->alarms[3]    = 3;
             text_handler->next_list[3] = &game->text[24];
 
+            Color pink = {232, 181, 223, 255};
+
             chapter_5_window_text(true,
                                   &game->text[24],
-                                  "He remembered her as she was.",
-                                  WHITE,
+                                  "Old memories came flooding back.\n\r"
+                                  "They swirled around him uncontrollably,\r"
+                                  "flashes of nostalgia and heartache.\n\r"
+                                  "The serendipity of their meeting,\r"
+                                  "Her peach face half-lit by the dusklight,\r"
+                                  "Her warm hand coddling his hair.",
+                                  pink,
                                   &game->text[25]);
             chapter_5_window_text(true,
                                   &game->text[25],
-                                  "She held the most vibrant pearlescence.\r"
-                                  "Her long hair fluttered in the breeze,\ntrailing a soft perfume.\r"
-                                  "Made him feel safe, made him feel whole.",
-                                  WHITE,
+                                  "Her tresses lit by golden hour\nfluttered in the breeze,\n"
+                                  "trailing a gentle perfume.",
+                                  pink,
                                   &game->text[26]);
             chapter_5_window_text(true,
                                   &game->text[26],
-                                  "On lazy Saturdays they both laid on\n"
-                                  "the grass fields looking up at the stars\n"
-                                  "laughing in bliss and harmony.\n\n\r"
+                                  "On lazy Saturday afternoons they both laid\n"
+                                  "on the grass fields looking up at the stars,\n"
+                                  "laughing in bliss and harmony.\n\r"
                                   "He turned over to her, stared into her eyes\n"
                                   "and saw Truth.",
-                                  WHITE,
+                                  pink,
                                   &game->text[35]);
 
             chapter_5_window_text(true,
                                   &game->text[35],
-                                  "Her cute smile infatuated him.\r"
+                                  "Her sweet smile infatuated him.\n\r"
                                   "The Universe's balance hung delicately\n"
                                   "on her, because he loved her.",
-                                  WHITE,
+                                  pink,
                                   nullptr);
 
             text_handler->alarms[4]    = 3;
@@ -1719,7 +1732,7 @@ void chapter_5_scene_init(Game *game) {
             chapter_5_window_text(true,
                                   &game->text[27],
                                   "But now, he realized what he missed.\r"
-                                  "Beyond words in splendor.",
+                                  "Beyond words.",
                                   WHITE,
                                   &game->text[28]);
             chapter_5_window_text(true,
@@ -2238,7 +2251,7 @@ void chapter_5_init(Game *game) {
     level->transition_fade = false;
 
     level->good = false;
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_STAIRCASE);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_DESERT);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {

@@ -431,6 +431,9 @@ void chapter_4_init(Game *game) {
        because you have not withheld from me your son, your only son.
      */
 
+    game->text[9].disallow_skipping = true;
+    game->text[100].disallow_skipping = true;
+
     game->text[9].scroll_sound = SOUND_EMPTY;
     text_list_init(&game->text[9],
                    nullptr,
@@ -659,7 +662,7 @@ void chapter_4_3d_update_camera(Game *game, Level_Chapter_4 *level, Camera3D *ca
 
                     level->lock_looking   = false;
 
-                    level->camera.fovy = 60;
+                    level->camera.fovy = 62;
 
                     play_sound(SOUND_SCREAM);
 

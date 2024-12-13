@@ -229,7 +229,7 @@ void game_audio_init() {
     audio->sounds[SOUND_CLOSE_WINDOW] = load_sound(CHANNEL_WORLD, "close_window.ogg");
     audio->sounds[SOUND_CREAKING]     = load_sound(CHANNEL_WORLD, "creaking.ogg", 0.4f);
 
-    audio->sounds[SOUND_SCREAM]       = load_sound(CHANNEL_WORLD, "scream.ogg", 0.6f);
+    audio->sounds[SOUND_SCREAM]       = load_sound(CHANNEL_WORLD, "scream.ogg", 0.4f);
 
     audio->current_music = -1;
     audio->volume_a = audio->volume_b = -1;
