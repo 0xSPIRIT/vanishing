@@ -585,6 +585,36 @@ Find_Word_Result find_word(const char *string, const char *word, int n) {
     return result;
 }
 
+Rectangle get_screen_rectangle() {
+    Rectangle result;
+
+    float desired_aspect_ratio = 4.f/3.f;
+
+    int screen_width = GetRenderWidth();
+    int screen_height = (int) ((float)screen_width / desired_aspect_ratio);
+    if (screen_height > GetRenderHeight()) {
+        screen_height = GetRenderHeight();
+        screen_width = (int)(screen_height * desired_aspect_ratio);
+    }
+
+    // When alt-tabbing in fullscreen this becomes 0.
+    // If we don't do this we get a division by 0 somewhere
+    // and the camera position and target turns into a bunch
+    // of nans.
+    if (screen_width == 0 || screen_height == 0) {
+        screen_width = default_width;
+        screen_height = default_height;
+    }
+
+    result.x = GetRenderWidth()  / 2 - screen_width  / 2;
+    result.y = GetRenderHeight() / 2 - screen_height / 2;
+    result.width  = screen_width;
+    result.height = screen_height;
+
+    return result;
+}
+
+
 // System Time
 
 #if defined(_WIN32)

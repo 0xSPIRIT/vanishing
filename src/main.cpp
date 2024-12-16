@@ -6,13 +6,18 @@
   #define RES_DIR "./"
 #endif
 
-#define IsTextureValid IsTextureReady
-#define IsModelValid IsModelReady
-#define IsFontValid IsFontReady
-#define IsSoundValid IsSoundReady
+// There was a problem with upgrading to raylib v5.5
+// where they broke the model loader. So in case they
+// fix that, I'm leaving the updated function names
+// here (they changed some of 'em)
+
+#define IsTextureValid       IsTextureReady
+#define IsModelValid         IsModelReady
+#define IsFontValid          IsFontReady
+#define IsSoundValid         IsSoundReady
 #define IsRenderTextureValid IsRenderTextureReady
-#define IsShaderValid IsShaderReady
-#define IsMusicValid IsMusicReady
+#define IsShaderValid        IsShaderReady
+#define IsMusicValid         IsMusicReady
 
 #define RL_CULL_DISTANCE_NEAR 0.1
 #define RL_CULL_DISTANCE_FAR  1000
@@ -20,12 +25,10 @@
 #include <raylib.h>
 
 #define GLSL_VERSION 330
-//#include <glad/glad.h>
 
 #include <rlgl.h>
 #include <raymath.h>
-//#define RLIGHTS_IMPLEMENTATION
-//#include <rlights.h>
+
 #define RCAMERA_IMPLEMENTATION
 #include <rcamera.h>
 #include <assert.h>
@@ -37,11 +40,12 @@
 #include <math.h>
 #include <time.h>
 
+// For loading our movies
 #include "pl_mpeg.h"
 
 #ifdef RELEASE
   #define MainFunction int WinMain
-  #define NDEBUG
+  #define NDEBUG // remove asserts
 #else
   #define MainFunction int main
   #define DEBUG
@@ -73,7 +77,17 @@ Game_Mode game_mode = GAME_MODE_INVALID;
 
 int chapter = 5;
 
-Font global_font, atari_font, comic_sans, italics_font, bold_font, bold_2_font, bold_font_big, atari_small_font, titlescreen_font, titlescreen_minor_font, dos_font;
+Font global_font,
+     atari_font,
+     comic_sans,
+     italics_font,
+     bold_font,
+     bold_2_font,
+     bold_font_big,
+     atari_small_font,
+     titlescreen_font,
+     titlescreen_minor_font,
+     dos_font;
 
 bool toggled_fullscreen_past_second = false;
 float fullscreen_timer = 0;
@@ -88,44 +102,12 @@ enum Keyboard_Focus {
 
 void set_game_mode(Game_Mode mode);
 
-Rectangle get_screen_rectangle() {
-    Rectangle result;
-
-    float desired_aspect_ratio = 4.f/3.f;
-
-    int screen_width = GetRenderWidth();
-    int screen_height = (int) ((float)screen_width / desired_aspect_ratio);
-    if (screen_height > GetRenderHeight()) {
-        screen_height = GetRenderHeight();
-        screen_width = (int)(screen_height * desired_aspect_ratio);
-    }
-
-    // When alt-tabbing in fullscreen this becomes 0.
-    // If we don't do this we get a division by 0 somewhere
-    // and the camera position and target turns into a bunch
-    // of nans.
-    if (screen_width == 0 || screen_height == 0) {
-        screen_width = default_width;
-        screen_height = default_height;
-    }
-
-    result.x = GetRenderWidth()  / 2 - screen_width  / 2;
-    result.y = GetRenderHeight() / 2 - screen_height / 2;
-    result.width  = screen_width;
-    result.height = screen_height;
-
-    return result;
-}
-
 void initialize_game_mode(Game_Mode mode);
 
 #include "util.cpp"
-
 #include "keys.cpp"
 #include "audio.cpp"
-
 #include "text.cpp"
-
 #include "post_processing.cpp"
 
 #include "chapter_1.h"
@@ -136,6 +118,7 @@ void initialize_game_mode(Game_Mode mode);
 #include "movie.h"
 
 // The chapter_n.cpp files are included in game.cpp.
+#include "game.h"
 #include "game.cpp"
 #include "intro.cpp"
 
@@ -154,6 +137,7 @@ void toggle_fullscreen() {
     fullscreen = !fullscreen;
 
     ToggleBorderlessWindowed();
+    //ToggleFullscreen();
 }
 
 void set_game_mode(Game_Mode mode) {

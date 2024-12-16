@@ -87,7 +87,13 @@ void movie_run(Movie *movie) {
         movie->movie = MOVIE_OFF;
     }
 
-    if (IsKeyPressed(KEY_SPACE) || (plm_has_ended(movie->plm) && movie->end_movie_callback)) {
+    bool skip = false;
+
+#ifdef DEBUG
+    skip = IsKeyPressed(KEY_SPACE);
+#endif
+
+    if (skip || (plm_has_ended(movie->plm) && movie->end_movie_callback)) {
         movie->movie = MOVIE_OFF;
 
         if (movie->end_movie_callback)
@@ -128,8 +134,10 @@ void movie_run(Movie *movie) {
 #endif
 
     // Sync audio and video
-    if (fabs(plm_get_time(movie->plm) - GetMusicTimePlayed(movie->audio)) > 0.05)
-        SeekMusicStream(movie->audio, plm_get_time(movie->plm));
+    float movie_time = plm_get_time(movie->plm);
+
+    if (fabs(movie_time - GetMusicTimePlayed(movie->audio)) > 0.05)
+        SeekMusicStream(movie->audio, movie_time);
 
     if (movie->movie == MOVIE_OFF) {
         movie_free(movie);

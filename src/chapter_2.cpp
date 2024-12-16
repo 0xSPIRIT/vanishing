@@ -68,10 +68,12 @@ void chapter_2_window_text(bool scroll, Text_List *list, char *line,
     //list->alpha_speed  = 0.5;
     list->color        = WHITE;
     list->center_text  = true;
+
     if (scroll)
         list->scroll_type = LetterByLetter;
     else
         list->scroll_type  = EntireLine;
+
     list->render_type  = Bare;
     list->location     = Middle;
     list->take_keyboard_focus = true;
