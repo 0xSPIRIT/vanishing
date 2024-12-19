@@ -147,7 +147,7 @@ void game_run(Game *game) {
             case 4: chapter_4_draw(game, dt);     break;
             case 5: chapter_5_draw(game);         break;
             case 6: chapter_6_draw(game);         break;
-            case 7: chapter_epilogue_draw(game);  break;
+            case 7: chapter_epilogue_draw(game,dt);break;
         }
 
         update_and_draw_fade(game, &game->fader, dt);

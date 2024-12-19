@@ -30,6 +30,12 @@ struct Level_Chapter_Epilogue {
     Shader         shader;
     Model          scene, bars, node, door, timer_model;
 
+    bool           noclip;
+    float          end_timer;
+
+    bool           tweak_out;
+    float          tweak_out_timer;
+
     float          fog_factor;
     float          fog_factor_to;
 
@@ -48,13 +54,14 @@ struct Level_Chapter_Epilogue {
     float          node_timer, node_timer_max;
 
     RenderTexture  timer_texture, flipped_timer_texture;
-    Texture        pink_dot, orange_dot, black_texture;
+    Texture        pink_dot, red_dot, black_texture, white_texture;
 
     bool           door_popup;
     bool           door_strike_popup;
     bool           bars_popup;
 
     bool           is_transitioning;
+    bool           transition_white;
     float          transition_timer; // 0.0 to 1.0
 };
 
@@ -79,14 +86,8 @@ void epilogue_goto_credits(void *game_ptr) {
     add_event(game, atari_queue_deinit_and_goto_intro, 5);
 }
 
-void epilogue_start_congratulations_text(Game *game) {
-    game->current = &game->text[64];
-}
-
-void epilogue_raise_node_last_scene(void *game_ptr) {
-    Game *game = (Game *)game_ptr;
+void epilogue_raise_node_last_scene(Game *game) {
     Level_Chapter_Epilogue *level = (Level_Chapter_Epilogue*)game->level;
-
     level->nodes[0].moving_up = true;
 }
 
@@ -97,6 +98,11 @@ void chapter_epilogue_init(Game *game) {
 
     render_width  = DIM_3D_WIDTH;
     render_height = DIM_3D_HEIGHT;
+
+    {
+        level->state = EPILOGUE_STATE_THIRD;
+
+    }
 
     game->render_state = RENDER_STATE_3D;
 
@@ -124,11 +130,12 @@ void chapter_epilogue_init(Game *game) {
     level->timer_model = load_model("models/clock.glb");
 
     level->pink_dot      = load_texture("art/pink_dot.png");
-    level->orange_dot    = load_texture("art/orange_dot.png");
+    level->red_dot       = load_texture("art/red_dot.png");
     level->black_texture = load_texture("art/black.png");
+    level->white_texture = load_texture("art/white.png");
 
     SetTextureFilter(level->pink_dot, TEXTURE_FILTER_BILINEAR);
-    SetTextureFilter(level->orange_dot, TEXTURE_FILTER_BILINEAR);
+    SetTextureFilter(level->red_dot, TEXTURE_FILTER_BILINEAR);
 
     level->node_timer_max = 8;
     level->node_timer = 8;
@@ -418,7 +425,7 @@ void chapter_epilogue_init(Game *game) {
 
     atari_text_list_init(&game->text[60],
                          0,
-                         "We need to focus on getting out of here.\rI'm not going to be distracted.",
+                         "We need to focus on getting out of here.\rIt's not like I can walk through walls.\rI'm not going to be distracted.",
                          speed,
                          nullptr);
 
@@ -450,6 +457,7 @@ void chapter_epilogue_init(Game *game) {
                                     2);
     }
 
+    /*
     atari_text_list_init(&game->text[63],
                          0,
                          "Too bad.",
@@ -473,8 +481,11 @@ void chapter_epilogue_init(Game *game) {
     };
 
     game->text[64].callbacks[0] = start_next_text;
+    */
+
     //game->text[64].callbacks[0] = epilogue_raise_node_last_scene;
 
+    /*
     chapter_5_window_text(true,
                           &game->text[114],
                           "But, you know that you suffer.\rAnd it is painful.\rBut that is okay.",
@@ -526,6 +537,7 @@ void chapter_epilogue_init(Game *game) {
                           WHITE,
                           nullptr);
     game->text[122].callbacks[0] = epilogue_raise_node_last_scene;
+    */
 
     {
         String choices[] = {
@@ -536,9 +548,9 @@ void chapter_epilogue_init(Game *game) {
         Text_List *next[2] = { 0, &game->text[66] };
         void (*function_pointers[2])(void*) = {0, 0};
 
-        game->text[65].arrow_color = WHITE;
-        game->text[65].choice_color = WHITE;
-        game->text[65].choice_backdrop_color = {60,60,60,255};
+        game->text[65].arrow_color = BLACK;
+        game->text[65].choice_color = BLACK;
+        game->text[65].choice_backdrop_color = {240,240,240,255};
 
         atari_choice_text_list_init(&game->text[65],
                                     0,
@@ -559,9 +571,9 @@ void chapter_epilogue_init(Game *game) {
         Text_List *next[3] = { 0, 0, &game->text[67] };
         void (*function_pointers[3])(void*) = {};
 
-        game->text[67].arrow_color = WHITE;
-        game->text[67].choice_color = WHITE;
-        game->text[67].choice_backdrop_color = {60,60,60,255};
+        game->text[67].arrow_color = BLACK;
+        game->text[67].choice_color = BLACK;
+        game->text[67].choice_backdrop_color = {240,240,240,255};
 
         atari_choice_text_list_init(&game->text[67],
                                     0,
@@ -687,9 +699,13 @@ void chapter_epilogue_init(Game *game) {
                          nullptr);
     game->text[90].callbacks[0] = epilogue_goto_credits;
 
+    for (int i = 70; i <= 90; i++ ) {
+        game->text[i].color = GRAY;
+    }
+
     atari_text_list_init(&game->text[100],
                          0,
-                         "The bars are made of diamond.",
+                         "I can't pass through this.\rThe bars are made of diamond.",
                          speed,
                          nullptr);
     game->text[100].textbox_height = render_height/3.5;
@@ -711,13 +727,6 @@ void chapter_epilogue_init(Game *game) {
     nodes[2].text = &game->text[7];
     nodes[3].text = &game->text[10];
     nodes[4].text = &game->text[13];
-
-    /*
-    level->state = EPILOGUE_STATE_THIRD;
-    level->transitioned = false;
-    level->transition_timer = 0.5;
-    level->is_transitioning = true;
-    */
 }
 
 void epilogue_handle_transition(Game *game, float dt) {
@@ -745,7 +754,6 @@ void epilogue_handle_transition(Game *game, float dt) {
             level->door_strike_popup = false;
 
             Epilogue_Node *nodes = level->nodes;
-            memset(nodes, 0, sizeof(Epilogue_Node) * level->num_nodes);
 
             level->door_timer = 120;
 
@@ -774,7 +782,9 @@ void epilogue_handle_transition(Game *game, float dt) {
             } else if (level->state == EPILOGUE_STATE_SECOND) {
                 level->state = EPILOGUE_STATE_THIRD;
 
-                level->scene.materials[1].maps[MATERIAL_MAP_DIFFUSE].texture = level->orange_dot;
+                level->pause_door_timer = true;
+
+                level->scene.materials[1].maps[MATERIAL_MAP_DIFFUSE].texture = level->red_dot;
                 level->fog_factor = level->fog_factor_to = 0;
 
                 level->num_nodes = 5;
@@ -797,7 +807,7 @@ void epilogue_handle_transition(Game *game, float dt) {
                 game->textbox_alpha = 255;
 
                 float time = 5;
-                add_event(game, epilogue_start_congratulations_text, time);
+                add_event(game, epilogue_raise_node_last_scene, time);
 
                 level->num_nodes = 1;
 
@@ -806,7 +816,7 @@ void epilogue_handle_transition(Game *game, float dt) {
                 nodes[0].position = { -1, y, 0 };
                 nodes[0].text = &game->text[65];
 
-                level->scene.materials[1].maps[MATERIAL_MAP_DIFFUSE].texture = level->black_texture;
+                level->scene.materials[1].maps[MATERIAL_MAP_DIFFUSE].texture = level->white_texture;
 
                 level->camera.position = {1.74f, 1.67f, 2.10f};
                 level->camera.target   = {0.23f, 1.19f, 0.88f};
@@ -952,8 +962,36 @@ void chapter_epilogue_update(Game *game, float dt) {
 
         level->camera.target = saved_target;
 
-        cam->x = Clamp(cam->x, -28, 28);
-        cam->z = Clamp(cam->z, -28, 28);
+        bool clamp = true;
+
+        if (level->state == EPILOGUE_STATE_THIRD &&
+            (fabs(cam->x) > 2 && fabs(cam->z) > 2))
+        {
+            clamp = false;
+        }
+
+        if (!level->noclip && clamp) {
+            cam->x = Clamp(cam->x, -28, 28);
+            cam->z = Clamp(cam->z, -28, 28);
+        } else if (level->state == EPILOGUE_STATE_THIRD) {
+            if (fabs(cam->x > 28) || fabs(cam->z) > 28) {
+                level->end_timer += dt;
+                level->num_nodes = 0;
+                level->noclip = true;
+            } else {
+                level->end_timer = 0; // reset if you go inside
+            }
+
+            if (level->end_timer >= 5) {
+                if (level->is_transitioning == false) {
+                    level->is_transitioning = true;
+                    level->transition_white = true;
+                    memset(level->nodes, 0, sizeof(level->nodes));
+                    level->next_node_to_appear = 0;
+                    level->node_popup = false;
+                }
+            }
+        }
 
         if (level->state >= EPILOGUE_STATE_SECOND && level->state <= EPILOGUE_STATE_THIRD) {
             float dist = 28 * 0.05f;
@@ -1021,7 +1059,7 @@ void chapter_epilogue_update(Game *game, float dt) {
 
                 if (is_action_pressed()) {
                     if (level->door_popup && level->state == EPILOGUE_STATE_THIRD) {
-                        game->current = &game->text[61];
+                        //game->current = &game->text[61];
                     } else {
                         if (level->door_popup) {
                             level->is_transitioning = true;
@@ -1045,8 +1083,11 @@ void chapter_epilogue_update(Game *game, float dt) {
             }
         }
 
-        if (near_door || level->door_popup || level->door_strike_popup)
+        if (level->state == EPILOGUE_STATE_THIRD || near_door ||
+            level->door_popup || level->door_strike_popup)
+        {
             level->bars_popup = false;
+        }
 
         if (level->bars_popup && is_action_pressed()) {
             game->current = &game->text[100];
@@ -1092,10 +1133,45 @@ void chapter_epilogue_update(Game *game, float dt) {
 
 void chapter_epilogue_draw_ending(Game *game) {
     (void)game;
-    ClearBackground(BLACK);
+    ClearBackground(WHITE);
 }
 
-void chapter_epilogue_draw(Game *game) {
+void chapter_epilogue_draw_bar_side(Model bars,
+                                    float rotation,
+                                    float scale,
+                                    bool tweak_out)
+{
+    Matrix mat_scale = MatrixScale(scale, scale, scale);
+    Matrix mat_rotation = MatrixRotate({0,1,0}, rotation * DEG2RAD);
+    Matrix mat_translation = MatrixTranslate(0, 0, 0);
+
+    Matrix mat_transform = MatrixMultiply(MatrixMultiply(mat_scale, mat_rotation), mat_translation);
+
+    bars.transform = MatrixMultiply(bars.transform, mat_transform);
+
+    for (int i = 0; i < bars.meshCount; i++) {
+        Color color = bars.materials[bars.meshMaterial[i]].maps[MATERIAL_MAP_DIFFUSE].color;
+
+        Color tint = WHITE;
+
+        if (tweak_out)
+            if (rand_bool(0.01)) continue;
+
+        Color colorTint = tint;
+        /*
+        colorTint.r = (unsigned char)(((int)color.r*(int)tint.r)/255);
+        colorTint.g = (unsigned char)(((int)color.g*(int)tint.g)/255);
+        colorTint.b = (unsigned char)(((int)color.b*(int)tint.b)/255);
+        colorTint.a = (unsigned char)(((int)color.a*(int)tint.a)/255);
+        */
+
+        bars.materials[bars.meshMaterial[i]].maps[MATERIAL_MAP_DIFFUSE].color = colorTint;
+        DrawMesh(bars.meshes[i], bars.materials[bars.meshMaterial[i]], bars.transform);
+        bars.materials[bars.meshMaterial[i]].maps[MATERIAL_MAP_DIFFUSE].color = color;
+    }
+}
+
+void chapter_epilogue_draw(Game *game, float dt) {
     Level_Chapter_Epilogue *level = (Level_Chapter_Epilogue*)game->level;
 
     if (level->state == EPILOGUE_STATE_ENDING) {
@@ -1106,11 +1182,7 @@ void chapter_epilogue_draw(Game *game) {
     SetShaderValue(level->shader, GetShaderLocation(level->shader, "viewPos"), &level->camera.position, SHADER_UNIFORM_VEC3);
     SetShaderValue(level->shader, GetShaderLocation(level->shader, "fog_factor"), &level->fog_factor, SHADER_UNIFORM_FLOAT);
 
-    if (level->state == EPILOGUE_STATE_FOURTH) {
-        ClearBackground(BLACK);
-    } else {
-        ClearBackground(WHITE);
-    }
+    ClearBackground(WHITE);
 
     BeginMode3D(level->camera);
 
@@ -1118,12 +1190,31 @@ void chapter_epilogue_draw(Game *game) {
 
     if (level->state != EPILOGUE_STATE_FOURTH) {
         auto draw_bars = [&](float scale) {
-            Vector3 scale_vec = { scale, scale, scale };
+            if (level->state == EPILOGUE_STATE_THIRD) {
+                if (level->tweak_out_timer <= 0) {
+                    if (level->tweak_out) {
+                        level->tweak_out_timer = rand_range(5, 14);
+                    } else {
+                        level->tweak_out_timer = rand_range(0.25, 1.5);
+                    }
 
-            DrawModelEx(level->bars, {}, {0,1,0}, 0,   scale_vec, WHITE);
-            DrawModelEx(level->bars, {}, {0,1,0}, 90,  scale_vec, WHITE);
-            DrawModelEx(level->bars, {}, {0,1,0}, 180, scale_vec, WHITE);
-            DrawModelEx(level->bars, {}, {0,1,0}, 270, scale_vec, WHITE);
+                    level->tweak_out = !level->tweak_out;
+                }
+
+                level->tweak_out_timer -= dt;
+            }
+
+            for (int i = 0; i <= 270; i += 90) {
+                float offset = 0;
+
+                /*
+                if (level->tweak_out) {
+                    offset = rand_range(-0.125, +0.125);
+                }
+                */
+
+                chapter_epilogue_draw_bar_side(level->bars, i + offset, scale, level->tweak_out);
+            }
         };
 
         draw_bars(1);
@@ -1140,31 +1231,33 @@ void chapter_epilogue_draw(Game *game) {
 
         EndMode3D();
 
-        BeginTextureMode(level->flipped_timer_texture);
+        {
+            BeginTextureMode(level->flipped_timer_texture);
 
-        ClearBackground({});
-        Font *font = &bold_2_font;
+            ClearBackground({});
+            Font *font = &bold_2_font;
 
-        char time_string[64] = {};
-        seconds_to_minutes_and_seconds(level->door_timer, time_string);
-        DrawTextEx(*font, time_string, {0,-3}, font->baseSize, 0, WHITE);
+            char time_string[64] = {};
+            seconds_to_minutes_and_seconds(level->door_timer, time_string);
+            DrawTextEx(*font, time_string, {0,-3}, font->baseSize, 0, WHITE);
 
-        EndTextureMode();
+            EndTextureMode();
 
-        BeginTextureMode(level->timer_texture);
+            BeginTextureMode(level->timer_texture);
 
-        float w = level->flipped_timer_texture.texture.width;
-        float h = level->flipped_timer_texture.texture.height;
+            float w = level->flipped_timer_texture.texture.width;
+            float h = level->flipped_timer_texture.texture.height;
 
-        ClearBackground(BLACK);
+            ClearBackground(BLACK);
 
-        DrawTexturePro(level->flipped_timer_texture.texture,
-                       {0, 0, -w, h},
-                       {0, 0, w, h},
-                       {0, 0},
-                       0,
-                       WHITE);
-        EndTextureMode();
+            DrawTexturePro(level->flipped_timer_texture.texture,
+                           {0, 0, -w, h},
+                           {0, 0, w, h},
+                           {0, 0},
+                           0,
+                           WHITE);
+            EndTextureMode();
+        }
 
         BeginTextureMode(game->render_target_3d);
         BeginMode3D(level->camera);
@@ -1184,11 +1277,12 @@ void chapter_epilogue_draw(Game *game) {
             Vector3 pos = door->pos;
             pos.y += 5.25f;
 
-            float s = 1;
+            if (level->state != EPILOGUE_STATE_THIRD) {
+                float s = 1;
+                level->timer_model.materials[1].maps[MATERIAL_MAP_DIFFUSE].texture = level->timer_texture.texture;
+                DrawModelEx(level->timer_model, pos, {0,1,0}, rotation, {s,s,s}, WHITE);
+            }
 
-            level->timer_model.materials[1].maps[MATERIAL_MAP_DIFFUSE].texture = level->timer_texture.texture;
-
-            DrawModelEx(level->timer_model, pos, {0,1,0}, rotation, {s,s,s}, WHITE);
             DrawModelEx(level->door, {0,level->door_y,0}, {0,1,0}, rotation, {1,1,1}, WHITE);
             // door->texture now has the 1:59 on it
         }
@@ -1212,9 +1306,6 @@ void chapter_epilogue_draw(Game *game) {
     if (level->node_popup) {
         Color c = BLACK;
 
-        if (level->state == EPILOGUE_STATE_FOURTH)
-            c = WHITE;
-
         draw_popup("Inspect Capsule", c, Top);
     }
 
@@ -1230,5 +1321,10 @@ void chapter_epilogue_draw(Game *game) {
 
     float transition_fade = sinf(level->transition_timer * PI);
 
-    DrawRectangle(0, 0, render_width, render_height, {0,0,0,(uint8_t)(transition_fade * 255)});
+    uint8_t f = 0;
+    if (level->transition_white) {
+        f = 255;
+    }
+
+    DrawRectangle(0, 0, render_width, render_height, {f,f,f,(uint8_t)(transition_fade * 255)});
 }

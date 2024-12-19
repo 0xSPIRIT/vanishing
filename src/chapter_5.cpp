@@ -2251,7 +2251,7 @@ void chapter_5_init(Game *game) {
     level->transition_fade = false;
 
     level->good = false;
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_DESERT);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_STAIRCASE);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {

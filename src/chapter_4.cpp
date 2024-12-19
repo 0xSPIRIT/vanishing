@@ -559,7 +559,7 @@ void chapter_4_init(Game *game) {
                          speed,
                          nullptr);
 
-    chapter_4_3d_init(game);
+    //chapter_4_3d_init(game);
 
     atari_text_list_init(&game->text[30],
                          0,

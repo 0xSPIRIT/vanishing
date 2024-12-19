@@ -621,6 +621,7 @@ void chapter_3_job_init(Game *game, int which_document_list) {
             document_register_error_first_occurrence(d0, "unprefesional!", "unprofessional.");
 
             Document *d1 = &level->minigame.document_list[1];
+
             document_register_error_first_occurrence(d1, "frendly", "friendly");
             document_register_error_first_occurrence(d1, "setled",  "settled");
             document_register_error_first_occurrence(d1, "planing", "planning");
@@ -808,16 +809,18 @@ void chapter_3_job_init(Game *game, int which_document_list) {
 void chapter_3_init(Game *game) {
     Level_Chapter_3 *level = (Level_Chapter_3 *)game->level;
 
-    game->post_processing.type = POST_PROCESSING_CRT;
-    game->post_processing.crt.do_scanline_effect = false;
-    game->post_processing.crt.scanline_alpha = 0.07f;
-    game->post_processing.crt.do_warp_effect = false;
-    game->post_processing.crt.abberation_intensity = 1;
-    game->post_processing.crt.vignette_intensity = 1;
-    game->post_processing.crt.vignette_mix = 0.75f;
-    game->post_processing.crt.noise_intensity = 0.6f;
+    Post_Processing_Crt *crt = &game->post_processing.crt;
 
-    game->post_processing.crt.spinner.do_wiggle = false;
+    game->post_processing.type = POST_PROCESSING_CRT;
+
+    crt->do_scanline_effect   = false;
+    crt->scanline_alpha       = 0.07f;
+    crt->do_warp_effect       = false;
+    crt->abberation_intensity = 1;
+    crt->vignette_intensity   = 1;
+    crt->vignette_mix         = 0.75f;
+    crt->noise_intensity      = 0.6f;
+    crt->spinner.do_wiggle    = false;
 
     //level->state = CHAPTER_3_STATE_HOME_INSIDE;
     //level->state = CHAPTER_3_STATE_ROAD;
