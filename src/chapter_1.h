@@ -12,7 +12,7 @@ enum Player_Walking_State {
     PLAYER_WALKING_STATE_CRAWLING
 };
 
-// These are included in the Entity struct in atari.cpp as a part of
+// These are included in the Entity struct in game.h as a part of
 // the union.
 struct Chapter_1_Player {
     Vector2 stored_pos;

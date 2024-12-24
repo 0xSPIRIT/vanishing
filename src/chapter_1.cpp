@@ -346,6 +346,9 @@ void chapter_1_init(Game *game) {
         Text_List *next[] = { 0, 0 };
         void (*function_pointers[])(void*) = { chapter_1_activate_node, nullptr };
 
+        game->text[10].choice_color = BLACK;
+        game->text[10].choice_backdrop_color = {};
+
         atari_choice_text_list_init(&game->text[10],
                                     0,
                                     "Drink the liquid?",
@@ -591,6 +594,9 @@ void chapter_1_init(Game *game) {
             chapter_1_start_prayer,
             nullptr
         };
+
+        game->text[60].choice_color = BLACK;
+        game->text[60].choice_backdrop_color = {};
 
         atari_choice_text_list_init(&game->text[60],
                                     0,

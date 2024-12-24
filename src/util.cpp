@@ -265,6 +265,21 @@ void seconds_to_minutes_and_seconds(float time, char *output) {
     sprintf(output, "%d:%02d", minutes, seconds);
 }
 
+// t in [0, 1]
+float triangle_wave(float t) {
+    t = fmod(2 * t, 2);
+
+    if (t <= 0.5) {
+        return 2 * t;
+    } else if (t <= 1.5) {
+        return 2 - 2 * t;
+    } else if (2 * t - 4 <= 2) {
+        return 2 * t - 4;
+    }
+
+    return 0;
+}
+
 BoundingBox BoundingBoxMove(BoundingBox box, Vector3 offset) {
     BoundingBox result;
 
@@ -491,6 +506,13 @@ Color hsv(float hue, float saturation, float value) {
     }
 
     return out;     
+}
+
+int my_rand(int seed) {
+    const int a = 1103515245;
+    const int c = 12345;
+    const int m = 2000000;
+    return (a * (seed * seed) + c) % m;
 }
 
 bool rand_bool(double prob_true) {

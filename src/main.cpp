@@ -75,7 +75,7 @@ enum Game_Mode {
 };
 Game_Mode game_mode = GAME_MODE_INVALID;
 
-int chapter = 7;
+int chapter = 5;
 
 Font global_font,
      atari_font,
@@ -87,7 +87,7 @@ Font global_font,
      atari_small_font,
      titlescreen_font,
      titlescreen_minor_font,
-     dos_font;
+     timer_font;
 
 bool toggled_fullscreen_past_second = false;
 float fullscreen_timer = 0;
@@ -159,7 +159,7 @@ MainFunction() {
         show_titlescreen = false;
 
         int chapter_start = atoi(__argv[1]);
-        if (chapter_start < 1 || chapter_start > 7)
+        if (chapter_start < 0 || chapter_start > 7)
             exit(1);
 
         chapter = chapter_start;
@@ -184,6 +184,8 @@ MainFunction() {
 
     //gladLoadGL();
 
+    printf("%zu\n", sizeof(game_atari.text));
+
     if (fullscreen)
         toggle_fullscreen();
 
@@ -199,7 +201,7 @@ MainFunction() {
     bold_2_font            = load_font("art/BOOKOSB.TTF",  32);
     titlescreen_font       = load_font("art/cambriaz.ttf", 48);
     titlescreen_minor_font = load_font("art/cambriaz.ttf", 24);
-    dos_font               = load_font("art/dos.ttf",      11);
+    timer_font             = load_font("art/BOOKOSB.TTF", 128);
 
     game_audio_init();
 
@@ -246,7 +248,7 @@ MainFunction() {
             MinimizeWindow();
         }
 
-        if ((IsKeyPressed(KEY_F4) && IsKeyDown(KEY_LEFT_ALT))) {
+        if (IsKeyPressed(KEY_F4) && IsKeyDown(KEY_LEFT_ALT)) {
             exit(0);
         }
 

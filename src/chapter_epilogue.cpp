@@ -99,11 +99,6 @@ void chapter_epilogue_init(Game *game) {
     render_width  = DIM_3D_WIDTH;
     render_height = DIM_3D_HEIGHT;
 
-    {
-        level->state = EPILOGUE_STATE_THIRD;
-
-    }
-
     game->render_state = RENDER_STATE_3D;
 
     game->textbox_target = LoadRenderTexture(render_width, render_height);
@@ -129,7 +124,7 @@ void chapter_epilogue_init(Game *game) {
     level->door        = load_model("models/epilogue_door.glb");
     level->timer_model = load_model("models/clock.glb");
 
-    level->pink_dot      = load_texture("art/pink_dot.png");
+    level->pink_dot      = load_texture("art/cobble.png");
     level->red_dot       = load_texture("art/red_dot.png");
     level->black_texture = load_texture("art/black.png");
     level->white_texture = load_texture("art/white.png");
@@ -162,12 +157,14 @@ void chapter_epilogue_init(Game *game) {
     level->doors[2].pos = { 0, 0, -door_distance };
     level->doors[3].pos = { 0, 0, +door_distance };
 
-    level->timer_texture = LoadRenderTexture(64, 24);
-    level->flipped_timer_texture = LoadRenderTexture(64, 24);
+    int width = 260;
+    int height = 128;
+    level->timer_texture = LoadRenderTexture(width, height);
+    level->flipped_timer_texture = LoadRenderTexture(width, height);
 
     //SetTextureFilter(level->timer_texture.texture, TEXTURE_FILTER_BILINEAR);
 
-    float speed = 20;
+    float speed = 30;
 
     atari_text_list_init(&game->text[0],
                          0,
@@ -425,7 +422,7 @@ void chapter_epilogue_init(Game *game) {
 
     atari_text_list_init(&game->text[60],
                          0,
-                         "We need to focus on getting out of here.\rIt's not like I can walk through walls.\rI'm not going to be distracted.",
+                         "We need to focus on getting out of here.\rI'm not going to be distracted.",
                          speed,
                          nullptr);
 
@@ -592,116 +589,104 @@ void chapter_epilogue_init(Game *game) {
 
     speed = 30;
 
-    atari_text_list_init(&game->text[70],
-                         "Penny",
-                         "Oh, electronic music?\rThat's lame.",
-                         speed,
-                         &game->text[71]);
-    atari_text_list_init(&game->text[71],
-                         "Chase",
-                         "WHAT?!\rYou don't like deadmau5, Crystal Castles...?\rAphex Twin!?\rPastel Ghost?!!?!?",
-                         speed,
-                         &game->text[72]);
-    atari_text_list_init(&game->text[72],
-                         "Penny",
-                         "...\r...\rWho them?",
-                         speed,
-                         &game->text[73]);
-    atari_text_list_init(&game->text[73],
-                         "Chase",
-                         "Woah, I can't believe that!\rOk wait, but I do make other stuff too.",
-                         speed,
-                         &game->text[74]);
-    atari_text_list_init(&game->text[74],
-                         "Penny",
-                         "Like what?",
-                         speed,
-                         &game->text[75]);
-    atari_text_list_init(&game->text[75],
-                         "Chase",
-                         "Solo piano pieces, mainly.\rKind of impressionistic.",
-                         speed,
-                         &game->text[76]);
-    atari_text_list_init(&game->text[76],
-                         "Penny",
-                         "Oh, nice.\rI like Debussy.\rSatie too.",
-                         speed,
-                         &game->text[77]);
-    atari_text_list_init(&game->text[77],
-                         "Chase",
-                         "YEAH! Those were big inspirations.",
-                         speed,
-                         &game->text[78]);
-    atari_text_list_init(&game->text[78],
-                         "Penny",
-                         "So, how does it work?\rDo you record yourself playing, or do you\njust program in the notes?",
-                         speed,
-                         &game->text[79]);
-    atari_text_list_init(&game->text[79],
-                         "Chase",
-                         "Yeah I record myself playing.\rWhat about you?",
-                         speed,
-                         &game->text[80]);
-    atari_text_list_init(&game->text[80],
-                         "Penny",
-                         "I do as well- I have this shitty mic that\nI use for my acoustic guitar.\rI layer everything up, then mix and master\neverything myself.",
-                         speed,
-                         &game->text[81]);
-    atari_text_list_init(&game->text[81],
-                         "Chase",
-                         "Well, the shitter the mic the better in\nmy experience.\rGives it the ~vibe~",
-                         speed,
-                         &game->text[82]);
-    atari_text_list_init(&game->text[82],
-                         "Penny",
-                         "Hahah, so true.\r...\r.....\r......",
-                         speed,
-                         &game->text[83]);
-    atari_text_list_init(&game->text[83],
-                         "Chase",
-                         "...\r...\r...",
-                         speed,
-                         &game->text[84]);
-    atari_text_list_init(&game->text[84],
-                         "Penny",
-                         "...\r...\r...",
-                         speed,
-                         &game->text[85]);
-    atari_text_list_init(&game->text[85],
-                         "Chase",
-                         "...\r...\r...",
-                         speed,
-                         &game->text[86]);
-    atari_text_list_init(&game->text[86],
-                         "Penny",
-                         "Hey.",
-                         speed,
-                         &game->text[87]);
-    atari_text_list_init(&game->text[87],
-                         "Chase",
-                         "...?",
-                         speed,
-                         &game->text[88]);
-    atari_text_list_init(&game->text[88],
-                         "Penny",
-                         "Maybe we could work on a song together.",
-                         speed,
-                         &game->text[89]);
-    atari_text_list_init(&game->text[89],
-                         "Chase",
-                         "Oh.\r...",
-                         speed,
-                         &game->text[90]);
-    atari_text_list_init(&game->text[90],
-                         "Chase",
-                         "I'd like that a lot.",
-                         speed,
-                         nullptr);
-    game->text[90].callbacks[0] = epilogue_goto_credits;
+    auto penny = [&](Text_List *list, char *speaker, char *data, Text_List *next) -> void {
+        list->font = &atari_font;
+        list->font_spacing = 1;
+        list->scale = 0.125;
+        list->scroll_speed = 30;
 
-    for (int i = 70; i <= 90; i++ ) {
-        game->text[i].color = GRAY;
-    }
+        setup_text_scroll_sound(list, speaker);
+        list->center_text = false;
+        list->color = {232, 181, 223, 255};
+
+        text_list_init(list, speaker, data, next);
+    };
+
+    penny(&game->text[70],
+          "Penny",
+          "Oh, electronic music?\rThat's lame.",
+          &game->text[71]);
+    penny(&game->text[71],
+          "Chase",
+          "WHAT?!\rYou don't like deadmau5, Crystal Castles...?\rAphex Twin!?\rPastel Ghost?!!?!?",
+          &game->text[72]);
+    penny(&game->text[72],
+          "Penny",
+          "...\r...\rWho them?",
+          &game->text[73]);
+    penny(&game->text[73],
+          "Chase",
+          "Woah, I can't believe that!\rOk wait, but I do make other stuff too.",
+          &game->text[74]);
+    penny(&game->text[74],
+          "Penny",
+          "Like what?",
+          &game->text[75]);
+    penny(&game->text[75],
+          "Chase",
+          "Solo piano pieces, mainly.\rKind of impressionistic.",
+          &game->text[76]);
+    penny(&game->text[76],
+          "Penny",
+          "Oh, nice.\rI like Debussy.\rSatie too.",
+          &game->text[77]);
+    penny(&game->text[77],
+          "Chase",
+          "YEAH! Those were big inspirations.",
+          &game->text[78]);
+    penny(&game->text[78],
+          "Penny",
+          "So, how does it work?\rDo you record yourself playing, or do you\njust program in the notes?",
+          &game->text[79]);
+    penny(&game->text[79],
+          "Chase",
+          "Yeah I record myself playing.\rWhat about you?",
+          &game->text[80]);
+    penny(&game->text[80],
+          "Penny",
+          "I do as well- I have this shitty mic that\nI use for my acoustic guitar.\rI layer everything up, then mix and master\neverything myself.",
+          &game->text[81]);
+    penny(&game->text[81],
+          "Chase",
+          "Well, the shittier the mic the better in\nmy experience.\rGives it the ~vibe~",
+          &game->text[82]);
+    penny(&game->text[82],
+          "Penny",
+          "Hahah, so true.\r...\r.....\r......",
+          &game->text[83]);
+    penny(&game->text[83],
+          "Chase",
+          "...\r...\r...",
+          &game->text[84]);
+    penny(&game->text[84],
+          "Penny",
+          "...\r...\r...",
+          &game->text[85]);
+    penny(&game->text[85],
+          "Chase",
+          "...\r...\r...",
+          &game->text[86]);
+    penny(&game->text[86],
+          "Penny",
+          "Hey.",
+          &game->text[87]);
+    penny(&game->text[87],
+          "Chase",
+          "...?",
+          &game->text[88]);
+    penny(&game->text[88],
+          "Penny",
+          "Maybe we could work on a song together.",
+          &game->text[89]);
+    penny(&game->text[89],
+          "Chase",
+          "Oh.\r...",
+          &game->text[90]);
+    penny(&game->text[90],
+          "Chase",
+          "I'd like that a lot.",
+          nullptr);
+    game->text[90].callbacks[0] = epilogue_goto_credits;
 
     atari_text_list_init(&game->text[100],
                          0,
@@ -934,7 +919,7 @@ void chapter_epilogue_update(Game *game, float dt) {
     bool update_camera = true;
 
     update_camera &= (game->current == 0);
-    update_camera &= (level->transition_timer == 0);
+    update_camera &= (!level->transition_white && level->transition_timer == 0);
     
     if (level->state == EPILOGUE_STATE_FOURTH && level->nodes[0].position.y < 0) {
         update_camera = false;
@@ -982,7 +967,7 @@ void chapter_epilogue_update(Game *game, float dt) {
                 level->end_timer = 0; // reset if you go inside
             }
 
-            if (level->end_timer >= 5) {
+            if (level->end_timer >= 15) {
                 if (level->is_transitioning == false) {
                     level->is_transitioning = true;
                     level->transition_white = true;
@@ -1158,15 +1143,16 @@ void chapter_epilogue_draw_bar_side(Model bars,
             if (rand_bool(0.01)) continue;
 
         Color colorTint = tint;
-        /*
-        colorTint.r = (unsigned char)(((int)color.r*(int)tint.r)/255);
-        colorTint.g = (unsigned char)(((int)color.g*(int)tint.g)/255);
-        colorTint.b = (unsigned char)(((int)color.b*(int)tint.b)/255);
-        colorTint.a = (unsigned char)(((int)color.a*(int)tint.a)/255);
-        */
+
+        Matrix transform = bars.transform;
+        if (tweak_out) {
+            if (rand_bool(0.01)) {
+                transform = MatrixMultiply(transform, MatrixTranslate(rand_float()/2,0,rand_float()/2));
+            }
+        }
 
         bars.materials[bars.meshMaterial[i]].maps[MATERIAL_MAP_DIFFUSE].color = colorTint;
-        DrawMesh(bars.meshes[i], bars.materials[bars.meshMaterial[i]], bars.transform);
+        DrawMesh(bars.meshes[i], bars.materials[bars.meshMaterial[i]], transform);
         bars.materials[bars.meshMaterial[i]].maps[MATERIAL_MAP_DIFFUSE].color = color;
     }
 }
@@ -1207,12 +1193,6 @@ void chapter_epilogue_draw(Game *game, float dt) {
             for (int i = 0; i <= 270; i += 90) {
                 float offset = 0;
 
-                /*
-                if (level->tweak_out) {
-                    offset = rand_range(-0.125, +0.125);
-                }
-                */
-
                 chapter_epilogue_draw_bar_side(level->bars, i + offset, scale, level->tweak_out);
             }
         };
@@ -1235,7 +1215,7 @@ void chapter_epilogue_draw(Game *game, float dt) {
             BeginTextureMode(level->flipped_timer_texture);
 
             ClearBackground({});
-            Font *font = &bold_2_font;
+            Font *font = &timer_font;
 
             char time_string[64] = {};
             seconds_to_minutes_and_seconds(level->door_timer, time_string);
@@ -1310,7 +1290,7 @@ void chapter_epilogue_draw(Game *game, float dt) {
     }
 
     if (level->door_strike_popup) {
-        draw_popup("Try to strike the door", RED, Bottom);
+        draw_popup("Strike the door", BLACK, Bottom);
     }
     if (level->door_popup) {
         draw_popup("Exit the prison", BLACK, Bottom);
@@ -1326,5 +1306,9 @@ void chapter_epilogue_draw(Game *game, float dt) {
         f = 255;
     }
 
+    BeginBlendMode(BLEND_ALPHA);
+
     DrawRectangle(0, 0, render_width, render_height, {f,f,f,(uint8_t)(transition_fade * 255)});
+
+    EndBlendMode();
 }

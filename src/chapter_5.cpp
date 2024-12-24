@@ -458,26 +458,6 @@ void chapter_5_window_text(bool scroll, Text_List *list, char *line, Color color
     text_list_init(list, 0, line, next);
 }
 
-void chapter_5_window_text_2(bool scroll, Text_List *list, char *line, Color color, Text_List *next) {
-    list->font         = &dos_font;
-    list->font_spacing = 1;
-    list->scale        = 0.125;
-    list->scroll_speed = 20;
-    list->color        = color;
-    list->center_text  = true;
-
-    if (scroll)
-        list->scroll_type = LetterByLetter;
-    else
-        list->scroll_type  = EntireLine;
-
-    list->render_type  = Bare;
-    list->location     = Middle;
-    list->take_keyboard_focus = true;
-
-    text_list_init(list, 0, line, next);
-}
-
 void chapter_5_text(Text_List *list, char *speaker, char *line, float scroll_speed, Text_List *next) {
     list->font = &atari_font;
     list->font_spacing = 1;
@@ -1313,12 +1293,12 @@ void chapter_5_scene_init(Game *game) {
                            &game->text[110]);
             chapter_5_text(&game->text[110],
                            "Chase",
-                           "Awe, thanks so much!!!\rSpeaking of Eleanor, I gotta meet her now.",
+                           "Awe, thanks so much!!!\rSpeaking of Eleanor, I gotta go meet her now.",
                            30,
                            &game->text[111]);
             chapter_5_text(&game->text[111],
                            "Penny",
-                           "Alright, see ya!",
+                           "Alright, see ya!\rI'll talk to you later,\rI NEED to ask about your music!",
                            30,
                            nullptr);
 
@@ -1354,7 +1334,7 @@ void chapter_5_scene_init(Game *game) {
                 game->text[93].render_type = DrawTextbox;
                 game->text[93].arrow_color = BLACK;
                 game->text[93].location = Bottom;
-                game->text[93].choice_backdrop_color = {200,200,200,255};
+                game->text[93].choice_backdrop_color = {};
                 game->text[93].choice_color = BLACK;
 
                 atari_choice_text_list_init(&game->text[93],
@@ -2250,8 +2230,8 @@ void chapter_5_init(Game *game) {
 
     level->transition_fade = false;
 
-    level->good = false;
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_STAIRCASE);
+    level->good = true;
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_SEASIDE);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {

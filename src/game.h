@@ -691,7 +691,9 @@ void setup_text_scroll_sound(Text_List *list, char *speaker) {
         const char *male_names[] = {
             "Bartender", "Guard",
             "Noah", "Mike", "Hunter",
-            "Tyrell"
+            "Tyrell", "Trey", "Judas",
+            "Lucas", "Siphor", "Tyrell",
+            "Jason"
         };
 
         const char *female_names[] = {
@@ -699,7 +701,7 @@ void setup_text_scroll_sound(Text_List *list, char *speaker) {
             "Jessica", "Amy",
             "Clarice", "Sherane",
             "Joanne", "Melody",
-            "Aria"
+            "Aria", "Olivia",
         };
 
         if (strcmp(speaker, "Chase") == 0) {

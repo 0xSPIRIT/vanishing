@@ -4,11 +4,12 @@
 // Functions you must implement if you're making
 // a new chapter:
 //
-//   chapter_n_init(game)
-//   chapter_n_update(game, dt)
-//   chapter_n_draw(game)
+//   chapter_n_init(Game *game)
+//   chapter_n_update(Game *game, float dt)
+//   chapter_n_draw(Game *game)
 //
 
+#include "chapter_intro.cpp"
 #include "chapter_1.cpp"
 #include "chapter_2.cpp"
 #include "chapter_3.cpp"
@@ -41,6 +42,10 @@ void game_init(Game *game) {
     uint64_t start = get_system_time();
 
     switch (chapter) {
+        case 0: {
+            game->level = arena_push(&game->level_arena, sizeof(Level_Chapter_Intro));
+            chapter_intro_init(game);
+        } break;
         case 1: {
             game->level = arena_push(&game->level_arena, sizeof(Level_Chapter_1));
             chapter_1_init(game);
@@ -112,6 +117,7 @@ void game_run(Game *game) {
 
     if (!game_movie.movie) {
         switch (chapter) {
+            case 0: chapter_intro_update(game, dt);    break;
             case 1: chapter_1_update(game, dt);        break;
             case 2: chapter_2_update(game, dt);        break;
             case 3: chapter_3_update(game, dt);        break;
@@ -141,13 +147,14 @@ void game_run(Game *game) {
         BeginTextureMode(*target);
 
         switch (chapter) {
-            case 1: chapter_1_draw(game);         break;
-            case 2: chapter_2_draw(game, target); break;
-            case 3: chapter_3_draw(game, dt);     break;
-            case 4: chapter_4_draw(game, dt);     break;
-            case 5: chapter_5_draw(game);         break;
-            case 6: chapter_6_draw(game);         break;
-            case 7: chapter_epilogue_draw(game,dt);break;
+            case 0: chapter_intro_draw(game);       break;
+            case 1: chapter_1_draw(game);           break;
+            case 2: chapter_2_draw(game, target);   break;
+            case 3: chapter_3_draw(game, dt);       break;
+            case 4: chapter_4_draw(game, dt);       break;
+            case 5: chapter_5_draw(game);           break;
+            case 6: chapter_6_draw(game);           break;
+            case 7: chapter_epilogue_draw(game,dt); break;
         }
 
         update_and_draw_fade(game, &game->fader, dt);
@@ -156,22 +163,9 @@ void game_run(Game *game) {
 
         EndTextureMode();
 
-        Texture2D *texture = 0;
-        switch (game->render_state) {
-            case RENDER_STATE_ATARI: {
-                texture = &game->atari_render_target.texture;
-            } break;
-            case RENDER_STATE_3D: {
-                texture = &game->render_target_3d.texture;
-            } break;
-            default: {
-                assert(false);
-            } break;
-        }
-
         // Apply post processing shader, then draw it to the screen, or
         // just pass it through if game->post_procesing.type == POST_PROCESSING_PASSTHROUGH
-        post_process(&game->post_processing, texture);
+        post_process(&game->post_processing, &target->texture);
     } else {
         movie_run(&game_movie);
     }
