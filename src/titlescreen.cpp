@@ -70,7 +70,7 @@ void titlescreen_update_and_draw(Titlescreen *tit) {
         dark_screen_timer -= GetFrameTime();
 
         if (dark_screen_timer <= 0) {
-            set_game_mode(GAME_MODE_ATARI);
+            set_game_mode(GAME_MODE_INTRO);
         }
     }
 

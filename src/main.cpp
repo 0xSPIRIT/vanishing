@@ -87,7 +87,7 @@ enum Game_Mode {
 };
 Game_Mode game_mode = GAME_MODE_INVALID;
 
-int chapter = 5;
+int chapter = 0;
 
 Font global_font,
      atari_font,
@@ -228,7 +228,7 @@ void update_game_and_draw_frame() {
 }
 
 MainFunction() {
-    bool show_titlescreen = false;
+    bool show_titlescreen = true;
 
 #if !defined(PLATFORM_WEB)
     if (__argc == 2) {

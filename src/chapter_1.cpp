@@ -468,10 +468,30 @@ void chapter_1_init(Game *game) {
                          "      ",
                          "... Whatever-\rTrust me, you'll find\nit there.",
                          speed,
+                         &game->text[70]);
+    atari_text_list_init(&game->text[70],
+                         "Chase",
+                         "Okay.",
+                         speed,
+                         &game->text[71]);
+    atari_text_list_init(&game->text[71],
+                         "      ",
+                         "Oh, and Chase?",
+                         speed,
                          &game->text[23]);
     atari_text_list_init(&game->text[23],
                          "Chase",
-                         "Okay.\r*click*",
+                         "...\rI- I didn't give you my...",
+                         speed,
+                         &game->text[72]);
+    atari_text_list_init(&game->text[72],
+                         "      ",
+                         "Open the door.",
+                         speed,
+                         &game->text[73]);
+    atari_text_list_init(&game->text[73],
+                         0,
+                         "*click*",
                          speed,
                          nullptr);
 
@@ -667,7 +687,7 @@ void chapter_1_init(Game *game) {
 
     atari_text_list_init(&game->text[65],
                          0,
-                         "Chase's hand phases\nthrough the window.\rHe feels watched.",
+                         "It's a window.\rIt feels strange.\rChase feels watched.",
                          speed,
                          nullptr);
 
@@ -677,7 +697,7 @@ void chapter_1_init(Game *game) {
     level->prayer_mat = 0;
 
     //level->state = LEVEL_CHAPTER_1_STATE_CRAWLING;
-    chapter_1_goto_3d(game);
+    //chapter_1_goto_3d(game);
 }
 
 void chapter_1_deinit(Game *game) {
@@ -1201,7 +1221,7 @@ void chapter_1_update(Game *game, float dt) {
         if (level->move_3d) {
             float speed = 1;
 #ifdef DEBUG
-            speed = 10;
+            speed = 1;
 #endif
 
             level->camera.position.x -= speed * 0.25f * dt;
