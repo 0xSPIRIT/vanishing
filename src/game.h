@@ -151,7 +151,7 @@ struct Game {
 
     Post_Processing post_processing;
 
-    Arena level_arena;
+    Arena level_arena; // TODO: void *level; instead -- there's no reason to use an arena.
     //Arena frame_arena; // 32k scratch space
     Array<Entity*> entities;
 
@@ -382,14 +382,14 @@ bool are_entities_visibly_colliding(Entity *a, Entity *b) {
 
     Rectangle a_rect = {
         a->pos.x, a->pos.y,
-        entity_texture_width(a),
-        entity_texture_height(a),
+        (float)entity_texture_width(a),
+        (float)entity_texture_height(a),
     };
 
     Rectangle b_rect = {
         b->pos.x, b->pos.y,
-        entity_texture_width(b),
-        entity_texture_height(b)
+        (float)entity_texture_width(b),
+        (float)entity_texture_height(b)
     };
 
     return CheckCollisionRecs(a_rect, b_rect);
@@ -471,8 +471,8 @@ void apply_velocity(Entity *e, Vector2 vel, Array<Entity*> *entities) {
 }
 
 bool is_player_close_to_entity(Entity *player, Entity *e, int closeness) {
-    int width = entity_texture_width(e);
-    int height = entity_texture_height(e);
+    float width = entity_texture_width(e);
+    float height = entity_texture_height(e);
 
     Rectangle a = {
         e->pos.x,
@@ -483,8 +483,8 @@ bool is_player_close_to_entity(Entity *player, Entity *e, int closeness) {
 
     a = enlarge_rectangle(a, closeness);
 
-    int player_width = entity_texture_width(player);
-    int player_height = entity_texture_height(player);
+    float player_width = entity_texture_width(player);
+    float player_height = entity_texture_height(player);
 
     Rectangle player_rect = {
         player->pos.x,
@@ -693,7 +693,7 @@ void setup_text_scroll_sound(Text_List *list, char *speaker) {
             "Noah", "Mike", "Hunter",
             "Tyrell", "Trey", "Judas",
             "Lucas", "Siphor", "Tyrell",
-            "Jason"
+            "Jason", "Matt"
         };
 
         const char *female_names[] = {
@@ -702,6 +702,8 @@ void setup_text_scroll_sound(Text_List *list, char *speaker) {
             "Clarice", "Sherane",
             "Joanne", "Melody",
             "Aria", "Olivia",
+            "Ana", "???",
+            "Trisha"
         };
 
         if (strcmp(speaker, "Chase") == 0) {
@@ -859,4 +861,108 @@ void update_camera_3d(Camera3D *camera, float speed, bool allow_run, float dt) {
     CameraMoveForward(camera, -dir_y * speed * dt, true);
     CameraMoveRight(camera, dir_x * speed * dt, true);
     camera->target = saved;
+}
+
+bool is_mesh_collider(Model *model, int mesh_index) {
+    int material_index = model->meshMaterial[mesh_index];
+    Material *material = model->materials + material_index;
+
+    Color c = material->maps[0].color;
+
+    if (c.r == 255 && c.g == 0 && c.b == 0) {
+        return true;
+    }
+ 
+    return false;
+}
+
+bool apply_3d_velocity(Camera3D *camera, float camera_height, Model world,
+                       Vector3 pos_vel, bool use_red_material_for_collision)
+{
+    bool had_hit = false;
+
+    struct Is_Bad_Position_Result {
+        bool ok;
+        RayCollision collision_result;
+    };
+
+    auto is_bad_position = [&](Vector3 initial_pos, Vector3 pos, Model model) -> Is_Bad_Position_Result {
+        Is_Bad_Position_Result result = {};
+
+        Ray ray = {};
+        ray.direction = {0, -1, 0};
+        ray.position = pos;
+
+        // Check bottom collision
+        RayCollision highest = {};
+        highest.point.y = -9999;
+
+        for (int j = 0; j < model.meshCount; j++) {
+            if (use_red_material_for_collision && !is_mesh_collider(&model, j)) {
+                continue;
+            }
+
+            Mesh mesh = model.meshes[j];
+
+            Matrix transform = MatrixIdentity();
+            result.collision_result = GetRayCollisionMesh(ray, mesh, transform);
+
+            if (result.collision_result.hit) {
+                if (result.collision_result.point.y > highest.point.y) {
+                    highest = result.collision_result;
+                    result.ok = true;
+                }
+            }
+        }
+
+        result.collision_result = highest;
+
+        // Check forward direction.
+        ray = {};
+        ray.direction = Vector3Normalize(Vector3Subtract(pos, initial_pos));
+        ray.position = initial_pos;
+        ray.position.y -= 1;
+
+        float distance = Vector3Distance(pos, initial_pos);
+
+        for (int j = 0; j < model.meshCount; j++) {
+            if (use_red_material_for_collision && !is_mesh_collider(&model, j)) {
+                continue;
+            }
+
+            RayCollision col = GetRayCollisionMesh(ray, model.meshes[j], MatrixIdentity());
+
+            if (col.hit) {
+                if (col.distance < distance) {
+                    result.ok = false;
+                }
+            }
+        }
+
+        return result;
+    };
+
+    auto resolve_axis = [&](float *axis, float axis_vel, Camera *cam, Model model) -> void {
+        Vector3 initial = cam->position;
+
+        *axis += axis_vel;
+
+        Is_Bad_Position_Result result = is_bad_position(initial, cam->position, model);
+        if (!result.ok) {
+            had_hit = true;
+            *axis -= axis_vel;
+        } else {
+            cam->position.y = result.collision_result.point.y + camera_height;
+        }
+    };
+
+    Vector3 saved_pos = camera->position;
+
+    resolve_axis(&camera->position.x, pos_vel.x, camera, world);
+    resolve_axis(&camera->position.z, pos_vel.z, camera, world);
+
+    Vector3 diff = Vector3Subtract(camera->position, saved_pos);
+    camera->target = Vector3Add(camera->target, diff);
+
+    return had_hit;
 }

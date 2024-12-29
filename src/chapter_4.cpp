@@ -235,7 +235,7 @@ void chapter_4_3d_init(Game *game) {
     level->camera.fovy     = FOV_DEFAULT;
     level->camera.projection = CAMERA_PERSPECTIVE;
 
-    level->shader = load_shader("shaders/basic.vs", "shaders/desert.fs");
+    level->shader = load_shader("basic.vs", "desert.fs");
 
     level->shader.locs[SHADER_LOC_MATRIX_MODEL] = GetShaderLocation(level->shader, "matModel");
     level->shader.locs[SHADER_LOC_VECTOR_VIEW]  = GetShaderLocation(level->shader, "viewPos");

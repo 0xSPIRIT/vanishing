@@ -1,11 +1,11 @@
 FileVersion = 1
 LastConfig = "Debug"
 LastPlatform = "Win64"
-RecentFilesList = ["c:\\dev\\vanishing\\src\\chapter_epilogue.cpp", "c:\\dev\\vanishing\\src\\game.cpp", "c:\\dev\\vanishing\\src\\game.h", "c:\\dev\\vanishing\\src\\chapter_2.cpp", "c:\\dev\\vanishing\\src\\text.cpp", "c:\\dev\\vanishing\\src\\audio.cpp", "Disassembly", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\abort.cpp", "c:\\dev\\vanishing\\src\\post_processing.cpp", "c:\\dev\\vanishing\\src\\chapter_4.cpp", "d:\\a\\_work\\1\\s\\src\\vctools\\crt\\vcruntime\\src\\string\\amd64\\memset.asm", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strncpy.asm", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\assert.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strlen.asm", "c:\\dev\\vanishing\\chapter_5.cpp", "c:\\dev\\vanishing\\game.cpp", "c:\\dev\\vanishing\\main.cpp", "c:\\dev\\vanishing\\util.cpp"]
+RecentFilesList = ["c:\\dev\\vanishing\\src\\chapter_epilogue.cpp", "c:\\dev\\vanishing\\src\\game.h", "c:\\dev\\vanishing\\src\\chapter_intro.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strcmp.asm", "c:\\dev\\vanishing\\src\\game.cpp", "c:\\dev\\vanishing\\src\\chapter_2.cpp", "c:\\dev\\vanishing\\src\\text.cpp", "c:\\dev\\vanishing\\src\\audio.cpp", "Disassembly", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\abort.cpp", "c:\\dev\\vanishing\\src\\post_processing.cpp", "c:\\dev\\vanishing\\src\\chapter_4.cpp", "d:\\a\\_work\\1\\s\\src\\vctools\\crt\\vcruntime\\src\\string\\amd64\\memset.asm", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strncpy.asm", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\startup\\assert.cpp", "c:\\dev\\vanishing\\minkernel\\crts\\ucrt\\src\\appcrt\\string\\amd64\\strlen.asm", "c:\\dev\\vanishing\\chapter_5.cpp", "c:\\dev\\vanishing\\game.cpp", "c:\\dev\\vanishing\\main.cpp", "c:\\dev\\vanishing\\util.cpp"]
 
 [MainWindow]
-X = 600
-Y = 0
+X = 250
+Y = 74
 Width = 1156
 Height = 867
 ShowKind = "ShowMaximized"
@@ -24,23 +24,32 @@ DefaultDocumentsTabbedView = true
 Type = "TabbedView"
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
+TabLabel = "chapter_intro.cpp"
+TabWidth = 127.8723
+TabIsPinned = false
+Type = "SourceViewPanel"
+FilePath = "c:\\dev\\vanishing\\src\\chapter_intro.cpp"
+CursorPos = 8726
+VertPos = 1176.0
+
+[[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "game.h"
-TabWidth = 81.91489
+TabWidth = 72.02127
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\game.h"
-CursorPos = 5198
-VertPos = 5796.0
+CursorPos = 21617
+VertPos = 23100.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 Active = true
 TabLabel = "chapter_epilogue.cpp"
-TabWidth = 161.1702
+TabWidth = 151.2766
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\chapter_epilogue.cpp"
-CursorPos = 45150
-VertPos = 26975.0
+CursorPos = 32886
+VertPos = 25687.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "text.cpp"
@@ -49,7 +58,6 @@ TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\text.cpp"
 CursorPos = 5804
-VertPos = 5740.0
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "post_processing.cpp"
@@ -65,8 +73,7 @@ TabWidth = 108.1915
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\chapter_2.cpp"
-CursorPos = 34766
-VertPos = 26656.0
+CursorPos = 709
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "audio.cpp"
@@ -88,8 +95,7 @@ TabWidth = 85.31915
 TabIsPinned = false
 Type = "SourceViewPanel"
 FilePath = "c:\\dev\\vanishing\\src\\game.cpp"
-CursorPos = 4741
-VertPos = 3929.0
+CursorPos = 5459
 
 [[MainDockingFrame.DockedWidgets.Tabs]]
 TabLabel = "chapter_4.cpp"
@@ -100,7 +106,7 @@ FilePath = "c:\\dev\\vanishing\\src\\chapter_4.cpp"
 CursorPos = 22235
 
 [[MainDockingFrame.DockedWidgets]]
-RequestedWidth = 805.0
+RequestedWidth = 504.0
 RequestedHeight = 250.0
 Type = "DockingFrame"
 SplitType = 2
@@ -126,7 +132,7 @@ TabWidth = 85.10638
 TabIsPinned = false
 Type = "WatchPanel"
 Columns = [{Width = 336.0}, {Width = 972.0001}, {Width = 211.0}]
-Items = ["level", "level.nodes[0]", ""]
+Items = ["update_camera", "level.transition_white", "level.transition_timer", ""]
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 TabLabel = "Auto"

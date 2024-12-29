@@ -13,8 +13,13 @@ void game_intro_init(Game_Intro *game) {
 
     game->fader = 0;
 
+    if (chapter == 1) {
+        initialize_game_mode(GAME_MODE_ATARI);
+        return;
+    }
+
     switch (chapter) {
-        case 1: {
+        case 0: {
             game->message = "AGONY IN THE\n\n     GARDEN";
         } break;
         case 2: {

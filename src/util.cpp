@@ -13,13 +13,6 @@
 
 // Arena Alloactor
 
-extern "C" {
-    void *VirtualAlloc(void *, size_t, uint32_t, uint32_t);
-}
-#define MEM_COMMIT     0x00001000
-#define MEM_RESERVE    0x00002000
-#define PAGE_READWRITE 0x04
-
 struct Arena {
     uint8_t *buffer;
     size_t   used;
@@ -31,7 +24,7 @@ Arena make_arena(size_t size) {
 
     arena.used     = 0;
     arena.capacity = size;
-    arena.buffer   = (uint8_t *)VirtualAlloc(0, size, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+    arena.buffer   = (uint8_t *)calloc(size, 1);
     assert(arena.buffer);
 
     return arena;
@@ -280,6 +273,17 @@ float triangle_wave(float t) {
     return 0;
 }
 
+// angle in [-pi, pi)
+int get_octant(double angle) {
+    // Normalize the angle to [0, 2*pi)
+    double normalized_angle = angle + PI;
+
+    // Determine the octant (0 to 7)
+    int octant = (int)(normalized_angle / (PI / 4)) % 8;
+
+    return octant;
+}
+
 BoundingBox BoundingBoxMove(BoundingBox box, Vector3 offset) {
     BoundingBox result;
 
@@ -328,11 +332,19 @@ Shader load_shader(const char *vertex_path, const char *fragment_path) {
 
     const char *vert = 0, *frag = 0;
 
+    const char *prefix;
+
+#if defined(PLATFORM_WEB)
+    prefix = RES_DIR "shaders/gles/";
+#else
+    prefix = RES_DIR "shaders/glsl330/";
+#endif
+
     if (vertex_path)
-        vert = TextFormat("%s%s", RES_DIR, vertex_path);
+        vert = TextFormat("%s%s", prefix, vertex_path);
 
     if (fragment_path)
-        frag = TextFormat("%s%s", RES_DIR, fragment_path);
+        frag = TextFormat("%s%s", prefix, fragment_path);
 
     result = LoadShader(vert, frag);
 
@@ -639,6 +651,8 @@ Rectangle get_screen_rectangle() {
 
 // System Time
 
+double global_system_timer_frequency = 0;
+
 #if defined(_WIN32)
 extern "C" {
     typedef union _LARGE_INTEGER {
@@ -657,8 +671,6 @@ extern "C" {
     int QueryPerformanceFrequency(LARGE_INTEGER *);
 }
 
-double global_system_timer_frequency = 0;
-
 inline void set_global_system_timer_frequency() {
     LARGE_INTEGER a;
     QueryPerformanceFrequency(&a);
@@ -670,4 +682,7 @@ inline uint64_t get_system_time() {
     QueryPerformanceCounter(&a);
     return a.QuadPart;
 }
-#endif // defined(_WIN32)
+#else
+uint64_t get_system_time() { return 0; }
+void set_global_system_timer_frequency() {}
+#endif

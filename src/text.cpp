@@ -540,7 +540,7 @@ Text_List *text_list_update_and_draw(RenderTexture2D *output_target, RenderTextu
         Rectangle rectangle = {
             offset.x,
             offset.y,
-            render_width,
+            (float)render_width,
             list->textbox_height,
         };
 

@@ -1,33 +1,34 @@
-#define PROFILE 0
+#if defined(PLATFORM_WEB)
+  #define PROFILE 0
+#else
+  #define PROFILE 0
+#endif
 
 void movie_handle_frame(plm_t *mpeg, plm_frame_t *frame, void *user) {
     (void)mpeg;
     Movie *movie = (Movie *)user;
 
 #if PROFILE
-    uint64_t start = get_system_time();
+    double start = emscripten_get_now();
 #endif
 
     Image image = GenImageColor(frame->width, frame->height, BLACK);
-    
+
     plm_frame_to_rgba(frame, (uint8_t*)image.data, 4 * frame->width);
 
-    if (movie->texture.width > 0)
-        UnloadTexture(movie->texture);
+    // for some reason we have to do this for emscripten
+    UnloadTexture(movie->texture2);
+    movie->texture2 = movie->texture;
     movie->texture = LoadTextureFromImage(image);
 
     UnloadImage(image);
 
-    //SetTextureFilter(movie->texture, TEXTURE_FILTER_BILINEAR);
-    SetTextureFilter(movie->texture, TEXTURE_FILTER_POINT);
-
 #if PROFILE
-    uint64_t end = get_system_time();
+    double end = emscripten_get_now();
 
     double time = end - start;
-    time /= global_system_timer_frequency;
 
-    printf("Frame took %fms\n", time * 1000);
+    //printf("Frame took %fms\n", time);
 #endif
 }
 
@@ -81,6 +82,9 @@ void movie_free(Movie *movie) {
 }
 
 void movie_run(Movie *movie) {
+#if PROFILE
+    double start = emscripten_get_now();
+#endif
     movie->frames++;
 
     if (plm_has_ended(movie->plm)) {
@@ -112,6 +116,7 @@ void movie_run(Movie *movie) {
         (float)movie->texture.width, (float)movie->texture.height
     };
     Rectangle dst = get_screen_rectangle();
+
     DrawTexturePro(movie->texture, src, dst, {}, 0, WHITE);
 
     double current_time = GetTime();
@@ -122,26 +127,25 @@ void movie_run(Movie *movie) {
     double elapsed_time = current_time - movie->last_time;
     movie->last_time = current_time;
 
-#if PROFILE
-    uint64_t start = get_system_time();
-#endif
     plm_decode(movie->plm, elapsed_time);
-#if PROFILE
-    uint64_t end = get_system_time();
-    double taken = (double)(end - start) / global_system_timer_frequency;
-
-    printf("Decode  took %fms\n", taken * 1000);
-#endif
 
     // Sync audio and video
     float movie_time = plm_get_time(movie->plm);
 
-    if (fabs(movie_time - GetMusicTimePlayed(movie->audio)) > 0.05)
+    if (fabs(movie_time - GetMusicTimePlayed(movie->audio)) > 0.05) {
         SeekMusicStream(movie->audio, movie_time);
+    }
 
     if (movie->movie == MOVIE_OFF) {
         movie_free(movie);
     }
+
+#if PROFILE
+    double end = emscripten_get_now();
+    double taken = end - start;
+
+    printf("movie_run  took %fms\n", taken);
+#endif
 }
 
 void movie_init(Movie *movie, int which_movie) {

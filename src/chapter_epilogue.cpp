@@ -91,6 +91,32 @@ void epilogue_raise_node_last_scene(Game *game) {
     level->nodes[0].moving_up = true;
 }
 
+void epilogue_init_third(Game *game) {
+    Level_Chapter_Epilogue *level = (Level_Chapter_Epilogue*)game->level;
+
+    Epilogue_Node *nodes = level->nodes;
+
+    level->state = EPILOGUE_STATE_THIRD;
+
+    level->pause_door_timer = true;
+
+    level->scene.materials[1].maps[MATERIAL_MAP_DIFFUSE].texture = level->red_dot;
+    level->fog_factor = level->fog_factor_to = 0;
+
+    level->num_nodes = 5;
+
+    float y = -5;
+
+    nodes[0].position = { -9, y, -10 };
+    nodes[1].position = {  9, y,  10 };
+    nodes[2].position = { -19, y, -5 };
+    nodes[3].position = { 6, y,  19 };
+    nodes[4].position = { 0, y, -7 };
+
+    for (int i = 0; i < level->num_nodes; i++)
+        nodes[i].text = &game->text[60];
+}
+
 void chapter_epilogue_init(Game *game) {
     Level_Chapter_Epilogue *level = (Level_Chapter_Epilogue*)game->level;
 
@@ -117,7 +143,7 @@ void chapter_epilogue_init(Game *game) {
     level->camera.fovy       = FOV_DEFAULT;
     level->camera.projection = CAMERA_PERSPECTIVE;
 
-    level->shader      = LoadShader("shaders/basic.vs", "shaders/fog.fs");
+    level->shader      = load_shader("basic.vs", "fog.fs");
     level->scene       = load_model("models/epilogue.glb");
     level->bars        = load_model("models/epilogue_bars.glb");
     level->node        = load_model("models/node.glb");
@@ -712,6 +738,8 @@ void chapter_epilogue_init(Game *game) {
     nodes[2].text = &game->text[7];
     nodes[3].text = &game->text[10];
     nodes[4].text = &game->text[13];
+
+    epilogue_init_third(game);
 }
 
 void epilogue_handle_transition(Game *game, float dt) {
@@ -765,25 +793,7 @@ void epilogue_handle_transition(Game *game, float dt) {
                 nodes[1].text = &game->text[43];
                 nodes[3].text = &game->text[46];
             } else if (level->state == EPILOGUE_STATE_SECOND) {
-                level->state = EPILOGUE_STATE_THIRD;
-
-                level->pause_door_timer = true;
-
-                level->scene.materials[1].maps[MATERIAL_MAP_DIFFUSE].texture = level->red_dot;
-                level->fog_factor = level->fog_factor_to = 0;
-
-                level->num_nodes = 5;
-
-                float y = -5;
-
-                nodes[0].position = { -9, y, -10 };
-                nodes[1].position = {  9, y,  10 };
-                nodes[2].position = { -19, y, -5 };
-                nodes[3].position = { 6, y,  19 };
-                nodes[4].position = { 0, y, -7 };
-
-                for (int i = 0; i < level->num_nodes; i++)
-                    nodes[i].text = &game->text[60];
+                epilogue_init_third(game);
             } else if (level->state == EPILOGUE_STATE_THIRD) {
                 level->state = EPILOGUE_STATE_FOURTH;
 
@@ -919,7 +929,7 @@ void chapter_epilogue_update(Game *game, float dt) {
     bool update_camera = true;
 
     update_camera &= (game->current == 0);
-    update_camera &= (!level->transition_white && level->transition_timer == 0);
+    update_camera &= level->transition_timer == 0;
     
     if (level->state == EPILOGUE_STATE_FOURTH && level->nodes[0].position.y < 0) {
         update_camera = false;
@@ -967,7 +977,9 @@ void chapter_epilogue_update(Game *game, float dt) {
                 level->end_timer = 0; // reset if you go inside
             }
 
-            if (level->end_timer >= 15) {
+            printf("%f\n", level->end_timer);
+
+            if (level->end_timer >= 2) {
                 if (level->is_transitioning == false) {
                     level->is_transitioning = true;
                     level->transition_white = true;

@@ -608,7 +608,7 @@ void chapter_5_scene_init(Game *game) {
             train->able_to_close = true;
             train->speed         = 0;
 
-            level->shader = load_shader(0, "shaders/cottage.fs");
+            level->shader = load_shader(0, "cottage.fs");
 
             //model_set_bilinear(&level->scenes[0]);
 
@@ -744,7 +744,7 @@ void chapter_5_scene_init(Game *game) {
 
             level->scenes[1] = load_model("models/staircase.glb");
 
-            level->shader = load_shader(0, "shaders/staircase.fs");
+            level->shader = load_shader(0, "staircase.fs");
 
             float train_distance = -508;
 
@@ -933,9 +933,9 @@ void chapter_5_scene_init(Game *game) {
             game->textbox_alpha = 220;
 
             if (level->good)
-                level->shader = load_shader("shaders/basic.vs", "shaders/fog.fs");
+                level->shader = load_shader("basic.vs", "fog.fs");
             else
-                level->shader = load_shader("shaders/basic.vs", "shaders/dinner.fs");
+                level->shader = load_shader("basic.vs", "dinner.fs");
 
 
             level->shader.locs[SHADER_LOC_VECTOR_VIEW] = GetShaderLocation(level->shader, "viewPos");
@@ -1469,7 +1469,7 @@ void chapter_5_scene_init(Game *game) {
 
             level->scenes[4] = load_model("models/desert.glb");
 
-            level->shader = LoadShader("shaders/basic.vs", "shaders/desert.fs");
+            level->shader = load_shader("basic.vs", "desert.fs");
 
             //Model *scene_model = &level->scenes[4];
             //model_set_bilinear(scene_model);
@@ -1692,7 +1692,7 @@ void chapter_5_scene_init(Game *game) {
                                   &game->text[26],
                                   "On lazy Saturday afternoons they both laid\n"
                                   "on the grass fields looking up at the stars,\n"
-                                  "laughing in bliss and harmony.\n\r"
+                                  "laughing in bliss and harmony.\r"
                                   "He turned over to her, stared into her eyes\n"
                                   "and saw Truth.",
                                   pink,
@@ -1792,7 +1792,7 @@ void chapter_5_scene_init(Game *game) {
 
             level->scenes[5] = load_model("models/artgallery.glb");
 
-            level->shader = LoadShader(0, "shaders/cottage.fs");
+            level->shader = load_shader("cottage.vs", "cottage.fs");
             model_set_shader(&level->scenes[5], level->shader);
 
             game->post_processing.type = POST_PROCESSING_BLOOM;
@@ -2230,8 +2230,8 @@ void chapter_5_init(Game *game) {
 
     level->transition_fade = false;
 
-    level->good = true;
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_SEASIDE);
+    level->good = false;
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_TRAIN_STATION);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {
@@ -2396,10 +2396,6 @@ void chapter_5_update_train(Game *game, float dt) {
     {
         if (!level->transition_fade) {
             level->transition_fade = true;
-
-            // TODO: Is this valid? Will this cause UB?
-            //       I'm taking the function pointer of a lambda
-            //       and storing it for later out-of-scope use...
 
             auto fade_out = [](Game *game) -> void {
                 auto chapter_5_goto_staircase = [](Game *game) -> void {
@@ -2636,110 +2632,6 @@ void chapter_5_draw_train(Level_Chapter_5 *level, Chapter_5_Train *train) {
                      MatrixMultiply(x_inverse, translate));
         }
     }
-}
-
-bool is_mesh_collider(Model *model, int mesh_index) {
-    int material_index = model->meshMaterial[mesh_index];
-    Material *material = model->materials + material_index;
-
-    Color c = material->maps[0].color;
-
-    if (c.r == 255 && c.g == 0 && c.b == 0) {
-        return true;
-    }
- 
-    return false;
-}
-
-bool apply_3d_velocity(Camera3D *camera, float camera_height, Model world,
-                       Vector3 pos_vel, bool use_red_material_for_collision)
-{
-    bool had_hit = false;
-
-    struct Is_Bad_Position_Result {
-        bool ok;
-        RayCollision collision_result;
-    };
-
-    auto is_bad_position = [&](Vector3 initial_pos, Vector3 pos, Model model) -> Is_Bad_Position_Result {
-        Is_Bad_Position_Result result = {};
-
-        Ray ray = {};
-        ray.direction = {0, -1, 0};
-        ray.position = pos;
-
-        // Check bottom collision
-        RayCollision highest = {};
-        highest.point.y = -9999;
-
-        for (int j = 0; j < model.meshCount; j++) {
-            if (use_red_material_for_collision && !is_mesh_collider(&model, j)) {
-                continue;
-            }
-
-            Mesh mesh = model.meshes[j];
-
-            Matrix transform = MatrixIdentity();
-            result.collision_result = GetRayCollisionMesh(ray, mesh, transform);
-
-            if (result.collision_result.hit) {
-                if (result.collision_result.point.y > highest.point.y) {
-                    highest = result.collision_result;
-                    result.ok = true;
-                }
-            }
-        }
-
-        result.collision_result = highest;
-
-        // Check forward direction.
-        ray = {};
-        ray.direction = Vector3Normalize(Vector3Subtract(pos, initial_pos));
-        ray.position = initial_pos;
-        ray.position.y -= 1;
-
-        float distance = Vector3Distance(pos, initial_pos);
-
-        for (int j = 0; j < model.meshCount; j++) {
-            if (use_red_material_for_collision && !is_mesh_collider(&model, j)) {
-                continue;
-            }
-
-            RayCollision col = GetRayCollisionMesh(ray, model.meshes[j], MatrixIdentity());
-
-            if (col.hit) {
-                if (col.distance < distance) {
-                    result.ok = false;
-                }
-            }
-        }
-
-        return result;
-    };
-
-    auto resolve_axis = [&](float *axis, float axis_vel, Camera *cam, Model model) -> void {
-        Vector3 initial = cam->position;
-
-        *axis += axis_vel;
-
-        Is_Bad_Position_Result result = is_bad_position(initial, cam->position, model);
-        if (!result.ok) {
-            had_hit = true;
-            *axis -= axis_vel;
-        } else {
-            cam->position.y = result.collision_result.point.y + camera_height;
-        }
-    };
-
-    Vector3 saved_pos = camera->position;
-
-    resolve_axis(&camera->position.x, pos_vel.x, camera, world);
-    resolve_axis(&camera->position.z, pos_vel.z, camera, world);
-
-    Vector3 diff = Vector3Subtract(camera->position, saved_pos);
-    camera->target = Vector3Add(camera->target, diff);
-
-    return had_hit;
 }
 
 bool is_x_in_door_area(Chapter_5_Train *train, float x) {

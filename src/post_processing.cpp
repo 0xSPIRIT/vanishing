@@ -123,7 +123,7 @@ void post_process_spin_uniforms(Shader shader, Post_Processing_Spin *spin) {
 }
 
 void post_process_init(Post_Processing *post) {
-    post->vhs.shader = LoadShader(0, "shaders/vhs.fs");
+    post->vhs.shader = load_shader("vhs.vs", "vhs.fs");
 
     post->type = POST_PROCESSING_PASSTHROUGH;
 
@@ -160,7 +160,7 @@ void post_process_init(Post_Processing *post) {
     crt->green_offset = +0.006f;
     crt->blue_offset  = -0.006f;
 
-    crt->shader                 = LoadShader(0, "shaders/crt.fs");
+    crt->shader                 = load_shader(0, "crt.fs");
     crt->u_time                 = GetShaderLocation(crt->shader, "time");
     crt->u_do_scanline_effect   = GetShaderLocation(crt->shader, "do_scanline_effect");
     crt->u_do_warp_effect       = GetShaderLocation(crt->shader, "do_warp_effect");
@@ -180,7 +180,7 @@ void post_process_init(Post_Processing *post) {
     bloom->bloom_intensity = 4;
     bloom->vignette_mix = 0.35f;
 
-    bloom->shader            = LoadShader(0, "shaders/bloom.fs");
+    bloom->shader            = load_shader(0, "bloom.fs");
     bloom->u_time            = GetShaderLocation(bloom->shader, "time");
     bloom->u_bloom_intensity = GetShaderLocation(bloom->shader, "bloom_intensity");
     bloom->u_vignette_mix    = GetShaderLocation(bloom->shader, "vignette_mix");
@@ -251,7 +251,7 @@ void post_process_crt_uniforms(Post_Processing_Crt *crt) {
 
 void post_process_bloom_uniforms(Post_Processing_Bloom *bloom) {
     float curtime = GetTime();
-    Vector2 window_size = { render_width, render_height };
+    Vector2 window_size = { (float)render_width, (float)render_height };
 
     SetShaderValue(bloom->shader, bloom->u_time,            &curtime,                SHADER_UNIFORM_FLOAT);
     SetShaderValue(bloom->shader, bloom->u_bloom_intensity, &bloom->bloom_intensity, SHADER_UNIFORM_FLOAT);

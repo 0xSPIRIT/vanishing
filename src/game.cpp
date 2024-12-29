@@ -99,8 +99,10 @@ void game_deinit(Game *game) {
         }
     }
 
-    // Reset text
-    memset(game->text, 0, sizeof(game->text));
+    // Reset text to the default Text
+    for (int i = 0; i < StaticArraySize(game->text); i++)
+        game->text[i] = {};
+
     game->current = nullptr;
 
     array_free(&game->entities);
@@ -169,6 +171,10 @@ void game_run(Game *game) {
     } else {
         movie_run(&game_movie);
     }
+
+#ifdef PLATFORM_WEB
+    DrawFPS(10, 10);
+#endif
 
     EndDrawing();
 

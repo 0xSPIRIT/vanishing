@@ -9,13 +9,16 @@ struct Movie {
     int     movie;
     int     frames;
 
+    thrd_t  thread;
+
     plm_t  *plm;
     double  last_time;
     double  framerate;
 
-    void (*end_movie_callback)(struct Game *game);
+    void   (*end_movie_callback)(struct Game *game);
 
-    Texture texture;   // current frame
+    Texture texture;
+    Texture texture2;
     Music   audio;
 };
 

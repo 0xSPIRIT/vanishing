@@ -489,12 +489,12 @@ void chapter_6_entity_draw(Entity *entity, Game *game) {
 
             Rectangle source = {
                 0, 0,
-                texture->width, texture->height
+                (float)texture->width, (float)texture->height
             };
 
             Rectangle dest = {
                 entity->pos.x, entity->pos.y,
-                node_texture->width, node_texture->height
+                (float)node_texture->width, (float)node_texture->height
             };
 
             DrawTexturePro(*texture, source, dest, {}, 0, WHITE);

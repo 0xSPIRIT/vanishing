@@ -1376,8 +1376,8 @@ void job_minigame_run(Game *game, Chapter_3_Job_Minigame *minigame,
 
     int pad = 3;
     Vector2 pos = {
-        pad,
-        pad + (int)minigame->scroll_y
+        (float)pad,
+        (float)(pad + (int)minigame->scroll_y)
     };
 
     auto add_line = [&]() -> void {
@@ -1922,7 +1922,7 @@ void chapter_3_entity_draw(Entity *entity, Game *game) {
 
                 pos.x = entity->pos.x + 7 - size.x/2;
 
-                Vector2 integer_pos = { (int)pos.x, (int)pos.y };
+                Vector2 integer_pos = { floor(pos.x), floor(pos.y) };
                 DrawTextEx(*font, text, integer_pos, font->baseSize, 0, text_color);
 
                 pos.y += char_height;

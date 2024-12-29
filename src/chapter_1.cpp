@@ -1,6 +1,6 @@
 #define DESERT_COLOR { 232, 204, 124, 255 }
 //#define FOREST_COLOR { 50, 168, 82, 255 }
-#define CACTUS_COUNT 4
+#define CACTUS_COUNT 6
 
 enum Level_Chapter_1_State {
     LEVEL_CHAPTER_1_STATE_BEFORE_PHONE = 0,
@@ -10,6 +10,7 @@ enum Level_Chapter_1_State {
     LEVEL_CHAPTER_1_STATE_CRAWLING,
     LEVEL_CHAPTER_1_STATE_FOREST,
     LEVEL_CHAPTER_1_STATE_APARTMENT,
+    LEVEL_CHAPTER_1_STATE_3D,
     LEVEL_CHAPTER_1_PHONE_CALL,
 };
 
@@ -53,7 +54,27 @@ struct Level_Chapter_1 {
     bool intro;
     float god_scroll;
     int godtext;
+
+    // 3d part
+    Model    scene_3d, scene_door;
+    Camera3D camera;
+    float    door_t;
+    bool     move_3d;
+    bool     hide_2d_elements;
+    float    alpha_3d; // 0 is desert color bg, 1 is transparent showing 3d scene
 };
+
+void chapter_1_goto_3d(Game *game) {
+    Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
+
+    level->state = LEVEL_CHAPTER_1_STATE_3D;
+    add_event(game,
+              [](Game *game)->void{Level_Chapter_1 *l = (Level_Chapter_1*)game->level;l->move_3d=true;},
+              5);
+    add_event(game,
+              [](Game *game)->void{Level_Chapter_1 *l = (Level_Chapter_1*)game->level;l->hide_2d_elements=true;},
+              3);
+}
 
 void chapter_1_end(void *game_ptr) {
     Game *game = (Game *)game_ptr;
@@ -73,12 +94,9 @@ void chapter_1_end_intro(Game *game) {
     level->intro = false;
     level->before_first_text = true;
     add_event(game, chapter_1_first_text, 2);
-
-    post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_LOW);
 }
 
 void chapter_1_start_phone_call(Game *game) {
-    game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
     game->current = &game->text[35];
 }
 
@@ -100,6 +118,20 @@ void chapter_1_end_prayer(void *game_ptr) {
     Level_Chapter_1 *level = (Level_Chapter_1*)game->level;
 
     level->prayer_fader_to = 0;
+}
+
+void chapter_1_draw_end_scene() {
+    Texture2D *textures = atari_assets.textures;
+
+    DrawTexture(textures[12], render_width/2-textures[11].width/2, render_height/4, WHITE);
+
+    DrawTexture(textures[2], 51, 26, WHITE);
+    DrawTexture(textures[1], 122, 19, WHITE);
+
+    DrawTexture(textures[21], render_width/2 - textures[21].width/2, 10, WHITE);
+
+    DrawTexture(textures[24], 49, 98, WHITE);
+    DrawTexture(textures[25], 149, 96, WHITE);
 }
 
 Entity *chapter_1_make_entity(Entity_Type type, float x, float y) {
@@ -135,6 +167,7 @@ Entity *chapter_1_make_entity(Entity_Type type, float x, float y) {
         } break;
         case ENTITY_WINDOW: {
             result->texture_id = 21;
+            result->has_dialogue = true;
         } break;
         case ENTITY_PRAYER_MAT: {
             result->texture_id = 22;
@@ -242,6 +275,17 @@ void chapter_1_call_text(Text_List *list, char *speaker,
 void chapter_1_init(Game *game) {
     Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
 
+    //-5.51753 m
+
+    level->scene_3d = load_model("models/chap_1_end.glb");
+    level->scene_door = load_model("models/door_chap_1_end.glb");
+
+    level->camera.position = {-1, 1.5f, 0};
+    level->camera.target = {-2, 1.5f, 0};
+    level->camera.up = {0, 1, 0};
+    level->camera.fovy = 70;
+    level->camera.projection = CAMERA_PERSPECTIVE;
+
     level->music_pitch = 1;
 
     level->intro = true;
@@ -288,9 +332,11 @@ void chapter_1_init(Game *game) {
         textures[24+i-1] = load_texture(TextFormat("art/rock%d.png", i));
     }
 
+    textures[32] = load_texture("art/desert.png");
+
     level->background_color = DESERT_COLOR;
 
-    level->flashing_shader = load_shader(0, "shaders/flashing.fs");
+    level->flashing_shader = load_shader(0, "flashing.fs");
 
     game->entities = make_array<Entity*>(2);
 
@@ -301,8 +347,8 @@ void chapter_1_init(Game *game) {
     float speed = 15;
 
     atari_text_list_init(&game->text[0],
-                         0,
-                         "He takes a deep breath.",
+                         "Chase",
+                         "I... need... to find... her...",
                          speed,
                          &game->text[1]);
     atari_text_list_init(&game->text[1],
@@ -619,16 +665,24 @@ void chapter_1_init(Game *game) {
                          nullptr);
     game->text[62].callbacks[0] = chapter_1_end_prayer;
 
+    atari_text_list_init(&game->text[65],
+                         0,
+                         "Chase's hand phases\nthrough the window.\rHe feels watched.",
+                         speed,
+                         nullptr);
+
     Entity *e = chapter_1_make_entity(ENTITY_WINDOW, render_width/2 - 16, render_height/5);
     array_add(&game->entities, e);
 
     level->prayer_mat = 0;
 
-//    level->state = LEVEL_CHAPTER_1_STATE_CRAWLING;
+    //level->state = LEVEL_CHAPTER_1_STATE_CRAWLING;
+    chapter_1_goto_3d(game);
 }
 
 void chapter_1_deinit(Game *game) {
-    (void)game;
+    Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
+    UnloadModel(level->scene_3d);
 }
 
 void add_cactuses_randomly(Array<Entity*> *entities, size_t cactus_count) {
@@ -687,6 +741,13 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                 }
             }
         } break;
+        case ENTITY_WINDOW: {
+            if (keyboard_focus(game) == NO_KEYBOARD_FOCUS && within_region) {
+                if (is_action_pressed()) {
+                    game->current = &game->text[65];
+                }
+            }
+        } break;
         case ENTITY_NODE: {
             if (e->chap_1_node.active && keyboard_focus(game) == NO_KEYBOARD_FOCUS && within_region) {
                 if (is_action_pressed()) {
@@ -716,6 +777,8 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                 e->chap_1_player.huffing_and_puffing = true;
             }
 
+            // this no longer occurs.
+            /*
             if (e->chap_1_player.huffing_and_puffing) {
                 if (level->about_to_exit && e->alarm[2] == 0) {
                     level->state = LEVEL_CHAPTER_1_PHONE_CALL;
@@ -724,6 +787,7 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                 }
                 break;
             }
+            */
 
             float player_speed = 30;
 
@@ -793,20 +857,14 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
 
             if (level->state == LEVEL_CHAPTER_1_STATE_FOREST) {
                 if (e->pos.y < 95) {
-                    level->state = LEVEL_CHAPTER_1_STATE_APARTMENT;
-                    stop_music();
+                    chapter_1_goto_3d(game);
 
                     e->chap_1_player.walking_state = PLAYER_WALKING_STATE_SLOWED_1;
                     //game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
 
-                    //post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_LOW);
-                    Post_Processing_Vhs *vhs = &game->post_processing.vhs;
-                    vhs->scan_intensity = 0;
-                    vhs->noise_intensity = 0;
-                    vhs->abberation_intensity = 1;
-                    vhs->vignette_intensity = 1;
-                    vhs->vignette_mix = 1;
-                    vhs->mix_factor = 1;
+                    post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_MEDIUM);
+                    game->post_processing.vhs.vignette_mix = 0.5f;
+                    game->post_processing.vhs.vignette_intensity = 1;
 
                     e->alarm[1] = 3;
 
@@ -1004,11 +1062,13 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                         level->state = LEVEL_CHAPTER_1_STATE_FOREST;
                         e->pos.x = render_width/2 - entity_texture_width(e) / 2;
 
-                        level->music_pitch = 0.25;
+                        //level->music_pitch = 1;
 
+                        /*
                         post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_HIGH);
                         game->post_processing.vhs.vignette_intensity = 1;
                         game->post_processing.vhs.vignette_mix = 1;
+                        */
 
                         //game->post_processing.type = POST_PROCESSING_CRT;
                     }
@@ -1031,8 +1091,7 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                     }
 
                     // And then re-add new ones.
-                    if (level->state != LEVEL_CHAPTER_1_STATE_CRAWLING &&
-                        level->state != LEVEL_CHAPTER_1_STATE_FOREST) {
+                    if (level->state != LEVEL_CHAPTER_1_STATE_CRAWLING && level->state != LEVEL_CHAPTER_1_STATE_FOREST) {
                         add_cactuses_randomly(&game->entities, CACTUS_COUNT);
                     }
                 }
@@ -1087,8 +1146,8 @@ void chapter_1_entity_draw(Entity *e, Game *game) {
 
             if (texture) {
                 if (e->texture_id != 3 && e->chap_1_player.walking_state == PLAYER_WALKING_STATE_CRAWLING) {
-                    static int x_sign = 1;
-                    static int y_sign = 1;
+                    static float x_sign = 1;
+                    static float y_sign = 1;
 
                     if (e->chap_1_player.dir_x != 0)
                         x_sign = e->chap_1_player.dir_x;
@@ -1106,9 +1165,9 @@ void chapter_1_entity_draw(Entity *e, Game *game) {
                     };
 
                     Rectangle dst = {
-                        (int)e->pos.x, (int)e->pos.y,
-                        entity_texture_width(e),
-                        entity_texture_height(e),
+                        floor(e->pos.x), floor(e->pos.y),
+                        (float)entity_texture_width(e),
+                        (float)entity_texture_height(e),
                     };
 
                     DrawTexturePro(*texture, src, dst, {}, 0, WHITE);
@@ -1138,6 +1197,35 @@ void chapter_1_update(Game *game, float dt) {
         return;
     }
 
+    if (level->state == LEVEL_CHAPTER_1_STATE_3D) {
+        if (level->move_3d) {
+            float speed = 1;
+#ifdef DEBUG
+            speed = 10;
+#endif
+
+            level->camera.position.x -= speed * 0.25f * dt;
+            level->camera.target.x   -= speed * 0.25f * dt;
+
+            level->door_t += speed * 0.05f * dt;
+            if (level->door_t > 1) level->door_t = 1;
+
+            if (level->camera.position.x < -5.75f) {
+                level->state = LEVEL_CHAPTER_1_PHONE_CALL;
+                level->background_color = BLACK;
+                stop_music();
+                game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
+                add_event(game, chapter_1_start_phone_call, 3);
+            }
+        }
+
+        level->alpha_3d += 5 * dt;
+        if (level->alpha_3d > 1)
+            level->alpha_3d = 1;
+
+        return;
+    }
+
     if (level->intro && level->god_index != -1) {
         level->god_scroll += 8 * dt;
 
@@ -1155,6 +1243,8 @@ void chapter_1_update(Game *game, float dt) {
                     duration = 1;
 #endif
                     add_event(game, chapter_1_end_intro, duration);
+
+                    post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_LOW);
                 }
                 level->god_scroll = chapter_1_god_text_y[level->god_index];
             } else {
@@ -1225,9 +1315,41 @@ void chapter_1_update(Game *game, float dt) {
 void chapter_1_draw(Game *game) {
     Level_Chapter_1 *level = (Level_Chapter_1 *)game->level;
 
+    if (level->state == LEVEL_CHAPTER_1_STATE_3D) {
+        ClearBackground(BLACK);
+
+        BeginMode3D(level->camera);
+
+        DrawModel(level->scene_3d, {}, 1, WHITE);
+        DrawModelEx(level->scene_door, {-5.51753f, 0, 0.5}, {0,1,0}, 180 * level->door_t * level->door_t, {1,1,1}, WHITE);
+
+        EndMode3D();
+
+        if (!level->hide_2d_elements) {
+            Entity *player = level->player;
+            Texture2D *textures = atari_assets.textures;
+
+            Color bg = WHITE;
+            bg.a = (1 - level->alpha_3d) * 255;
+
+            DrawTexture(textures[32], 0, 0, bg);
+
+            DrawTexture(textures[3], player->pos.x+4, player->pos.y, WHITE);
+
+            chapter_1_draw_end_scene();
+        }
+        return;
+    }
+
     ClearBackground(level->background_color);
 
     if (level->state == LEVEL_CHAPTER_1_PHONE_CALL) return;
+
+    {
+        Texture2D *textures = atari_assets.textures;
+        DrawTexture(textures[32], 0, 0, WHITE);
+    }
+
 
     if (level->intro) {
         if (level->god_index == -1) {
@@ -1251,12 +1373,20 @@ void chapter_1_draw(Game *game) {
         return;
     }
 
+    Texture2D *textures = atari_assets.textures;
+
     switch (level->state) {
         case LEVEL_CHAPTER_1_STATE_FOREST: {
-            DrawTexture(atari_assets.textures[14], 0, 0, WHITE);
+            // 51, 26
+            // 154, 64
+            // 51, 118
+            // 149, 116
+            // 102, 19
+
+            chapter_1_draw_end_scene();
         } break;
         case LEVEL_CHAPTER_1_STATE_APARTMENT: {
-            DrawTexture(atari_assets.textures[15], 0, 0, WHITE);
+            DrawTexture(textures[15], 0, 0, WHITE);
         } break;
     }
 

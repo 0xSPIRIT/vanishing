@@ -1,10 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 
-#ifdef RELEASE
-  #define RES_DIR "data/"
-#else
-  #define RES_DIR "./"
-#endif
+#define RES_DIR "data/"
 
 // There was a problem with upgrading to raylib v5.5
 // where they broke the model loader. So in case they
@@ -21,6 +17,10 @@
 
 #define RL_CULL_DISTANCE_NEAR 0.1
 #define RL_CULL_DISTANCE_FAR  1000
+
+#if defined(PLATFORM_WEB)
+  #include <emscripten.h>
+#endif
 
 #include <raylib.h>
 
@@ -39,16 +39,20 @@
 #include <ctype.h>
 #include <math.h>
 #include <time.h>
+#include <threads.h>
 
 // For loading our movies
 #include "pl_mpeg.h"
 
-#ifdef RELEASE
+#if defined(RELEASE) && !defined(PLATFORM_WEB)
   #define MainFunction int WinMain
   #define NDEBUG // remove asserts
 #else
   #define MainFunction int main
   #define DEBUG
+#endif
+
+#if defined(PLATFORM_WEB)
 #endif
 
 #define DIM_ATARI_WIDTH  192
@@ -61,8 +65,16 @@
 
 #define FOV_DEFAULT 65
 
-const int default_width  = 192*5;
-const int default_height = 144*5;
+#if defined(PLATFORM_WEB)
+  #define DEFAULT_WIDTH (192*3)
+  #define DEFAULT_HEIGHT (144*3)
+#else
+  #define DEFAULT_WIDTH (192*5)
+  #define DEFAULT_HEIGHT (144*5)
+#endif
+
+const int default_width  = DEFAULT_WIDTH;
+const int default_height = DEFAULT_HEIGHT;
 
 int render_width = default_width;
 int render_height = default_height;
@@ -145,6 +157,8 @@ void set_game_mode(Game_Mode mode) {
 }
 
 void initialize_game_mode(Game_Mode mode) {
+    set_game_mode(mode);
+
     switch (mode) {
         case GAME_MODE_INTRO:       game_intro_init(&game_intro);        break;
         case GAME_MODE_ATARI:       game_init(&game_atari);              break;
@@ -152,9 +166,71 @@ void initialize_game_mode(Game_Mode mode) {
     }
 }
 
+void update_game_and_draw_frame() {
+    fullscreen_timer -= GetFrameTime();
+
+    if (fullscreen_timer <= 0)
+        toggled_fullscreen_past_second = false;
+
+    if (IsKeyPressed(KEY_F11))
+        toggle_fullscreen();
+
+    if (IsKeyPressed(KEY_F10)) {
+        Image image   = {};
+
+        image.width   = GetRenderWidth();
+        image.height  = GetRenderHeight();
+        image.data    = rlReadScreenPixels(image.width, image.height);
+        image.format  = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8;
+        image.mipmaps = 1;
+
+        int i = 0;
+
+        while (true) {
+            const char *file = TextFormat("screenshots/screenshot%d.png", i++);
+
+            if (!FileExists(file)) {
+                ExportImage(image, file);
+                break;
+            }
+        }
+    }
+
+    if (fullscreen && !IsWindowFocused()) {
+        MinimizeWindow();
+    }
+
+    if (IsKeyPressed(KEY_F4) && IsKeyDown(KEY_LEFT_ALT)) {
+        exit(0);
+    }
+
+    game_audio_update(GetFrameTime());
+
+    Game_Mode previous_game_mode = game_mode;
+
+    switch (game_mode) {
+        case GAME_MODE_TITLESCREEN: {
+            titlescreen_update_and_draw(&game_titlescreen);
+        } break;
+        case GAME_MODE_INTRO: {
+            game_intro_run(&game_intro);
+        } break;
+        case GAME_MODE_ATARI: {
+            game_run(&game_atari);
+        } break;
+        case GAME_MODE_INVALID: assert(false);
+    }
+
+    if (automatically_init_game_mode && previous_game_mode != game_mode)
+        initialize_game_mode(game_mode);
+
+    automatically_init_game_mode = true;
+}
+
 MainFunction() {
     bool show_titlescreen = false;
 
+#if !defined(PLATFORM_WEB)
     if (__argc == 2) {
         show_titlescreen = false;
 
@@ -164,6 +240,7 @@ MainFunction() {
 
         chapter = chapter_start;
     }
+#endif
 
     set_global_system_timer_frequency();
     srand(time(0));
@@ -181,8 +258,6 @@ MainFunction() {
     //SetMasterVolume(0);
 
     InitWindow(default_width, default_height, "Veil");
-
-    //gladLoadGL();
 
     printf("%zu\n", sizeof(game_atari.text));
 
@@ -210,70 +285,17 @@ MainFunction() {
     if (show_titlescreen)
         set_game_mode(GAME_MODE_TITLESCREEN);
     else
-        set_game_mode(GAME_MODE_ATARI);
+        set_game_mode(GAME_MODE_INTRO);
 
     initialize_game_mode(game_mode);
 
+#if defined(PLATFORM_WEB)
+    emscripten_set_main_loop(update_game_and_draw_frame, 0, 1);
+#else
     while (!WindowShouldClose()) {
-        fullscreen_timer -= GetFrameTime();
-
-        if (fullscreen_timer <= 0)
-            toggled_fullscreen_past_second = false;
-
-        if (IsKeyPressed(KEY_F11))
-            toggle_fullscreen();
-
-        if (IsKeyPressed(KEY_F10)) {
-            Image image   = {};
-
-            image.width   = GetRenderWidth();
-            image.height  = GetRenderHeight();
-            image.data    = rlReadScreenPixels(image.width, image.height);
-            image.format  = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8;
-            image.mipmaps = 1;
-
-            int i = 0;
-
-            while (true) {
-                const char *file = TextFormat("screenshots/screenshot%d.png", i++);
-
-                if (!FileExists(file)) {
-                    ExportImage(image, file);
-                    break;
-                }
-            }
-        }
-
-        if (fullscreen && !IsWindowFocused()) {
-            MinimizeWindow();
-        }
-
-        if (IsKeyPressed(KEY_F4) && IsKeyDown(KEY_LEFT_ALT)) {
-            exit(0);
-        }
-
-        game_audio_update(GetFrameTime());
-
-        Game_Mode previous_game_mode = game_mode;
-
-        switch (game_mode) {
-            case GAME_MODE_TITLESCREEN: {
-                titlescreen_update_and_draw(&game_titlescreen);
-            } break;
-            case GAME_MODE_INTRO: {
-                game_intro_run(&game_intro);
-            } break;
-            case GAME_MODE_ATARI: {
-                game_run(&game_atari);
-            } break;
-            case GAME_MODE_INVALID: assert(false);
-        }
-
-        if (automatically_init_game_mode && previous_game_mode != game_mode)
-            initialize_game_mode(game_mode);
-
-        automatically_init_game_mode = true;
+        update_game_and_draw_frame();
     }
+#endif
 
     CloseWindow();
     return 0;

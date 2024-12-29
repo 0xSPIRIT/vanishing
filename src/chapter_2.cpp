@@ -24,7 +24,7 @@ struct Level_Chapter_2 {
 
     float final_dialogue_alarm;
 
-    bool show_window; // TODO: Show the window in fullscreen at the very end.
+    bool show_window;
     bool window_popup;
     bool mirror_popup;
     int  bathroom_state;
@@ -461,6 +461,7 @@ void chapter_2_init(Game *game) {
                          speed,
                          nullptr);
 
+    // If you talk to him again:
     atari_text_list_init(&game->text[13],
                          "Bartender",
                          "Get 'outta here before I\nneed to call your parents.",
