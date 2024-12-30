@@ -68,7 +68,6 @@ void arena_pop(Arena *arena, size_t size) {
         assert(false);
     }
 }
-
 // Dynamic Array
 
 template <typename T>

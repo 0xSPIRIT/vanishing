@@ -525,7 +525,7 @@ __anon84520d2b0208	src/util.cpp	/^        struct {$/;"	s	union:_LARGE_INTEGER	fi
 __anon9cf613ef0102	src/titlescreen.cpp	/^            auto text = [&](int off, Color a) {$/;"	f	function:titlescreen_update_and_draw	file:
 __anon9cf613ef0202	src/titlescreen.cpp	/^            auto text = [&](int i, char *message, bool selected, Color c, float offset) {$/;"	f	function:titlescreen_update_and_draw	file:
 __anonb290d74d0102	src/chapter_epilogue.cpp	/^    auto node_text = [&](int index, int yes_index) {$/;"	f	function:chapter_epilogue_init	file:
-__anonb290d74d0202	src/chapter_epilogue.cpp	/^    auto penny = [&](Text_List *list, char *speaker, char *data, Text_List *next) -> void {$/;"	f	function:chapter_epilogue_init	typeref:typename:void	file:
+__anonb290d74d0202	src/chapter_epilogue.cpp	/^    auto penny = [](Text_List *list, char *speaker, char *data, Text_List *next) -> void {$/;"	f	function:chapter_epilogue_init	typeref:typename:void	file:
 __anonb290d74d0302	src/chapter_epilogue.cpp	/^        auto draw_bars = [&](float scale) {$/;"	f	function:chapter_epilogue_draw	file:
 __anonbf2cf55f0102	src/chapter_intro.cpp	/^    auto add_guy = [](void *game_ptr) -> void {$/;"	f	function:chapter_intro_init	typeref:typename:void	file:
 __anonbf2cf55f0202	src/chapter_intro.cpp	/^        auto add = [](Game *game) -> void {$/;"	f	function:chapter_intro_init::__anonbf2cf55f0102	typeref:typename:void	file:
@@ -635,7 +635,7 @@ audio_packet_type	src/pl_mpeg.h	/^	int audio_packet_type;$/;"	m	struct:plm_t	typ
 audio_stream_index	src/pl_mpeg.h	/^	int audio_stream_index;$/;"	m	struct:plm_t	typeref:typename:int
 automatically_init_game_mode	src/main.cpp	/^bool automatically_init_game_mode = true;$/;"	v	typeref:typename:bool
 backdrop_color	src/text.cpp	/^    Color backdrop_color    = {0, 0, 0, 0};$/;"	m	struct:Text_List	typeref:typename:Color	file:
-backdrop_color	src/text.cpp	/^    Color color, bg_color, backdrop_color;$/;"	m	struct:Text	typeref:typename:Color	file:
+backdrop_color	src/text.cpp	/^    Color color, backdrop_color;$/;"	m	struct:Text	typeref:typename:Color	file:
 background	src/text.cpp	/^    bool  background;$/;"	m	struct:Text	typeref:typename:bool	file:
 background	src/text.cpp	/^    bool  background;$/;"	m	struct:Text_List	typeref:typename:bool	file:
 background_color	src/chapter_1.cpp	/^    Color background_color;$/;"	m	struct:Level_Chapter_1	typeref:typename:Color	file:
@@ -648,7 +648,6 @@ bed_popup	src/chapter_3.cpp	/^    bool bed_popup;$/;"	m	struct:Level_Chapter_3	t
 bed_popup	src/chapter_4.cpp	/^    bool bed_popup;$/;"	m	struct:Level_Chapter_4	typeref:typename:bool	file:
 before_first_text	src/chapter_1.cpp	/^    bool before_first_text;$/;"	m	struct:Level_Chapter_1	typeref:typename:bool	file:
 bg_color	src/text.cpp	/^    Color bg_color          = BLACK;$/;"	m	struct:Text_List	typeref:typename:Color	file:
-bg_color	src/text.cpp	/^    Color color, bg_color, backdrop_color;$/;"	m	struct:Text	typeref:typename:Color	file:
 bit_index	src/pl_mpeg.h	/^	size_t bit_index;$/;"	m	struct:plm_buffer_t	typeref:typename:size_t
 bitrate_index	src/pl_mpeg.h	/^	int bitrate_index;$/;"	m	struct:plm_audio_t	typeref:typename:int
 bits	src/pl_mpeg.h	/^	unsigned char bits;$/;"	m	struct:plm_quantizer_spec_t	typeref:typename:unsigned char
@@ -726,7 +725,7 @@ chap_3_cubicle	src/game.h	/^        Chapter_3_Cubicle chap_3_cubicle;$/;"	m	unio
 chap_4_devil	src/game.h	/^        Chapter_4_Devil     chap_4_devil;$/;"	m	union:Entity::__anon5c99f8ec010a	typeref:typename:Chapter_4_Devil
 chap_4_microwave	src/game.h	/^        Chapter_4_Microwave chap_4_microwave;$/;"	m	union:Entity::__anon5c99f8ec010a	typeref:typename:Chapter_4_Microwave
 chap_4_window	src/game.h	/^        Chapter_4_Window    chap_4_window;$/;"	m	union:Entity::__anon5c99f8ec010a	typeref:typename:Chapter_4_Window
-chapter	src/main.cpp	/^int chapter = 5;$/;"	v	typeref:typename:int
+chapter	src/main.cpp	/^int chapter = 0;$/;"	v	typeref:typename:int
 chapter_1_activate_node	src/chapter_1.cpp	/^void chapter_1_activate_node(void *ptr_game) {$/;"	f	typeref:typename:void
 chapter_1_apartment_text	src/chapter_1.cpp	/^void chapter_1_apartment_text(Text_List *list, char *line,$/;"	f	typeref:typename:void
 chapter_1_call_text	src/chapter_1.cpp	/^void chapter_1_call_text(Text_List *list, char *speaker,$/;"	f	typeref:typename:void
@@ -889,7 +888,7 @@ closed	src/chapter_5.cpp	/^    bool        closed;$/;"	m	struct:Chapter_5_Train	
 collision_result	src/game.h	/^        RayCollision collision_result;$/;"	m	struct:apply_3d_velocity::Is_Bad_Position_Result	typeref:typename:RayCollision
 color	src/chapter_3.cpp	/^    Color color;$/;"	m	struct:Chapter_3_Car	typeref:typename:Color	file:
 color	src/text.cpp	/^    Color color             = RAYWHITE;$/;"	m	struct:Text_List	typeref:typename:Color	file:
-color	src/text.cpp	/^    Color color, bg_color, backdrop_color;$/;"	m	struct:Text	typeref:typename:Color	file:
+color	src/text.cpp	/^    Color color, backdrop_color;$/;"	m	struct:Text	typeref:typename:Color	file:
 colors_equal	src/util.cpp	/^bool colors_equal(Color a, Color b) {$/;"	f	typeref:typename:bool
 comic_sans	src/main.cpp	/^     comic_sans,$/;"	v	typeref:typename:Font
 compare_colors	src/util.cpp	/^bool compare_colors(Color a, Color b) {$/;"	f	typeref:typename:bool
@@ -2044,7 +2043,6 @@ texture	src/movie.h	/^    Texture texture;$/;"	m	struct:Movie	typeref:typename:T
 texture2	src/movie.h	/^    Texture texture2;$/;"	m	struct:Movie	typeref:typename:Texture
 texture_id	src/game.h	/^    int         texture_id;      \/\/ Index into atari_assets.textures[]$/;"	m	struct:Entity	typeref:typename:int
 textures	src/game.h	/^    Texture2D textures[64];$/;"	m	struct:Atari_Assets	typeref:typename:Texture2D[64]
-thread	src/movie.h	/^    thrd_t  thread;$/;"	m	struct:Movie	typeref:typename:thrd_t
 tick_events	src/game.h	/^void tick_events(Game *game, float dt) {$/;"	f	typeref:typename:void
 ticket	src/chapter_5.cpp	/^        bool     ticket;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80208	typeref:typename:bool	file:
 time	src/chapter_4.h	/^    float time;$/;"	m	struct:Chapter_4_Devil	typeref:typename:float

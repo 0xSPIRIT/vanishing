@@ -41,40 +41,24 @@ void game_init(Game *game) {
 
     uint64_t start = get_system_time();
 
-    switch (chapter) {
-        case 0: {
-            game->level = arena_push(&game->level_arena, sizeof(Level_Chapter_Intro));
-            chapter_intro_init(game);
-        } break;
-        case 1: {
-            game->level = arena_push(&game->level_arena, sizeof(Level_Chapter_1));
-            chapter_1_init(game);
-        } break;
-        case 2: {
-            game->level = arena_push(&game->level_arena, sizeof(Level_Chapter_2));
-            chapter_2_init(game);
-        } break;
-        case 3: {
-            game->level = arena_push(&game->level_arena, sizeof(Level_Chapter_3));
-            chapter_3_init(game);
-        } break;
-        case 4: {
-            game->level = arena_push(&game->level_arena, sizeof(Level_Chapter_4));
-            chapter_4_init(game);
-        } break;
-        case 5: {
-            game->level = arena_push(&game->level_arena, sizeof(Level_Chapter_5));
-            chapter_5_init(game);
-        } break;
-        case 6: {
-            game->level = arena_push(&game->level_arena, sizeof(Level_Chapter_6));
-            chapter_6_init(game);
-        } break;
-        case 7: {
-            game->level = arena_push(&game->level_arena, sizeof(Level_Chapter_Epilogue));
-            chapter_epilogue_init(game);
-        } break;
-    }
+    struct Chapter_Info {
+        size_t size;
+        void (*init)(Game *);
+    };
+
+    Chapter_Info chapters[] = {
+        { sizeof(Level_Chapter_Intro),    chapter_intro_init },
+        { sizeof(Level_Chapter_1),        chapter_1_init },
+        { sizeof(Level_Chapter_2),        chapter_2_init },
+        { sizeof(Level_Chapter_3),        chapter_3_init },
+        { sizeof(Level_Chapter_4),        chapter_4_init },
+        { sizeof(Level_Chapter_5),        chapter_5_init },
+        { sizeof(Level_Chapter_6),        chapter_6_init },
+        { sizeof(Level_Chapter_Epilogue), chapter_epilogue_init},
+    };
+
+    game->level = arena_push(&game->level_arena, chapters[chapter].size);
+    chapters[chapter].init(game);
 
     uint64_t end = get_system_time();
 

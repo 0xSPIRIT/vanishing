@@ -966,6 +966,7 @@ void chapter_2_init(Game *game) {
                                     hooks,
                                     2);
     }
+
     atari_text_list_init(&game->text[126],
                          "Woman",
                          "Indubitably.\rI mean, the optics of\nsynergy could never",
@@ -1034,6 +1035,12 @@ void chapter_2_init(Game *game) {
     atari_text_list_init(&game->text[139],
                          "Woman",
                          "You're so smart!",
+                         speed,
+                         nullptr);
+
+    atari_text_list_init(&game->text[140],
+                         "",
+                         "Test",
                          speed,
                          nullptr);
 
@@ -1424,9 +1431,11 @@ void chapter_2_update(Game *game, float dt) {
 
     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
 
+#ifdef DEBUG
     if (IsKeyPressed(KEY_DELETE)) {
         DEBUG_goto_penny_at_table(game);
     }
+#endif
 
     for (size_t i = 0; i < entity_count; i++) {
         Entity *e = game->entities.data[i];

@@ -32,7 +32,7 @@ struct Text {
 
     Font *font = &global_font;
     int font_spacing;
-    Color color, bg_color, backdrop_color;
+    Color color, backdrop_color;
     bool  background;
 
     float scale;
@@ -356,7 +356,6 @@ void text_list_init(Text_List *list, char *speaker, char *text_string,
             text.font_spacing   = list->font_spacing;
             text.center_text    = list->center_text;
             text.color          = list->color;
-            text.bg_color       = list->bg_color;
             text.backdrop_color = list->backdrop_color;
             text.scroll_speed   = list->scroll_speed;
             text.alpha_speed    = list->alpha_speed;

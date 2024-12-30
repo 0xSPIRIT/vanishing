@@ -69,8 +69,6 @@ void epilogue_start_transition(void *game_ptr) {
     Game *game = (Game *)game_ptr;
     Level_Chapter_Epilogue *level = (Level_Chapter_Epilogue*)game->level;
     level->is_transitioning = true;
-
-    //level->black_overlay = true;
 }
 
 void epilogue_start_final_conversation(Game *game) {
@@ -185,10 +183,9 @@ void chapter_epilogue_init(Game *game) {
 
     int width = 260;
     int height = 128;
+
     level->timer_texture = LoadRenderTexture(width, height);
     level->flipped_timer_texture = LoadRenderTexture(width, height);
-
-    //SetTextureFilter(level->timer_texture.texture, TEXTURE_FILTER_BILINEAR);
 
     float speed = 30;
 
@@ -480,88 +477,6 @@ void chapter_epilogue_init(Game *game) {
                                     2);
     }
 
-    /*
-    atari_text_list_init(&game->text[63],
-                         0,
-                         "Too bad.",
-                         speed,
-                         nullptr);
-    game->text[63].callbacks[0] = epilogue_start_transition;
-
-    atari_text_list_init(&game->text[64],
-                         0,
-                         "Congratulations!\r...\r...\rYou have wasted your time.\rGoodbye, I guess!",
-                         speed,
-                         nullptr);
-    auto start_next_text = [](void *game_ptr) -> void {
-        Game *game = (Game *)game_ptr;
-
-        auto start_101 = [](Game *game) -> void {
-            game->current = &game->text[114];
-        };
-
-        add_event(game, start_101, 5);
-    };
-
-    game->text[64].callbacks[0] = start_next_text;
-    */
-
-    //game->text[64].callbacks[0] = epilogue_raise_node_last_scene;
-
-    /*
-    chapter_5_window_text(true,
-                          &game->text[114],
-                          "But, you know that you suffer.\rAnd it is painful.\rBut that is okay.",
-                          WHITE,
-                          &game->text[115]);
-    chapter_5_window_text(true,
-                          &game->text[115],
-                          "The void says nothing because, of course,\nthere is nothing there.",
-                          WHITE,
-                          &game->text[116]);
-    chapter_5_window_text(true,
-                          &game->text[116],
-                          "The universe does not help you when\nyou are broken,\rYou must seek that out yourself.",
-                          WHITE,
-                          &game->text[117]);
-    chapter_5_window_text(true,
-                          &game->text[117],
-                          "Nor does she congratulate you when\nyou overcome,\rYou must seek that out yourself.",
-                          WHITE,
-                          &game->text[118]);
-    chapter_5_window_text(true,
-                          &game->text[118],
-                          "The universe does not care about you.\rSo you have to care about yourself.",
-                          WHITE,
-                          &game->text[119]);
-    chapter_5_window_text(true,
-                          &game->text[119],
-                          "She remains neutral.",
-                          WHITE,
-                          &game->text[120]);
-    chapter_5_window_text(true,
-                          &game->text[120],
-                          "Nonetheless, you must find meaning in this\nhodgepodge of circumstance.\r"
-                          "Meaning created by your hand,\rcrafted with the utmost care,\rin accordance with Her hand.",
-                          WHITE,
-                          &game->text[121]);
-    chapter_5_window_text(true,
-                          &game->text[121],
-                          "I say, feel the pain!\r"
-                          "There is no alternative!\r"
-                          "Crushing truths perish from being\nacknowledged!",
-                          WHITE,
-                          &game->text[122]);
-    chapter_5_window_text(true,
-                          &game->text[122],
-                          "And eventually, probably soon,\r"
-                          "you will be filled with the indescribable\n"
-                          "feeling of belonging.",
-                          WHITE,
-                          nullptr);
-    game->text[122].callbacks[0] = epilogue_raise_node_last_scene;
-    */
-
     {
         String choices[] = {
             const_string("Yes, there's no reason not to."),
@@ -615,7 +530,7 @@ void chapter_epilogue_init(Game *game) {
 
     speed = 30;
 
-    auto penny = [&](Text_List *list, char *speaker, char *data, Text_List *next) -> void {
+    auto penny = [](Text_List *list, char *speaker, char *data, Text_List *next) -> void {
         list->font = &atari_font;
         list->font_spacing = 1;
         list->scale = 0.125;

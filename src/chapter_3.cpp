@@ -1302,9 +1302,9 @@ void chapter_3_init(Game *game) {
     //chapter_3_goto_window_text(game);
     //level->minigame.active = true;
 
-    //chapter_3_init_outside(game);
+    chapter_3_init_outside(game);
     //chapter_3_goto_home_inside(game);
-    chapter_3_goto_home_outside(game);
+    //chapter_3_goto_home_outside(game);
 
     //chapter_3_goto_road(game);
 }

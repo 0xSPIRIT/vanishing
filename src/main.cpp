@@ -259,24 +259,24 @@ MainFunction() {
 
     InitWindow(default_width, default_height, "Veil");
 
-    printf("%zu\n", sizeof(game_atari.text));
+    printf("%zu bytes | %f MB\n", sizeof(game_atari), (sizeof(game_atari)/1024.f)/1024.f);
 
     if (fullscreen)
         toggle_fullscreen();
 
     SetExitKey(0);
 
-    atari_font             = load_font("art/romulus.png");
-    atari_small_font       = load_font("art/cambriaz.ttf", 14);
-    global_font            = load_font("art/frabk.ttf",    32);
-    comic_sans             = load_font("art/comic.ttf",    16);
-    italics_font           = load_font("art/cambriaz.ttf", 16);
-    bold_font              = load_font("art/cambriab.ttf", 16);
-    bold_font_big          = load_font("art/cambriab.ttf", 32);
-    bold_2_font            = load_font("art/BOOKOSB.TTF",  32);
-    titlescreen_font       = load_font("art/cambriaz.ttf", 48);
-    titlescreen_minor_font = load_font("art/cambriaz.ttf", 24);
-    timer_font             = load_font("art/BOOKOSB.TTF", 128);
+    atari_font             = load_font("fonts/romulus.png");
+    atari_small_font       = load_font("fonts/cambriaz.ttf", 14);
+    global_font            = load_font("fonts/frabk.ttf",    32);
+    comic_sans             = load_font("fonts/comic.ttf",    16);
+    italics_font           = load_font("fonts/cambriaz.ttf", 16);
+    bold_font              = load_font("fonts/cambriab.ttf", 16);
+    bold_font_big          = load_font("fonts/cambriab.ttf", 32);
+    bold_2_font            = load_font("fonts/BOOKOSB.TTF",  32);
+    titlescreen_font       = load_font("fonts/cambriaz.ttf", 48);
+    titlescreen_minor_font = load_font("fonts/cambriaz.ttf", 24);
+    timer_font             = load_font("fonts/BOOKOSB.TTF", 128);
 
     game_audio_init();
 
@@ -285,7 +285,7 @@ MainFunction() {
     if (show_titlescreen)
         set_game_mode(GAME_MODE_TITLESCREEN);
     else
-        set_game_mode(GAME_MODE_INTRO);
+        set_game_mode(GAME_MODE_ATARI);
 
     initialize_game_mode(game_mode);
 

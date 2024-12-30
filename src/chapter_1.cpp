@@ -298,7 +298,6 @@ void chapter_1_init(Game *game) {
     game->post_processing.vhs.vignette_mix = 0.5f;
     game->post_processing.vhs.vignette_intensity = 1;
 
-    //play_sound(MUSIC_DESERT_AMBIENCE);
     play_music(MUSIC_DESERT_AMBIENCE);
 
     Texture2D *textures = atari_assets.textures;
@@ -333,6 +332,7 @@ void chapter_1_init(Game *game) {
     }
 
     textures[32] = load_texture("art/desert.png");
+    textures[33] = load_texture("art/ready.png");
 
     level->background_color = DESERT_COLOR;
 
@@ -1345,9 +1345,10 @@ void chapter_1_draw(Game *game) {
 
         EndMode3D();
 
+        Texture2D *textures = atari_assets.textures;
+
         if (!level->hide_2d_elements) {
             Entity *player = level->player;
-            Texture2D *textures = atari_assets.textures;
 
             Color bg = WHITE;
             bg.a = (1 - level->alpha_3d) * 255;
@@ -1357,6 +1358,10 @@ void chapter_1_draw(Game *game) {
             DrawTexture(textures[3], player->pos.x+4, player->pos.y, WHITE);
 
             chapter_1_draw_end_scene();
+        }
+
+        if (level->camera.position.x < -3) {
+            DrawTexture(textures[33], 0, 0, WHITE);
         }
         return;
     }

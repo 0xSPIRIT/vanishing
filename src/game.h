@@ -151,8 +151,7 @@ struct Game {
 
     Post_Processing post_processing;
 
-    Arena level_arena; // TODO: void *level; instead -- there's no reason to use an arena.
-    //Arena frame_arena; // 32k scratch space
+    Arena level_arena; // memory persists for entire level, reset at game_init
     Array<Entity*> entities;
 
     Text_List  text[200];
