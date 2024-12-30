@@ -1,0 +1,59 @@
+TODO
+
+- Dinner Party
+  - Add dialogue to the people at the start.
+- Chapter 3: Lunch room could have better colors.
+             - There should be a transition to the phone.
+- Chapter 2: The bartender looks like shit, and the bar area
+             in general.
+
+------------------------------------------------------------------
+
+- Unique text scroll sound for each character, even minor ones.
+- Music for dinner party: Cello, piano + jazz drums
+- Footstep sounds for 3d, marble, grass, and wood for boardwalk
+- Music for chapter 3:
+  - Ambient electronic start?
+  - Music for work
+  - Music for lunch
+  - No music after you need to walk to the edge of the screen for lunch 2
+  - No music for the last lunch text
+  - Music for devil part
+  - Ambient music from driving to the end. like intro to SUNSET - Lucki
+- Music for Chapter 5:
+  - Train station
+  - Staircase: piano / violin? anxiety, calm before the storm, DREAD
+  - Dinner Party (Good) -- strings?
+  - Desert - amazement, harshness, agony
+  - Gallery - quiet harp, peaceful repreieve from harshness
+  - Sea ambience for boardwalk
+- Music for chapter 6: something other than just the same noise
+  that we've been hearing for the whole game. Use a different
+  noise & add some strings or piano something. Modulate the pitch
+  of the music based on the speed of the player, so when the
+  player stops, the music stops.
+- Music for Epilogue
+  - Something reflective, piano, strings that slowly come in.
+    The piece should feel like slowly realizing something
+    that will make a big difference in your life, yet unsure
+    at the same time.
+- Music for Penny
+  - Piano solo, something impressionistic with a mistake in
+    the middle; he hit the wrong note, play a "sigh" sound,
+    and then continue.
+- Sometimes Movie doesn't start at chapter 5 after playing through
+  the game. Crashes.
+- Handwrite chapter intros
+- Redo road sprites in chapter 3
+- Be able to switch audio devices during a session. Calling
+  CloseAudioDevice() and InitAudioDevice() works well.
+
+V1 squad
+  (1/2) Jaydn
+  - Rais
+  - Saurav
+  x Gyasi
+  x Saleem
+  x Daniel
+  x Varun
+  (1/2) Anthony
