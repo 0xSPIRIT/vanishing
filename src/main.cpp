@@ -226,10 +226,13 @@ void update_game_and_draw_frame() {
     automatically_init_game_mode = true;
 }
 
+#ifdef __linux__
+int main(int __argc, char **__argv) {
+#else
 MainFunction() {
+#endif
     bool show_titlescreen = false;
 
-#if !defined(PLATFORM_WEB)
     if (__argc == 2) {
         show_titlescreen = false;
 
@@ -239,7 +242,6 @@ MainFunction() {
 
         chapter = chapter_start;
     }
-#endif
 
     set_global_system_timer_frequency();
     srand(time(0));
