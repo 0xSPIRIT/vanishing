@@ -1,11 +1,13 @@
 TODO
 
-- Dinner Party
-  - Add dialogue to the people at the start.
+x Dinner Party
+  x Add dialogue to the people at the start.
 - Chapter 3: Lunch room could have better colors.
              - There should be a transition to the phone.
 - Chapter 2: The bartender looks like shit, and the bar area
              in general.
+- Epilogue - Change the effect for the bars to have their alpha
+             values change slightly.
 
 - Sometimes the audio cuts out...
   Like the music doesn't loop, for some reason.

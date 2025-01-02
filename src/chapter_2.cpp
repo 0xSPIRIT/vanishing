@@ -173,6 +173,7 @@ Entity *chapter_2_make_entity(Entity_Type type, float x, float y) {
         }
         case ENTITY_CHAP_2_COUPLE_2: {
             result->texture_id = 23;
+            result->has_dialogue = true;
             break;
         }
         case ENTITY_CHAP_2_TABLEY_1: {
@@ -1136,8 +1137,48 @@ void chapter_2_init(Game *game) {
                          speed,
                          nullptr);
 
-    game->text[154].location = Top;
-    game->text[155].location = Top;
+    eavesdrop_choice(&game->text[156], &game->text[157]);
+
+    atari_text_list_init(&game->text[157],
+                         "Man",
+                         "How's work?",
+                         speed,
+                         &game->text[158]);
+    atari_text_list_init(&game->text[158],
+                         "Woman",
+                         "Good. You?",
+                         speed,
+                         &game->text[159]);
+    atari_text_list_init(&game->text[159],
+                         "Man",
+                         "Good.",
+                         speed,
+                         &game->text[160]);
+    atari_text_list_init(&game->text[160],
+                         "Woman",
+                         "How's Jen?",
+                         speed,
+                         &game->text[161]);
+    atari_text_list_init(&game->text[161],
+                         "Man",
+                         "She's good.\rHow's Frank?",
+                         speed,
+                         &game->text[162]);
+    atari_text_list_init(&game->text[162],
+                         "Woman",
+                         "Good.",
+                         speed,
+                         &game->text[163]);
+    atari_text_list_init(&game->text[163],
+                         "Man",
+                         "Cool.",
+                         speed,
+                         nullptr);
+
+    for (int i = 154; i <= 163; i++) {
+        game->text[i].location = Top;
+    }
+
 
     Entity *jake     = chapter_2_make_entity(ENTITY_CHAP_2_JAKE,    638,  30);
     Entity *erica    = chapter_2_make_entity(ENTITY_CHAP_2_ERICA,   618,  14);
@@ -1371,6 +1412,15 @@ void chapter_2_entity_update(Entity *e, Game *game, float dt) {
             if (open_dialogue) {
                 if (e->dialogue_state == 0) {
                     game->current = &game->text[125];
+                }
+                //e->dialogue_state++;
+            }
+        } break;
+
+        case ENTITY_CHAP_2_COUPLE_2: {
+            if (open_dialogue) {
+                if (e->dialogue_state == 0) {
+                    game->current = &game->text[156];
                 }
                 //e->dialogue_state++;
             }

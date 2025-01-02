@@ -328,7 +328,6 @@ MUSIC_VHS_BAD_2	src/audio.cpp	/^    MUSIC_VHS_BAD_2,$/;"	e	enum:Music_ID	file:
 MUSIC_VHS_BAD_3	src/audio.cpp	/^    MUSIC_VHS_BAD_3,$/;"	e	enum:Music_ID	file:
 MUSIC_VHS_BAD_4	src/audio.cpp	/^    MUSIC_VHS_BAD_4,$/;"	e	enum:Music_ID	file:
 MainFunction	src/main.cpp	/^  #define MainFunction /;"	d	file:
-MainFunction	src/main.cpp	/^MainFunction() {$/;"	f
 Megabytes	src/util.cpp	/^#define Megabytes(/;"	d	file:
 Middle	src/text.cpp	/^    Middle,$/;"	e	enum:Location	file:
 Models	src/chapter_5.cpp	/^    struct Models {$/;"	s	struct:Level_Chapter_5	file:
@@ -728,7 +727,7 @@ chap_3_cubicle	src/game.h	/^        Chapter_3_Cubicle chap_3_cubicle;$/;"	m	unio
 chap_4_devil	src/game.h	/^        Chapter_4_Devil     chap_4_devil;$/;"	m	union:Entity::__anon5c99f8ec010a	typeref:typename:Chapter_4_Devil
 chap_4_microwave	src/game.h	/^        Chapter_4_Microwave chap_4_microwave;$/;"	m	union:Entity::__anon5c99f8ec010a	typeref:typename:Chapter_4_Microwave
 chap_4_window	src/game.h	/^        Chapter_4_Window    chap_4_window;$/;"	m	union:Entity::__anon5c99f8ec010a	typeref:typename:Chapter_4_Window
-chapter	src/main.cpp	/^int chapter = 0;$/;"	v	typeref:typename:int
+chapter	src/main.cpp	/^int chapter = 1;$/;"	v	typeref:typename:int
 chapter_1_activate_node	src/chapter_1.cpp	/^void chapter_1_activate_node(void *ptr_game) {$/;"	f	typeref:typename:void
 chapter_1_apartment_text	src/chapter_1.cpp	/^void chapter_1_apartment_text(Text_List *list, char *line,$/;"	f	typeref:typename:void
 chapter_1_call_text	src/chapter_1.cpp	/^void chapter_1_call_text(Text_List *list, char *speaker,$/;"	f	typeref:typename:void
@@ -1595,6 +1594,7 @@ lunch_devil_effect	src/chapter_3.cpp	/^    bool lunch_devil_effect;$/;"	m	struct
 macroblock_address	src/pl_mpeg.h	/^	int macroblock_address;$/;"	m	struct:plm_video_t	typeref:typename:int
 macroblock_intra	src/pl_mpeg.h	/^	int macroblock_intra;$/;"	m	struct:plm_video_t	typeref:typename:int
 macroblock_type	src/pl_mpeg.h	/^	int macroblock_type;$/;"	m	struct:plm_video_t	typeref:typename:int
+main	src/main.cpp	/^int main(int __argc, char **__argv) {$/;"	f	typeref:typename:int
 make_arena	src/util.cpp	/^Arena make_arena(size_t size) {$/;"	f	typeref:typename:Arena
 make_array	src/util.cpp	/^Array<T> make_array(size_t initial_capacity) {$/;"	f	typeref:typename:Array<T>
 max	src/text.cpp	/^#define max(/;"	d	file:

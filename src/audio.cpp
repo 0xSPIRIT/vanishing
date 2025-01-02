@@ -183,56 +183,60 @@ void game_audio_init() {
 
     audio->current_music = -1;
 
-    audio->musics[MUSIC_DESERT_AMBIENCE] = load_music("NULL DESERT.ogg");
-    audio->musics[MUSIC_VHS_BAD]         = load_music("vhs_bad.ogg");
-    audio->musics[MUSIC_VHS_BAD_2]       = load_music("vhs_bad_2.ogg");
-    audio->musics[MUSIC_VHS_BAD_3]       = load_music("vhs_bad_3.ogg");
-    audio->musics[MUSIC_VHS_BAD_4]       = load_music("vhs_bad_4.wav");
-    audio->musics[MUSIC_NOISE]           = load_music("whitenoise.ogg");
-    audio->musics[MUSIC_GLITCH]          = load_music("glitch.ogg");
-    audio->musics[MUSIC_NIGHT_AMBIENCE]  = load_music("nightambience.ogg");
+    Music *musics = audio->musics;
 
-    SetMusicVolume(audio->musics[MUSIC_VHS_BAD_4], 0.2f);
-    SetMusicVolume(audio->musics[MUSIC_NOISE], 0.2f);
-    SetMusicVolume(audio->musics[MUSIC_GLITCH], 1);
+    musics[MUSIC_DESERT_AMBIENCE] = load_music("NULL DESERT.ogg");
+    musics[MUSIC_VHS_BAD]         = load_music("vhs_bad.ogg");
+    musics[MUSIC_VHS_BAD_2]       = load_music("vhs_bad_2.ogg");
+    musics[MUSIC_VHS_BAD_3]       = load_music("vhs_bad_3.ogg");
+    musics[MUSIC_VHS_BAD_4]       = load_music("vhs_bad_4.wav");
+    musics[MUSIC_NOISE]           = load_music("whitenoise.ogg");
+    musics[MUSIC_GLITCH]          = load_music("glitch.ogg");
+    musics[MUSIC_NIGHT_AMBIENCE]  = load_music("nightambience.ogg");
+
+    SetMusicVolume(musics[MUSIC_VHS_BAD_4], 0.2f);
+    SetMusicVolume(musics[MUSIC_NOISE], 0.2f);
+    SetMusicVolume(musics[MUSIC_GLITCH], 1);
 
     float volume = 0.05f;
 
-    audio->sounds[SOUND_TEXT_SCROLL]        = load_sound(CHANNEL_GUI, "textblip.wav",          volume * 3);
-    audio->sounds[SOUND_TEXT_SCROLL_CHASE]  = load_sound(CHANNEL_GUI, "textscroll_chase.wav",  volume * 3);
-    audio->sounds[SOUND_TEXT_SCROLL_FEMALE] = load_sound(CHANNEL_GUI, "textscroll_female.wav", volume * 2);
-    audio->sounds[SOUND_TEXT_SCROLL_MALE]   = load_sound(CHANNEL_GUI, "textscroll_guy.wav",    volume * 3);
+    Game_Sound *sounds = audio->sounds;
 
-    audio->sounds[SOUND_TEXT_SCROLL_LOW] = load_sound(CHANNEL_GUI,   "textblip_low.wav", 0.85f);
-    audio->sounds[SOUND_TEXT_SCROLL_BAD] = load_sound(CHANNEL_GUI,   "textblip_bad.wav");
-    audio->sounds[SOUND_TEXT_CONFIRM]    = load_sound(CHANNEL_GUI,   "confirm.ogg");
+    sounds[SOUND_TEXT_SCROLL]        = load_sound(CHANNEL_GUI, "textblip.wav",          volume * 2);
+    sounds[SOUND_TEXT_SCROLL_CHASE]  = load_sound(CHANNEL_GUI, "textscroll_chase.wav",  volume * 3);
+    sounds[SOUND_TEXT_SCROLL_FEMALE] = load_sound(CHANNEL_GUI, "textscroll_female.wav", volume * 3);
+    sounds[SOUND_TEXT_SCROLL_MALE]   = load_sound(CHANNEL_GUI, "textscroll_guy.wav",    volume * 3);
+
+    sounds[SOUND_TEXT_SCROLL_LOW] = load_sound(CHANNEL_GUI,   "textblip_low.wav", 0.85f);
+    sounds[SOUND_TEXT_SCROLL_BAD] = load_sound(CHANNEL_GUI,   "textblip_bad.wav");
+    sounds[SOUND_TEXT_CONFIRM]    = load_sound(CHANNEL_GUI,   "confirm.ogg", 0.3f);
 
     float footstep_volume = 0.2f;
-    audio->sounds[SOUND_SAND_FOOTSTEP_1] = load_sound(CHANNEL_WORLD, "footstep1.ogg", footstep_volume);
-    audio->sounds[SOUND_SAND_FOOTSTEP_2] = load_sound(CHANNEL_WORLD, "footstep2.ogg", footstep_volume);
-    audio->sounds[SOUND_SAND_FOOTSTEP_3] = load_sound(CHANNEL_WORLD, "footstep3.ogg", footstep_volume);
-    audio->sounds[SOUND_SAND_FOOTSTEP_4] = load_sound(CHANNEL_WORLD, "footstep4.ogg", footstep_volume);
+    sounds[SOUND_SAND_FOOTSTEP_1] = load_sound(CHANNEL_WORLD, "footstep1.ogg", footstep_volume);
+    sounds[SOUND_SAND_FOOTSTEP_2] = load_sound(CHANNEL_WORLD, "footstep2.ogg", footstep_volume);
+    sounds[SOUND_SAND_FOOTSTEP_3] = load_sound(CHANNEL_WORLD, "footstep3.ogg", footstep_volume);
+    sounds[SOUND_SAND_FOOTSTEP_4] = load_sound(CHANNEL_WORLD, "footstep4.ogg", footstep_volume);
 
     for (int i = 1; i <= 6; i++) {
         int index = SOUND_REAL_SAND_STEP_1 - 1 + i;
-        audio->sounds[index] = load_sound(CHANNEL_WORLD, TextFormat("sand_%d.ogg", i), footstep_volume);
+        sounds[index] = load_sound(CHANNEL_WORLD, TextFormat("sand_%d.ogg", i), footstep_volume);
     }
 
-    audio->sounds[SOUND_ATARI_BASS_EFFECT] = load_sound(CHANNEL_WORLD, "atari_effect.ogg");
+    sounds[SOUND_ATARI_BASS_EFFECT] = load_sound(CHANNEL_WORLD, "atari_effect.ogg");
 
-    audio->sounds[SOUND_EXHALE] = load_sound(CHANNEL_WORLD, "exhale.ogg");
+    sounds[SOUND_EXHALE] = load_sound(CHANNEL_WORLD, "exhale.ogg");
 
-    audio->sounds[SOUND_KNOCKING_1] = load_sound(CHANNEL_WORLD, "knocking1.ogg");
-    audio->sounds[SOUND_KNOCKING_2] = load_sound(CHANNEL_WORLD, "knocking2.ogg");
-    audio->sounds[SOUND_KNOCKING_3] = load_sound(CHANNEL_WORLD, "knocking3.ogg");
-    audio->sounds[SOUND_KNOCKING_4] = load_sound(CHANNEL_WORLD, "knocking4.ogg");
-    audio->sounds[SOUND_KNOCKING_WEIRD] = load_sound(CHANNEL_WORLD, "knocking_weird.ogg", 0.4f);
+    sounds[SOUND_KNOCKING_1] = load_sound(CHANNEL_WORLD, "knocking1.ogg");
+    sounds[SOUND_KNOCKING_2] = load_sound(CHANNEL_WORLD, "knocking2.ogg");
+    sounds[SOUND_KNOCKING_3] = load_sound(CHANNEL_WORLD, "knocking3.ogg");
+    sounds[SOUND_KNOCKING_4] = load_sound(CHANNEL_WORLD, "knocking4.ogg");
+    sounds[SOUND_KNOCKING_WEIRD] = load_sound(CHANNEL_WORLD, "knocking_weird.ogg", 0.4f);
 
-    audio->sounds[SOUND_OPEN_WINDOW]  = load_sound(CHANNEL_WORLD, "open_window.ogg");
-    audio->sounds[SOUND_CLOSE_WINDOW] = load_sound(CHANNEL_WORLD, "close_window.ogg");
-    audio->sounds[SOUND_CREAKING]     = load_sound(CHANNEL_WORLD, "creaking.ogg", 0.4f);
+    sounds[SOUND_OPEN_WINDOW]  = load_sound(CHANNEL_WORLD, "open_window.ogg");
+    sounds[SOUND_CLOSE_WINDOW] = load_sound(CHANNEL_WORLD, "close_window.ogg");
+    sounds[SOUND_CREAKING]     = load_sound(CHANNEL_WORLD, "creaking.ogg", 0.4f);
 
-    audio->sounds[SOUND_SCREAM]       = load_sound(CHANNEL_WORLD, "scream.ogg", 0.4f);
+    sounds[SOUND_SCREAM]       = load_sound(CHANNEL_WORLD, "scream.ogg", 0.4f);
 
     audio->current_music = -1;
     audio->volume_a = audio->volume_b = -1;
