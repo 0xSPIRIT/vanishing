@@ -349,7 +349,7 @@ Shader load_shader(const char *vertex_path, const char *fragment_path) {
     vert = TextFormat("%s%s", prefix, vertex_path);
     frag = TextFormat("%s%s", prefix, fragment_path);
 
-    //printf("Attempting to load (%s, %s).\n", vert, frag);
+    printf("Attempting to load (%s, %s).\n", vert, frag);
 
     char *vertex_code_data = 0;
     char *fragment_code_data = 0;
@@ -384,14 +384,12 @@ Shader load_shader(const char *vertex_path, const char *fragment_path) {
     UnloadFileText(vertex_code_data);
     UnloadFileText(fragment_code_data);
 
-    /*
     if (IsShaderValid(result)) {
         printf("Shader (%s, %s) loaded with ID %d\n",
                vert,
                frag,
                result.id);
     }
-    */
 
     return result;
 }

@@ -592,14 +592,14 @@ Text_List *text_list_update_and_draw(RenderTexture2D *output_target, RenderTextu
         Text *current_text = &list->text[list->text_index];
 
         if (is_text_at_end(current_text)) {
-            if (key_down_pressed()) {
+            if (key_down_pressed() || GetMouseWheelMove() < 0) {
                 list->choice_index++;
                 if (list->choice_index >= list->choice_count)
                     list->choice_index = 0;
 
                 play_sound(SOUND_TEXT_SCROLL);
             }
-            if (key_up_pressed()) {
+            if (key_up_pressed() || GetMouseWheelMove() > 0) {
                 list->choice_index--;
                 if (list->choice_index < 0)
                     list->choice_index = list->choice_count-1;

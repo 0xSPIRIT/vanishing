@@ -515,6 +515,8 @@ void chapter_4_init(Game *game) {
                          20,
                          nullptr);
 
+    game->text[20].location = Top;
+
     atari_text_list_init(&game->text[21],
                          0,
                          "The night is still.\r...\r...",
@@ -553,11 +555,15 @@ void chapter_4_init(Game *game) {
                          speed,
                          nullptr);
 
+    game->text[22].location = Top;
+
     atari_text_list_init(&game->text[23],
                          "Chase",
                          "There's nothing to watch.",
                          speed,
                          nullptr);
+
+    game->text[23].location = Top;
 
     //chapter_4_3d_init(game);
 

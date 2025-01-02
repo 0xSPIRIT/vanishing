@@ -338,7 +338,7 @@ void DEBUG_goto_penny_at_table(Game *game) {
 void chapter_2_init(Game *game) {
     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
 
-    game->textbox_alpha = 200;
+    game->textbox_alpha = 190;
 
     level->window_target = LoadRenderTexture(90, 17);
 

@@ -133,14 +133,14 @@ void game_run(Game *game) {
         BeginTextureMode(*target);
 
         switch (chapter) {
-            case 0: chapter_intro_draw(game);       break;
-            case 1: chapter_1_draw(game);           break;
-            case 2: chapter_2_draw(game, target);   break;
-            case 3: chapter_3_draw(game, dt);       break;
-            case 4: chapter_4_draw(game, dt);       break;
-            case 5: chapter_5_draw(game);           break;
-            case 6: chapter_6_draw(game);           break;
-            case 7: chapter_epilogue_draw(game,dt); break;
+            case 0: chapter_intro_draw(game);     break;
+            case 1: chapter_1_draw(game);         break;
+            case 2: chapter_2_draw(game, target); break;
+            case 3: chapter_3_draw(game, dt);     break;
+            case 4: chapter_4_draw(game, dt);     break;
+            case 5: chapter_5_draw(game);         break;
+            case 6: chapter_6_draw(game);         break;
+            case 7: chapter_epilogue_draw(game);  break;
         }
 
         update_and_draw_fade(game, &game->fader, dt);

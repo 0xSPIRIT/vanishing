@@ -69,8 +69,8 @@
   #define DEFAULT_WIDTH (192*3)
   #define DEFAULT_HEIGHT (144*3)
 #else
-  #define DEFAULT_WIDTH (192*5)
-  #define DEFAULT_HEIGHT (144*5)
+  #define DEFAULT_WIDTH (192*6)
+  #define DEFAULT_HEIGHT (144*6)
 #endif
 
 const int default_width  = DEFAULT_WIDTH;
@@ -233,6 +233,7 @@ MainFunction() {
 #endif
     bool show_titlescreen = false;
 
+#ifndef PLATFORM_WEB
     if (__argc == 2) {
         show_titlescreen = false;
 
@@ -242,6 +243,7 @@ MainFunction() {
 
         chapter = chapter_start;
     }
+#endif
 
     set_global_system_timer_frequency();
     srand(time(0));
@@ -259,6 +261,29 @@ MainFunction() {
     //SetMasterVolume(0);
 
     InitWindow(default_width, default_height, "Veil");
+
+    printf("OpenGL version: ");
+
+    switch (rlGetVersion()) {
+        case RL_OPENGL_11: {
+            printf("OpenGL 1.1\n");
+        } break;
+        case RL_OPENGL_21: {
+            printf("OpenGL 2.1\n");
+        } break;
+        case RL_OPENGL_33: {
+            printf("OpenGL 3.3\n");
+        } break;
+        case RL_OPENGL_43: {
+            printf("OpenGL 4.3\n");
+        } break;
+        case RL_OPENGL_ES_20: {
+            printf("OpenGL ES 2.0\n");
+        } break;
+        case RL_OPENGL_ES_30: {
+            printf("OpenGL ES 3.0\n");
+        } break;
+    }
 
     printf("%zu bytes | %f MB\n", sizeof(game_atari), (sizeof(game_atari)/1024.f)/1024.f);
 

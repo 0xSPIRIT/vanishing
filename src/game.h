@@ -140,6 +140,7 @@ struct Fader {
     Fade_Direction direction;
     float          alpha;
     float          speed; // alpha per second
+    Color          color;
 
     void (*action)(struct Game *);
 };
@@ -224,12 +225,13 @@ void tick_events(Game *game, float dt) {
     }
 }
 
-void start_fade(Game *game, Fade_Direction dir, float speed, void (*action)(Game *)) {
+void start_fade(Game *game, Fade_Direction dir, float speed, void (*action)(Game *), Color color = BLACK) {
     Fader f;
 
     f.direction = dir;
     f.action = action;
     f.speed = speed;
+    f.color = color;
 
     switch (dir) {
         case FADE_IN:  f.alpha = 255; break;
@@ -241,6 +243,10 @@ void start_fade(Game *game, Fade_Direction dir, float speed, void (*action)(Game
 
 void start_fade(Game *game, Fade_Direction dir, void (*action)(Game *)) {
     start_fade(game, dir, 60, action);
+}
+
+bool is_fade_active(Game *game) {
+    return game->fader.direction != FADE_INVALID;
 }
 
 void update_and_draw_fade(Game *game, Fader *fader, float dt) {
@@ -259,8 +265,10 @@ void update_and_draw_fade(Game *game, Fader *fader, float dt) {
             fader->action(game);
     }
 
-    DrawRectangle(0, 0, render_width, render_height,
-                  {0, 0, 0, (uint8_t)fader->alpha});
+    Color color = fader->color;
+    color.a = (uint8_t)fader->alpha;
+
+    DrawRectangle(0, 0, render_width, render_height, color);
 }
 
 Entity *entities_get_player(Array<Entity*> *entities) {

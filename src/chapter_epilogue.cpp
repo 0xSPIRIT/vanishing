@@ -27,7 +27,7 @@ struct Level_Chapter_Epilogue {
 
     float          camera_height;
     Camera3D       camera;
-    Shader         shader;
+    Shader         shader, bar_shader;
     Model          scene, bars, node, door, timer_model;
 
     bool           noclip;
@@ -59,24 +59,14 @@ struct Level_Chapter_Epilogue {
     bool           door_popup;
     bool           door_strike_popup;
     bool           bars_popup;
-
-    bool           is_transitioning;
-    bool           transition_white;
-    float          transition_timer; // 0.0 to 1.0
 };
-
-void epilogue_start_transition(void *game_ptr) {
-    Game *game = (Game *)game_ptr;
-    Level_Chapter_Epilogue *level = (Level_Chapter_Epilogue*)game->level;
-    level->is_transitioning = true;
-}
 
 void epilogue_start_final_conversation(Game *game) {
     game->current = &game->text[70];
 }
 
 void epilogue_start_final_conversation_delayed(Game *game) {
-    add_event(game, epilogue_start_final_conversation, 5);
+    add_event(game, epilogue_start_final_conversation, 10);
 }
 
 void epilogue_goto_credits(void *game_ptr) {
@@ -95,6 +85,8 @@ void epilogue_init_third(Game *game) {
     Epilogue_Node *nodes = level->nodes;
 
     level->state = EPILOGUE_STATE_THIRD;
+
+    model_set_shader(&level->bars, level->bar_shader);
 
     level->pause_door_timer = true;
 
@@ -142,6 +134,8 @@ void chapter_epilogue_init(Game *game) {
     level->camera.projection = CAMERA_PERSPECTIVE;
 
     level->shader      = load_shader("basic.vs", "fog.fs");
+    level->bar_shader  = load_shader("basic.vs", "epilogue_bars.fs");
+
     level->scene       = load_model("models/epilogue.glb");
     level->bars        = load_model("models/epilogue_bars.glb");
     level->node        = load_model("models/node.glb");
@@ -457,28 +451,6 @@ void chapter_epilogue_init(Game *game) {
 
     {
         String choices[] = {
-            const_string("Yes"),
-            const_string("No")
-        };
-
-        Text_List *next[2] = { 0, &game->text[63] };
-        void (*function_pointers[2])(void*) = {epilogue_start_transition, 0};
-
-        game->text[62].arrow_color = BLACK;
-        game->text[62].choice_color = BLACK;
-        game->text[62].choice_backdrop_color = {185,185,185,255};
-
-        atari_choice_text_list_init(&game->text[62],
-                                    0,
-                                    "Are you ready?",
-                                    choices,
-                                    next,
-                                    function_pointers,
-                                    2);
-    }
-
-    {
-        String choices[] = {
             const_string("Yes, there's no reason not to."),
             const_string("No, there's no reason to.")
         };
@@ -654,100 +626,90 @@ void chapter_epilogue_init(Game *game) {
     nodes[3].text = &game->text[10];
     nodes[4].text = &game->text[13];
 
-    epilogue_init_third(game);
+    //epilogue_init_third(game);
 }
 
-void epilogue_handle_transition(Game *game, float dt) {
-    Level_Chapter_Epilogue *level = (Level_Chapter_Epilogue*)game->level;
+void epilogue_handle_transition(Game *game) {
+    Level_Chapter_Epilogue *level = (Level_Chapter_Epilogue *)game->level;
 
-    if (level->is_transitioning) {
-        level->transition_timer += 0.25f * dt;
+    auto end_of_transition = [](Game *game) -> void {
+        Level_Chapter_Epilogue *level = (Level_Chapter_Epilogue *)game->level;
+        if (level->state == EPILOGUE_STATE_SECOND)
+            game->current = &game->text[20];
+    };
 
-        if (!level->transitioned && level->transition_timer >= 0.5f) {
-            // transition to next part
-            level->transitioned = true;
+    start_fade(game, FADE_IN, 60, end_of_transition, game->fader.color);
 
-            level->camera.position = {0, level->camera_height, 2};
-            level->camera.target   = {0, level->camera_height, 4};
+    level->camera.position = {0, level->camera_height, 2};
+    level->camera.target   = {0, level->camera_height, 4};
 
-            memset(level->nodes, 0, sizeof(level->nodes));
-            level->num_nodes = 0;
-            level->next_node_to_appear = 0;
-            level->node_popup = false;
-            level->current_node = 0;
-            level->door_y     = 0;
-            level->node_timer = 8;
+    memset(level->nodes, 0, sizeof(level->nodes));
+    level->num_nodes = 0;
+    level->next_node_to_appear = 0;
+    level->node_popup = false;
+    level->current_node = 0;
+    level->door_y     = 0;
+    level->node_timer = 8;
 
-            level->door_popup = false;
-            level->door_strike_popup = false;
+    level->door_popup = false;
+    level->door_strike_popup = false;
 
-            Epilogue_Node *nodes = level->nodes;
+    Epilogue_Node *nodes = level->nodes;
 
-            level->door_timer = 120;
+    level->door_timer = 120;
 
-            if (level->state == EPILOGUE_STATE_FIRST) {
-                level->state = EPILOGUE_STATE_SECOND;
+    if (level->state == EPILOGUE_STATE_FIRST) {
+        level->state = EPILOGUE_STATE_SECOND;
 
-                level->fog_factor = level->fog_factor_to = 1.0f/20.0f;
+        level->fog_factor = level->fog_factor_to = 1.0f/20.0f;
 
-                level->pause_door_timer = true;
+        level->pause_door_timer = true;
 
-                level->scene.materials[1].maps[MATERIAL_MAP_DIFFUSE].texture = level->pink_dot;
+        level->scene.materials[1].maps[MATERIAL_MAP_DIFFUSE].texture = level->pink_dot;
 
-                float y = -5;
+        float y = -5;
 
-                level->num_nodes = 5;
+        level->num_nodes = 5;
 
-                nodes[0].position = { -9, y, -10 };
-                nodes[1].position = {  9, y,  10 };
-                nodes[2].position = { -19, y, -5 };
-                nodes[3].position = { 6, y,  19 };
-                nodes[4].position = { 0, y, -7 };
+        nodes[0].position = { -9, y, -10 };
+        nodes[1].position = {  9, y,  10 };
+        nodes[2].position = { -19, y, -5 };
+        nodes[3].position = { 6, y,  19 };
+        nodes[4].position = { 0, y, -7 };
 
-                nodes[0].text = &game->text[40];
-                nodes[1].text = &game->text[43];
-                nodes[3].text = &game->text[46];
-            } else if (level->state == EPILOGUE_STATE_SECOND) {
-                epilogue_init_third(game);
-            } else if (level->state == EPILOGUE_STATE_THIRD) {
-                level->state = EPILOGUE_STATE_FOURTH;
+        nodes[0].text = &game->text[40];
+        nodes[1].text = &game->text[43];
+        nodes[3].text = &game->text[46];
+    } else if (level->state == EPILOGUE_STATE_SECOND) {
+        epilogue_init_third(game);
+    } else if (level->state == EPILOGUE_STATE_THIRD) {
+        level->state = EPILOGUE_STATE_FOURTH;
 
-                //epilogue_text_change_color = true;
+        //epilogue_text_change_color = true;
 
-                game->textbox_alpha = 255;
+        game->textbox_alpha = 255;
 
-                float time = 5;
-                add_event(game, epilogue_raise_node_last_scene, time);
+        float time = 5;
+        add_event(game, epilogue_raise_node_last_scene, time);
 
-                level->num_nodes = 1;
+        level->num_nodes = 1;
 
-                float y = -15;
+        float y = -15;
 
-                nodes[0].position = { -1, y, 0 };
-                nodes[0].text = &game->text[65];
+        nodes[0].position = { -1, y, 0 };
+        nodes[0].text = &game->text[65];
 
-                level->scene.materials[1].maps[MATERIAL_MAP_DIFFUSE].texture = level->white_texture;
+        level->scene.materials[1].maps[MATERIAL_MAP_DIFFUSE].texture = level->white_texture;
 
-                level->camera.position = {1.74f, 1.67f, 2.10f};
-                level->camera.target   = {0.23f, 1.19f, 0.88f};
-            } else {
-                level->state = EPILOGUE_STATE_ENDING;
-            }
-        }
-
-        if (level->transition_timer > 1) {
-            level->transition_timer = 0;
-            level->is_transitioning = false;
-            level->transitioned = false;
-
-            if (level->state == EPILOGUE_STATE_SECOND)
-                game->current = &game->text[20];
-        }
+        level->camera.position = {1.74f, 1.67f, 2.10f};
+        level->camera.target   = {0.23f, 1.19f, 0.88f};
+    } else {
+        level->state = EPILOGUE_STATE_ENDING;
     }
 }
 
-void chapter_epilogue_update_ending(Game *game, float dt) {
-    (void)game,dt;
+void epilogue_transition(Game *game, Color color = BLACK) {
+    start_fade(game, FADE_OUT, 120, epilogue_handle_transition, color);
 }
 
 void chapter_epilogue_update(Game *game, float dt) {
@@ -765,7 +727,7 @@ void chapter_epilogue_update(Game *game, float dt) {
     }
 
     if (level->state == EPILOGUE_STATE_ENDING) {
-        chapter_epilogue_update_ending(game, dt);
+        //chapter_epilogue_update_ending(game, dt);
         return;
     }
 
@@ -844,7 +806,7 @@ void chapter_epilogue_update(Game *game, float dt) {
     bool update_camera = true;
 
     update_camera &= (game->current == 0);
-    update_camera &= level->transition_timer == 0;
+    update_camera &= !is_fade_active(game);
     
     if (level->state == EPILOGUE_STATE_FOURTH && level->nodes[0].position.y < 0) {
         update_camera = false;
@@ -884,7 +846,7 @@ void chapter_epilogue_update(Game *game, float dt) {
             cam->x = Clamp(cam->x, -28, 28);
             cam->z = Clamp(cam->z, -28, 28);
         } else if (level->state == EPILOGUE_STATE_THIRD) {
-            if (fabs(cam->x > 28) || fabs(cam->z) > 28) {
+            if (fabs(cam->x) > 28 || fabs(cam->z) > 28) {
                 level->end_timer += dt;
                 level->num_nodes = 0;
                 level->noclip = true;
@@ -892,12 +854,9 @@ void chapter_epilogue_update(Game *game, float dt) {
                 level->end_timer = 0; // reset if you go inside
             }
 
-            printf("%f\n", level->end_timer);
-
-            if (level->end_timer >= 2) {
-                if (level->is_transitioning == false) {
-                    level->is_transitioning = true;
-                    level->transition_white = true;
+            if (level->end_timer >= 15) {
+                if (!is_fade_active(game)) {
+                    epilogue_transition(game, WHITE);
                     memset(level->nodes, 0, sizeof(level->nodes));
                     level->next_node_to_appear = 0;
                     level->node_popup = false;
@@ -919,11 +878,11 @@ void chapter_epilogue_update(Game *game, float dt) {
     }
 
     level->node_popup = false;
-    if (game->current == nullptr && level->transition_timer == 0) {
+    if (game->current == nullptr && !is_fade_active(game)) {
         if (level->current_node) {
             if (level->state == EPILOGUE_STATE_FOURTH) {
                 add_event(game, epilogue_start_final_conversation, 5);
-                level->is_transitioning = true;
+                epilogue_transition(game);
             } else {
                 level->current_node->text = 0;
                 level->current_node->moving_down = true;
@@ -953,7 +912,7 @@ void chapter_epilogue_update(Game *game, float dt) {
     level->door_popup = false;
     level->door_strike_popup = false;
 
-    if (level->transition_timer == 0 && game->current == nullptr) {
+    if (!is_fade_active(game) && game->current == nullptr) {
         Vector2 cam_pos = {level->camera.position.x, level->camera.position.z};
 
         bool near_door = false;
@@ -974,7 +933,7 @@ void chapter_epilogue_update(Game *game, float dt) {
                         //game->current = &game->text[61];
                     } else {
                         if (level->door_popup) {
-                            level->is_transitioning = true;
+                            epilogue_transition(game);
                         } else {
                             // TODO: Door strike sound
                             level->door_strike_popup = false;
@@ -1017,8 +976,6 @@ void chapter_epilogue_update(Game *game, float dt) {
         level->door_y -= dt;
         level->door_timer = 0;
     }
-
-    epilogue_handle_transition(game, dt);
 
     if (game->current == &game->text[29]) {
         level->fog_factor_to = 0;
@@ -1066,17 +1023,19 @@ void chapter_epilogue_draw_bar_side(Model bars,
 
         Color tint = WHITE;
 
-        if (tweak_out)
-            if (rand_bool(0.01)) continue;
+        auto alpha = [](float t) -> float {
+            float result = 0.50f * sin(t) * sin(t);
+            result = Clamp(result, 0, 1);
+            return result;
+        };
+
+        if (tweak_out) {
+            tint.a = (uint8_t) (alpha(GetTime()) * 255);
+        }
 
         Color colorTint = tint;
 
         Matrix transform = bars.transform;
-        if (tweak_out) {
-            if (rand_bool(0.01)) {
-                transform = MatrixMultiply(transform, MatrixTranslate(rand_float()/2,0,rand_float()/2));
-            }
-        }
 
         bars.materials[bars.meshMaterial[i]].maps[MATERIAL_MAP_DIFFUSE].color = colorTint;
         DrawMesh(bars.meshes[i], bars.materials[bars.meshMaterial[i]], transform);
@@ -1084,7 +1043,7 @@ void chapter_epilogue_draw_bar_side(Model bars,
     }
 }
 
-void chapter_epilogue_draw(Game *game, float dt) {
+void chapter_epilogue_draw(Game *game) {
     Level_Chapter_Epilogue *level = (Level_Chapter_Epilogue*)game->level;
 
     if (level->state == EPILOGUE_STATE_ENDING) {
@@ -1102,21 +1061,26 @@ void chapter_epilogue_draw(Game *game, float dt) {
     DrawModel(level->scene, {}, 1, WHITE);
 
     if (level->state != EPILOGUE_STATE_FOURTH) {
-        auto draw_bars = [&](float scale) {
-            if (level->state == EPILOGUE_STATE_THIRD) {
-                if (level->tweak_out_timer <= 0) {
-                    if (level->tweak_out) {
-                        level->tweak_out_timer = rand_range(5, 14);
-                    } else {
-                        level->tweak_out_timer = rand_range(0.25, 1.5);
-                    }
-
-                    level->tweak_out = !level->tweak_out;
+        if (level->state == EPILOGUE_STATE_THIRD) {
+            /*
+            if (level->tweak_out_timer <= 0) {
+                if (level->tweak_out) {
+                    level->tweak_out_timer = rand_range(5, 14);
+                } else {
+                    level->tweak_out_timer = rand_range(0.25, 1.5);
                 }
 
-                level->tweak_out_timer -= dt;
+                level->tweak_out = !level->tweak_out;
             }
 
+            printf("%f\n", level->tweak_out_timer);
+
+            level->tweak_out_timer -= dt;
+            */
+            level->tweak_out = true;
+        }
+
+        auto draw_bars = [&](float scale) {
             for (int i = 0; i <= 270; i += 90) {
                 float offset = 0;
 
@@ -1225,17 +1189,4 @@ void chapter_epilogue_draw(Game *game, float dt) {
     if (level->bars_popup) {
         draw_popup("Inspect the bars", {0, 38, 48, 255}, Bottom);
     }
-
-    float transition_fade = sinf(level->transition_timer * PI);
-
-    uint8_t f = 0;
-    if (level->transition_white) {
-        f = 255;
-    }
-
-    BeginBlendMode(BLEND_ALPHA);
-
-    DrawRectangle(0, 0, render_width, render_height, {f,f,f,(uint8_t)(transition_fade * 255)});
-
-    EndBlendMode();
 }
