@@ -68,6 +68,7 @@ void arena_pop(Arena *arena, size_t size) {
         assert(false);
     }
 }
+
 // Dynamic Array
 
 template <typename T>
@@ -329,25 +330,66 @@ Model load_model(const char *filename) {
 Shader load_shader(const char *vertex_path, const char *fragment_path) {
     Shader result;
 
-    const char *vert = 0, *frag = 0;
-
     const char *prefix;
 
 #if defined(PLATFORM_WEB)
-    prefix = RES_DIR "shaders/gles/";
+    prefix = RES_DIR "shaders/";
 #else
-    prefix = RES_DIR "shaders/glsl330/";
+    prefix = RES_DIR "shaders/";
 #endif
 
-    if (vertex_path)
-        vert = TextFormat("%s%s", prefix, vertex_path);
+    if (!vertex_path)
+        vertex_path = "basic.vs";
 
-    if (fragment_path)
-        frag = TextFormat("%s%s", prefix, fragment_path);
+    if (!fragment_path)
+        fragment_path = "basic.fs";
 
-    result = LoadShader(vert, frag);
+    const char *vert = 0, *frag = 0;
 
-    assert(IsShaderValid(result));
+    vert = TextFormat("%s%s", prefix, vertex_path);
+    frag = TextFormat("%s%s", prefix, fragment_path);
+
+    printf("Attempting to load (%s, %s).\n", vert, frag);
+
+    char *vertex_code_data = 0;
+    char *fragment_code_data = 0;
+
+    if (vert)
+        vertex_code_data = LoadFileText(vert);
+    if (frag)
+        fragment_code_data = LoadFileText(frag);
+
+    char *version = 0;
+
+#if defined(PLATFORM_WEB)
+    version = "#version 300 es\n\n";
+#else
+    version = "#version 330 core\n\n";
+#endif
+
+    char *vertex_code   = (char *)malloc(strlen(vertex_code_data)   + strlen(version) + 1);
+    char *fragment_code = (char *)malloc(strlen(fragment_code_data) + strlen(version) + 1);
+
+    strcpy(vertex_code, version);
+    strcpy(fragment_code, version);
+
+    strcat(vertex_code, vertex_code_data);
+    strcat(fragment_code, fragment_code_data);
+
+    result = LoadShaderFromMemory(vertex_code, fragment_code);
+
+    free(vertex_code);
+    free(fragment_code);
+
+    UnloadFileText(vertex_code_data);
+    UnloadFileText(fragment_code_data);
+
+    if (IsShaderValid(result)) {
+        printf("Shader (%s, %s) loaded with ID %d\n",
+               vert,
+               frag,
+               result.id);
+    }
 
     return result;
 }

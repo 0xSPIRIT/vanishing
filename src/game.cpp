@@ -39,8 +39,6 @@ void game_init(Game *game) {
     entity_allocator.first_free  = 0;
     entity_allocator.level_arena = &game->level_arena;
 
-    uint64_t start = get_system_time();
-
     struct Chapter_Info {
         size_t size;
         void (*init)(Game *);
@@ -56,6 +54,8 @@ void game_init(Game *game) {
         { sizeof(Level_Chapter_6),        chapter_6_init },
         { sizeof(Level_Chapter_Epilogue), chapter_epilogue_init},
     };
+
+    uint64_t start = get_system_time();
 
     game->level = arena_push(&game->level_arena, chapters[chapter].size);
     chapters[chapter].init(game);

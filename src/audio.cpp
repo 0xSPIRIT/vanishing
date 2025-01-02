@@ -13,6 +13,7 @@ enum Music_ID {
     MUSIC_VHS_BAD,
     MUSIC_VHS_BAD_2,
     MUSIC_VHS_BAD_3,
+    MUSIC_VHS_BAD_4,
     MUSIC_NOISE,
     MUSIC_GLITCH,
     MUSIC_NIGHT_AMBIENCE,
@@ -186,19 +187,21 @@ void game_audio_init() {
     audio->musics[MUSIC_VHS_BAD]         = load_music("vhs_bad.ogg");
     audio->musics[MUSIC_VHS_BAD_2]       = load_music("vhs_bad_2.ogg");
     audio->musics[MUSIC_VHS_BAD_3]       = load_music("vhs_bad_3.ogg");
+    audio->musics[MUSIC_VHS_BAD_4]       = load_music("vhs_bad_4.wav");
     audio->musics[MUSIC_NOISE]           = load_music("whitenoise.ogg");
     audio->musics[MUSIC_GLITCH]          = load_music("glitch.ogg");
     audio->musics[MUSIC_NIGHT_AMBIENCE]  = load_music("nightambience.ogg");
 
+    SetMusicVolume(audio->musics[MUSIC_VHS_BAD_4], 0.2f);
     SetMusicVolume(audio->musics[MUSIC_NOISE], 0.2f);
     SetMusicVolume(audio->musics[MUSIC_GLITCH], 1);
 
     float volume = 0.05f;
 
     audio->sounds[SOUND_TEXT_SCROLL]        = load_sound(CHANNEL_GUI, "textblip.wav",          volume * 3);
-    audio->sounds[SOUND_TEXT_SCROLL_CHASE]  = load_sound(CHANNEL_GUI, "textscroll_chase.wav",  volume * 4.5f);
+    audio->sounds[SOUND_TEXT_SCROLL_CHASE]  = load_sound(CHANNEL_GUI, "textscroll_chase.wav",  volume * 3);
     audio->sounds[SOUND_TEXT_SCROLL_FEMALE] = load_sound(CHANNEL_GUI, "textscroll_female.wav", volume * 2);
-    audio->sounds[SOUND_TEXT_SCROLL_MALE]   = load_sound(CHANNEL_GUI, "textscroll_guy.wav",    volume * 2);
+    audio->sounds[SOUND_TEXT_SCROLL_MALE]   = load_sound(CHANNEL_GUI, "textscroll_guy.wav",    volume * 3);
 
     audio->sounds[SOUND_TEXT_SCROLL_LOW] = load_sound(CHANNEL_GUI,   "textblip_low.wav", 0.85f);
     audio->sounds[SOUND_TEXT_SCROLL_BAD] = load_sound(CHANNEL_GUI,   "textblip_bad.wav");

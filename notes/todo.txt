@@ -7,9 +7,12 @@ TODO
 - Chapter 2: The bartender looks like shit, and the bar area
              in general.
 
+- Sometimes the audio cuts out...
+  Like the music doesn't loop, for some reason.
+
 ------------------------------------------------------------------
 
-- Unique text scroll sound for each character, even minor ones.
+- Unique text scroll sound & color for each character, even minor ones.
 - Music for dinner party: Cello, piano + jazz drums
 - Footstep sounds for 3d, marble, grass, and wood for boardwalk
 - Music for chapter 3:
@@ -47,13 +50,3 @@ TODO
 - Redo road sprites in chapter 3
 - Be able to switch audio devices during a session. Calling
   CloseAudioDevice() and InitAudioDevice() works well.
-
-V1 squad
-  (1/2) Jaydn
-  - Rais
-  - Saurav
-  x Gyasi
-  x Saleem
-  x Daniel
-  x Varun
-  (1/2) Anthony

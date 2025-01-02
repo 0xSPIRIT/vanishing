@@ -165,4 +165,7 @@ void movie_init(Movie *movie, int which_movie) {
     const char *audio = TextFormat(RES_DIR "movie/%s.mp3",  movie_name);
 
     movie_load_video(movie, video, audio);
+
+    if (movie->movie == MOVIE_DRACULA)
+        SetMusicVolume(movie->audio, 0.45f);
 }

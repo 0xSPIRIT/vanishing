@@ -123,7 +123,7 @@ void post_process_spin_uniforms(Shader shader, Post_Processing_Spin *spin) {
 }
 
 void post_process_init(Post_Processing *post) {
-    post->vhs.shader = load_shader("vhs.vs", "vhs.fs");
+    post->vhs.shader = load_shader(0, "vhs.fs");
 
     post->type = POST_PROCESSING_PASSTHROUGH;
 

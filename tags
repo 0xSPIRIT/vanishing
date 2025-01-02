@@ -146,6 +146,7 @@ Chapter_5_Scene	src/chapter_5.cpp	/^enum Chapter_5_Scene {$/;"	g	file:
 Chapter_5_Table	src/chapter_5.cpp	/^struct Chapter_5_Table {$/;"	s	file:
 Chapter_5_Train	src/chapter_5.cpp	/^struct Chapter_5_Train {$/;"	s	file:
 Chapter_6_State	src/chapter_6.cpp	/^enum Chapter_6_State {$/;"	g	file:
+Chapter_Info	src/game.cpp	/^    struct Chapter_Info {$/;"	s	function:game_init	file:
 ColorScale	src/util.cpp	/^Color ColorScale(Color a, float b) {$/;"	f	typeref:typename:Color
 D	src/pl_mpeg.h	/^	float D[1024];$/;"	m	struct:plm_audio_t	typeref:typename:float[1024]
 DEBUG	src/main.cpp	/^  #define DEBUG$/;"	d	file:
@@ -325,6 +326,7 @@ MUSIC_NOISE	src/audio.cpp	/^    MUSIC_NOISE,$/;"	e	enum:Music_ID	file:
 MUSIC_VHS_BAD	src/audio.cpp	/^    MUSIC_VHS_BAD,$/;"	e	enum:Music_ID	file:
 MUSIC_VHS_BAD_2	src/audio.cpp	/^    MUSIC_VHS_BAD_2,$/;"	e	enum:Music_ID	file:
 MUSIC_VHS_BAD_3	src/audio.cpp	/^    MUSIC_VHS_BAD_3,$/;"	e	enum:Music_ID	file:
+MUSIC_VHS_BAD_4	src/audio.cpp	/^    MUSIC_VHS_BAD_4,$/;"	e	enum:Music_ID	file:
 MainFunction	src/main.cpp	/^  #define MainFunction /;"	d	file:
 MainFunction	src/main.cpp	/^MainFunction() {$/;"	f
 Megabytes	src/util.cpp	/^#define Megabytes(/;"	d	file:
@@ -538,7 +540,8 @@ __anonbf2cf55f0802	src/chapter_intro.cpp	/^        auto investigate_noise = [](v
 __anondf04acb20103	src/movie.h	/^enum {$/;"	g
 __anonec8683e40102	src/chapter_1.cpp	/^              [](Game *game)->void{Level_Chapter_1 *l = (Level_Chapter_1*)game->level;l->move_3d/;"	f	function:chapter_1_goto_3d	typeref:typename:void	file:
 __anonec8683e40202	src/chapter_1.cpp	/^              [](Game *game)->void{Level_Chapter_1 *l = (Level_Chapter_1*)game->level;l->hide_2d/;"	f	function:chapter_1_goto_3d	typeref:typename:void	file:
-__anonec989c650102	src/chapter_2.cpp	/^    auto entity = [&](Entity *e) -> void {$/;"	f	function:chapter_2_init	typeref:typename:void	file:
+__anonec989c650102	src/chapter_2.cpp	/^    auto eavesdrop_choice = [](Text_List *choice, Text_List *next_list) {$/;"	f	function:chapter_2_init	file:
+__anonec989c650202	src/chapter_2.cpp	/^    auto entity = [&](Entity *e) -> void {$/;"	f	function:chapter_2_init	typeref:typename:void	file:
 __anonecaab4e60102	src/chapter_3.cpp	/^            auto error_n = [&](int i, char *correction) -> void {$/;"	f	function:chapter_3_job_init	typeref:typename:void	file:
 __anonecaab4e60202	src/chapter_3.cpp	/^    auto final_text = [](Text_List *list, char *string, Text_List *next) -> void {$/;"	f	function:chapter_3_init	typeref:typename:void	file:
 __anonecaab4e60302	src/chapter_3.cpp	/^    auto add_line = [&]() -> void {$/;"	f	function:job_minigame_run	typeref:typename:void	file:
@@ -1491,6 +1494,7 @@ huffing_and_puffing	src/chapter_1.h	/^    bool  huffing_and_puffing;$/;"	m	struc
 include_text_in_target	src/game.h	/^    bool include_text_in_target;$/;"	m	struct:Game	typeref:typename:bool
 index	src/pl_mpeg.h	/^	int16_t index;$/;"	m	struct:__anon6b50db360508	typeref:typename:int16_t
 index	src/pl_mpeg.h	/^	int16_t index;$/;"	m	struct:__anon6b50db360608	typeref:typename:int16_t
+init	src/game.cpp	/^        void (*init)(Game *);$/;"	m	struct:game_init::Chapter_Info	typeref:typename:void (*)(Game *)	file:
 init_text_list_default	src/text.cpp	/^void init_text_list_default(Text_List *list, char *speaker, char *text_string, Text_List *next) /;"	f	typeref:typename:void
 initialize_game_mode	src/main.cpp	/^void initialize_game_mode(Game_Mode mode) {$/;"	f	typeref:typename:void
 input_movement_cont_look_axis	src/keys.cpp	/^Vector2 input_movement_cont_look_axis(float dt) {$/;"	f	typeref:typename:Vector2
@@ -1550,7 +1554,7 @@ lerp_dt	src/util.cpp	/^float lerp_dt(float a, float b, float t, float dt) {$/;"	
 lerp_vector3	src/util.cpp	/^Vector3 lerp_vector3(Vector3 a, Vector3 b, float t) {$/;"	f	typeref:typename:Vector3
 level	src/game.h	/^    void *level; \/\/ Points to the specific chapter level struct.$/;"	m	struct:Game	typeref:typename:void *
 level_arena	src/game.h	/^    Arena  *level_arena;$/;"	m	struct:Entity_Allocator	typeref:typename:Arena *
-level_arena	src/game.h	/^    Arena level_arena; \/\/ TODO: void *level; instead -- there's no reason to use an arena.$/;"	m	struct:Game	typeref:typename:Arena
+level_arena	src/game.h	/^    Arena level_arena; \/\/ memory persists for entire level, reset at game_init$/;"	m	struct:Game	typeref:typename:Arena
 levels	src/pl_mpeg.h	/^	unsigned short levels;$/;"	m	struct:plm_quantizer_spec_t	typeref:typename:unsigned short
 libGL	src/glad/glad.c	/^static HMODULE libGL;$/;"	v	typeref:typename:HMODULE	file:
 libGL	src/glad/glad.c	/^static void* libGL;$/;"	v	typeref:typename:void *	file:
@@ -1944,6 +1948,7 @@ set_music_pitch	src/audio.cpp	/^void set_music_pitch(Music_ID music, float pitch
 set_music_volume	src/audio.cpp	/^void set_music_volume(Music_ID music, float volume) {$/;"	f	typeref:typename:void
 set_player_alarm	src/chapter_1.cpp	/^void set_player_alarm(void *game_ptr) {$/;"	f	typeref:typename:void
 setoff_timer	src/chapter_5.cpp	/^    float       setoff_timer;$/;"	m	struct:Chapter_5_Train	typeref:typename:float	file:
+setup_text_color	src/game.h	/^void setup_text_color(Text_List *list, char *speaker) {$/;"	f	typeref:typename:void
 setup_text_scroll_sound	src/game.h	/^void setup_text_scroll_sound(Text_List *list, char *speaker) {$/;"	f	typeref:typename:void
 shader	src/chapter_4.cpp	/^    Shader shader;$/;"	m	struct:Level_Chapter_4	typeref:typename:Shader	file:
 shader	src/chapter_5.cpp	/^    Shader   shader;$/;"	m	struct:Level_Chapter_5	typeref:typename:Shader	file:
@@ -1957,6 +1962,7 @@ sign	src/util.cpp	/^int sign(float a) {$/;"	f	typeref:typename:int
 sitting_at_table	src/chapter_5.cpp	/^        bool             sitting_at_table;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80408	typeref:typename:bool	file:
 sitting_state	src/chapter_2.h	/^    int sitting_state;$/;"	m	struct:Chapter_2_Player	typeref:typename:int
 sitting_timer	src/chapter_5.cpp	/^        float            sitting_timer;$/;"	m	struct:Level_Chapter_5::__anoneccee5e80408	typeref:typename:float	file:
+size	src/game.cpp	/^        size_t size;$/;"	m	struct:game_init::Chapter_Info	typeref:typename:size_t	file:
 slice_begin	src/pl_mpeg.h	/^	int slice_begin;$/;"	m	struct:plm_video_t	typeref:typename:int
 smoothstep	src/util.cpp	/^double smoothstep(double start, double end, double t) {$/;"	f	typeref:typename:double
 smoothstep_vector3	src/util.cpp	/^Vector3 smoothstep_vector3(Vector3 start, Vector3 end, double t) {$/;"	f	typeref:typename:Vector3

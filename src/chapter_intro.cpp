@@ -40,23 +40,7 @@ void intro_text(Text_List *list,
     list->scroll_speed = speed;
 
     setup_text_scroll_sound(list, speaker);
-
-    if (speaker) {
-        if (list->scroll_sound == SOUND_TEXT_SCROLL_FEMALE) {
-            list->color = PINK;
-        }
-
-        if (list->scroll_sound == SOUND_TEXT_SCROLL_MALE) {
-            list->color = BLUE;
-        }
-
-        if (strcmp(speaker, "???") == 0) {
-            Color pink = {255, 133, 220, 255};//232, 81, 193, 255};
-            list->color = pink;
-        }
-    }
-
-    list->bg_color = {0, 0, 0, 127};
+    setup_text_color(list, speaker);
 
     text_list_init(list, speaker, message, next);
 }
@@ -66,7 +50,7 @@ void chapter_intro_init(Game *game) {
 
     Texture2D *textures = atari_assets.textures;
 
-    play_music(MUSIC_DESERT_AMBIENCE);
+    play_music(MUSIC_VHS_BAD_4);
 
     level->scene = load_model("models/hallway.glb");
 
@@ -346,10 +330,13 @@ void chapter_intro_update(Game *game, float dt) {
             if (level->camera_t == 1) {
                 level->camera.fovy -= 2 * dt;
 
+                set_music_pitch(MUSIC_VHS_BAD_4, 0.5);
+                set_music_volume(MUSIC_VHS_BAD_4, 0.27f);
+
                 if (level->camera.fovy < 10) {
                     level->view_3d = false;
                     game->post_processing.type = POST_PROCESSING_PASSTHROUGH;
-                    add_event(game, atari_queue_deinit_and_goto_intro, 2);
+                    add_event(game, atari_queue_deinit_and_goto_intro, 5);
                     stop_music();
                 }
             }

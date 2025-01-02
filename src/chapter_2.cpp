@@ -92,60 +92,74 @@ Entity *chapter_2_make_entity(Entity_Type type, float x, float y) {
     switch (type) {
         case ENTITY_PLAYER: {
             result->texture_id = 0;
-        } break;
+            break;
+        }
         case ENTITY_CHAP_2_TABLE: {
             result->texture_id = 5;
-        } break;
+            break;
+        }
         case ENTITY_CHAP_2_RANDOM_GUY: {
             result->texture_id = 2;
             result->has_dialogue = true;
-        } break;
+            break;
+        }
         case ENTITY_CHAP_2_PENNY: {
             result->texture_id = 7;
-        } break;
+            break;
+        }
         case ENTITY_CHAP_2_JAKE: case ENTITY_CHAP_2_MIKE:
         case ENTITY_CHAP_2_BOUNCER: {
             result->texture_id = 2;
             result->has_dialogue = true;
-        } break;
+            break;
+        }
         case ENTITY_CHAP_2_RANDOM_GIRL: case ENTITY_CHAP_2_JESSICA: {
             result->texture_id = 4;
             result->has_dialogue = true;
-        } break;
+            break;
+        }
         case ENTITY_CHAP_2_ERICA: case ENTITY_CHAP_2_AMELIA:
         case ENTITY_CHAP_2_LUNA:
         case ENTITY_CHAP_2_ISABELLE: case ENTITY_CHAP_2_CAMILA: 
         case ENTITY_CHAP_2_OLIVIA: case ENTITY_CHAP_2_AVA: {
             result->texture_id = 4;
             result->has_dialogue = true;
-        } break;
+            break;
+        }
         case ENTITY_CHAP_2_ELEANOR: {
             result->texture_id = 6;
             result->has_dialogue = true;
-        } break;
+            break;
+        }
         case ENTITY_CHAP_2_BARTENDER: {
             result->texture_id = 3;
             result->has_dialogue = true;
-        } break;
+            break;
+        }
 
         case ENTITY_CHAP_2_GIRL1: {
             result->texture_id = 16;
+            result->has_dialogue = true;
             break;
         }
         case ENTITY_CHAP_2_BOY1: {
             result->texture_id = 17;
+            result->has_dialogue = true;
             break;
         }
         case ENTITY_CHAP_2_GIRL2: {
             result->texture_id = 18;
+            result->has_dialogue = true;
             break;
         }
         case ENTITY_CHAP_2_GIRL3: {
             result->texture_id = 19;
+            result->has_dialogue = true;
             break;
         }
         case ENTITY_CHAP_2_COFFEE_TABLE: {
             result->texture_id = 20;
+            result->has_dialogue = true;
             break;
         }
         case ENTITY_CHAP_2_COUPLE_1: {
@@ -154,6 +168,7 @@ Entity *chapter_2_make_entity(Entity_Type type, float x, float y) {
         }
         case ENTITY_CHAP_2_SINGLE_1: {
             result->texture_id = 22;
+            result->has_dialogue = true;
             break;
         }
         case ENTITY_CHAP_2_COUPLE_2: {
@@ -170,7 +185,8 @@ Entity *chapter_2_make_entity(Entity_Type type, float x, float y) {
         }
         default: {
             result->texture_id = -1;
-        } break;
+            break;
+        }
     }
 
     float texture_width  = entity_texture_width(result);
@@ -321,7 +337,7 @@ void DEBUG_goto_penny_at_table(Game *game) {
 void chapter_2_init(Game *game) {
     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
 
-    game->textbox_alpha = 255;
+    game->textbox_alpha = 200;
 
     level->window_target = LoadRenderTexture(90, 17);
 
@@ -950,22 +966,24 @@ void chapter_2_init(Game *game) {
 
     // Guys at the start
 
-    {
+    auto eavesdrop_choice = [](Text_List *choice, Text_List *next_list) {
         String choices[] = { const_string("Sure"), const_string("No that's weird") };
-        Text_List *next[] = { &game->text[126], nullptr };
+        Text_List *next[] = { next_list, nullptr };
 
         void (*hooks[2])(void*) = { nullptr, nullptr };
 
-        game->text[125].arrow_color = WHITE;
+        choice->arrow_color = WHITE;
 
-        atari_choice_text_list_init(&game->text[125],
+        atari_choice_text_list_init(choice,
                                     0,
                                     "Eavesdrop?",
                                     choices,
                                     next,
                                     hooks,
                                     2);
-    }
+    };
+
+    eavesdrop_choice(&game->text[125], &game->text[126]);
 
     atari_text_list_init(&game->text[126],
                          "Woman",
@@ -1043,6 +1061,83 @@ void chapter_2_init(Game *game) {
                          "Test",
                          speed,
                          nullptr);
+
+    eavesdrop_choice(&game->text[141], &game->text[142]);
+
+    atari_text_list_init(&game->text[142],
+                         "Man",
+                         "Oh. My. God.\rGuys.",
+                         speed,
+                         &game->text[143]);
+    atari_text_list_init(&game->text[143],
+                         "Woman 1",
+                         "What???",
+                         speed,
+                         &game->text[144]);
+    atari_text_list_init(&game->text[144],
+                         "Man",
+                         "Look what JJ posted...\rCheck IG.\rNOW.",
+                         speed,
+                         &game->text[145]);
+    atari_text_list_init(&game->text[145],
+                         "Woman 2",
+                         "AHHHHHHHHHHHHHHH!!!",
+                         speed,
+                         &game->text[146]);
+    atari_text_list_init(&game->text[146],
+                         "Woman 1",
+                         "Noooooo... WHAT?!?!",
+                         speed,
+                         &game->text[147]);
+    atari_text_list_init(&game->text[147],
+                         "Woman 1",
+                         "After all that \"starting\nthe new year with a\nfree soul\" BS!?",
+                         speed,
+                         &game->text[148]);
+    atari_text_list_init(&game->text[148],
+                         "Woman 3",
+                         "Haaaaaaaa,\rremember the \"shedding my\npast\" shit on her story?",
+                         speed,
+                         &game->text[149]);
+    atari_text_list_init(&game->text[149],
+                         "Man",
+                         "Broo, I don't understand\nthese people.",
+                         speed,
+                         &game->text[150]);
+    atari_text_list_init(&game->text[150],
+                         "Woman 1",
+                         "Whene Cece sees this,\nshe's gonna be PISSED.",
+                         speed,
+                         &game->text[151]);
+    atari_text_list_init(&game->text[151],
+                         "Woman 2",
+                         "Yup.\rShe's gonna fly off\nthe fuckin' handle.",
+                         speed,
+                         &game->text[152]);
+    atari_text_list_init(&game->text[152],
+                         "Woman 2",
+                         "We all know how she\nis with him talking\nto other girls.",
+                         speed,
+                         &game->text[153]);
+    atari_text_list_init(&game->text[153],
+                         "Woman 2",
+                         "This is gonna be crazy.\rWe need more drinks.",
+                         speed,
+                         nullptr);
+
+    atari_text_list_init(&game->text[154],
+                         0,
+                         "The girl sips her drink\nnonchalantly.",
+                         speed,
+                         &game->text[155]);
+    atari_text_list_init(&game->text[155],
+                         0,
+                         "She gives you a scornful\nglare before returning to\nher phone.",
+                         speed,
+                         nullptr);
+
+    game->text[154].location = Top;
+    game->text[155].location = Top;
 
     Entity *jake     = chapter_2_make_entity(ENTITY_CHAP_2_JAKE,    638,  30);
     Entity *erica    = chapter_2_make_entity(ENTITY_CHAP_2_ERICA,   618,  14);
@@ -1271,11 +1366,35 @@ void chapter_2_entity_update(Entity *e, Game *game, float dt) {
                 e->dialogue_state++;
             }
         } break;
+
         case ENTITY_CHAP_2_COUPLE_1: {
             if (open_dialogue) {
-                game->current = &game->text[125];
+                if (e->dialogue_state == 0) {
+                    game->current = &game->text[125];
+                }
+                //e->dialogue_state++;
             }
         } break;
+
+        case ENTITY_CHAP_2_GIRL1:
+        case ENTITY_CHAP_2_BOY1:
+        case ENTITY_CHAP_2_GIRL2:
+        case ENTITY_CHAP_2_GIRL3:
+        case ENTITY_CHAP_2_COFFEE_TABLE: {
+            if (open_dialogue) {
+                if (e->dialogue_state == 0) {
+                    game->current = &game->text[141];
+                }
+                //e->dialogue_state++;
+            }
+        } break;
+
+        case ENTITY_CHAP_2_SINGLE_1: {
+            if (open_dialogue) {
+                game->current = &game->text[154];
+            }
+        } break;
+
         case ENTITY_CHAP_2_BOUNCER: {
             if (e->dialogue_state == 0 && open_dialogue) {
                 game->current = &game->text[0];
@@ -1594,7 +1713,7 @@ void chapter_2_draw(Game *game, RenderTexture2D *target) {
             Texture *djinns = atari_assets.textures + 12;
 
             static int num_djinns = 0;
-            const int total_djinns = 10;
+            const int total_djinns = 5;
             static float djinn_time = 0;
 
             if (num_djinns > 0) {

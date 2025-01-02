@@ -50,7 +50,9 @@ enum Entity_Type {
     ENTITY_CHAP_2_BOY1,
     ENTITY_CHAP_2_GIRL2,
     ENTITY_CHAP_2_GIRL3,
+
     ENTITY_CHAP_2_COFFEE_TABLE,
+
     ENTITY_CHAP_2_COUPLE_1,
     ENTITY_CHAP_2_SINGLE_1,
     ENTITY_CHAP_2_COUPLE_2,
@@ -688,21 +690,18 @@ void atari_update_and_draw_textbox(Game *game, float dt) {
 void setup_text_scroll_sound(Text_List *list, char *speaker) {
     if (speaker) {
         const char *male_names[] = {
-            "Bartender", "Guard",
-            "Noah", "Mike", "Hunter",
-            "Tyrell", "Trey", "Judas",
-            "Lucas", "Siphor", "Tyrell",
-            "Jason", "Matt"
+            "Bartender", "Guard", "Noah", "Mike",
+            "Hunter", "Tyrell", "Trey", "Judas",
+            "Lucas", "Siphor", "Tyrell", "Jason",
+            "Matt", "Man",
         };
 
         const char *female_names[] = {
-            "Eleanor", "Saira",
-            "Jessica", "Amy",
-            "Clarice", "Sherane",
-            "Joanne", "Melody",
-            "Aria", "Olivia",
-            "Ana", "???",
-            "Trisha"
+            "Eleanor", "Saira", "Jessica", "Amy",
+            "Clarice", "Sherane", "Joanne", "Melody",
+            "Aria", "Olivia", "Ana", "???",
+            "Trisha", "Woman", "Woman 1", "Woman 2",
+            "Woman 3",
         };
 
         if (strcmp(speaker, "Chase") == 0) {
@@ -726,6 +725,36 @@ void setup_text_scroll_sound(Text_List *list, char *speaker) {
     }
 }
 
+// This must be called after setup_text_scroll_sound
+void setup_text_color(Text_List *list, char *speaker) {
+    if (speaker) {
+        if (list->scroll_sound == SOUND_TEXT_SCROLL_FEMALE) {
+            list->color = PINK;
+        }
+
+        if (list->scroll_sound == SOUND_TEXT_SCROLL_MALE) {
+            list->color = BLUE;
+        }
+
+        if (strcmp(speaker, "???") == 0) {
+            Color pink = {255, 133, 220, 255};
+            list->color = pink;
+        }
+    
+        switch (chapter) {
+            case 0: {
+                list->bg_color = {0, 0, 0, 127};
+            } break;
+            case 1: {
+                list->bg_color = {0, 0, 0, 127};
+            } break;
+            case 2: {
+                list->bg_color = {0, 0, 0, 200};
+            } break;
+        }
+    }
+}
+
 void atari_text_list_init(Text_List *list, char *speaker,
                           char *line, float scroll_speed,
                           Text_List *next)
@@ -743,8 +772,11 @@ void atari_text_list_init(Text_List *list, char *speaker,
             list->bg_color = {232,204,124,255};
         } break;
         case 2: {
+            /*
             list->color    = WHITE;
             list->bg_color = {50, 0, 0, 220};
+            */
+            setup_text_color(list, speaker);
         } break;
         default: {
             list->color = WHITE;
