@@ -494,8 +494,9 @@ __anon9cf613ef0202	src/titlescreen.cpp	/^            auto text = [&](int i, char
 __anonb290d74d0102	src/chapter_epilogue.cpp	/^    auto node_text = [&](int index, int yes_index) {$/;"	f	function:chapter_epilogue_init	file:
 __anonb290d74d0202	src/chapter_epilogue.cpp	/^    auto penny = [](Text_List *list, char *speaker, char *data, Text_List *next) -> void {$/;"	f	function:chapter_epilogue_init	typeref:typename:void	file:
 __anonb290d74d0302	src/chapter_epilogue.cpp	/^    auto end_of_transition = [](Game *game) -> void {$/;"	f	function:epilogue_handle_transition	typeref:typename:void	file:
-__anonb290d74d0402	src/chapter_epilogue.cpp	/^        auto alpha = [](float t) -> float {$/;"	f	function:chapter_epilogue_draw_bar_side	typeref:typename:float	file:
-__anonb290d74d0502	src/chapter_epilogue.cpp	/^        auto draw_bars = [&](float scale) {$/;"	f	function:chapter_epilogue_draw	file:
+__anonb290d74d0402	src/chapter_epilogue.cpp	/^                auto start_final_convo = [](Game *game) -> void {$/;"	f	function:chapter_epilogue_update	typeref:typename:void	file:
+__anonb290d74d0502	src/chapter_epilogue.cpp	/^        auto alpha = [](float t) -> float {$/;"	f	function:chapter_epilogue_draw_bar_side	typeref:typename:float	file:
+__anonb290d74d0602	src/chapter_epilogue.cpp	/^        auto draw_bars = [&](float scale) {$/;"	f	function:chapter_epilogue_draw	file:
 __anonbf2cf55f0102	src/chapter_intro.cpp	/^    auto add_guy = [](void *game_ptr) -> void {$/;"	f	function:chapter_intro_init	typeref:typename:void	file:
 __anonbf2cf55f0202	src/chapter_intro.cpp	/^        auto add = [](Game *game) -> void {$/;"	f	function:chapter_intro_init::__anonbf2cf55f0102	typeref:typename:void	file:
 __anonbf2cf55f0302	src/chapter_intro.cpp	/^        auto next_text = [](Game *game) -> void {$/;"	f	function:chapter_intro_init::__anonbf2cf55f0102	typeref:typename:void	file:
@@ -856,6 +857,7 @@ closed	src/chapter_4.h	/^    bool closed;$/;"	m	struct:Chapter_4_Window	typeref:
 closed	src/chapter_5.cpp	/^    bool        closed;$/;"	m	struct:Chapter_5_Train	typeref:typename:bool	file:
 collision_result	src/game.h	/^        RayCollision collision_result;$/;"	m	struct:apply_3d_velocity::Is_Bad_Position_Result	typeref:typename:RayCollision
 color	src/chapter_3.cpp	/^    Color color;$/;"	m	struct:Chapter_3_Car	typeref:typename:Color	file:
+color	src/game.h	/^    Color          color;$/;"	m	struct:Fader	typeref:typename:Color
 color	src/text.cpp	/^    Color color             = RAYWHITE;$/;"	m	struct:Text_List	typeref:typename:Color	file:
 color	src/text.cpp	/^    Color color, backdrop_color;$/;"	m	struct:Text	typeref:typename:Color	file:
 colors_equal	src/util.cpp	/^bool colors_equal(Color a, Color b) {$/;"	f	typeref:typename:bool
@@ -904,6 +906,7 @@ dialogue_state	src/game.h	/^    int         dialogue_state;$/;"	m	struct:Entity	
 dir_x	src/chapter_1.h	/^    int   dir_x, dir_y;$/;"	m	struct:Chapter_1_Player	typeref:typename:int
 dir_y	src/chapter_1.h	/^    int   dir_x, dir_y;$/;"	m	struct:Chapter_1_Player	typeref:typename:int
 direction	src/game.h	/^    Fade_Direction direction;$/;"	m	struct:Fader	typeref:typename:Fade_Direction
+disable_node_popup	src/chapter_epilogue.cpp	/^    bool           disable_node_popup;$/;"	m	struct:Level_Chapter_Epilogue	typeref:typename:bool	file:
 disallow_skipping	src/text.cpp	/^    bool disallow_skipping = false;$/;"	m	struct:Text_List	typeref:typename:bool	file:
 disallow_skipping	src/text.cpp	/^    bool disallow_skipping;$/;"	m	struct:Text	typeref:typename:bool	file:
 discard_read_bytes	src/pl_mpeg.h	/^	int discard_read_bytes;$/;"	m	struct:plm_buffer_t	typeref:typename:int
@@ -957,11 +960,12 @@ entity_texture_width	src/game.h	/^int entity_texture_width(Entity *entity) {$/;"
 entity_update_alarms	src/game.h	/^void entity_update_alarms(Entity *e, float dt) {$/;"	f	typeref:typename:void
 epilogue_goto_credits	src/chapter_epilogue.cpp	/^void epilogue_goto_credits(void *game_ptr) {$/;"	f	typeref:typename:void
 epilogue_handle_transition	src/chapter_epilogue.cpp	/^void epilogue_handle_transition(Game *game) {$/;"	f	typeref:typename:void
+epilogue_init_first	src/chapter_epilogue.cpp	/^void epilogue_init_first(Game *game) {$/;"	f	typeref:typename:void
+epilogue_init_fourth	src/chapter_epilogue.cpp	/^void epilogue_init_fourth(Game *game) {$/;"	f	typeref:typename:void
+epilogue_init_second	src/chapter_epilogue.cpp	/^void epilogue_init_second(Game *game) {$/;"	f	typeref:typename:void
 epilogue_init_third	src/chapter_epilogue.cpp	/^void epilogue_init_third(Game *game) {$/;"	f	typeref:typename:void
 epilogue_raise_node_last_scene	src/chapter_epilogue.cpp	/^void epilogue_raise_node_last_scene(Game *game) {$/;"	f	typeref:typename:void
-epilogue_start_final_conversation	src/chapter_epilogue.cpp	/^void epilogue_start_final_conversation(Game *game) {$/;"	f	typeref:typename:void
-epilogue_start_final_conversation_delayed	src/chapter_epilogue.cpp	/^void epilogue_start_final_conversation_delayed(Game *game) {$/;"	f	typeref:typename:void
-epilogue_transition	src/chapter_epilogue.cpp	/^void epilogue_transition(Game *game) {$/;"	f	typeref:typename:void
+epilogue_transition	src/chapter_epilogue.cpp	/^void epilogue_transition(Game *game, Color color = BLACK) {$/;"	f	typeref:typename:void
 error_count	src/chapter_3.cpp	/^    size_t  error_count;$/;"	m	struct:Document	typeref:typename:size_t	file:
 events	src/game.h	/^    Event events[64];$/;"	m	struct:Game	typeref:typename:Event[64]
 fade_alpha	src/chapter_3.cpp	/^    int fade_alpha;$/;"	m	struct:Chapter_3_Phone	typeref:typename:int	file:
@@ -1545,7 +1549,7 @@ staircase_podium_current	src/chapter_5.cpp	/^        int                 stairca
 staircase_podiums	src/chapter_5.cpp	/^        Chapter_5_Podium    staircase_podiums[7];$/;"	m	struct:Level_Chapter_5::__anoneccee5e80308	typeref:typename:Chapter_5_Podium[7]	file:
 start_code	src/pl_mpeg.h	/^	int start_code;$/;"	m	struct:plm_demux_t	typeref:typename:int
 start_code	src/pl_mpeg.h	/^	int start_code;$/;"	m	struct:plm_video_t	typeref:typename:int
-start_fade	src/game.h	/^void start_fade(Game *game, Fade_Direction dir, float speed, void (*action)(Game *)) {$/;"	f	typeref:typename:void
+start_fade	src/game.h	/^void start_fade(Game *game, Fade_Direction dir, float speed, void (*action)(Game *), Color color/;"	f	typeref:typename:void
 start_fade	src/game.h	/^void start_fade(Game *game, Fade_Direction dir, void (*action)(Game *)) {$/;"	f	typeref:typename:void
 start_index	src/chapter_3.cpp	/^    int   start_index;$/;"	m	struct:Word	typeref:typename:int	file:
 start_index	src/util.cpp	/^    int start_index;$/;"	m	struct:Find_Word_Result	typeref:typename:int	file:

@@ -29,6 +29,8 @@ struct Level_Chapter_2 {
     bool mirror_popup;
     int  bathroom_state;
 
+    bool black_screen;
+
     int width, height;
 
     RenderTexture2D window_target;
@@ -295,6 +297,14 @@ void chapter_2_end_eleanor_third_text(void *game_ptr) {
     Entity *player = level->player;
     player->chap_2_player.sitting_state = false;
     player->chap_2_player.speed_penny = 1;
+
+    level->black_screen = true;
+
+    auto kill_blacks = [](Game *game) -> void {
+        Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
+        level->black_screen = false;
+    };
+    add_event(game, kill_blacks, 1);
 
     game->post_processing.type = POST_PROCESSING_VHS;
     post_process_vhs_set_intensity(&game->post_processing.vhs, VHS_INTENSITY_LOW);
@@ -639,7 +649,7 @@ void chapter_2_init(Game *game) {
                          &game->text[44]);
     atari_text_list_init(&game->text[44],
                          "Chase",
-                         "Thanks.\rAnyways, I'll get out of\nyour hair.",
+                         "Um, alright.\rAnyways, I'll get out of\nyour hair.",
                          speed,
                          nullptr);
 
@@ -1107,7 +1117,7 @@ void chapter_2_init(Game *game) {
                          &game->text[150]);
     atari_text_list_init(&game->text[150],
                          "Woman 1",
-                         "Whene Cece sees this,\nshe's gonna be PISSED.",
+                         "When Cece sees this,\nshe's gonna be PISSED.",
                          speed,
                          &game->text[151]);
     atari_text_list_init(&game->text[151],
@@ -1698,6 +1708,9 @@ void chapter_2_draw(Game *game, RenderTexture2D *target) {
     Level_Chapter_2 *level = (Level_Chapter_2 *)game->level;
 
     ClearBackground(BLACK);
+
+    if (level->black_screen)
+        return;
 
     if (level->show_window) {
         Texture2D *texture = 0;

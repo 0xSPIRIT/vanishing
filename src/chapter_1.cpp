@@ -646,7 +646,7 @@ void chapter_1_init(Game *game) {
                         speed,
                         &game->text[58]);
     chapter_1_call_text(&game->text[58],
-                        "Chase",
+                        0,
                         "*click*",
                         speed,
                         nullptr);

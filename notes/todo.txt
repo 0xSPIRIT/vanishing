@@ -4,8 +4,12 @@ TODO
              - There should be a transition to the phone.
 - Chapter 2: The bartender looks like shit, and the bar area
              in general.
-- Epilogue - Change the effect for the bars to have their alpha
-             values change slightly.
+- Staircase:
+  - Add more collision geometry to stop walking up tables etc
+  - Add spot lights that cast onto the podiums.
+- Intro 3D: Same thing
+- Chapter 5: Apply a "night light" hue shift to Art Gallery
+- Movie: pause when tabbed out
 
 - Sometimes the audio cuts out...
   Like the music doesn't loop, for some reason.

@@ -1792,7 +1792,7 @@ void chapter_5_scene_init(Game *game) {
 
             level->scenes[5] = load_model("models/artgallery.glb");
 
-            level->shader = load_shader("cottage.vs", "cottage.fs");
+            level->shader = load_shader(0, "cottage.fs");
             model_set_shader(&level->scenes[5], level->shader);
 
             game->post_processing.type = POST_PROCESSING_BLOOM;
@@ -2231,7 +2231,7 @@ void chapter_5_init(Game *game) {
     level->transition_fade = false;
 
     level->good = false;
-    chapter_5_goto_scene(game, CHAPTER_5_SCENE_STAIRCASE);
+    chapter_5_goto_scene(game, CHAPTER_5_SCENE_GALLERY);
 }
 
 void chapter_5_update_clerk(Game *game, float dt) {

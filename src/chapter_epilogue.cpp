@@ -30,6 +30,8 @@ struct Level_Chapter_Epilogue {
     Shader         shader, bar_shader;
     Model          scene, bars, node, door, timer_model;
 
+    bool           disable_node_popup;
+
     bool           noclip;
     float          end_timer;
 
@@ -61,14 +63,6 @@ struct Level_Chapter_Epilogue {
     bool           bars_popup;
 };
 
-void epilogue_start_final_conversation(Game *game) {
-    game->current = &game->text[70];
-}
-
-void epilogue_start_final_conversation_delayed(Game *game) {
-    add_event(game, epilogue_start_final_conversation, 10);
-}
-
 void epilogue_goto_credits(void *game_ptr) {
     Game *game = (Game *)game_ptr;
     add_event(game, atari_queue_deinit_and_goto_intro, 5);
@@ -77,6 +71,53 @@ void epilogue_goto_credits(void *game_ptr) {
 void epilogue_raise_node_last_scene(Game *game) {
     Level_Chapter_Epilogue *level = (Level_Chapter_Epilogue*)game->level;
     level->nodes[0].moving_up = true;
+}
+
+void epilogue_init_first(Game *game) {
+    Level_Chapter_Epilogue *level = (Level_Chapter_Epilogue*)game->level;
+    Epilogue_Node *nodes = level->nodes;
+
+    float y = -5;
+
+    nodes[0].position = { -13, y, -18 };
+    nodes[1].position = {   5, y, -10 };
+    nodes[2].position = {  10, y,   5 };
+    nodes[3].position = {  16, y,  16 };
+    nodes[4].position = { -10, y,  15 };
+
+    nodes[0].text = &game->text[0];
+    nodes[1].text = &game->text[4];
+    nodes[2].text = &game->text[7];
+    nodes[3].text = &game->text[10];
+    nodes[4].text = &game->text[13];
+}
+
+void epilogue_init_second(Game *game) {
+    Level_Chapter_Epilogue *level = (Level_Chapter_Epilogue*)game->level;
+
+    level->state = EPILOGUE_STATE_SECOND;
+
+    level->fog_factor = level->fog_factor_to = 1.0f/20.0f;
+
+    level->pause_door_timer = true;
+
+    level->scene.materials[1].maps[MATERIAL_MAP_DIFFUSE].texture = level->pink_dot;
+
+    float y = -5;
+
+    level->num_nodes = 5;
+
+    Epilogue_Node *nodes = level->nodes;
+
+    nodes[0].position = { -9, y, -10 };
+    nodes[1].position = {  9, y,  10 };
+    nodes[2].position = { -19, y, -5 };
+    nodes[3].position = { 6, y,  19 };
+    nodes[4].position = { 0, y, -7 };
+
+    nodes[0].text = &game->text[40];
+    nodes[1].text = &game->text[43];
+    nodes[3].text = &game->text[46];
 }
 
 void epilogue_init_third(Game *game) {
@@ -105,6 +146,33 @@ void epilogue_init_third(Game *game) {
 
     for (int i = 0; i < level->num_nodes; i++)
         nodes[i].text = &game->text[60];
+}
+
+void epilogue_init_fourth(Game *game) {
+    Level_Chapter_Epilogue *level = (Level_Chapter_Epilogue*)game->level;
+
+    level->state = EPILOGUE_STATE_FOURTH;
+
+    //epilogue_text_change_color = true;
+
+    game->textbox_alpha = 160;
+
+    float time = 5;
+    add_event(game, epilogue_raise_node_last_scene, time);
+
+    level->num_nodes = 1;
+
+    float y = -15;
+
+    Epilogue_Node *nodes = level->nodes;
+
+    nodes[0].position = { -1, y, 0 };
+    nodes[0].text = &game->text[65];
+
+    level->scene.materials[1].maps[MATERIAL_MAP_DIFFUSE].texture = level->white_texture;
+
+    level->camera.position = {1.74f, 1.67f, 2.10f};
+    level->camera.target   = {0.23f, 1.19f, 0.88f};
 }
 
 void chapter_epilogue_init(Game *game) {
@@ -460,7 +528,7 @@ void chapter_epilogue_init(Game *game) {
 
         game->text[65].arrow_color = BLACK;
         game->text[65].choice_color = BLACK;
-        game->text[65].choice_backdrop_color = {240,240,240,255};
+        game->text[65].choice_backdrop_color = {};
 
         atari_choice_text_list_init(&game->text[65],
                                     0,
@@ -601,6 +669,10 @@ void chapter_epilogue_init(Game *game) {
           nullptr);
     game->text[90].callbacks[0] = epilogue_goto_credits;
 
+    for (int i = 70; i <= 90; i++) {
+        game->text[i].location = Middle;
+    }
+
     atari_text_list_init(&game->text[100],
                          0,
                          "I can't pass through this.\rThe bars are made of diamond.",
@@ -612,20 +684,7 @@ void chapter_epilogue_init(Game *game) {
     Epilogue_Node *nodes = level->nodes;
     memset(nodes, 0, sizeof(Epilogue_Node) * level->num_nodes);
 
-    float y = -5;
-
-    nodes[0].position = { -13, y, -18 };
-    nodes[1].position = {   5, y, -10 };
-    nodes[2].position = {  10, y,   5 };
-    nodes[3].position = {  16, y,  16 };
-    nodes[4].position = { -10, y,  15 };
-
-    nodes[0].text = &game->text[0];
-    nodes[1].text = &game->text[4];
-    nodes[2].text = &game->text[7];
-    nodes[3].text = &game->text[10];
-    nodes[4].text = &game->text[13];
-
+    epilogue_init_first(game);
     //epilogue_init_third(game);
 }
 
@@ -634,8 +693,15 @@ void epilogue_handle_transition(Game *game) {
 
     auto end_of_transition = [](Game *game) -> void {
         Level_Chapter_Epilogue *level = (Level_Chapter_Epilogue *)game->level;
+
+        auto start_final_convo = [](Game *game) -> void {
+            game->current = &game->text[70];
+        };
+
         if (level->state == EPILOGUE_STATE_SECOND)
             game->current = &game->text[20];
+        if (level->state == EPILOGUE_STATE_ENDING)
+            add_event(game, start_final_convo, 3);
     };
 
     start_fade(game, FADE_IN, 60, end_of_transition, game->fader.color);
@@ -654,55 +720,14 @@ void epilogue_handle_transition(Game *game) {
     level->door_popup = false;
     level->door_strike_popup = false;
 
-    Epilogue_Node *nodes = level->nodes;
-
     level->door_timer = 120;
 
     if (level->state == EPILOGUE_STATE_FIRST) {
-        level->state = EPILOGUE_STATE_SECOND;
-
-        level->fog_factor = level->fog_factor_to = 1.0f/20.0f;
-
-        level->pause_door_timer = true;
-
-        level->scene.materials[1].maps[MATERIAL_MAP_DIFFUSE].texture = level->pink_dot;
-
-        float y = -5;
-
-        level->num_nodes = 5;
-
-        nodes[0].position = { -9, y, -10 };
-        nodes[1].position = {  9, y,  10 };
-        nodes[2].position = { -19, y, -5 };
-        nodes[3].position = { 6, y,  19 };
-        nodes[4].position = { 0, y, -7 };
-
-        nodes[0].text = &game->text[40];
-        nodes[1].text = &game->text[43];
-        nodes[3].text = &game->text[46];
+        epilogue_init_second(game);
     } else if (level->state == EPILOGUE_STATE_SECOND) {
         epilogue_init_third(game);
     } else if (level->state == EPILOGUE_STATE_THIRD) {
-        level->state = EPILOGUE_STATE_FOURTH;
-
-        //epilogue_text_change_color = true;
-
-        game->textbox_alpha = 255;
-
-        float time = 5;
-        add_event(game, epilogue_raise_node_last_scene, time);
-
-        level->num_nodes = 1;
-
-        float y = -15;
-
-        nodes[0].position = { -1, y, 0 };
-        nodes[0].text = &game->text[65];
-
-        level->scene.materials[1].maps[MATERIAL_MAP_DIFFUSE].texture = level->white_texture;
-
-        level->camera.position = {1.74f, 1.67f, 2.10f};
-        level->camera.target   = {0.23f, 1.19f, 0.88f};
+        epilogue_init_fourth(game);
     } else {
         level->state = EPILOGUE_STATE_ENDING;
     }
@@ -854,7 +879,7 @@ void chapter_epilogue_update(Game *game, float dt) {
                 level->end_timer = 0; // reset if you go inside
             }
 
-            if (level->end_timer >= 15) {
+            if (level->end_timer >= 2) {
                 if (!is_fade_active(game)) {
                     epilogue_transition(game, WHITE);
                     memset(level->nodes, 0, sizeof(level->nodes));
@@ -881,8 +906,7 @@ void chapter_epilogue_update(Game *game, float dt) {
     if (game->current == nullptr && !is_fade_active(game)) {
         if (level->current_node) {
             if (level->state == EPILOGUE_STATE_FOURTH) {
-                add_event(game, epilogue_start_final_conversation, 5);
-                epilogue_transition(game);
+                epilogue_transition(game, WHITE);
             } else {
                 level->current_node->text = 0;
                 level->current_node->moving_down = true;
@@ -904,6 +928,10 @@ void chapter_epilogue_update(Game *game, float dt) {
                 if (is_action_pressed()) {
                     game->current = node->text;
                     level->current_node = node;
+
+                    if (level->state == EPILOGUE_STATE_FOURTH) {
+                        level->disable_node_popup = true;
+                    }
                 }
             }
         }
@@ -954,8 +982,7 @@ void chapter_epilogue_update(Game *game, float dt) {
             }
         }
 
-        if (level->state == EPILOGUE_STATE_THIRD || near_door ||
-            level->door_popup || level->door_strike_popup)
+        if (level->state == EPILOGUE_STATE_FOURTH || level->state == EPILOGUE_STATE_THIRD || near_door || level->door_popup || level->door_strike_popup)
         {
             level->bars_popup = false;
         }
@@ -1024,7 +1051,7 @@ void chapter_epilogue_draw_bar_side(Model bars,
         Color tint = WHITE;
 
         auto alpha = [](float t) -> float {
-            float result = 0.50f * sin(t) * sin(t);
+            float result = 0.60f * sin(t) * sin(t);
             result = Clamp(result, 0, 1);
             return result;
         };
@@ -1174,7 +1201,7 @@ void chapter_epilogue_draw(Game *game) {
 
     EndMode3D();
 
-    if (level->node_popup) {
+    if (!level->disable_node_popup && level->node_popup) {
         Color c = BLACK;
 
         draw_popup("Inspect Capsule", c, Top);
