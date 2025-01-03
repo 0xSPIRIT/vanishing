@@ -55,6 +55,22 @@ struct Level_Chapter_1 {
     float god_scroll;
     int godtext;
 
+    // Pointers into game->text to be used by the chapter code
+    Text_List *text_chase_start,
+              *text_chase_1,
+              *text_chase_2,
+              *text_node_1,
+              *text_node_2,
+              *text_node_3,
+              *text_payphone_start,
+              *text_payphone_redial,
+              *text_veil,
+              *text_phone_call_start,
+              *text_phone_sigh,
+              *text_pray,
+              *text_after_prayer,
+              *text_window;
+
     // 3d part
     Model    scene_3d, scene_door;
     Camera3D camera;
@@ -84,7 +100,7 @@ void chapter_1_end(void *game_ptr) {
 void chapter_1_first_text(Game *game) {
     Level_Chapter_1 *level = (Level_Chapter_1*)game->level;
 
-    game->current = &game->text[0];
+    game->current = level->text_chase_start;
     level->before_first_text = false;
 }
 
@@ -97,11 +113,15 @@ void chapter_1_end_intro(Game *game) {
 }
 
 void chapter_1_start_phone_call(Game *game) {
-    game->current = &game->text[35];
+    Level_Chapter_1 *level = (Level_Chapter_1*)game->level;
+
+    game->current = level->text_phone_call_start;
 }
 
 void chapter_1_prayer_text(Game *game) {
-    game->current = &game->text[61];
+    Level_Chapter_1 *level = (Level_Chapter_1*)game->level;
+
+    game->current = level->text_after_prayer;
 }
 
 void chapter_1_start_prayer(void *game_ptr) {
@@ -346,360 +366,173 @@ void chapter_1_init(Game *game) {
 
     float speed = 15;
 
-    Dialogue_Segment segment[] = {
-        text(0, "Chase", "I... need... to find... her...", speed, DLG_NEXT),
-        text(1, "Chase", "So... thirsty...", speed, DLG_NULL),
+    int idx = 0;
+
+    enum {
+        NEXT = -2,
+        END = -1,
     };
 
-    dialogue_segment(game, segment, StaticArraySize(segment));
+    auto text = [&](char *speaker, char *line, int end) -> Text_List* {
+        Text_List *curr = game->text + idx;
+        Text_List *next = 0;
 
-    /*
-    atari_text_list_init(&game->text[0],
-                         "Chase",
-                         "I... need... to find... her...",
-                         speed,
-                         &game->text[1]);
-    atari_text_list_init(&game->text[1],
-                         "Chase",
-                         "So... thirsty...",
-                         speed,
-                         nullptr);
-                         */
+        idx++;
 
+        if (end == END) {
+        } else if (end == NEXT) {
+            next = game->text + idx;
+        } else {
+            next = game->text + end;
+        }
 
-    atari_text_list_init(&game->text[2],
-                         "Chase",
-                         "God...\rI'm gonna... die here...",
-                         speed,
-                         nullptr);
-    atari_text_list_init(&game->text[3],
-                         "Chase",
-                         "Someone... help...\rSo... thirsty...",
-                         speed,
-                         nullptr);
+        atari_text_list_init(curr,
+                             speaker,
+                             line,
+                             speed,
+                             next);
 
-    speed = 30;
+        return curr;
+    };
 
+    auto choice_yes_no = [&](char *line, void (*on_yes)(void*)) -> Text_List* {
+        Text_List *result = &game->text[idx];
 
-    atari_text_list_init(&game->text[7],
-                         0,
-                         "On the bottom is inscribed:\n83D3960AA4B1 (READ ERROR).",
-                         speed,
-                         &game->text[10]);
-    atari_text_list_init(&game->text[8],
-                         0,
-                         "On the bottom is inscribed:\nC0291BA16324 (READ ERROR).",
-                         speed,
-                         &game->text[10]);
-    atari_text_list_init(&game->text[9],
-                         0,
-                         "On the bottom is inscribed:\nDC6F8203351 (READ ERROR).",
-                         speed,
-                         &game->text[10]);
+        idx++;
 
-    {
         String choices[] = {const_string("Yes"), const_string("No")};
         Text_List *next[] = { 0, 0 };
-        void (*function_pointers[])(void*) = { chapter_1_activate_node, nullptr };
+        void (*function_pointers[])(void*) = { on_yes, nullptr };
 
-        game->text[10].choice_color = BLACK;
-        game->text[10].choice_backdrop_color = {};
+        result->choice_color = BLACK;
+        result->choice_backdrop_color = {};
 
-        atari_choice_text_list_init(&game->text[10],
+        atari_choice_text_list_init(result,
                                     0,
-                                    "Drink the liquid?",
+                                    line,
                                     choices,
                                     next,
                                     function_pointers,
                                     2);
-    }
 
-    atari_text_list_init(&game->text[11],
-                         0,
-                         "*ring ring*\r*ring ring*\r*click*",
-                         speed,
-                         &game->text[99]);
-    atari_text_list_init(&game->text[99],
-                         "Chase",
-                         "H... he- hello?",
-                         speed,
-                         &game->text[12]);
-    atari_text_list_init(&game->text[12],
-                         "      ",
-                         "Yes?",
-                         speed,
-                         &game->text[13]);
-    atari_text_list_init(&game->text[13],
-                         "Chase",
-                         "H-h... help...\rPlease...",
-                         speed,
-                         &game->text[14]);
-    atari_text_list_init(&game->text[14],
-                         "      ",
-                         "Oh, you're stuck in the\ndesert?",
-                         speed,
-                         &game->text[15]);
-    atari_text_list_init(&game->text[15],
-                         "      ",
-                         "Most people find their\nway out pretty easily.",
-                         speed,
-                         &game->text[16]);
-    atari_text_list_init(&game->text[16],
-                         "Chase",
-                         "...\rI need... water.",
-                         speed,
-                         &game->text[17]);
-    atari_text_list_init(&game->text[17],
-                         "Chase",
-                         "I-I keep walking... but it\ngoes on forever...",
-                         speed,
-                         &game->text[18]);
-    atari_text_list_init(&game->text[18],
-                         "      ",
-                         "It's simple, silly!\rThere's water everywhere!",
-                         speed,
-                         &game->text[19]);
-    atari_text_list_init(&game->text[19],
-                         "      ",
-                         "You just go up, then down,\nthen up, then left.\rYou'll find what you need.",
-                         speed,
-                         &game->text[20]);
-    atari_text_list_init(&game->text[20],
-                         "Chase",
-                         "Th-that doesn't make sense.\rAnd I already drank the\nwater- it hurts!",
-                         speed,
-                         &game->text[21]);
-    atari_text_list_init(&game->text[21],
-                         "      ",
-                         "Huh?\rWhen everyone else drinks\nit their thirst is quenched.",
-                         speed,
-                         &game->text[22]);
-    atari_text_list_init(&game->text[22],
-                         "      ",
-                         "... Whatever-\rTrust me, you'll find\nit there.",
-                         speed,
-                         &game->text[70]);
-    atari_text_list_init(&game->text[70],
-                         "Chase",
-                         "Okay.",
-                         speed,
-                         &game->text[71]);
-    atari_text_list_init(&game->text[71],
-                         "      ",
-                         "Oh, and Chase?",
-                         speed,
-                         &game->text[23]);
-    atari_text_list_init(&game->text[23],
-                         "Chase",
-                         "...\rI- I didn't give you my...",
-                         speed,
-                         &game->text[72]);
-    atari_text_list_init(&game->text[72],
-                         "      ",
-                         "Open the door.",
-                         speed,
-                         &game->text[73]);
-    atari_text_list_init(&game->text[73],
-                         0,
-                         "*click*",
-                         speed,
-                         nullptr);
+        return result;
+    };
+
+    level->text_chase_start = text("Chase", "I... need... to find... her...", NEXT);
+    text("Chase", "So... thirsty...",               END);
+
+    level->text_chase_1 = text("Chase", "God...\rI'm gonna... die here...",     END);
+    level->text_chase_2 = text("Chase", "Someone... help...\rSo... thirsty...", END);
+
+    speed = 30;
+
+    level->text_node_1 = text(0, "On the bottom is inscribed:\n83D3960AA4B1 (READ ERROR).", 10);
+    level->text_node_2 = text(0, "On the bottom is inscribed:\nC0291BA16324 (READ ERROR).", 10);
+    level->text_node_3 = text(0, "On the bottom is inscribed:\nDC6F8203351 (READ ERROR).",  10);
+
+    speed = 30;
+
+    idx = 10;
+    choice_yes_no("Drink the liquid?", chapter_1_activate_node);
+
+    level->text_payphone_start = text(0, "*ring ring*\r*ring ring*\r*click*", NEXT);
+    text("Chase",  "H... he- hello?", NEXT);
+    text("      ", "Yes?", NEXT);
+    text("Chase",  "H-h... help...\rPlease...", NEXT);
+    text("      ", "Oh, you're stuck in the\ndesert?", NEXT);
+    text("      ", "Most people find their\nway out pretty easily.", NEXT);
+    text("Chase",  "...\rI need... water.", NEXT);
+    level->text_payphone_redial = text("Chase",  "I-I keep walking... but it\ngoes on forever...", NEXT);
+    text("      ", "It's simple, silly!\rThere's water everywhere!", NEXT);
+
+    text("      ", "You just go up, then down,\nthen up, then left.\rYou'll find what you need.", NEXT);
+    text("Chase",  "Th-that doesn't make sense.\rAnd I already drank the\nwater- it hurts!",      NEXT);
+    text("      ", "Huh?\rWhen everyone else drinks\nit their thirst is quenched.",               NEXT);
+    text("      ", "... Whatever-\rTrust me, you'll find\nit there.",                             NEXT);
+
+    text("Chase",  "Okay.",                           NEXT);
+    text("      ", "Oh, and Chase?",                  NEXT);
+    text("Chase",  "...\rI- I didn't give you my...", NEXT);
+    text("      ", "Open the door.",                  NEXT);
+    text(0,        "*click*",                         END);
 
     speed = 10;
 
-    atari_mid_text_list_init(&game->text[24],
-                             "the insurmountable veil\nstands firm, made of\ndiamond bars.",
-                             &game->text[25]);
-    atari_mid_text_list_init(&game->text[25],
-                             "i try to peek through\nthe gaps to find her.\rto quench my thirst.",
-                             &game->text[26]);
-    atari_mid_text_list_init(&game->text[26],
-                             "i don't know what i see,\rbecause there is\nnothing visible.",
-                             &game->text[27]);
-    atari_mid_text_list_init(&game->text[27],
-                             "i don't know how to\nname you, because I\ndon't know what\nyou are.",
-                             &game->text[28]);
-    atari_mid_text_list_init(&game->text[28],
-                             "should anyone tell me\nyou are named by\nthis name or that name,\ri know it must not\nbe.",
-                             &game->text[29]);
-    atari_mid_text_list_init(&game->text[29],
-                             "because the veil beyond\nwhich you are suceeds\nthe boundary of names\nitself.",
-                             &game->text[30]);
-    atari_mid_text_list_init(&game->text[30],
-                             "but if you do exist,\r\n... please help me.",
-                             nullptr);
+    auto god_text = [&](char *string, bool end = false) -> Text_List* {
+        Text_List *result = &game->text[idx];
+        Text_List *next = &game->text[++idx];
 
-    chapter_1_apartment_text(&game->text[31],
-                             "He tried getting out\nof bed.",
-                             &game->text[32]);
-    chapter_1_apartment_text(&game->text[32],
-                             "Maybe next time.",
-                             nullptr);
-    game->text[32].scroll_type = LetterByLetter;
-    game->text[32].callbacks[0] = set_player_alarm;
+        if (end) next = nullptr;
+
+        atari_mid_text_list_init(result, string, next);
+
+        return result;
+    };
+
+    level->text_veil = god_text("the insurmountable veil\nstands firm, made of\ndiamond bars.");
+    god_text("i try to peek through\nthe gaps to find her.\rto quench my thirst.");
+    god_text("i don't know what i see,\rbecause there is\nnothing visible.");
+    god_text("i don't know how to\nname you, because I\ndon't know what\nyou are.");
+    god_text("should anyone tell me\nyou are named by\nthis name or that name,\ri know it must not\nbe.");
+    god_text("because the veil beyond\nwhich you are suceeds\nthe boundary of names\nitself.");
+    god_text("but if you do exist,\r\n... please help me.", true);
 
     speed = 30;
 
-    chapter_1_call_text(&game->text[35],
-                        0,
-                        "*ring ring*\r*click*",
-                        speed,
-                        &game->text[36]);
-    chapter_1_call_text(&game->text[36],
-                        "Chase",
-                        "Uh hello?",
-                        speed,
-                        &game->text[37]);
-    chapter_1_call_text(&game->text[37],
-                        "Eleanor",
-                        "Heyyyy Chase!!\rI got someone for you.",
-                        speed,
-                        &game->text[38]);
-    chapter_1_call_text(&game->text[38],
-                        "Chase",
-                        "Uhhh what?",
-                        speed,
-                        &game->text[39]);
-    chapter_1_call_text(&game->text[39],
-                        "Eleanor",
-                        "Y'know, SOMEONE!!!",
-                        speed,
-                        &game->text[40]);
-    chapter_1_call_text(&game->text[40],
-                        "Chase",
-                        "Does this really require\na phone call?",
-                        speed,
-                        &game->text[41]);
-    chapter_1_call_text(&game->text[41],
-                        "Chase",
-                        "You could've sent me a\ntext that I would have\npretended not to read.",
-                        speed,
-                        &game->text[42]);
-    chapter_1_call_text(&game->text[42],
-                        "Eleanor",
-                        "UGH. FINE.\rYou're an ass, you know\nthat?!",
-                        speed,
-                        &game->text[43]);
-    chapter_1_call_text(&game->text[43],
-                        "Chase",
-                        "Waaait hold on,\rI've been trying to get\nup for the past 45 minutes.",
-                        speed,
-                        &game->text[44]);
-    chapter_1_call_text(&game->text[44],
-                        "Chase",
-                        "I'm just cranky.\rWe're already here.\nWho do you got?",
-                        speed,
-                        &game->text[45]);
-    chapter_1_call_text(&game->text[45],
-                        "Eleanor",
-                        "Penny.",
-                        speed,
-                        &game->text[46]);
-    chapter_1_call_text(&game->text[46],
-                        "Chase",
-                        "Penny?\rUh, Jason's Penny?",
-                        speed,
-                        &game->text[47]);
-    chapter_1_call_text(&game->text[47],
-                        "Eleanor",
-                        "Come on, she's perfect.\rShe even composes like\nyou!!!",
-                        speed,
-                        &game->text[48]);
-    chapter_1_call_text(&game->text[48],
-                        "Chase",
-                        "Oh really?\rWhat type of music?",
-                        speed,
-                        &game->text[49]);
-    chapter_1_call_text(&game->text[49],
-                        "Eleanor",
-                        "Talk to her yourself and\nfind out.",
-                        speed,
-                        &game->text[50]);
-    chapter_1_call_text(&game->text[50],
-                        "Chase",
-                        "Can I state the obvious\nhere sis?\r",
-                        speed,
-                        &game->text[51]);
-    chapter_1_call_text(&game->text[51],
-                        "Chase",
-                        "It's JASON's Penny.",
-                        speed,
-                        &game->text[52]);
-    chapter_1_call_text(&game->text[52],
-                        "Eleanor",
-                        "Uh, the same Jason that\nswears at her and treats\nher like shit?",
-                        speed,
-                        &game->text[53]);
-    chapter_1_call_text(&game->text[53],
-                        "Eleanor",
-                        "They broke up. They do\nthat like every 5 days.\rIt doesn't matter, trust me.",
-                        speed,
-                        &game->text[54]);
-    chapter_1_call_text(&game->text[54],
-                        "Chase",
-                        "...",
-                        speed,
-                        &game->text[55]);
-    chapter_1_call_text(&game->text[55],
-                        "Eleanor",
-                        "Soooo what do you think\nbro?",
-                        speed,
-                        &game->text[56]);
-    chapter_1_call_text(&game->text[56],
-                        "Chase",
-                        "...\r...\rI'll think about it.",
-                        speed,
-                        &game->text[57]);
-    chapter_1_call_text(&game->text[57],
-                        "Eleanor",
-                        "*sigh*\rWe all know what that\nmea--",
-                        speed,
-                        &game->text[58]);
-    chapter_1_call_text(&game->text[58],
-                        0,
-                        "*click*",
-                        speed,
-                        nullptr);
+    auto call = [&](char *speaker, char *line, int end) -> Text_List* {
+        Text_List *curr = game->text + idx;
+        Text_List *next = 0;
 
-    game->text[58].callbacks[0] = chapter_1_end;
+        idx++;
 
-    {
-        String choices[] = {const_string("Yes"), const_string("No")};
-        Text_List *next[] = { 0, 0 };
-        void (*function_pointers[])(void*) = {
-            chapter_1_start_prayer,
-            nullptr
-        };
+        if (end == END) {
+        } else if (end == NEXT) {
+            next = game->text + idx;
+        } else {
+            next = game->text + end;
+        }
 
-        game->text[60].choice_color = BLACK;
-        game->text[60].choice_backdrop_color = {};
+        chapter_1_call_text(curr,
+                            speaker,
+                            line,
+                            speed,
+                            next);
 
-        atari_choice_text_list_init(&game->text[60],
-                                    0,
-                                    "Pray to God?",
-                                    choices,
-                                    next,
-                                    function_pointers,
-                                    2);
-    }
+        return curr;
+    };
 
-    atari_text_list_init(&game->text[61],
-                         "Chase",
-                         "...\r...\r...",
-                         speed,
-                         &game->text[62]);
-    atari_text_list_init(&game->text[62],
-                         "Chase",
-                         "I don't hear anyone.",
-                         speed,
-                         nullptr);
-    game->text[62].callbacks[0] = chapter_1_end_prayer;
+    level->text_phone_call_start = 
+        call(0, "*ring ring*\r*click*", NEXT);
+    call("Chase", "Uh hello?", NEXT);
+    call("Eleanor", "Heyyyy Chase!!\rI got someone for you.", NEXT);
+    call("Chase", "Uhhh what?", NEXT);
+    call("Eleanor", "Y'know, SOMEONE!!!", NEXT);
+    call("Chase", "Does this really require\na phone call?", NEXT);
+    call("Chase", "You could've sent me a\ntext that I would have\npretended not to read.", NEXT);
+    call("Eleanor", "UGH. FINE.\rYou're an ass, you know\nthat?!", NEXT);
+    call("Chase", "Waaait hold on,\rI've been trying to get\nup for the past 45 minutes.", NEXT);
+    call("Chase", "I'm just cranky.\rWe're already here.\nWho do you got?", NEXT);
+    call("Eleanor", "Penny.", NEXT);
+    call("Chase", "Penny?\rUh, Jason's Penny?", NEXT);
+    call("Eleanor", "Come on, she's perfect.\rShe even composes like\nyou!!!", NEXT);
+    call("Chase", "Oh really?\rWhat type of music?", NEXT);
+    call("Eleanor", "Talk to her yourself and\nfind out.", NEXT);
+    call("Chase", "Can I state the obvious\nhere sis?\r", NEXT);
+    call("Chase", "It's JASON's Penny.", NEXT);
+    call("Eleanor", "Uh, the same Jason that\nswears at her and treats\nher like shit?", NEXT);
+    call("Eleanor", "They broke up. They do\nthat like every 5 days.\rIt doesn't matter, trust me.", NEXT);
+    call("Chase", "...", NEXT);
+    call("Eleanor", "Soooo what do you think\nbro?", NEXT);
+    call("Chase", "...\r...\rI'll think about it.", NEXT);
+    level->text_phone_sigh = call("Eleanor", "*sigh*\rWe all know what that\nmea--", NEXT);
+    call(0, "*click*", END)->callbacks[0] = chapter_1_end;
 
-    atari_text_list_init(&game->text[65],
-                         0,
-                         "It's a window.\rIt feels strange.\rChase feels watched.",
-                         speed,
-                         nullptr);
+    level->text_pray = choice_yes_no("Pray to God?", chapter_1_start_prayer);
+
+    level->text_after_prayer = text("Chase", "...\r...\r...", NEXT);
+    text("Chase", "I don't hear anyone.", END)->callbacks[0] = chapter_1_end_prayer;
+
+    level->text_window = text( 0, "It's a window.\rIt feels strange.\rChase feels watched.", END);
 
     Entity *e = chapter_1_make_entity(ENTITY_WINDOW, render_width/2 - 16, render_height/5);
     array_add(&game->entities, e);
@@ -755,9 +588,9 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
             if (keyboard_focus(game) == NO_KEYBOARD_FOCUS && within_region) {
                 if (is_action_pressed()) {
                     if (e->chap_1_phone.called) {
-                        game->current = &game->text[17];
+                        game->current = level->text_payphone_redial;
                     } else {
-                        game->current = &game->text[11];
+                        game->current = level->text_payphone_start;
                     }
                     e->chap_1_phone.called = true;
                     level->state = LEVEL_CHAPTER_1_STATE_PHONE_WAS_CALLED;
@@ -767,14 +600,14 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
         case ENTITY_PRAYER_MAT: {
             if (keyboard_focus(game) == NO_KEYBOARD_FOCUS && within_region) {
                 if (is_action_pressed() && level->prayer_fader == 0) {
-                    game->current = &game->text[60];
+                    game->current = level->text_pray;
                 }
             }
         } break;
         case ENTITY_WINDOW: {
             if (keyboard_focus(game) == NO_KEYBOARD_FOCUS && within_region) {
                 if (is_action_pressed()) {
-                    game->current = &game->text[65];
+                    game->current = level->text_window;
                 }
             }
         } break;
@@ -783,13 +616,13 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                 if (is_action_pressed()) {
                     switch (e->chap_1_node.type) {
                         case NODE_FIRST: {
-                            game->current = &game->text[7];
+                            game->current = level->text_node_1;
                         } break;
                         case NODE_SECOND: {
-                            game->current = &game->text[8];
+                            game->current = level->text_node_2;
                         } break;
                         case NODE_THIRD: {
-                            game->current = &game->text[9];
+                            game->current = level->text_node_3;
                         } break;
                     }
                 }
@@ -799,6 +632,8 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
             if (keyboard_focus(game) != NO_KEYBOARD_FOCUS) break;
             if (level->prayer_fader > 0) break;
 
+            // this no longer occurs.
+            /*
             if (!e->chap_1_player.huffing_and_puffing &&
                 level->state == LEVEL_CHAPTER_1_STATE_APARTMENT &&
                 e->alarm[1] == 0)
@@ -806,8 +641,8 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                 game->current = &game->text[31];
                 e->chap_1_player.huffing_and_puffing = true;
             }
+            */
 
-            // this no longer occurs.
             /*
             if (e->chap_1_player.huffing_and_puffing) {
                 if (level->about_to_exit && e->alarm[2] == 0) {
@@ -934,9 +769,9 @@ void chapter_1_entity_update(Entity *e, Game *game, float dt) {
                         keyboard_focus(game) == NO_KEYBOARD_FOCUS)
                     {
                         if (e->chap_1_player.footsteps_done == 20) {
-                            game->current = &game->text[2];
+                            game->current = level->text_chase_1;
                         } else if (e->chap_1_player.footsteps_done == 40) {
-                            game->current = &game->text[3];
+                            game->current = level->text_chase_2;
                         }
                     }
 
@@ -1306,7 +1141,7 @@ void chapter_1_update(Game *game, float dt) {
         if (time_end != -1 && level->timer >= time_end) {
             switch (level->crawling_text_state) {
                 case 0: {
-                    game->current = &game->text[24];
+                    game->current = level->text_veil;
                     level->final_text = true;
                 } break;
                 case 1: {
@@ -1319,7 +1154,7 @@ void chapter_1_update(Game *game, float dt) {
         }
     }
 
-    if (game->current == &game->text[57] &&
+    if (game->current == level->text_phone_sigh &&
         is_text_list_at_end(game->current))
     {
         game->current = game->current->next[0];

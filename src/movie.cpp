@@ -1,5 +1,5 @@
 #if defined(PLATFORM_WEB)
-  #define PROFILE 0
+  #define PROFILE 1
 #else
   #define PROFILE 0
 #endif
@@ -9,7 +9,7 @@ void movie_handle_frame(plm_t *mpeg, plm_frame_t *frame, void *user) {
     Movie *movie = (Movie *)user;
 
 #if PROFILE
-    double start = emscripten_get_now();
+    double start = GetTime();
 #endif
 
     Image image = GenImageColor(frame->width, frame->height, BLACK);
@@ -24,11 +24,11 @@ void movie_handle_frame(plm_t *mpeg, plm_frame_t *frame, void *user) {
     UnloadImage(image);
 
 #if PROFILE
-    double end = emscripten_get_now();
+    double end = GetTime();
 
     double time = end - start;
 
-    //printf("Frame took %fms\n", time);
+    printf("Frame took %fms\n", 1000 * time);
 #endif
 }
 
@@ -83,7 +83,7 @@ void movie_free(Movie *movie) {
 
 void movie_run(Movie *movie) {
 #if PROFILE
-    double start = emscripten_get_now();
+    double start = GetTime();
 #endif
     movie->frames++;
 
@@ -141,10 +141,10 @@ void movie_run(Movie *movie) {
     }
 
 #if PROFILE
-    double end = emscripten_get_now();
+    double end = GetTime();
     double taken = end - start;
 
-    printf("movie_run  took %fms\n", taken);
+    printf("movie_run  took %fms\n", 1000 * taken);
 #endif
 }
 

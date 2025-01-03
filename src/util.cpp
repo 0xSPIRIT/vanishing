@@ -61,6 +61,8 @@ void *arena_push(Arena *arena, size_t size) {
     return result;
 }
 
+#define ArenaPushType(arena, count, type) arena_push(arena, count * sizeof(type))
+
 void arena_pop(Arena *arena, size_t size) {
     if (arena->used >= size) {
         arena->used -= size;
@@ -68,6 +70,19 @@ void arena_pop(Arena *arena, size_t size) {
         assert(false);
     }
 }
+
+// An arena that automatically deallocates when outside scope
+struct Scratch_Arena {
+    Arena arena;
+
+    Scratch_Arena(size_t size) {
+        arena = make_arena(size);
+    }
+
+    ~Scratch_Arena() {
+        arena_free(&arena);
+    }
+};
 
 // Dynamic Array
 

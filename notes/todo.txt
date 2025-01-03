@@ -8,7 +8,7 @@ TODO
   - Add more collision geometry to stop walking up tables etc
   - Add spot lights that cast onto the podiums.
 - Intro 3D: Same thing
-- Chapter 5: Apply a "night light" hue shift to Art Gallery
+x Chapter 5: Apply a "night light" hue shift to Art Gallery
 - Movie: pause when tabbed out
 
 - Sometimes the audio cuts out...
