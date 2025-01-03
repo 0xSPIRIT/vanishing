@@ -587,6 +587,9 @@ void chapter_5_scene_init(Game *game) {
             game->post_processing.bloom.bloom_intensity = 4;
             game->post_processing.bloom.vignette_mix = 0.55f;
 
+            Post_Processing_Bloom *bloom = &game->post_processing.bloom;
+            bloom->hue_shift = {1, 1, 1};
+
             level->train.visible = false;
 
             level->scenes[0] = load_model("models/train_station2.glb");
@@ -1796,8 +1799,11 @@ void chapter_5_scene_init(Game *game) {
             model_set_shader(&level->scenes[5], level->shader);
 
             game->post_processing.type = POST_PROCESSING_BLOOM;
-            game->post_processing.bloom.bloom_intensity = 6.5f;
-            game->post_processing.bloom.vignette_mix = 0.55f;
+
+            Post_Processing_Bloom *bloom = &game->post_processing.bloom;
+            bloom->bloom_intensity = 6.5f;
+            bloom->vignette_mix = 0.55f;
+            bloom->hue_shift = {110.f/255.f, 72.f/255.f, 15.f/255.f};
 
             memset(game->text, 0, sizeof(game->text));
 

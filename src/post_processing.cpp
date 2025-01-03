@@ -27,15 +27,17 @@ struct Post_Processing_Spin {
 };
 
 struct Post_Processing_Bloom {
-    Shader shader;
+    Shader  shader;
 
-    int    u_time;
-    int    u_bloom_intensity;
-    int    u_vignette_mix;
-    int    u_window_size;
+    int     u_time;
+    int     u_bloom_intensity;
+    int     u_vignette_mix;
+    int     u_window_size;
+    int     u_hue_shift;
 
     float   bloom_intensity;
     float   vignette_mix;
+    Vector3 hue_shift;
 };
 
 struct Post_Processing_Vhs {
@@ -179,12 +181,14 @@ void post_process_init(Post_Processing *post) {
 
     bloom->bloom_intensity = 4;
     bloom->vignette_mix = 0.35f;
+    bloom->hue_shift = {1, 1, 1};
 
     bloom->shader            = load_shader(0, "bloom.fs");
     bloom->u_time            = GetShaderLocation(bloom->shader, "time");
     bloom->u_bloom_intensity = GetShaderLocation(bloom->shader, "bloom_intensity");
     bloom->u_vignette_mix    = GetShaderLocation(bloom->shader, "vignette_mix");
     bloom->u_window_size     = GetShaderLocation(bloom->shader, "window_size");
+    bloom->u_hue_shift       = GetShaderLocation(bloom->shader, "hue_shift");
 }
 
 void post_process_vhs_set_intensity(Post_Processing_Vhs *vhs, Vhs_Intensity intensity) {
@@ -257,6 +261,7 @@ void post_process_bloom_uniforms(Post_Processing_Bloom *bloom) {
     SetShaderValue(bloom->shader, bloom->u_bloom_intensity, &bloom->bloom_intensity, SHADER_UNIFORM_FLOAT);
     SetShaderValue(bloom->shader, bloom->u_vignette_mix,    &bloom->vignette_mix,    SHADER_UNIFORM_FLOAT);
     SetShaderValue(bloom->shader, bloom->u_window_size,     &window_size,            SHADER_UNIFORM_VEC2);
+    SetShaderValue(bloom->shader, bloom->u_hue_shift,       &bloom->hue_shift,       SHADER_UNIFORM_VEC3);
 }
 
 // Apply post processing shader, then draw it to the screen.

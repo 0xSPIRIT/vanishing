@@ -9,6 +9,7 @@ uniform float time;
 
 uniform float bloom_intensity;
 uniform float vignette_mix;
+uniform vec3  hue_shift;
 
 uniform vec2 window_size;
 
@@ -76,4 +77,5 @@ void main() {
     finalColor = texture(texture0, fragTexCoord);
     finalColor = bloom(finalColor, fragTexCoord);
     finalColor = vignette(fragTexCoord, finalColor);
+    finalColor = mix(finalColor, vec4(hue_shift, 1), 0.15);
 }

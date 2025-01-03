@@ -145,6 +145,14 @@ struct Fader {
     void (*action)(struct Game *);
 };
 
+struct Dialogue_Segment {
+    int    index;
+    char  *speaker;
+    char  *text;
+    float  speed;
+    int    next_index;
+};
+
 struct Game {
     Render_State render_state;
 
@@ -866,6 +874,46 @@ void model_set_bilinear(Model *model) {
         }
     }
 
+}
+
+#define DLG_NEXT -2
+#define DLG_NULL -1
+
+// -2 means the Text_List.next will be 1+ this Text_List
+Dialogue_Segment text(int index, char *speaker, char *text, float speed = 30, int next_index = DLG_NEXT) {
+    Dialogue_Segment segment = {};
+
+    segment.index      = index;
+    segment.speaker    = speaker;
+    segment.text       = text;
+    segment.speed      = speed;
+    segment.next_index = next_index;
+
+    return segment;
+}
+
+void dialogue_segment(Game *game, Dialogue_Segment *seg, int seg_count) {
+    for (int i = 0; i < seg_count; i++) {
+        Dialogue_Segment *s = seg + i;
+
+        Text_List *me   = game->text + s->index;
+        Text_List *next = 0;
+
+        if (s->next_index == -1) {
+            assert(next == 0);
+        } else if (s->next_index == -2) {
+            next = me + 1;
+            assert(s->index + 1 <= StaticArraySize(game->text));
+        } else {
+            next = me + s->next_index;
+        }
+
+        atari_text_list_init(me,
+                             s->speaker,
+                             s->text,
+                             s->speed,
+                             next);
+    }
 }
 
 void model_set_shader(Model *model, Shader shader) {

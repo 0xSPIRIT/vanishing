@@ -87,7 +87,7 @@ enum Game_Mode {
 };
 Game_Mode game_mode = GAME_MODE_INVALID;
 
-int chapter = 7;
+int chapter = 1;
 
 Font global_font,
      atari_font,

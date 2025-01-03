@@ -346,6 +346,14 @@ void chapter_1_init(Game *game) {
 
     float speed = 15;
 
+    Dialogue_Segment segment[] = {
+        text(0, "Chase", "I... need... to find... her...", speed, DLG_NEXT),
+        text(1, "Chase", "So... thirsty...", speed, DLG_NULL),
+    };
+
+    dialogue_segment(game, segment, StaticArraySize(segment));
+
+    /*
     atari_text_list_init(&game->text[0],
                          "Chase",
                          "I... need... to find... her...",
@@ -356,6 +364,8 @@ void chapter_1_init(Game *game) {
                          "So... thirsty...",
                          speed,
                          nullptr);
+                         */
+
 
     atari_text_list_init(&game->text[2],
                          "Chase",
